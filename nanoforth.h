@@ -1,33 +1,23 @@
 #ifndef __SRC_NANOFORTH_H
 #define __SRC_NANOFORTH_H
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <Arduino.h>
 
-#define ASM_TRACE  1
-#define EXE_TRACE  0
+#define ASM_TRACE    1
+#define EXE_TRACE    0
 
-typedef uint8_t    U8;
-typedef uint16_t   U16;
-typedef int16_t    S16;
+typedef uint8_t      U8;
+typedef uint16_t     U16;
+typedef int16_t      S16;
+typedef uint32_t     U32;
 
-#define TIB_SZ     80       /* 8 - 255    */
-#define STK_SZ     (64)     /* 8 - 65536  */
-#define DIC_SZ     (512)    /* 8 - 8*1024 */
-
-#define getchr()   getchar()
-#define putchr(c)  putchar(c)
-
-typedef struct task {
-    struct task *next;
-    U8          *pc;             // program counter
-    S16         *sp;             // parameter stack pointer
-    U16         *rp;             // return stack pointer
-    U16         s[STK_SZ];
-} Task;
+#define BUF_SZ       80
+#define STK_SZ       64
+#define DIC_SZ       512
 //
-// length + space delimited 3-char string
+// parser flag
 //
 enum {
     TKN_EXE = 1,
@@ -37,21 +27,10 @@ enum {
     TKN_NUM,
     TKN_ERR
 };
-#define LST_CMD    "\x05" \
-    ":  " "VAR" "FGT" "DMP" "BYE"
-#define LST_JMP    "\x0b" \
-    ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "DO " "LOP" "I  "
-#define LST_PRM    "\x19" \
-	"DRP" "DUP" "SWP" ">R " "R> " "+  " "-  " "*  " "/  " "MOD" \
-	"AND" "OR " "XOR" "=  " "<  " ">  " "<= " ">= " "<> " "NOT" \
-    "@  " "!  " "C@ " "C! " ".  " 
-#define LST_EXT    "\x09" \
-    "HRE" "CP " "OVR" "INV" "CEL" "ALO" "WRD" "SAV" "LD "
-//
 // ============================================================================================
 // Opcode formats
 //     primitive:  111c cccc                      (32 primitive)
-//     branching:  1BBa aaaa aaaa aaaa            (+- 12-bit address)
+//     branching:  1BBo oooo oooo oooo            (+- 12-bit relative offset, i.e. portable)
 //     1-byte lit: 0nnn nnnn                      (0..127)
 //     3-byte lit: 1111 1111 nnnn nnnn nnnn nnnn
 // ============================================================================================
@@ -64,25 +43,37 @@ enum {
 #define PFX_CALL   0xc0            /* 1100 0000 */
 #define PFX_PRM    0xe0            /* 1110 0000 */
 //
-// opcodes for loop control, literal, and extensions
+// opcodes for loop control (in compiler mode)
 //
-#define I_LOOP     (PFX_PRM | 25)  /* 19 1111 1001 */
-#define I_RD2      (PFX_PRM | 26)  /* 1a 1111 1010 */
-#define I_I        (PFX_PRM | 27)  /* 1b 1111 1011 */
-#define I_P2R2     (PFX_PRM | 28)  /* 1c 1111 1100 */
-#define I_RET      (PFX_PRM | 29)  /* 1d 1111 1101 */
-#define I_LIT      (PFX_PRM | 30)  /* 1e 1111 1110 */
-#define I_EXT      (PFX_PRM | 31)  /* 1f 1111 1111 */
+#define I_LOOP     (PFX_PRM | 25)  /* f 9 */ 
+#define I_RD2      (PFX_PRM | 26)  /* f a */
+#define I_I        (PFX_PRM | 27)  /* f b */
+#define I_P2R2     (PFX_PRM | 28)  /* f c */
+#define I_RET      (PFX_PRM | 29)  /* f d */
 //
-// dictionary address<=>pointer translation macros
+// extended opcode and literal (in compiler mode)
 //
-#define PTR(n)     (_dic + (U16)(n))
-#define IDX(p)     ((U16)((U8*)(p) - _dic))
+#define I_LIT      (PFX_PRM | 30)  /* f e */
+#define I_EXT      (PFX_PRM | 31)  /* f f */
+
+typedef struct task {
+    struct task *next;             // pointer to next task user area
+    S16 *sp;                       // parameter stack pointer
+    U16 *rp;                       // return stack pointer
+    U16 stk[STK_SZ];
+} Task;
+//
+// global variables
+//
+extern U8  *dic, *here, *last;     // dictionary pointers
+extern Task *tp;                   // current task pointer
+//
+// dictionary index <=> pointer translation macros
+//
+#define PTR(n)     ((U8*)dic + (n))
+#define IDX(p)     ((U16)((U8*)(p) - dic))
 //
 // Forth stack opcode macros
-//
-// s[0,1,.......,STK_SZ-1,STK_SZ]
-//  [*rp--->             <---sp*]
 //
 #define TOS        (*tp->sp)
 #define TOS1       (*(tp->sp+1))
@@ -94,51 +85,44 @@ enum {
 // memory access opcodes
 //
 #define SET8(p, c)  (*(U8*)(p)++=(U8)(c))
-#define SET16(p, n) do { U16 x=(U16)(n); SET8(p, (x)>>8); SET8(p, (x)&0xff); } while(0)
-#define GET16(p)    (((U16)*((U8*)(p))<<8) + *((U8*)(p)+1))
-#define SETNM(p, s) do {                   \
-    SET8(p, (s)[0]);                       \
-    SET8(p, (s)[1]);                       \
-    SET8(p, ((s)[1]!=' ') ? (s)[2] : ' '); \
-    } while(0)
+#define SET16(p, n) do { U16 x=(U16)(n); SET8(p,(x)>>8); SET8(p,(x)&0xff); } while(0)
+#define GET16(p)    (((U16)(*(U8*)(p))<<8) + *((U8*)(p)+1))
 //
-// branching opcodes
+// tracing functions
 //
-#define JMP000(p,j) SET16(p, (j)<<8)
-#define JMPSET(idx, p1) do {               \
-    U8  *p = PTR(idx);                     \
-    U8  f8 = *(p);                         \
-    U16 a  = ((U8*)(p1) - p) + JMP_BIT;    \
-    SET16(p, (a | (U16)f8<<8));            \
-    } while(0)
-#define JMPBCK(idx, f) do {                \
-    U8  *p = PTR(idx);                     \
-    U16 a  = (U16)(p - here) + JMP_BIT;    \
-    SET16(here, a | (f<<8));               \
-    } while(0)
+void d_chr(char c);
+void d_hex(U8 c);
+void d_adr(U16 a);
+void d_ptr(U8 *p);
 //
 // IO functions
 //
-void putmsg(char *msg);
+void putmsg(__FlashStringHelper *msg);
+void putchr(char c);
 void putnum(S16 n);
-U8   getnum(U8 *str, U16 *num);
+U8   getnum(U8 *str, S16 *num);
 U8   *gettkn(void);
+//
+// memory dummpers
+//
+void dump(U8 *p0, U8 *p1, U8 d);
+void showdic(U16 idx, U16 sz);
 //
 // dictionary, string list scanners
 //
-U8 lookup(U8 *key, U16 *adr);
-U8 find(U8 *key, const char *lst, U16 *id);
-//
-// For compiler functions
-//
-void variable(void);
-void compile(void);
+U8   lookup(U8 *key, U16 *adr);
+U8   find(U8 *key, const char *lst, U16 *id);
+U8   parse_token(U8 *tkn, U16 *rst, U8 run);
 //
 // Forth VM core functions
 //
-void forget(void);
-void primitive(U8 op);
-void execute(U16 adr);
-void extended(U8 op);
+void vm_setup();
+void vm_core();
+void compile();             // create word on dictionary
+void variable();            // create variable on dictionary
+void extended(U8 op);       // additional primitive words
+
+void vm_delay(U32 ms);
+U8   vm_getchar();
 
 #endif // __SRC_NANOFORTH_H
