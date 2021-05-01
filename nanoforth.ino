@@ -1,5 +1,5 @@
 /*
- nanoFORTH
+ nanoFORTH - Forth for Arduino Nano (and UNO)
  
  2004-07 T. NAKAGAWA (Tiny FORTH), original reference 
  2019-04 Ken Bork (monsonite@github) TinyFORTH.c
@@ -91,8 +91,8 @@ void list_words()
     const char *lst[] PROGMEM = { CMD, JMP, PRM, EXT };
     U8 n = 0;
     for (U8 i=0; i<4; i++) {
-        U8 *p = lst[i];
-        U8 sz = pgm_read_byte(p++);
+        PGM_P p = reinterpret_cast<PGM_P>(lst[i]);
+        U8 sz   = pgm_read_byte(p++);
         for (U8 j=0; j<sz; j++, p+=3) {
             if (n++%10==0) d_chr('\n');
             d_chr(pgm_read_byte(p));
@@ -107,10 +107,10 @@ void list_words()
 U8 parse_token(U8 *tkn, U16 *rst, U8 run)
 {
     if (find(tkn, run ? CMD : JMP, rst)) return TKN_EXE; // run, compile mode
-    if (lookup(tkn, rst))                return TKN_DIC; // search word dictionary addr(2), name(3)
+    if (query(tkn, rst))                 return TKN_DIC; // search word dictionary addr(2), name(3)
     if (find(tkn, EXT, rst))             return TKN_EXT; // search extended words
     if (find(tkn, PRM, rst))             return TKN_PRM; // search primitives
-    if (getnum(tkn, rst))                return TKN_NUM; // parse as number literal
+    if (getnum(tkn, (S16*)rst))          return TKN_NUM; // parse as number literal
     
     return TKN_ERR;
 }

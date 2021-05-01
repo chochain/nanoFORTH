@@ -21,7 +21,7 @@ void _words()
 
 void _save()
 {
-    putmsg(F(">ROM"));
+    putstr(">ROM");
     U16 dm = IDX(last), sz = IDX(here);
     EEPROM.update(0, dm>>8); EEPROM.update(1, dm&0xff);
     EEPROM.update(2, sz>>8); EEPROM.update(3, sz&0xff);
@@ -41,7 +41,7 @@ void _load()
     for (int i=0; i<sz; i++) {
         *p++ = EEPROM.read(i+4);
     }
-    putmsg(F("ROM>"));
+    putstr("ROM>");
 }
 
 void extended(U8 op)

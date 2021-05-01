@@ -74,7 +74,7 @@ void _do_branch(U8 op)
 //
 void variable(void)
 {
-    U8 *tkn = gettkn();        // get token
+    U8 *tkn = token();         // get token
     U16 tmp = IDX(last);
     
     last = here;
@@ -98,7 +98,7 @@ void variable(void)
 //
 void compile(void)
 {
-    U8  *tkn = gettkn();
+    U8  *tkn = token();
     U8  *p0  = here;
     U16 tmp  = IDX(last);     // link to previous word
 
@@ -109,7 +109,7 @@ void compile(void)
     for (; tkn;) {            // terminate if tkn==NULL
         dump(p0, here, 0);
 
-        tkn = gettkn();
+        tkn = token();
         p0  = here;
         switch(parse_token(tkn, &tmp, 0)) {
         case TKN_EXE:
@@ -138,7 +138,7 @@ void compile(void)
                 SET16(here, tmp);
             }
             break;
-        default:  putmsg(F("!\n"));             // error
+        default:  putstr("!\n");                // error
         }
     }
     // debug memory dump

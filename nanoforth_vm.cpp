@@ -15,17 +15,17 @@ Task *tp;             // current task pointer
 //
 void _forget(void)
 {
-    U16 tmp;
-    if (!lookup(gettkn(), &tmp)) {
-        putmsg(F("??"));
+    U16 adr;
+    if (!query(token(), &adr)) { // query token in dictionary
+        putstr("??");            // not found, bail
         return;
     }
     //
     // word found, rollback here
     //
-    U8 *p = PTR(tmp);           // address of word
-    last  = PTR(GET16(p));
-    here  = p;
+    U8 *p = PTR(adr);           // address of word
+    last  = PTR(GET16(p));      // reset last word address
+    here  = p;                  // reset current pointer
 }
 //
 //  Execute a Primitive Instruction
@@ -79,17 +79,17 @@ void _primitive(U8 op)
 
 void _ok()
 {
-    S16 *s0 = &tp->stk[STK_SZ];
+    S16 *s0 = (S16*)&tp->stk[STK_SZ];
     if (tp->sp > s0) {  // check stack overflow
-        putmsg(F("OVF\n"));
+        putstr("OVF\n");
         tp->sp = s0;
     }
     else {                              // dump stack then prompt OK
         putchr('[');
-        for (U16 *p=s0-1; p >= tp->sp; p--) {
+        for (S16 *p=s0-1; p >= tp->sp; p--) {
             putchr(' '); putnum(*p);
         }
-        putmsg(F(" ] OK "));
+        putstr(" ] OK ");
     }
 }
 //
@@ -138,11 +138,11 @@ void vm_setup() {
     here   = dic;                                        // dictionary pointer
     last   = PTR(0xffff);                                // dictionary terminator mark
 
-    putmsg(F("\nnanoFORTH v1.0"));
+    putstr("\nnanoFORTH v1.0");
 }
 
 void vm_core() {
-    U8  *tkn = gettkn();                        // get token from console
+    U8  *tkn = token();                          // get token from console
     U16 tmp;
     switch (parse_token(tkn, &tmp, 1)) {
     case TKN_EXE:
@@ -158,7 +158,7 @@ void vm_core() {
     case TKN_PRM: _primitive((U8)tmp);   break;
     case TKN_NUM: PUSH(tmp);             break;
     default:
-        putmsg(F("?\n"));
+        putstr("?\n");
         return;
     }
     _ok();  // stack check and prompt OK
