@@ -95,13 +95,13 @@ void d_hex(U8 c);
 void d_adr(U16 a);
 void d_ptr(U8 *p);
 //
-// IO functions
+// IO and Search Functions =================================================
 //
-void putmsg(__FlashStringHelper *msg);
-void putchr(char c);
+#define putstr(msg)    Serial.print(F(msg))
+#define putchr(c)      Serial.write((char)c)
 void putnum(S16 n);
 U8   getnum(U8 *str, S16 *num);
-U8   *gettkn(void);
+U8   *token(void);
 //
 // memory dummpers
 //
@@ -110,9 +110,9 @@ void showdic(U16 idx, U16 sz);
 //
 // dictionary, string list scanners
 //
-U8   lookup(U8 *key, U16 *adr);
-U8   find(U8 *key, const char *lst, U16 *id);
-U8   parse_token(U8 *tkn, U16 *rst, U8 run);
+U8   query(U8 *tkn, U16 *adr);                    // query(token) in dictionary for existing word
+U8   find(U8 *tkn, const char *lst, U16 *id);     // find(token) in string list
+U8   parse_token(U8 *tkn, U16 *rst, U8 run);      // parse and action
 //
 // Forth VM core functions
 //

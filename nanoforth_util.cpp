@@ -11,8 +11,6 @@ void d_ptr(U8 *p)      { U16 a = (U16)p; d_chr('^'); d_adr(a); }
 //
 // IO and Search Functions =================================================
 //
-void putmsg(__FlashStringHelper *msg) { Serial.print(msg); }
-void putchr(char c)                   { Serial.write(c);   }
 //
 //  put a 16-bit integer
 //
@@ -30,7 +28,7 @@ void _console_input(U8 *buf)
 {
     U8 *p = buf;
     for (;;) {
-        U8 c = getchr();
+        U8 c = vm_getchar();
         if (c=='\r' || c=='\n') {            // split on RETURN
             if (p > buf) {
                 *p     = ' ';                // terminate input string
@@ -44,7 +42,7 @@ void _console_input(U8 *buf)
             putchr('\b');
         }
         else if ((p - buf) >= (BUF_SZ-1)) {
-            putmsg(F("BUF\n"));
+            putstr("BUF\n");
             *p = '\n';
             break;
         }
@@ -54,7 +52,7 @@ void _console_input(U8 *buf)
 //
 //  Get a Token
 //
-U8 *gettkn(void)
+U8 *token(void)
 {
     static U8 buf[BUF_SZ], *bptr = buf;
 
@@ -135,10 +133,10 @@ void showdic(U16 idx, U16 sz)            // idx: dictionary offset, sz: bytes
 //
 // scan the keyword through dictionary linked-list
 //
-U8 lookup(U8 *key, U16 *adr)
+U8 query(U8 *tkn, U16 *adr)
 {
     for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {
-        if (p[2]==key[0] && p[3]==key[1] && (p[3]==' ' || p[4]==key[2])) {
+        if (p[2]==tkn[0] && p[3]==tkn[1] && (p[3]==' ' || p[4]==tkn[2])) {
             *adr = IDX(p);
             return 1;
         }
@@ -148,12 +146,12 @@ U8 lookup(U8 *key, U16 *adr)
 //
 // search keyword in a List
 //
-U8 find(U8 *key, const char *lst, U16 *id)
+U8 find(U8 *tkn, const char *lst, U16 *id)
 {
     for (U16 n=1, m=pgm_read_byte(lst); n < m*3; n+=3) {
-        if (key[0]==pgm_read_byte(lst+n) &&
-            key[1]==pgm_read_byte(lst+n+1) &&
-            (key[1]==' ' || key[2]==pgm_read_byte(lst+n+2))) {
+        if (tkn[0]==pgm_read_byte(lst+n) &&
+            tkn[1]==pgm_read_byte(lst+n+1) &&
+            (tkn[1]==' ' || tkn[2]==pgm_read_byte(lst+n+2))) {
             *id = n/3;
             return 1;
         }
