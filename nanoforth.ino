@@ -120,6 +120,12 @@ void setup()
     Serial.begin(115200);
     PT_INIT(&ctx_hw);
     vm_setup();
+
+    putstr("\nnanoFORTH v1.0");
+    putstr(" [ DIC_SZ=x");  puthex(DIC_SZ);
+    putstr(", STK_SZ=x");   puthex(STK_SZ*sizeof(U16));
+    putstr(", TIB_SZ=x");   puthex(TIB_SZ);
+    putstr(" ]");
 }
 
 void loop()

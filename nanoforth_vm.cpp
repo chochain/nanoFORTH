@@ -137,8 +137,6 @@ void vm_setup() {
     tp->sp = (S16*)&tp->stk[STK_SZ];                     // parameter stack pointer
     here   = dic;                                        // dictionary pointer
     last   = PTR(0xffff);                                // dictionary terminator mark
-
-    putstr("\nnanoFORTH v1.0");
 }
 
 void vm_core() {

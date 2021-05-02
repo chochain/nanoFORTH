@@ -5,17 +5,17 @@
 #include <stdint.h>
 #include <Arduino.h>
 
-#define ASM_TRACE    1
-#define EXE_TRACE    0
+#define ASM_TRACE    1                /* enable assembler tracing    */
+#define EXE_TRACE    0                /* enable VM execution tracing */
 
 typedef uint8_t      U8;
 typedef uint16_t     U16;
 typedef int16_t      S16;
 typedef uint32_t     U32;
 
-#define BUF_SZ       80
+#define TIB_SZ       80
 #define STK_SZ       64
-#define DIC_SZ       512
+#define DIC_SZ       1024
 //
 // parser flag
 //
@@ -60,7 +60,7 @@ typedef struct task {
     struct task *next;             // pointer to next task user area
     S16 *sp;                       // parameter stack pointer
     U16 *rp;                       // return stack pointer
-    U16 stk[STK_SZ];
+    U16 stk[STK_SZ];               // local stack
 } Task;
 //
 // global variables
@@ -99,9 +99,10 @@ void d_ptr(U8 *p);
 //
 #define putstr(msg)    Serial.print(F(msg))
 #define putchr(c)      Serial.write((char)c)
-void putnum(S16 n);
-U8   getnum(U8 *str, S16 *num);
-U8   *token(void);
+#define puthex(v)      Serial.print((U16)v, HEX)
+void putnum(S16 n);                             // sent a number literal to console
+U8   getnum(U8 *str, S16 *num);                 // process a literal
+U8   *token(void);                              // get a token from console input
 //
 // memory dummpers
 //

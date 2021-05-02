@@ -11,38 +11,37 @@ void d_ptr(U8 *p)      { U16 a = (U16)p; d_chr('^'); d_adr(a); }
 //
 // IO and Search Functions =================================================
 //
-//
-//  put a 16-bit integer
+//  emit a 16-bit integer
 //
 void putnum(S16 n)
 {
-    if (n < 0) { n = -n; putchr('-'); }
+    if (n < 0) { n = -n; putchr('-'); }        // process negative number
     U16 t = n/10;
     if (t) putnum(t);                          // recursively call higher digits
     putchr('0' + (n%10));
 }
 //
-// fill buffer from console input
+// fill input buffer from console input
 //
-void _console_input(U8 *buf)
+void _console_input(U8 *tib)
 {
-    U8 *p = buf;
+    U8 *p = tib;
     for (;;) {
         U8 c = vm_getchar();
         if (c=='\r' || c=='\n') {            // split on RETURN
-            if (p > buf) {
+            if (p > tib) {
                 *p     = ' ';                // terminate input string
                 *(p+1) = '\n';
                 break;                       // skip empty token
             }
         }
-        else if (c=='\b' && p > buf) {       // backspace
+        else if (c=='\b' && p > tib) {       // backspace
             *(--p) = ' ';
             putchr(' ');
             putchr('\b');
         }
-        else if ((p - buf) >= (BUF_SZ-1)) {
-            putstr("BUF\n");
+        else if ((p - tib) >= (TIB_SZ-1)) {
+            putstr("TIB!\n");
             *p = '\n';
             break;
         }
@@ -54,25 +53,25 @@ void _console_input(U8 *buf)
 //
 U8 *token(void)
 {
-    static U8 buf[BUF_SZ], *bptr = buf;
+    static U8 tib[TIB_SZ], *tp = tib;
 
-    if (bptr==buf) _console_input(buf);         // buffer empty, read from console
+    if (tp==tib) _console_input(tib);         // buffer empty, read from console
 
-    U8 *p0 = bptr;
-    U8 sz  = 0;
-    while (*bptr++!=' ') sz++;                  // advance to next word
-    while (*bptr==' ') bptr++;                  // skip blanks
+    U8 *p = tp;                               // keep original tib pointer
+    U8 sz = 0;
+    while (*tp++!=' ') sz++;                  // advance to next word
+    while (*tp==' ')   tp++;                  // skip blanks
 
-    if (*bptr=='\r' || *bptr=='\n') bptr = buf; // rewind buffer
+    if (*tp=='\r' || *tp=='\n') tp = tib;     // rewind buffer
 
 #if ASM_TRACE
     // debug info
     d_chr('\n');
     for (U8 i=0; i<4; i++) {
-    	d_chr(i<sz ? (*(p0+i)<0x20 ? '_' : *(p0+i)) : ' ');
+    	d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
     }
 #endif // ASM_TRACE
-    return p0;
+    return p;
 }
 //
 // Process a Literal
