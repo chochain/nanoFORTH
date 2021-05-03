@@ -20,6 +20,8 @@
     [7396,932]  add ASM_TRACE from EXE_TRACE options
     [7676,802]  grow Task at end of heap
     [8266,802]  if use array instead of pointer arithmetics, revert!
+  2021-0503: CC
+    [7834,1428] forget Task struct; grow MEM_SZ to DIC_SZ+STK_SZ (1K+64*2)
 */
 #include <pt.h>
 #include "nanoforth.h"
@@ -118,12 +120,12 @@ void setup()
     Serial.begin(115200);
     PT_INIT(&ctx_hw);
     vm_setup();
-
-    putstr("\nnanoFORTH v1.0");
-    putstr(" [ DIC_SZ=x");  puthex(DIC_SZ);
-    putstr(", STK_SZ=x");   puthex(STK_SZ*sizeof(U16));
+    
+    putstr(" ( MEM_SZ=x");  puthex(MEM_SZ);
+    putstr(", DIC_SZ=x");   puthex(MEM_SZ-STK_SZ);
+    putstr(", STK_SZ=x");   puthex(STK_SZ);
     putstr(", TIB_SZ=x");   puthex(TIB_SZ);
-    putstr(" ]");
+    putstr(" )");
 }
 
 void loop()

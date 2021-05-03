@@ -5,11 +5,12 @@
 //
 // allocate, initialize dictionary pointers
 //
-U8   _mem[DIC_SZ];    // default 512
-U8   *dic = &_mem[0]; // heap
-U8   *here;           // dictionary pointer
-U8   *last;           // end of dictionary
-Task *tp;             // current task pointer
+U8   _mem[MEM_SZ];    // default 512
+U8   *dic = &_mem[0]; // dictionary space
+U8   *here;           // top of dictionary pointer
+U8   *last;           // pointer to last word
+U16  *rp;             // return stack pointer
+S16  *sp;             // parameter stack pointer
 //
 //  Forget Words in the Dictionary
 //
@@ -63,12 +64,12 @@ void _primitive(U8 op)
     case 23: { U8 *p = PTR(POP()); *p = (U8)POP();  } break; // C!
     case 24: putnum(POP()); putchr(' '); break; // .
     case 25: {	                                // LOOP
-        (*(tp->rp-2))++;                  // counter+1
-        PUSH(*(tp->rp-2) >= *(tp->rp-1)); // range check
+        (*(rp-2))++;                      // counter+1
+        PUSH(*(rp-2) >= *(rp-1));         // range check
         d_chr('\n');                      // debug info
     } break;
     case 26: RPOP(); RPOP();             break; // RD2
-    case 27: PUSH(*(tp->rp-2));          break; // I
+    case 27: PUSH(*(rp-2));              break; // I
     case 28: RPUSH(POP()); RPUSH(POP()); break; // P2R2
     // the following 3 opcodes change pc, done at one level up
     case 29: /* used by I_RET */         break;
@@ -79,18 +80,25 @@ void _primitive(U8 op)
 
 void _ok()
 {
-    S16 *s0 = (S16*)&tp->stk[STK_SZ];
-    if (tp->sp > s0) {  // check stack overflow
-        putstr("OVF\n");
-        tp->sp = s0;
+    S16 *s0 = (S16*)&_mem[MEM_SZ];      // top of heap
+    if (sp > s0) {                      // check stack overflow
+        putstr("OVF!\n");
+        sp = s0;                        // reset to top of stack block
     }
-    else {                              // dump stack then prompt OK
-        putchr('[');
-        for (S16 *p=s0-1; p >= tp->sp; p--) {
-            putchr(' '); putnum(*p);
-        }
-        putstr(" ] OK ");
+    putchr('(');
+    for (S16 *p=s0-1; p >= sp; p--) {
+        putchr(' '); putnum(*p);
     }
+    putstr(" ) OK ");
+}
+//
+// Execution tracer
+//
+void _trace(U16 a, U8 ir, U8 *pc)
+{
+#if EXE_TRACE
+    d_adr(a); d_hex(ir); d_chr(' ');                      // tracing info
+#endif // EXE_TRACE
 }
 //
 //  Virtual Code Execution
@@ -101,10 +109,9 @@ void _execute(U16 adr)
     for (U8 *pc=PTR(adr); pc!=PTR(0xffff); ) {
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *(pc++);                                 // fetch instruction
+
+        _trace(a, ir, pc);                                // execution tracing when enabled
         
-#if EXE_TRACE
-        d_adr(a); d_hex(ir); d_chr(' ');                  // tracing info
-#endif // EXE_TRACE
         if ((ir & 0x80)==0) { PUSH(ir);               }   // 1-byte literal
         else if (ir==I_LIT) { PUSH(GET16(pc)); pc+=2; }   // 3-byte literal
         else if (ir==I_RET) { pc = PTR(RPOP());       }   // RET
@@ -132,15 +139,16 @@ void _execute(U16 adr)
 }
 
 void vm_setup() {
-    tp     = (Task*)&_mem[DIC_SZ - sizeof(Task)];        // current task at the end of heap
-    tp->rp = &tp->stk[0];                                // return stack pointer
-    tp->sp = (S16*)&tp->stk[STK_SZ];                     // parameter stack pointer
-    here   = dic;                                        // dictionary pointer
-    last   = PTR(0xffff);                                // dictionary terminator mark
+    rp   = (U16*)&_mem[MEM_SZ - STK_SZ];                  // return stack pointer, grow upward
+    sp   = (S16*)&_mem[MEM_SZ];                           // parameter stack pointer, grows downward
+    here = dic;                                           // dictionary pointer
+    last = PTR(0xffff);                                   // dictionary terminator mark
+
+    putstr("\nnanoFORTH v1.0");
 }
 
 void vm_core() {
-    U8  *tkn = token();                                  // get a token from console
+    U8  *tkn = token();                                   // get a token from console
     U16 tmp;
     switch (parse_token(tkn, &tmp, 1)) {
     case TKN_EXE:
@@ -157,7 +165,6 @@ void vm_core() {
     case TKN_NUM: PUSH(tmp);             break;
     default:
         putstr("?\n");
-        return;
     }
     _ok();  // stack check and prompt OK
 }

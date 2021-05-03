@@ -6,16 +6,17 @@
 #include <Arduino.h>
 
 #define ASM_TRACE    1                /* enable assembler tracing    */
-#define EXE_TRACE    0                /* enable VM execution tracing */
+#define EXE_TRACE    1                /* enable VM execution tracing */
 
 typedef uint8_t      U8;
 typedef uint16_t     U16;
 typedef int16_t      S16;
 typedef uint32_t     U32;
 
-#define TIB_SZ       80
-#define STK_SZ       64
-#define DIC_SZ       1024
+#define TIB_SZ       0x40
+#define STK_SZ       0x80
+#define DIC_SZ       0x400
+#define MEM_SZ       (DIC_SZ+STK_SZ)
 //
 // parser flag
 //
@@ -55,18 +56,12 @@ enum {
 //
 #define I_LIT      (PFX_PRM | 30)  /* f e */
 #define I_EXT      (PFX_PRM | 31)  /* f f */
-
-typedef struct task {
-    struct task *next;             // pointer to next task user area
-    S16 *sp;                       // parameter stack pointer
-    U16 *rp;                       // return stack pointer
-    U16 stk[STK_SZ];               // local stack
-} Task;
 //
 // global variables
 //
 extern U8   *dic, *here, *last;    // dictionary pointers
-extern Task *tp;                   // current task pointer
+extern U16  *rp;                   // return stack pointer
+extern S16  *sp;                   // parameter stack pointer
 //
 // dictionary index <=> pointer translation macros
 //
@@ -75,12 +70,12 @@ extern Task *tp;                   // current task pointer
 //
 // Forth stack opcode macros
 //
-#define TOS        (*tp->sp)
-#define TOS1       (*(tp->sp+1))
-#define PUSH(v)    (*(--tp->sp)=(S16)(v))
-#define POP()      (*(tp->sp++))
-#define RPUSH(v)   (*(tp->rp++)=(U16)(v))
-#define RPOP()     (*(--tp->rp))
+#define TOS        (*sp)
+#define TOS1       (*(sp+1))
+#define PUSH(v)    (*(--sp)=(S16)(v))
+#define POP()      (*(sp++))
+#define RPUSH(v)   (*(rp++)=(U16)(v))
+#define RPOP()     (*(--rp))
 //
 // memory access opcodes
 //
