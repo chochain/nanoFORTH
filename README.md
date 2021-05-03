@@ -15,4 +15,14 @@ Jump back to our Nanos. The same old cycles of your C coding in the Arduino IDE.
 One day, ESP shows up on you radar. It can do everything you've imagined thus far. Web serving, mesh-network, LoRa, even MySQL,... Programming-wise, there're C, microPython, even Ruby after some hard digging. Soon, the universe started to expand and what came into view is a Raspberry Pi. The final frontier suddenly became bondless. Your imagination was pushed far beyond the black holes and the vast void. Life became meaningful and sure got excited again. MotionEyes, OctaPi, robot buggy, and the plan to try some AI stuffs, ... Your heart were filled with joy and temptations. The limitation of CPU resource or storage is already a distant memory.
 ##
 One night, while you felt the new path is set and the final destination is in sight, you were driving home with distant cresting moon hanging, a thought flowed through your head. What about the Nanos?
+##
+Compling code in the IDE and upload directory via the tethered USB cable has become the way of life in Arduino universe. Makers can also get feedback directly from Serial Monitor. This two-way development cycle right from and within the IDE is the major reason making this platform so popular. FORTH, arms the cycle with REPL which eaze the debug process, make it a natual choice for microprocessors. There are AmForth and FlashForth avaiable for Arduino. However, both of them require overwrite Arduino bootloader. They require not only an additional burner but render will render your kit a non-Arduino. This is a mental challenge for new makers and leaves a "your warrenty is void" taste in your mouth if done.
+##
+The requirements for nanoFORTH are
+* be as simple as any example Sketch that comes with the IDE (no bootloader burning)
+* provide a REPL development/operation environment
+* support core Arduino functions (i.e. pinMode, digitalRead,Write, analogRead,Write, millis, delay)
+* provide a main CPU thread and at least a separate FORTH thread
+* provide at least 1K RAM dictionary for resonablly size of work
+* can be easily extended and be persisted in EEPROM
 
