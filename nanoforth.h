@@ -65,7 +65,7 @@ typedef struct task {
 //
 // global variables
 //
-extern U8  *dic, *here, *last;     // dictionary pointers
+extern U8   *dic, *here, *last;    // dictionary pointers
 extern Task *tp;                   // current task pointer
 //
 // dictionary index <=> pointer translation macros

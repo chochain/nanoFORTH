@@ -140,7 +140,7 @@ void vm_setup() {
 }
 
 void vm_core() {
-    U8  *tkn = token();                          // get token from console
+    U8  *tkn = token();                                  // get a token from console
     U16 tmp;
     switch (parse_token(tkn, &tmp, 1)) {
     case TKN_EXE:
