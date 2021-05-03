@@ -81,15 +81,15 @@ U8 getnum(U8 *str, S16 *num)
     U8  neg = 0;
     S16 n   = 0;
     if (*str=='$') {
-        for (str++; *str != ' '; str++) {
+        for (str++; *str != ' '; str++) {    // hex number
             n *= 16;
-            n += *str - (*str<='9' ? '0' : 'A' - 10);
+            n += (*str<='9') ? *str-'0' : (*str&0x5f)-'A'+10;
         }
         *num = n;
         return 1;
     }
-    if (*str=='-') { str++; neg=1; }
-    if ('0' <= *str && *str <= '9') {
+    if (*str=='-') { str++; neg=1; }         // negative sign
+    if ('0' <= *str && *str <= '9') {        // decimal number
         for (n=0; *str != ' '; str++) {
             n *= 10;
             n += *str - '0';
