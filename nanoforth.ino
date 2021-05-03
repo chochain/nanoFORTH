@@ -2,10 +2,8 @@
  nanoFORTH - Forth for Arduino Nano (and UNO)
  
  2004-07 T. NAKAGAWA (Tiny FORTH), original reference 
- 2019-04 Ken Bork (monsonite@github) TinyFORTH.c
- 2021-03 CC Lee: rewrite with comments
- 2021-03 CC Lee: support Arduino Nano; add buffer handler
- 2021-03 CC - byte count[6698/1006],[6924/1036]
+ 2020-08 circuit4u@medium.com (Tiny Forth NXT), Arduino reference
+ 2021-03 CC Lee: modularize with comments [6698,1006]; add buffer handler[6924,1036]
  2021-04-02: CC - add multi-tasker, byte count[6782/1056],
     [6930,1056] add threads
     [6908,1014] use F()
@@ -16,11 +14,11 @@
     [6898,852]  add vm_delay
     [6912,852]  update EEPROM IO
     [6842,852]  execution tracing enable/disable
-    [6922,852]  add CELL (CEL), ALLOT (ALO)
+    [6922,852]  add CELL (CEL), ALLOT (ALO) opcodes
   2021-04-16: CC
     [7446,932]  add list_word, use 80-byte console buffer
     [7396,932]  add ASM_TRACE from EXE_TRACE options
-    [7676,802]  grow Task from end of heap
+    [7676,802]  grow Task at end of heap
     [8266,802]  if use array instead of pointer arithmetics, revert!
 */
 #include <pt.h>
