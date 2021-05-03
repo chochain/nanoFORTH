@@ -21,25 +21,25 @@ void _words()
 
 void _save()
 {
-    U16 z = IDX(last), h = IDX(here);
-    EEPROM.update(0, z>>8); EEPROM.update(1, z&0xff);
-    EEPROM.update(2, h>>8); EEPROM.update(3, h&0xff);
+    U16 last0 = IDX(last), here0 = IDX(here);
+    EEPROM.update(0, last0>>8); EEPROM.update(1, last0&0xff);
+    EEPROM.update(2, here0>>8); EEPROM.update(3, here0&0xff);
     U8 *p = dic;
-    for (int i=0; i<h; i++) {
+    for (int i=0; i<here0; i++) {
         EEPROM.update(i+4, *p++);
     }
 }
 
 void _load()
 {
-    U16 z = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
-    U16 h = ((U16)EEPROM.read(2)<<8) + EEPROM.read(3);
-    last = PTR(z);                            // reset pointer to last word
-    here = PTR(h);                            // reset pointer to top of dictionary
-    U8 *p = dic;
-    for (int i=0; i<sz; i++) {
+    U16 last0 = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
+    U16 here0 = ((U16)EEPROM.read(2)<<8) + EEPROM.read(3);
+    U8 *p = dic;                              // starting of RAM dictionary
+    for (int i=0; i<here0; i++) {
         *p++ = EEPROM.read(i+4);
     }
+    last = PTR(last0);                        // reset pointer to last word
+    here = PTR(here0);                        // reset pointer to top of dictionary
 }
 
 void extended(U8 op)
