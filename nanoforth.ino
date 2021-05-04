@@ -31,7 +31,7 @@
 #define PT_DELAY_msec(th, ms)  do {    \
     static U32 t;                      \
     t = millis() + (U32)(ms);          \
-    PT_WAIT_UNTIL((th), millis()>=t);  \
+    PT_WAIT_UNTIL(th, millis()>=t);    \
 } while(0)
 
 static struct pt ctx_hw;                    // protothread contexts
@@ -55,23 +55,20 @@ PT_THREAD(hw_thread())                      // hardward protothread
     }
     PT_END(&ctx_hw);
 }
+#define YIELD()      PT_SCHEDULE(hw_thread())
 //
 // console input with cooperative threading
 //
 U8 vm_getchar()
 {
-    while (!Serial.available()) {
-        PT_SCHEDULE(hw_thread());         // steal cycles for hardware stuffs
-    }
+    while (!Serial.available()) YIELD();   // steal cycles for hardware stuffs
     return (U8)Serial.read();
 }
 
 void vm_delay(U32 ms)
 {
     U32 t = millis() + ms;
-    while (millis()<t) {
-        PT_SCHEDULE(hw_thread());         // run hardware stuffs while waiting
-    }
+    while (millis()<t) YIELD();            // run hardware cycles while waiting
 }
 const char CMD[] PROGMEM = "\x05" \
     ":  " "VAR" "FGT" "DMP" "BYE";
@@ -100,6 +97,7 @@ void list_words()
             d_chr(pgm_read_byte(p+2));
             d_chr(' ');
         }
+        YIELD();
     }
     d_chr('\n');
 }
@@ -118,9 +116,11 @@ U8 parse_token(U8 *tkn, U16 *rst, U8 run)
 void setup()
 {
     Serial.begin(115200);
-    PT_INIT(&ctx_hw);
-    vm_setup();
-    
+    PT_INIT(&ctx_hw);          // initialize hardware thread
+    vm_setup();                // setup Forth virtual machine
+    //
+    // show system info
+    //
     putstr(" ( MEM_SZ=x");  puthex(MEM_SZ);
     putstr(", DIC_SZ=x");   puthex(MEM_SZ-STK_SZ);
     putstr(", STK_SZ=x");   puthex(STK_SZ);
@@ -130,6 +130,7 @@ void setup()
 
 void loop()
 {
-    vm_core();
+    vm_core();                 // execute one vm cycle
+    YIELD();                   // give hardware some CPU time
 }
 

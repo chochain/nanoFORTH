@@ -118,7 +118,7 @@ void compile();             // create word on dictionary
 void variable();            // create variable on dictionary
 void extended(U8 op);       // additional primitive words
 
-void vm_delay(U32 ms);
 U8   vm_getchar();
+void vm_delay(U32 ms);
 
 #endif // __SRC_NANOFORTH_H
