@@ -101,8 +101,8 @@ U8   *token(void);                              // get a token from console inpu
 //
 // memory dummpers
 //
-void dump(U8 *p0, U8 *p1, U8 d);
-void showdic(U16 idx, U16 sz);
+void memdump(U8 *p0, U8 *p1, U8 d);             // show memory content between pointers (d: delimiter option)
+void dump(U16 idx, U16 sz);                     // dump memory block with dictionary offset and length
 //
 // dictionary, string list scanners
 //

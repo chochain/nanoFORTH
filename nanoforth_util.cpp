@@ -100,9 +100,9 @@ U8 getnum(U8 *str, S16 *num)
     return 0;
 }
 //
-// memory dumper with delimiter option
+// byte-stream dumper with delimiter option
 // 
-void dump(U8 *p0, U8 *p1, U8 d)
+void memdump(U8 *p0, U8 *p1, U8 d)
 {
 	U16 n = IDX(p0);
 	d_adr(n);
@@ -112,15 +112,15 @@ void dump(U8 *p0, U8 *p1, U8 d)
 	}
 }
 //
-// show  a section of dictionary memory
+// show a section of memory in Forth dump format
 //
-void showdic(U16 idx, U16 sz)            // idx: dictionary offset, sz: bytes
+void dump(U16 idx, U16 sz)               // idx: memory offset, sz: bytes
 {
     U8 *p = PTR(idx & 0xfff0);           // 16-byte aligned
     sz &= 0xfff0;                        // 16-byte aligned
     putchr('\n');
     for (U16 i=0; i<sz; i+=0x20) {
-        dump(p, p+0x20, ' ');
+        memdump(p, p+0x20, ' ');
         putchr(' ');
         for (U8 j=0; j<0x20; j++, p++) { // print and advance to next byte
             char c = *p & 0x7f;

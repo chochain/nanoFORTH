@@ -155,7 +155,7 @@ void vm_core() {
         case 0:	compile();               break; // : (COLON), create word
         case 1:	variable();              break; // VAR, create variable    
         case 2:	_forget();               break; // FGT
-        case 3: showdic(POP(), POP());   break; // DMP
+        case 3: dump(POP(), POP());      break; // DMP
         case 4: vm_setup();              break; // BYE
         } break;
     case TKN_DIC: _execute(tmp + 2 + 3); break;

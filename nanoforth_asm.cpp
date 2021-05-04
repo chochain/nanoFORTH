@@ -107,7 +107,7 @@ void compile(void)
     SETNM(here, tkn);         // 3-byte name
 
     for (; tkn;) {            // terminate if tkn==NULL
-        dump(p0, here, 0);
+        memdump(p0, here, 0);
 
         tkn = token();
         p0  = here;
@@ -142,5 +142,5 @@ void compile(void)
         }
     }
     // debug memory dump
-    dump(last, here, ' ');
+    memdump(last, here, ' ');
 }
