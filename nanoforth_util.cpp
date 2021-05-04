@@ -6,8 +6,8 @@
 void d_chr(char c)     { Serial.write(c);   }
 void d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'A'-10 : '0')); }
 void d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
-void d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff)); d_chr(':'); }
-void d_ptr(U8 *p)      { U16 a = (U16)p; d_chr('^'); d_adr(a); }
+void d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff)); }
+void d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('^'); d_adr(a); }
 //
 // IO and Search Functions =================================================
 //
@@ -105,7 +105,7 @@ U8 getnum(U8 *str, S16 *num)
 void memdump(U8 *p0, U8 *p1, U8 d)
 {
 	U16 n = IDX(p0);
-	d_adr(n);
+	d_adr(n); d_chr(':');
 	for (; p0<p1; n++, p0++) {
 		if (d && (n&0x3)==0) d_chr(d);
 		d_hex(*p0);
