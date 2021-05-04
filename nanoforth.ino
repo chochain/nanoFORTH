@@ -21,7 +21,7 @@
     [7676,802]  grow Task at end of heap
     [8266,802]  if use array instead of pointer arithmetics, revert!
   2021-0503: CC
-    [7834,1428] forget Task struct; grow MEM_SZ to DIC_SZ+STK_SZ (1K+64*2)
+    [7818,1428] forget Task struct; grow MEM_SZ to DIC_SZ+STK_SZ (1K+64*2)
 */
 #include <pt.h>
 #include "nanoforth.h"
@@ -121,11 +121,11 @@ void setup()
     //
     // show system info
     //
-    putstr(" ( MEM_SZ=x");  puthex(MEM_SZ);
-    putstr(", DIC_SZ=x");   puthex(MEM_SZ-STK_SZ);
-    putstr(", STK_SZ=x");   puthex(STK_SZ);
-    putstr(", TIB_SZ=x");   puthex(TIB_SZ);
-    putstr(" )");
+    putstr("MEM_SZ=x");  puthex(MEM_SZ);
+    putstr(", DIC_SZ=x");  puthex(MEM_SZ-STK_SZ);
+    putstr(", STK_SZ=x");  puthex(STK_SZ);
+    putstr(", TIB_SZ=x");  puthex(TIB_SZ);
+    putstr(" ");
 }
 
 void loop()

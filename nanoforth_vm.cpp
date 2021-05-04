@@ -143,10 +143,12 @@ void vm_setup() {
     here = dic;                                           // dictionary pointer
     last = PTR(0xffff);                                   // dictionary terminator mark
 
-    putstr("\nnanoFORTH v1.0");
+    putstr("\nnanoFORTH v1.0 ");
 }
 
 void vm_core() {
+    _ok();                                                // stack check and prompt OK
+    
     U8  *tkn = token();                                   // get a token from console
     U16 tmp;
     switch (parse_token(tkn, &tmp, 1)) {
@@ -165,5 +167,4 @@ void vm_core() {
     default:
         putstr("?\n");
     }
-    _ok();  // stack check and prompt OK
 }
