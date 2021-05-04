@@ -85,11 +85,10 @@ void _ok()
         putstr("OVF!\n");
         sp = s0;                        // reset to top of stack block
     }
-    putchr('(');
     for (S16 *p=s0-1; p >= sp; p--) {
-        putchr(' '); putnum(*p);
+        putnum(*p); putchr('_'); 
     }
-    putstr(" ) OK ");
+    putstr("ok ");
 }
 //
 // Execution tracer
