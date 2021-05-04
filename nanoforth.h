@@ -120,5 +120,6 @@ void extended(U8 op);       // additional primitive words
 
 U8   vm_getchar();
 void vm_delay(U32 ms);
+void vm_trace(U16 a, U8 ir, U8 *pc);
 
 #endif // __SRC_NANOFORTH_H

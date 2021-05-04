@@ -91,15 +91,6 @@ void _ok()
     putstr("ok ");
 }
 //
-// Execution tracer
-//
-void _trace(U16 a, U8 ir, U8 *pc)
-{
-#if EXE_TRACE
-    d_adr(a); d_hex(ir); d_chr(' ');                      // tracing info
-#endif // EXE_TRACE
-}
-//
 //  Virtual Code Execution
 //
 void _execute(U16 adr)
@@ -109,7 +100,7 @@ void _execute(U16 adr)
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *(pc++);                                 // fetch instruction
 
-        _trace(a, ir, pc);                                // execution tracing when enabled
+        vm_trace(a, ir, pc);                              // execution tracing when enabled
         
         if ((ir & 0x80)==0) { PUSH(ir);               }   // 1-byte literal
         else if (ir==I_LIT) { PUSH(GET16(pc)); pc+=2; }   // 3-byte literal

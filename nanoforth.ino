@@ -112,7 +112,52 @@ U8 parse_token(U8 *tkn, U16 *rst, U8 run)
     
     return TKN_ERR;
 }
+//
+// Execution tracer
+//
+void _opcode(U8 op, const char *lst)
+{
+    PGM_P p = reinterpret_cast<PGM_P>(lst)+1+op*3;
+    d_chr('_');
+    d_chr(pgm_read_byte(p));
+    d_chr(pgm_read_byte(p+1));
+    d_chr(pgm_read_byte(p+2));
+}
 
+void vm_trace(U16 a, U8 ir, U8 *pc)
+{
+#if EXE_TRACE
+    d_adr(a);                                         // tracing info
+    
+    if ((ir & 0x80)==0) { d_chr('#'); d_hex(ir);         }        // 1-byte literal
+    else if (ir==I_LIT) { d_chr('#'); putnum(GET16(pc)); }        // 3-byte literal
+    else if (ir==I_RET) { d_chr(';');        }                    // RET
+    else if (ir==I_EXT) { _opcode(*pc, EXT); }                    // EXT extended words
+    else {
+        U8 op = ir & 0x1f;                            // opcode or top 5-bit of offset
+        a += ((U16)op<<8) + *pc - JMP_BIT;            // JMP_BIT ensure 2's complement (for backward jump)
+        switch (ir & 0xe0) {
+        case PFX_UDJ:                                 // 0x80 unconditional jump
+            d_chr('j');
+            d_adr(a);                                 // set jump target
+            break;
+        case PFX_CDJ:                                 // 0xa0 conditional jump
+            d_chr('?');
+            d_adr(a);                                 // next or target
+            break;
+        case PFX_CALL:                                // 0xd0 word call
+            d_chr(':');
+            pc = PTR(a)-3;
+            d_chr(*pc++); d_chr(*pc++); d_chr(*pc);
+            break;
+        case PFX_PRM:                                // 0xe0 primitive
+            _opcode(op, PRM);                        // show opcode
+            break;
+        }
+    }
+    d_chr(' ');
+#endif // EXE_TRACE
+}
 void setup()
 {
     Serial.begin(115200);

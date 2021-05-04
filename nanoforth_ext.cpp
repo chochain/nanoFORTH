@@ -13,7 +13,7 @@ void _words()
     for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p)), n++) {
         if (n%10==0) d_chr('\n');
 #if EXE_TRACE
-        d_adr(IDX(p));                                        // optionally show address
+        d_adr(IDX(p)); d_chr(':');                            // optionally show address
 #endif // EXE_TRACE
         d_chr(p[2]); d_chr(p[3]); d_chr(p[4]); d_chr(' ');    // 3-char name + space
     }
