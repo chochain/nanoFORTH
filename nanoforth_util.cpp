@@ -119,11 +119,11 @@ void showdic(U16 idx, U16 sz)            // idx: dictionary offset, sz: bytes
     U8 *p = PTR(idx & 0xfff0);           // 16-byte aligned
     sz &= 0xfff0;                        // 16-byte aligned
     putchr('\n');
-    for (U8 i=0; i<sz; i+=0x20) {
+    for (U16 i=0; i<sz; i+=0x20) {
         dump(p, p+0x20, ' ');
         putchr(' ');
         for (U8 j=0; j<0x20; j++, p++) { // print and advance to next byte
-            U8 c = *p & 0x7f;
+            char c = *p & 0x7f;
             putchr((c==0x7f||c<0x20) ? '_' : c);
         }
         putchr('\n');
