@@ -33,7 +33,7 @@ enum {
 //     primitive:  111c cccc                      (32 primitive)
 //     branching:  1BBo oooo oooo oooo            (+- 12-bit relative offset, i.e. portable)
 //     1-byte lit: 0nnn nnnn                      (0..127)
-//     3-byte lit: 1111 1111 nnnn nnnn nnnn nnnn
+//     3-byte lit: 1111 1110 nnnn nnnn nnnn nnnn  FE xxxx xxxx (16-bit signed integer)
 // ============================================================================================
 //
 // branch flags (1BBx)
@@ -47,8 +47,8 @@ enum {
 // opcodes for loop control (in compiler mode)
 //
 #define I_LOOP     (PFX_PRM | 25)  /* f 9 */ 
-#define I_RD2      (PFX_PRM | 26)  /* f a */
-#define I_I        (PFX_PRM | 27)  /* f b */
+#define I_I        (PFX_PRM | 26)  /* f a */
+#define I_RD2      (PFX_PRM | 27)  /* f b */
 #define I_P2R2     (PFX_PRM | 28)  /* f c */
 #define I_RET      (PFX_PRM | 29)  /* f d */
 //
@@ -117,9 +117,15 @@ void vm_core();
 void compile();             // create word on dictionary
 void variable();            // create variable on dictionary
 void extended(U8 op);       // additional primitive words
-
+//
+// multi-threaded VM functions
+//
 U8   vm_getchar();
 void vm_delay(U32 ms);
+//
+// execution tracing functions
+//
+void vm_trace_set(U16 f);
 void vm_trace(U16 a, U8 ir, U8 *pc);
 
 #endif // __SRC_NANOFORTH_H

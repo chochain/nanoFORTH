@@ -58,6 +58,7 @@ void extended(U8 op)
     case 10: PUSH(digitalRead(POP()));     break; // IN
     case 11: digitalWrite(POP(), POP());   break; // OUT
     case 12: PUSH(analogRead(POP()));      break; // AIN
+    case 13: vm_trace_set(POP());          break; // TRC
     }
 }
 
