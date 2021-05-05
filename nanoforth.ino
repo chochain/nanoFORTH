@@ -20,8 +20,9 @@
     [7396,932]  add ASM_TRACE from EXE_TRACE options
     [7676,802]  grow Task at end of heap
     [8266,802]  if use array instead of pointer arithmetics, revert!
-  2021-0503: CC
+  2021-05-03: CC
     [7818,1428] forget Task struct; grow MEM_SZ to DIC_SZ+STK_SZ (1K+64*2)
+    [8254,1430] add execution tracing option
 */
 #include <pt.h>
 #include "nanoforth.h"
@@ -79,23 +80,28 @@ const char PRM[] PROGMEM = "\x19" \
     "DRP" "DUP" "SWP" ">R " "R> " "+  " "-  " "*  " "/  " "MOD" \
     "AND" "OR " "XOR" "=  " "<  " ">  " "<= " ">= " "<> " "NOT" \
     "@  " "!  " "C@ " "C! " ".  ";
-const char EXT[] PROGMEM = "\x0d" \
+const char EXT[] PROGMEM = "\x0e" \
     "HRE" "CP " "OVR" "INV" "CEL" "ALO" "WRD" "SAV" "LD " "DLY" \
-    "IN " "OUT" "AIN";
+    "IN " "OUT" "AIN" "TRC";
+
+void _opname(U8 op, const char *lst, U8 space)
+{
+    PGM_P p = reinterpret_cast<PGM_P>(lst)+1+op*3;
+    char  c;
+    d_chr(pgm_read_byte(p));
+    if ((c=pgm_read_byte(p+1))!=' ' || space) d_chr(c);
+    if ((c=pgm_read_byte(p+2))!=' ' || space) d_chr(c);
+}
 
 void list_words()
 {
     const char *lst[] PROGMEM = { CMD, JMP, PRM, EXT };
     U8 n = 0;
     for (U8 i=0; i<4; i++) {
-        PGM_P p = reinterpret_cast<PGM_P>(lst[i]);
-        U8 sz   = pgm_read_byte(p++);
-        for (U8 j=0; j<sz; j++, p+=3) {
-            if (n++%10==0) d_chr('\n');
-            d_chr(pgm_read_byte(p));
-            d_chr(pgm_read_byte(p+1));
-            d_chr(pgm_read_byte(p+2));
-            d_chr(' ');
+        U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
+        for (U8 op=0; op<sz; op++) {
+            d_chr(n++%10==0 ? '\n' : ' ');
+            _opname(op, lst[i], 1);
         }
         YIELD();
     }
@@ -115,54 +121,62 @@ U8 parse_token(U8 *tkn, U16 *rst, U8 run)
 //
 // Execution tracer
 //
-void _opcode(U8 op, const char *lst)
+U8 tab, trc;
+void vm_trace_set(U16 f)
 {
-    PGM_P p = reinterpret_cast<PGM_P>(lst)+1+op*3;
-    d_chr('_');
-    d_chr(pgm_read_byte(p));
-    d_chr(pgm_read_byte(p+1));
-    d_chr(pgm_read_byte(p+2));
+    trc += f ? 1 : (trc ? -1 : 0);
+    tab = 0;
 }
 
+void _indent(U8 n)
+{
+    putstr("\n....");
+    for (int i=0; i<n; i++) {                         // indentation per call-depth
+        putstr("  ");
+    }
+}
+
+const char PMX[] PROGMEM = " LOPI  RD2DO ";
 void vm_trace(U16 a, U8 ir, U8 *pc)
 {
-#if EXE_TRACE
+    if (!trc) return;
+    
+    U8 spc=1;
     d_adr(a);                                         // tracing info
     
-    if ((ir & 0x80)==0) { d_chr('#'); d_hex(ir);         }        // 1-byte literal
-    else if (ir==I_LIT) { d_chr('#'); putnum(GET16(pc)); }        // 3-byte literal
-    else if (ir==I_RET) { d_chr(';');        }                    // RET
-    else if (ir==I_EXT) { _opcode(*pc, EXT); }                    // EXT extended words
+    if ((ir & 0x80)==0) { d_chr('#'); d_hex(ir);             }    // 1-byte literal
+    else if (ir==I_LIT) { d_chr('#'); putnum(GET16(pc));     }    // 3-byte literal
+    else if (ir==I_RET) { d_chr(';'); _indent(tab-=tab?1:0); spc=0; }    // RET
+    else if (ir==I_EXT) { d_chr('_'); _opname(*pc, EXT, 0);  }    // EXT extended words
     else {
         U8 op = ir & 0x1f;                            // opcode or top 5-bit of offset
         a += ((U16)op<<8) + *pc - JMP_BIT;            // JMP_BIT ensure 2's complement (for backward jump)
         switch (ir & 0xe0) {
-        case PFX_UDJ:                                 // 0x80 unconditional jump
-            d_chr('j');
-            d_adr(a);                                 // set jump target
-            break;
-        case PFX_CDJ:                                 // 0xa0 conditional jump
-            d_chr('?');
-            d_adr(a);                                 // next or target
-            break;
-        case PFX_CALL:                                // 0xd0 word call
+        case PFX_UDJ: d_chr('j'); d_adr(a);         break;        // 0x80 unconditional jump
+        case PFX_CDJ: d_chr('?'); d_adr(a);         break;        // 0xa0 conditional jump
+        case PFX_CALL:                                            // 0xc0 word call
             d_chr(':');
-            pc = PTR(a)-3;
+            pc = PTR(a)-3;                                        // backtrack 3-byte (name field)
             d_chr(*pc++); d_chr(*pc++); d_chr(*pc);
+            _indent(++tab);
+            spc = 0;
             break;
-        case PFX_PRM:                                // 0xe0 primitive
-            _opcode(op, PRM);                        // show opcode
+        case PFX_PRM:
+            d_chr('_');
+            _opname(op<25 ? op : op-25, op<25 ? PRM : PMX, 0);
             break;
         }
     }
-    d_chr(' ');
-#endif // EXE_TRACE
+    if (spc) d_chr(' ');
 }
+
 void setup()
 {
     Serial.begin(115200);
     PT_INIT(&ctx_hw);          // initialize hardware thread
     vm_setup();                // setup Forth virtual machine
+
+    tab = trc = 0;             // tracing flags
     //
     // show system info
     //

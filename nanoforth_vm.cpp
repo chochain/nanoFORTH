@@ -66,10 +66,9 @@ void _primitive(U8 op)
     case 25: {	                                // LOOP
         (*(rp-2))++;                      // counter+1
         PUSH(*(rp-2) >= *(rp-1));         // range check
-        d_chr('\n');                      // debug info
     } break;
-    case 26: RPOP(); RPOP();             break; // RD2
-    case 27: PUSH(*(rp-2));              break; // I
+    case 26: PUSH(*(rp-2));              break; // I
+    case 27: RPOP(); RPOP();             break; // RD2
     case 28: RPUSH(POP()); RPUSH(POP()); break; // P2R2
     // the following 3 opcodes change pc, done at one level up
     case 29: /* used by I_RET */         break;
@@ -112,7 +111,6 @@ void _execute(U16 adr)
             switch (ir & 0xe0) {
             case PFX_UDJ:                                 // 0x80 unconditional jump
                 pc = PTR(a);                              // set jump target
-                d_chr('\n');                              // debug info
                 break;
             case PFX_CDJ:                                 // 0xa0 conditional jump
                 pc = POP() ? pc+1 : PTR(a);               // next or target
