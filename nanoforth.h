@@ -6,7 +6,7 @@
 #include <Arduino.h>
 
 #define STK_SZ       0x80
-#define DIC_SZ       0x200
+#define DIC_SZ       0x400
 #define MEM_SZ       (DIC_SZ+STK_SZ)
 
 typedef uint8_t      U8;
@@ -42,23 +42,24 @@ enum {
 #define SET16(p, n)    do { U16 x=(U16)(n); SET8(p,(x)>>8); SET8(p,(x)&0xff); } while(0)
 #define GET16(p)       (((U16)(*(U8*)(p))<<8) + *((U8*)(p)+1))
 
+extern void n4_loop();            // virtual function
+extern int  n4_delay(U32 ms);     // hardware yield to NanoForth
+
 class N4VM;
 class NanoForth
 {
-    N4VM   *vm;
+    N4VM *vm;
     
 public:
     NanoForth();
     
-    void set_function(void (*f)());
-    void step();
-    void hw_delay(U32 ms);
+    bool run();
     //
     // multi-threaded VM functions (prefixed n4 to avoid collision with Arduino.h)
     //
-    static void n4_yield();
-    static char n4_getchar();
-    static void n4_delay(U32 ms);
+    static char key();                // Arduino's getchar()
+    static void yield();              // NanoForth yield to hardware context
+    static void wait(U32 ms);         // NanoForth thread delay
 };
 
 #endif // __SRC_NANOFORTH_H

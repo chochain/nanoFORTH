@@ -122,7 +122,7 @@ void N4Util::_console_input(U8 *tib)
 {
     U8 *p = tib;
     for (;;) {
-        char c = NanoForth::n4_getchar();
+        char c = NanoForth::key();
         if (c=='\r' || c=='\n') {            // split on RETURN
             if (p > tib) {
                 *p     = ' ';                // terminate input string

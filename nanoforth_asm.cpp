@@ -267,7 +267,6 @@ void N4Asm::_list_voc()
             D_CHR(n++%10==0 ? '\n' : ' ');
             _opname(op, lst[i], 1);
         }
-        NanoForth::n4_yield();
     }
     D_CHR('\n');
 }

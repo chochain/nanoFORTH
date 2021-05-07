@@ -187,7 +187,7 @@ void N4VM::_extended(U8 op)
     case 6:  n4asm->words();                  break; // WRD
     case 7:  n4asm->save();                   break; // SAV
     case 8:  n4asm->load();                   break; // LD
-    case 9:  NanoForth::n4_delay((U32)POP()); break; // DLY
+    case 9:  NanoForth::wait((U32)POP());     break; // DLY
     case 10: PUSH(digitalRead(POP()));        break; // IN
     case 11: digitalWrite(POP(), POP());      break; // OUT
     case 12: PUSH(analogRead(POP()));         break; // AIN

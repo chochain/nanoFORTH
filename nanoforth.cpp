@@ -1,10 +1,7 @@
 #include <pt.h>
 #include "nanoforth_vm.h"
-//
-// thread handler (note: using macro to make it stackless)
-//
-static struct pt _n4hw_ctx;                 // protothread contexts
-static void (*_n4hw_f)();                   // function pointer
+
+struct pt _n4hw_ctx;                        // hardware protothread context
 PT_THREAD(_n4hw_thread())                   // hardward protothread
 {
     PT_BEGIN(&_n4hw_ctx);
@@ -18,15 +15,18 @@ PT_THREAD(_n4hw_thread())                   // hardward protothread
     }  
     */
     while (1) {
-        _n4hw_f();
+        n4_loop();
     }
     PT_END(&_n4hw_ctx);
 }
-//
-// NanoForth multi-tasking handler
-//
-#define HW_DELAY(ms)  do {                  \
-} while(0)
+
+int n4_delay(U32 ms)
+{
+    PT_BEGIN(&_n4hw_ctx);
+    U32 t = millis() + ms;
+    PT_WAIT_WHILE(&_n4hw_ctx, millis()<t);
+    PT_END(&_n4hw_ctx);
+}
 
 NanoForth::NanoForth()
 {
@@ -34,51 +34,38 @@ NanoForth::NanoForth()
 
     vm = new N4VM;
     vm->init(_mem, MEM_SZ, STK_SZ);
-    
-    PT_INIT(&_n4hw_ctx);          // initialize hardware thread
-}
-//
-// assign user function pointer
-//
-void NanoForth::set_function(void (*f)())
-{
-    _n4hw_f = f;
+
+    PT_INIT(&_n4hw_ctx);
 }
 //
 // single step for Arduino loop
 //
-void NanoForth::step()
+bool NanoForth::run()
 {
     vm->step();
-    n4_yield();                                // share some CPU cycle to user routine
-}
-//
-// static members
-//
-void NanoForth::n4_yield()
-{
-    PT_SCHEDULE(_n4hw_thread());               // give hardware some CPU time
+    yield();
 }
 //
 // console input with cooperative threading
 //
-char NanoForth::n4_getchar()
+char NanoForth::key()
 {
-    while (!Serial.available()) n4_yield();
+    while (!Serial.available()) yield();
     
     return Serial.read();
 }
 
-void NanoForth::n4_delay(U32 ms)
+void NanoForth::yield()
 {
-    U32 t = millis() + ms;
-    while (millis()<t) n4_yield();
+    PT_SCHEDULE(_n4hw_thread());           // context switch to hardware
 }
 
-void NanoForth::hw_delay(U32 ms)
+void NanoForth::wait(U32 ms)
 {
-    static U32 t;
-    t = millis() + (U32)(ms);
-    //PT_WAIT_UNTIL(&_n4hw_ctx, millis()>=t);
+    U32 t = millis() + ms;
+    while (millis()<t) yield();
 }
+
+
+
 
