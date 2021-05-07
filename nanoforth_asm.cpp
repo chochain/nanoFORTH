@@ -20,7 +20,11 @@ const char EXT[] PROGMEM = "\x0e" \
     "HRE" "CP " "OVR" "INV" "CEL" "ALO" "WRD" "SAV" "LD " "DLY" \
     "IN " "OUT" "AIN" "TRC";
 //
-// Forth stack opcode macros
+// Forth assembler stack opcode macros (note: rp grows downward)
+//
+// mem[...dic_sz...[...stk_sz...]
+//    |                         |
+//    dic-->                rp<-+
 //
 #define RPUSH(v)       (*(--rp)=(U16)(v))
 #define RPOP()         (*(rp++))
