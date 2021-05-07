@@ -5,6 +5,20 @@
 #include "nanoforth_asm.h"
 #include "nanoforth_vm.h"
 //
+// Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)
+//
+// mem[...dic_sz...[...stk_sz...]
+//    |            |            |
+//    dic-->       +->rp    sp<-+
+//                          TOS TOS1
+//
+#define TOS            (*sp)
+#define TOS1           (*(sp+1))
+#define PUSH(v)        (*(--sp)=(S16)(v))
+#define POP()          (*(sp++))
+#define RPUSH(v)       (*(rp++)=(U16)(v))
+#define RPOP()         (*(--rp))
+//
 // NanoForth Virtual Machine initializer
 //
 N4VM::N4VM() {}
@@ -66,8 +80,8 @@ void N4VM::_init() {
     //
     // reset stack pointers and tracing flags
     //
-    rp  = (U16*)&dic[msz];               // return stack pointer, grow upward
-    sp  = (S16*)&dic[msz - ssz];         // parameter stack pointer, grows downward
+    rp  = (U16*)&dic[msz - ssz];         // return stack pointer, grow upward
+    sp  = (S16*)&dic[msz];               // parameter stack pointer, grows downward
     
     tab = trc = 0;
 
@@ -78,7 +92,7 @@ void N4VM::_init() {
 //
 void N4VM::_ok()
 {
-    S16 *s0 = (S16*)&dic[MEM_SZ];       // top of heap
+    S16 *s0 = (S16*)&dic[msz];          // top of heap
     if (sp > s0) {                      // check stack overflow
         putstr("OVF!\n");
         sp = s0;                        // reset to top of stack block

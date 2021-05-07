@@ -2,18 +2,6 @@
 #define __SRC_NANOFORTH_VM_H
 #include "nanoforth.h"
 
-#define ASM_TRACE      1                /* enable assembler tracing    */
-#define EXE_TRACE      1                /* enable VM execution tracing */
-//
-// Forth stack opcode macros
-//
-#define TOS            (*sp)
-#define TOS1           (*(sp+1))
-#define PUSH(v)        (*(--sp)=(S16)(v))
-#define POP()          (*(sp++))
-#define RPUSH(v)       (*(rp++)=(U16)(v))
-#define RPOP()         (*(--rp))
-
 class N4Asm;
 class N4VM
 {
