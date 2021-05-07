@@ -1,19 +1,19 @@
 #include <avr/pgmspace.h>
-#include "nanoforth.h"
+#include "nanoforth_util.h"
 //
 // tracing instrumentation
 //
-void d_chr(char c)     { Serial.write(c);   }
-void d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
-void d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
-void d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff)); }
-void d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('^'); d_adr(a); }
+void N4Util::d_chr(char c)     { Serial.write(c);   }
+void N4Util::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
+void N4Util::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
+void N4Util::d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff)); }
+void N4Util::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('^'); d_adr(a); }
 //
 // IO and Search Functions =================================================
 //
 //  emit a 16-bit integer
 //
-void putnum(S16 n)
+void N4Util::putnum(S16 n)
 {
     if (n < 0) { n = -n; putchr('-'); }        // process negative number
     U16 t = n/10;
@@ -21,41 +21,14 @@ void putnum(S16 n)
     putchr('0' + (n%10));
 }
 //
-// fill input buffer from console input
-//
-void _console_input(U8 *tib)
-{
-    U8 *p = tib;
-    for (;;) {
-        U8 c = vm_getchar();
-        if (c=='\r' || c=='\n') {            // split on RETURN
-            if (p > tib) {
-                *p     = ' ';                // terminate input string
-                *(p+1) = '\n';
-                break;                       // skip empty token
-            }
-        }
-        else if (c=='\b' && p > tib) {       // backspace
-            *(--p) = ' ';
-            putchr(' ');
-            putchr('\b');
-        }
-        else if ((p - tib) >= (TIB_SZ-1)) {
-            putstr("TIB!\n");
-            *p = '\n';
-            break;
-        }
-        else *p++ = c;
-    }
-}    
-//
 //  Get a Token
 //
-U8 *token(void)
+U8 *N4Util::token(void)
 {
-    static U8 tib[TIB_SZ], *tp = tib;
+    static U8 tib[TIB_SZ];
+    static U8 *tp = tib;
 
-    if (tp==tib) _console_input(tib);         // buffer empty, read from console
+    if (tp==tib) _console_input(tp);          // buffer empty, read from console
 
     U8 *p = tp;                               // keep original tib pointer
     U8 sz = 0;
@@ -67,7 +40,7 @@ U8 *token(void)
 #if ASM_TRACE
     // debug info
     d_chr('\n');
-    for (U8 i=0; i<4; i++) {
+    for (int i=0; i<4; i++) {
     	d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
     }
 #endif // ASM_TRACE
@@ -76,7 +49,7 @@ U8 *token(void)
 //
 // Process a Literal
 //
-U8 getnum(U8 *str, S16 *num)
+U8 N4Util::getnum(U8 *str, S16 *num)
 {
     U8  neg = 0;
     S16 n   = 0;
@@ -102,11 +75,10 @@ U8 getnum(U8 *str, S16 *num)
 //
 // byte-stream dumper with delimiter option
 // 
-void memdump(U8 *p0, U8 *p1, U8 d)
+void N4Util::memdump(U8 *p0, U8 *p1, U8 d)
 {
-	U16 n = IDX(p0);
-	d_adr(n); d_chr(':');
-	for (; p0<p1; n++, p0++) {
+	d_chr(':');
+	for (int n=0; p0<p1; n++, p0++) {
 		if (d && (n&0x3)==0) d_chr(d);
 		d_hex(*p0);
 	}
@@ -114,10 +86,8 @@ void memdump(U8 *p0, U8 *p1, U8 d)
 //
 // show a section of memory in Forth dump format
 //
-void dump(U16 idx, U16 sz)               // idx: memory offset, sz: bytes
+void N4Util::dump(U8* p, U16 sz)         // idx: memory offset, sz: bytes
 {
-    U8 *p = PTR(idx & 0xfff0);           // 16-byte aligned
-    sz &= 0xfff0;                        // 16-byte aligned
     putchr('\n');
     for (U16 i=0; i<sz; i+=0x20) {
         memdump(p, p+0x20, ' ');
@@ -130,24 +100,11 @@ void dump(U16 idx, U16 sz)               // idx: memory offset, sz: bytes
     }
 }
 //
-// scan the keyword through dictionary linked-list
-//
-U8 query(U8 *tkn, U16 *adr)
-{
-    for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {
-        if (p[2]==tkn[0] && p[3]==tkn[1] && (p[3]==' ' || p[4]==tkn[2])) {
-            *adr = IDX(p);
-            return 1;
-        }
-    }
-    return 0;
-}
-//
 // search keyword in a List
 //
-U8 find(U8 *tkn, const char *lst, U16 *id)
+U8 N4Util::find(U8 *tkn, const char *lst, U16 *id)
 {
-    for (U16 n=1, m=pgm_read_byte(lst); n < m*3; n+=3) {
+    for (int n=1, m=pgm_read_byte(lst); n < m*3; n+=3) {
         if (tkn[0]==pgm_read_byte(lst+n) &&
             tkn[1]==pgm_read_byte(lst+n+1) &&
             (tkn[1]==' ' || tkn[2]==pgm_read_byte(lst+n+2))) {
@@ -158,3 +115,31 @@ U8 find(U8 *tkn, const char *lst, U16 *id)
     return 0;
 }
 
+//
+// fill input buffer from console input
+//
+void N4Util::_console_input(U8 *tib)
+{
+    U8 *p = tib;
+    for (;;) {
+        char c = NanoForth::n4_getchar();
+        if (c=='\r' || c=='\n') {            // split on RETURN
+            if (p > tib) {
+                *p     = ' ';                // terminate input string
+                *(p+1) = '\n';
+                break;                       // skip empty token
+            }
+        }
+        else if (c=='\b' && p > tib) {       // backspace
+            *(--p) = ' ';
+            putchr(' ');
+            putchr('\b');
+        }
+        else if ((p - tib) >= (TIB_SZ-1)) {
+            putstr("TIB!\n");
+            *p = '\n';
+            break;
+        }
+        else *p++ = c;
+    }
+}    
