@@ -23,27 +23,28 @@
   2021-05-03: CC
     [7818,1428] forget Task struct; grow MEM_SZ to DIC_SZ+STK_SZ (1K+64*2)
     [8254,1430] add execution tracing option
+  2021-05-06: CC
+    [9214,1424] refactor to C++ for Arduino lib
 */
-#include "nanoforth_vm.h"
+#include "nanoforth.h"
 
 NanoForth n4;                 // create a nanoForth instance
-
-void test()
-{
-    digitalWrite(LED_BUILTIN, HIGH);
-    n4.hw_delay(500);
-    digitalWrite(LED_BUILTIN, LOW);
-    n4.hw_delay(500);
-}
 
 void setup()
 {
     Serial.begin(115200);
-    n4.set_function(test);
 }
 
 void loop()
 {
-    n4.step();                  // execute one vm cycle
+    n4.run();                  // execute one vm cycle
+}
+
+void n4_loop()
+{    
+    digitalWrite(LED_BUILTIN, HIGH);
+    n4_delay(500);
+    digitalWrite(LED_BUILTIN, LOW);
+    n4_delay(500);
 }
 
