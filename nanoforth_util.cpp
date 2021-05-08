@@ -83,6 +83,7 @@ void N4Util::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
 		if (delim && (n&0x3)==0) d_chr(delim);
 		d_hex(*p0);
 	}
+    d_chr(delim);
 }
 //
 // show a section of memory in Forth dump format

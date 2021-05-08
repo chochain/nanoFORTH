@@ -3,17 +3,19 @@
 #include "nanoforth.h"
 
 class N4Asm;
-class N4VM
+class N4VM              // NanoForth VM (16-byte header)
 {
-    N4Asm  *n4asm;      // assembler 
-
+    N4Asm  *n4asm;      // assembler
+    
     U16    msz;         // memory size        mem[dic->...<-stk]
     U16    ssz;         // stack size
-    U8     trc;         // tracing flags
     
     U8     *dic;        // dictionary base
     U16    *rp;         // return stack pointer
     S16    *sp;         // parameter stack pinter
+    
+    U8     trc;         // tracing flags
+    U8     xxx;         // reserved
     
 public:
     N4VM();

@@ -34,14 +34,17 @@ enum {
     I_EXT                    /* f f */
 };
 
-class N4Asm {
+class N4Asm                         // NanoForth Assembler (10-byte header)
+{
     U8  *dic;                       // dictionary base
     U16 *rp;                        // return stack pointer
+    
     U8  tab;                        // tracing indentation counter
+    U8  xxx;                        // reserved          
     
 public:
-    U8  *last;                      // pointer to last word
-    U8  *here;                      // top of dictionary
+    U8  *last;                      // pointer to last word (exposed to _vm::_extended for debugging)
+    U8  *here;                      // top of dictionary    (exposed to _vm::_extended for debugging)
     
     N4Asm();
     void init(U8 *mem);             // Arduino does not have dynamic constructor
