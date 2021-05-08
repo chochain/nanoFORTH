@@ -26,8 +26,8 @@ const char EXT[] PROGMEM = "\x0e" \
 //    |                         |
 //    dic-->                rp<-+
 //
-#define RPUSH(v)       (*(--rp)=(U16)(v))
-#define RPOP()         (*(rp++))
+#define RPUSH(v)       (*(rp++)=(U16)(v))
+#define RPOP()         (*(--rp))
 //
 // dictionary index <=> pointer translation macros
 //
@@ -59,10 +59,10 @@ const char EXT[] PROGMEM = "\x0e" \
 //
 // NanoForth Assembler initializer
 //
-N4Asm::N4Asm(U8 *mem, U16 mem_sz)
+N4Asm::N4Asm() {}
+void N4Asm::init(U8 *mem)
 {
     dic = &mem[0];
-    rp  = (U16*)&dic[mem_sz];         // top of dictionary
     reset();
 }
 //
@@ -90,8 +90,9 @@ U8 N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 //
 // NanoForth compiler - create word onto dictionary
 //
-void N4Asm::compile()
+void N4Asm::compile(U16 *rp0)
 {
+    rp = rp0;                    // capture current return pointer
     U8  *tkn = N4Util::token();  // fetch one token from console
     U8  *p0  = here;
     U16 tmp  = IDX(last);        // link to previous word
@@ -101,7 +102,7 @@ void N4Asm::compile()
     SETNM(here, tkn);            // 3-byte name
 
     for (; tkn;) {               // terminate if tkn==NULL
-        D_ADR(IDX(p0)); N4Util::memdump(p0, here, 0);
+        N4Util::memdump(dic, p0, (U16)(here-p0), 0);
 
         tkn = N4Util::token();
         p0  = here;
@@ -136,7 +137,7 @@ void N4Asm::compile()
         }
     }
     // debug memory dump
-    D_ADR(IDX(last)); N4Util::memdump(last, here, ' ');
+    N4Util::memdump(dic, last, (U16)(here-last), ' ');
 }
 //
 //  create variable on dictionary

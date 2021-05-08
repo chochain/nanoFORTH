@@ -37,20 +37,20 @@ enum {
 class N4Asm {
     U8  *dic;                       // dictionary base
     U16 *rp;                        // return stack pointer
-    
     U8  tab;                        // tracing indentation counter
     
 public:
     U8  *last;                      // pointer to last word
     U8  *here;                      // top of dictionary
     
-    N4Asm(U8 *mem, U16 mem_sz);
+    N4Asm();
+    void init(U8 *mem);             // Arduino does not have dynamic constructor
     void reset();                   // reset internal pointers (for BYE)
     //
     // assembler functions
     //
     U8   parse_token(U8 *tkn, U16 *rst, U8 run);
-    void compile();                // create word on dictionary
+    void compile(U16 *rp0);        // create word on dictionary
     void variable();               // create variable on dictionary
     //
     // dictionary, string list scanners
