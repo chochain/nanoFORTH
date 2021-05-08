@@ -4,6 +4,7 @@
 // tracing instrumentation
 //
 void N4Util::d_chr(char c)     { Serial.write(c);   }
+//void N4Util::d_chr(char c)     { printf("%c", c);   }
 void N4Util::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
 void N4Util::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
 void N4Util::d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff)); }
@@ -27,7 +28,7 @@ U8 *N4Util::token(void)
 {
     static U8 tib[TIB_SZ];
     static U8 *tp = tib;
-
+    
     if (tp==tib) _console_input(tib);         // buffer empty, read from console
 
     U8 *p = tp;                               // keep original tib pointer
@@ -40,7 +41,7 @@ U8 *N4Util::token(void)
 #if ASM_TRACE
     // debug info
     d_chr('\n');
-    for (int i=0; i<4; i++) {
+    for (int i=0; i<5; i++) {
     	d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
     }
 #endif // ASM_TRACE
@@ -75,22 +76,22 @@ U8 N4Util::getnum(U8 *str, S16 *num)
 //
 // byte-stream dumper with delimiter option
 // 
-void N4Util::memdump(U8 *p0, U8 *p1, U8 d)
+void N4Util::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
 {
-	d_chr(':');
-	for (int n=0; p0<p1; n++, p0++) {
-		if (d && (n&0x3)==0) d_chr(d);
+	d_adr((U16)(p0 - base)); d_chr(':');
+	for (int n=0; n<sz; n++, p0++) {
+		if (delim && (n&0x3)==0) d_chr(delim);
 		d_hex(*p0);
 	}
 }
 //
 // show a section of memory in Forth dump format
 //
-void N4Util::dump(U8* p, U16 sz)         // idx: memory offset, sz: bytes
+void N4Util::dump(U8* base, U8* p, U16 sz)         // idx: memory offset, sz: bytes
 {
     putchr('\n');
     for (U16 i=0; i<sz; i+=0x20) {
-        memdump(p, p+0x20, ' ');
+        memdump(base, p, 0x20, ' ');
         putchr(' ');
         for (U8 j=0; j<0x20; j++, p++) { // print and advance to next byte
             char c = *p & 0x7f;
@@ -114,7 +115,6 @@ U8 N4Util::find(U8 *tkn, const char *lst, U16 *id)
     }
     return 0;
 }
-
 //
 // fill input buffer from console input
 //

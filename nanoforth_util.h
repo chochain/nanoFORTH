@@ -28,12 +28,12 @@ public:
     //
     // memory dummpers
     //
-    static void memdump(U8 *p0, U8 *p1, U8 d);   // show memory content between pointers (d: delimiter option)
-    static void dump(U8 *p, U16 sz);             // dump memory block with dictionary offset and length
+    static void memdump(U8 *base, U8 *p0, U16 sz, U8 delim); // mem between pointers (d: delimiter option)
+    static void dump(U8 *base, U8 *p, U16 sz);               // mem block with dictionary offset and length
     //
     // string list scanners
     //
-    static U8   find(U8 *tkn, const char *lst, U16 *id);      // find(token) in string list
+    static U8   find(U8 *tkn, const char *lst, U16 *id);     // find(token) in string list
     
 private:
     static void _console_input(U8 *tib);
