@@ -18,9 +18,8 @@ class N4VM
     U8     tab, trc;    // tracing flags
     
 public:
-    N4VM();
-
-    void init(U8 *mem, U16 mem_sz, U16 stk_sz);
+    N4VM(U8 *mem, U16 mem_sz, U16 stk_sz);
+    
     void step();
     void info();
     void set_trace(U16 f);

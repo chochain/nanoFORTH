@@ -21,11 +21,10 @@
 //
 // NanoForth Virtual Machine initializer
 //
-N4VM::N4VM() {}
-void N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
+N4VM::N4VM(U8 *mem, U16 mem_sz, U16 stk_sz)
 {
-    n4asm = new N4Asm;
-    n4asm->init(mem, mem_sz);
+    N4Asm asm0(mem, mem_sz);  // instanciate NanoForth Assembler
+    n4asm = &asm0;
     
     dic = &mem[0];
     msz = mem_sz;
@@ -38,9 +37,20 @@ void N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
 //
 void N4VM::info()
 {
+    char tmp;
     putstr("MEM_SZ=x");    puthex(msz);
-    putstr(", DIC_SZ=x");  puthex(msz - ssz);
-    putstr(", STK_SZ=x");  puthex(ssz);
+    putstr("[DIC=x");      puthex(msz - ssz);
+    putstr(", STK=x");     puthex(ssz);
+    U16 free = IDX(&tmp) - IDX(sp);
+#if EXE_TRACE
+    putstr("] dic[");      N4Util::d_ptr(dic);
+    putstr("..|rp=");      N4Util::d_ptr((U8*)rp);
+    putstr(",");           N4Util::d_ptr((U8*)sp);
+    putstr("=sp] x");      puthex(free);
+    putstr(" [");          N4Util::d_ptr((U8*)&tmp);
+#else
+    putstr("] free=x");    puthex(free);
+#endif // EXE_TRACE
     putstr(" ");
 }
 //
@@ -82,6 +92,9 @@ void N4VM::_init() {
     //
     rp  = (U16*)&dic[msz - ssz];         // return stack pointer, grow upward
     sp  = (S16*)&dic[msz];               // parameter stack pointer, grows downward
+
+    n4asm->here = dic;
+    n4asm->last = PTR(0xffff);
     
     tab = trc = 0;
 
