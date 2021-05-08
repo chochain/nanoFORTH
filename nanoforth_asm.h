@@ -37,6 +37,7 @@ enum {
 class N4Asm {
     U8  *dic;                       // dictionary base
     U16 *rp;                        // return stack pointer
+    
     U8  tab;                        // tracing indentation counter
     
 public:
@@ -44,6 +45,7 @@ public:
     U8  *here;                      // top of dictionary
     
     N4Asm(U8 *mem, U16 mem_sz);
+    void reset();                   // reset internal pointers (for BYE)
     //
     // assembler functions
     //

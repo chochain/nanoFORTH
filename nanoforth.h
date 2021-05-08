@@ -34,11 +34,6 @@ enum {
 #define putchr(c)      Serial.write((char)c)
 #define puthex(v)      Serial.print((U16)v, HEX)
 //
-// dictionary index <=> pointer translation macros
-//
-#define PTR(n)         ((U8*)dic + (n))
-#define IDX(p)         ((U16)((U8*)(p) - dic))
-//
 // memory access opcodes
 //
 #define SET8(p, c)     (*(U8*)(p)++=(U8)(c))

@@ -29,6 +29,11 @@ const char EXT[] PROGMEM = "\x0e" \
 #define RPUSH(v)       (*(--rp)=(U16)(v))
 #define RPOP()         (*(rp++))
 //
+// dictionary index <=> pointer translation macros
+//
+#define PTR(n)         ((U8*)dic + (n))
+#define IDX(p)         ((U16)((U8*)(p) - dic))
+//
 // name creation macro
 //
 #define SETNM(p, s) do {                   \
@@ -56,10 +61,17 @@ const char EXT[] PROGMEM = "\x0e" \
 //
 N4Asm::N4Asm(U8 *mem, U16 mem_sz)
 {
-    dic  = &mem[0];
-    here = dic;
-    last = PTR(0xffff);
-    rp   = (U16*)&mem[mem_sz];
+    dic = &mem[0];
+    rp  = (U16*)&dic[mem_sz];         // top of dictionary
+    reset();
+}
+//
+// reset internal pointers
+//
+void N4Asm::reset()
+{
+    here = dic;                       // rewind to dictionary base
+    last = PTR(0xffff);               // -1
     tab  = 0;
 }
 //
@@ -80,15 +92,15 @@ U8 N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 //
 void N4Asm::compile()
 {
-    U8  *tkn = N4Util::token();
+    U8  *tkn = N4Util::token();  // fetch one token from console
     U8  *p0  = here;
-    U16 tmp  = IDX(last);     // link to previous word
+    U16 tmp  = IDX(last);        // link to previous word
 
     last = here;
-    SET16(here, tmp);         // pointer to previous word
-    SETNM(here, tkn);         // 3-byte name
+    SET16(here, tmp);            // pointer to previous word
+    SETNM(here, tkn);            // 3-byte name
 
-    for (; tkn;) {            // terminate if tkn==NULL
+    for (; tkn;) {               // terminate if tkn==NULL
         D_ADR(IDX(p0)); N4Util::memdump(p0, here, 0);
 
         tkn = N4Util::token();

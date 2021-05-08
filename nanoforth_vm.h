@@ -8,14 +8,11 @@ class N4VM
     N4Asm  *n4asm;      // assembler 
     U16    msz;         // memory size        mem[dic->...<-stk]
     U16    ssz;         // stack size
-    U8     *dic;        // dictionary base
+    U8     trc;         // tracing flags
     
+    U8     *dic;        // dictionary base
     U16    *rp;         // return stack pointer
     S16    *sp;         // parameter stack pinter
-    
-    bool   asm_trace;   // t
-    bool   exe_trace;   // f
-    U8     tab, trc;    // tracing flags
     
 public:
     N4VM(U8 *mem, U16 mem_sz, U16 stk_sz);

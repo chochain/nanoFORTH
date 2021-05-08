@@ -19,6 +19,11 @@
 #define RPUSH(v)       (*(rp++)=(U16)(v))
 #define RPOP()         (*(--rp))
 //
+// dictionary index <=> pointer translation macros
+//
+#define PTR(n)         ((U8*)dic + (n))
+#define IDX(p)         ((U16)((U8*)(p) - dic))
+//
 // NanoForth Virtual Machine initializer
 //
 N4VM::N4VM(U8 *mem, U16 mem_sz, U16 stk_sz)
@@ -92,11 +97,9 @@ void N4VM::_init() {
     //
     rp  = (U16*)&dic[msz - ssz];         // return stack pointer, grow upward
     sp  = (S16*)&dic[msz];               // parameter stack pointer, grows downward
+    trc = 0;
 
-    n4asm->here = dic;
-    n4asm->last = PTR(0xffff);
-    
-    tab = trc = 0;
+    n4asm->reset();                      // reset assember
 
     putstr("\nnanoFORTH v1.0 ");
 }
