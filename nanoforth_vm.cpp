@@ -26,10 +26,13 @@
 //
 // NanoForth Virtual Machine initializer
 //
-N4VM::N4VM(U8 *mem, U16 mem_sz, U16 stk_sz)
+N4VM::N4VM() {}
+void N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
 {
-    N4Asm asm0(mem, mem_sz);  // instanciate NanoForth Assembler
-    n4asm = &asm0;
+    n4asm = new N4Asm();
+    putstr(", asm="); N4Util::d_ptr((U8*)n4asm);
+    
+    n4asm->init(mem);
     
     dic = &mem[0];
     msz = mem_sz;
@@ -43,7 +46,7 @@ N4VM::N4VM(U8 *mem, U16 mem_sz, U16 stk_sz)
 void N4VM::info()
 {
     char tmp;
-    putstr("MEM_SZ=x");    puthex(msz);
+    putstr("MEM=x");       puthex(msz);
     putstr("[DIC=x");      puthex(msz - ssz);
     putstr(", STK=x");     puthex(ssz);
     U16 free = IDX(&tmp) - IDX(sp);
@@ -51,10 +54,10 @@ void N4VM::info()
     putstr("] dic[");      N4Util::d_ptr(dic);
     putstr("..|rp=");      N4Util::d_ptr((U8*)rp);
     putstr(",");           N4Util::d_ptr((U8*)sp);
-    putstr("=sp] x");      puthex(free);
+    putstr("=sp] free=x"); puthex(free);
     putstr(" [");          N4Util::d_ptr((U8*)&tmp);
 #else
-    putstr("] free=x");    puthex(free);
+    putstr("] Free=x");    puthex(free);
 #endif // EXE_TRACE
     putstr(" ");
 }
@@ -69,11 +72,14 @@ void N4VM::step() {
     switch (n4asm->parse_token(tkn, &tmp, 1)) {
     case TKN_EXE:
         switch (tmp) {
-        case 0:	n4asm->compile();  break;       // : (COLON), create word
-        case 1:	n4asm->variable(); break;       // VAR, create variable    
-        case 2:	n4asm->forget();   break;       // FGT
-        case 3: N4Util::dump(PTR(POP()&0xfff0), POP()&0xfff0); break; // DMP
-        case 4: _init();           break;       // BYE
+        case 0:	n4asm->compile(rp);  break;     // : (COLON), create word
+        case 1:	n4asm->variable();   break;     // VAR, create variable    
+        case 2:	n4asm->forget();     break;     // FGT
+        case 3: N4Util::dump(
+            dic,
+            PTR(POP()&0xfff0),
+            POP()&0xfff0);           break;     // DMP
+        case 4: _init();             break;     // BYE
         }                                  break;
     case TKN_DIC: _execute(tmp + 2 + 3);   break;
     case TKN_EXT: _extended((U8)tmp);      break;
@@ -128,7 +134,7 @@ void N4VM::_execute(U16 adr)
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *(pc++);                                 // fetch instruction
 
-        if (trc) n4asm->trace(a, ir, pc);                 // execution tracing when enabled
+        if (trc) n4asm->trace(a, ir, pc);                 // executioU8n tracing when enabled
         
         if ((ir & 0x80)==0) { PUSH(ir);               }   // 1-byte literal
         else if (ir==I_LIT) { PUSH(GET16(pc)); pc+=2; }   // 3-byte literal
@@ -152,6 +158,7 @@ void N4VM::_execute(U16 adr)
                 _primitive(op);                           // call primitve function with opcode
             }
         }
+        NanoForth::yield();
     }
 }
 //
@@ -191,7 +198,7 @@ void N4VM::_primitive(U8 op)
     case 24: N4Util::putnum(POP()); putchr(' ');      break; // .
     case 25: {	                                // LOP
         (*(rp-2))++;                      // counter+1
-        PUSH(*(rp-2) >= *(rp-1));         // range check
+        PUSH(*(rp-2) >= *(rp-1));         // range checkU8
     } break;
     case 26: PUSH(*(rp-2));              break; // I
     case 27: RPOP(); RPOP();             break; // RD2

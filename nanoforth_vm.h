@@ -6,6 +6,7 @@ class N4Asm;
 class N4VM
 {
     N4Asm  *n4asm;      // assembler 
+
     U16    msz;         // memory size        mem[dic->...<-stk]
     U16    ssz;         // stack size
     U8     trc;         // tracing flags
@@ -15,10 +16,11 @@ class N4VM
     S16    *sp;         // parameter stack pinter
     
 public:
-    N4VM(U8 *mem, U16 mem_sz, U16 stk_sz);
+    N4VM();
+    void init(U8 *mem, U16 mem_sz, U16 stk_sz); // Arduino does not have dynamic constructor
+    void info();
     
     void step();
-    void info();
     void set_trace(U16 f);
     
 private:
