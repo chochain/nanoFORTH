@@ -16,9 +16,9 @@ const char PRM[] PROGMEM = "\x19" \
     "DRP" "DUP" "SWP" ">R " "R> " "+  " "-  " "*  " "/  " "MOD" \
     "AND" "OR " "XOR" "=  " "<  " ">  " "<= " ">= " "<> " "NOT" \
     "@  " "!  " "C@ " "C! " ".  ";
-const char EXT[] PROGMEM = "\x0e" \
-    "HRE" "CP " "OVR" "INV" "CEL" "ALO" "WRD" "SAV" "LD " "DLY" \
-    "IN " "OUT" "AIN" "TRC";
+const char EXT[] PROGMEM = "\x10" \
+    "HRE" "CP " "OVR" "INV" "CEL" "ALO" "WRD" "SAV" "LD " "TRC" \
+    "DLY" "PIN" "IN " "OUT" "AIN" "AOT";
 //
 // Forth assembler stack opcode macros (note: rp grows downward)
 //

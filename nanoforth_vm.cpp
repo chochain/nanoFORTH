@@ -7,15 +7,17 @@
 //
 // Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)
 //
+//                              SP0 (sp max to protect overwritten of vm object)
 // mem[...dic_sz...[...stk_sz...]
 //    |            |            |
 //    dic-->       +->rp    sp<-+
-//                          TOS TOS1
+//                          TOS TOS1 (top of stack)
 //
+#define SP0            ((S16*)(dic+msz))
 #define TOS            (*sp)
 #define TOS1           (*(sp+1))
 #define PUSH(v)        (*(--sp)=(S16)(v))
-#define POP()          (*(sp++))
+#define POP()          (sp<SP0 ? *sp++ : 0)
 #define RPUSH(v)       (*(rp++)=(U16)(v))
 #define RPOP()         (*(--rp))
 //
@@ -224,11 +226,13 @@ void N4VM::_extended(U8 op)
     case 6:  n4asm->words();                  break; // WRD
     case 7:  n4asm->save();                   break; // SAV
     case 8:  n4asm->load();                   break; // LD
-    case 9:  NanoForth::wait((U32)POP());     break; // DLY
-    case 10: PUSH(digitalRead(POP()));        break; // IN
-    case 11: digitalWrite(POP(), POP());      break; // OUT
-    case 12: PUSH(analogRead(POP()));         break; // AIN
-    case 13: set_trace(POP());                break; // TRC
+    case 9:  set_trace(POP());                break; // TRC
+    case 10: NanoForth::wait((U32)POP());     break; // DLY
+    case 11: pinMode(POP(), POP());           break; // PIN
+    case 12: PUSH(digitalRead(POP()));        break; // IN
+    case 13: digitalWrite(POP(), POP());      break; // OUT
+    case 14: PUSH(analogRead(POP()));         break; // AIN
+    case 15: analogWrite(POP(), POP());       break; // AOT
     }
 }
 

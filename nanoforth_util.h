@@ -8,7 +8,7 @@
 #define D_HEX(h)   N4Util::d_hex(h)
 #define D_ADR(a)   N4Util::d_adr(a)
 
-class N4Util                    // helper class
+class N4Util                    // NanoForth helper class
 {
 public:
     //
