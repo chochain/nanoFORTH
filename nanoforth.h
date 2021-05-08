@@ -5,6 +5,9 @@
 #include <stdint.h>
 #include <Arduino.h>
 
+#define ASM_TRACE      1                /* enable assembler tracing    */
+#define EXE_TRACE      1                /* enable VM execution tracing */
+
 #define STK_SZ       0x80
 #define DIC_SZ       0x400
 #define MEM_SZ       (DIC_SZ+STK_SZ)
@@ -52,14 +55,15 @@ class NanoForth
     
 public:
     NanoForth();
+    NanoForth(U16 mem_sz, U16 stk_sz);
     
-    bool run();
+    bool run();                       // run one NanoForth VM cycle
     //
     // multi-threaded VM functions (prefixed n4 to avoid collision with Arduino.h)
     //
-    static char key();                // Arduino's getchar()
     static void yield();              // NanoForth yield to hardware context
-    static void wait(U32 ms);         // NanoForth thread delay
+    static char key();                // Arduino's getchar(), yield to hardware context when waiting
+    static void wait(U32 ms);         // NanoForth thread delay(), yield to hardware context
 };
 
 #endif // __SRC_NANOFORTH_H
