@@ -43,8 +43,7 @@ public:
     U8  *last;                      // pointer to last word
     U8  *here;                      // top of dictionary
     
-    N4Asm();
-    void init(U8 *mem, U16 mem_sz); // Arduino does not support new N4Asm(...)
+    N4Asm(U8 *mem, U16 mem_sz);
     //
     // assembler functions
     //

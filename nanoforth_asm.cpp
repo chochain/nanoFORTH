@@ -54,8 +54,7 @@ const char EXT[] PROGMEM = "\x0e" \
 //
 // NanoForth Assembler initializer
 //
-N4Asm::N4Asm() {}
-void N4Asm::init(U8 *mem, U16 mem_sz)
+N4Asm::N4Asm(U8 *mem, U16 mem_sz)
 {
     dic  = &mem[0];
     here = dic;

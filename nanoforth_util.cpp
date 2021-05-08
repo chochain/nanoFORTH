@@ -28,7 +28,7 @@ U8 *N4Util::token(void)
     static U8 tib[TIB_SZ];
     static U8 *tp = tib;
 
-    if (tp==tib) _console_input(tp);          // buffer empty, read from console
+    if (tp==tib) _console_input(tib);         // buffer empty, read from console
 
     U8 *p = tp;                               // keep original tib pointer
     U8 sz = 0;
