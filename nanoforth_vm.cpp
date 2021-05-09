@@ -32,8 +32,6 @@ N4VM::N4VM() {}
 void N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
 {
     n4asm = new N4Asm();
-    putstr(", asm="); N4Util::d_ptr((U8*)n4asm);
-    
     n4asm->init(mem);
     
     dic = &mem[0];

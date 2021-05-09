@@ -25,83 +25,57 @@
     [8254,1430] add execution tracing option
   2021-05-06: CC
     [9214,1424] refactor to C++ for Arduino lib
+    [11750,280] add mem,stk sizing; VM and ASM objects dynamically created
+    [11996,272] add struct n4_task and N4_FUNC multi-tasker
 */
-#include <pt.h>
 #include "nanoforth_vm.h"
-
-#define n4_delay( ms)  do {                 \
-    static U32 t;                           \
-    t = millis() + (U32)(ms);               \
-    PT_WAIT_UNTIL(&_n4hw_ctx, millis()>=t); \
-} while(0)
 //
-// main hardward protothread
+// user function linked-list
 //
-struct pt _n4hw_ctx;                        // hardware context
-PT_THREAD(_n4hw_thread())                   // hardward protothread
-{
-    PT_BEGIN(&_n4hw_ctx);
-    /*
-    U16 tmp;
-    find("LD ", LST_EXT, &tmp);             // Load DIC
-    extended((U8)tmp);
-    
-    if (lookup("INI", &tmp)) {              // RUN "INI"
-        execute(tmp + 2 + 3);               // header: 2-byte pointer to next + 3-byte NAME
-    }  
-    */
-    while (1) {
-//        n4_loop();                          // calling user function
-        digitalWrite(LED_BUILTIN, HIGH);
-        n4_delay(500);
-        digitalWrite(LED_BUILTIN, LOW);
-        n4_delay(500);
-    }
-    PT_END(&_n4hw_ctx);
-}
-/*
-int n4_delay(U32 ms)
-{
-    PT_BEGIN(&_n4hw_ctx);
-    U32 t = millis() + ms;
-    PT_WAIT_UNTIL(&_n4hw_ctx, millis()>=t);
-    PT_END(&_n4hw_ctx);
-}
-*/
+static n4_task *_n4tsk = 0;
 
-NanoForth::NanoForth() : NanoForth(MEM_SZ, STK_SZ) {}
+NanoForth::NanoForth() : NanoForth(MEM_SZ, STK_SZ) {}    // overloaded constructors
 NanoForth::NanoForth(U16 mem_sz, U16 stk_sz)
 {
-    U8 *_mem = (U8*)malloc(mem_sz);    // allocate heap
-    N4VM v0(_mem, mem_sz, stk_sz);     // instanciate NanoForth VM
-    
-    vm = &v0;                          // Arduino has no new()
+    U8 *_mem = (U8*)malloc(mem_sz);                      // allocate heap
+
+    vm = new N4VM();
+    vm->init(_mem, mem_sz, stk_sz);                      // instanciate NanoForth VM
     vm->info();
-    
-    PT_INIT(&_n4hw_ctx);
 }
 //
 // single step for Arduino loop
 //
+void NanoForth::add(void (*ufunc)(n4_task*))
+{
+    n4_task *tp = (n4_task*)malloc(sizeof(n4_task));
+
+    tp->func = ufunc;   // assign user function
+    tp->ci   = 0;       // reset case index 
+    tp->next = _n4tsk;  // push into linked-list
+    _n4tsk   = tp;      // reset head
+}
+
 bool NanoForth::run()
 {
     vm->step();
-//    yield();
+    yield();
 }
 //
-// n4 yield to hardware context
+// n4 yield to hardware tasks
 //
 void NanoForth::yield()
 {
-    PT_SCHEDULE(_n4hw_thread());           // context switch to hardware
+    for (n4_task *tp=_n4tsk; tp; tp=tp->next) {
+        tp->func(tp);
+    }
 }
 //
 // console input with cooperative threading
 //
 char NanoForth::key()
 {
-    while (!Serial.available()); // yield();
-    
+    while (!Serial.available()) yield();
     return Serial.read();
 }
 //
@@ -121,7 +95,9 @@ int main(int argc, char **argv)
 	setvbuf(stdout, NULL, _IONBF, 0);		// autoflush (turn STDOUT buffering off)
     
 	NanoForth n4;
-	n4.run();
+    while (1) {
+        n4.run();
+    }
 	return 0;
 }
 */
