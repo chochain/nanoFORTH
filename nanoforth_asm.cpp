@@ -1,12 +1,23 @@
-//
-// NanoForth Assmebler
-//
+///
+/// \file nanoforth_asm.cpp
+/// \brief NanoForth Assmebler implementation
+///
+///> NanoForth Assember memory organization
+///>>    `mem[...dic_sz...[...stk_sz...]`<p>
+///>>    `   |                         |`<p>
+///>>    `  dic-->                rp<-+`<p>
+///
 #include <EEPROM.h>
 #include "nanoforth_util.h"
 #include "nanoforth_asm.h"
-//
-// NanoForth built-in vocabularies
-//
+///
+/// NanoForth built-in vocabularies
+///
+/// \var CMD - words for interpret mode.
+/// \var JMP - words for branching op in compile mode.
+/// \var PRM - primitive words.
+/// \var EXT - extended words for I/O, and Arduino specific ops.
+
 const char CMD[] PROGMEM = "\x05" \
     ":  " "VAR" "FGT" "DMP" "BYE";
 const char JMP[] PROGMEM = "\x0b" \
@@ -21,10 +32,6 @@ const char EXT[] PROGMEM = "\x10" \
     "DLY" "PIN" "IN " "OUT" "AIN" "AOT";
 //
 // Forth assembler stack opcode macros (note: rp grows downward)
-//
-// mem[...dic_sz...[...stk_sz...]
-//    |                         |
-//    dic-->                rp<-+
 //
 #define RPUSH(v)       (*(rp++)=(U16)(v))
 #define RPOP()         (*(--rp))
@@ -56,40 +63,39 @@ const char EXT[] PROGMEM = "\x10" \
     U16 a  = (U16)(p - here) + JMP_BIT;    \
     SET16(here, a | (f<<8));               \
     } while(0)
-//
-// NanoForth Assembler initializer
-//
+///
+/// * NanoForth Assembler initializer
+///
 N4Asm::N4Asm() {}
 void N4Asm::init(U8 *mem)
 {
     dic = &mem[0];
     reset();
 }
-//
-// reset internal pointers
-//
+///
+/// * reset internal pointers
+///
 void N4Asm::reset()
 {
     here = dic;                       // rewind to dictionary base
     last = PTR(0xffff);               // -1
     tab  = 0;
 }
-//
-// parse given token into actionable item
-//
-U8 N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
+///
+/// * parse given token into actionable item
+///
+N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 {
-    if (query(tkn, rst))                         return TKN_DIC; // search word dictionary addr(2), name(3)
-    if (N4Util::find(tkn, run ? CMD : JMP, rst)) return TKN_EXE; // run, compile mode
-    if (N4Util::find(tkn, EXT, rst))             return TKN_EXT; // search extended words
-    if (N4Util::find(tkn, PRM, rst))             return TKN_PRM; // search primitives
-    if (N4Util::getnum(tkn, (S16*)rst))          return TKN_NUM; // parse as number literal
-    
-    return TKN_ERR;
+    if (query(tkn, rst))                         return TKN_DIC; // DIC search word dictionary adr(2),name(3)
+    if (N4Util::find(tkn, run ? CMD : JMP, rst)) return TKN_IMM; // IMM immediate word
+    if (N4Util::find(tkn, EXT, rst))             return TKN_EXT; // EXT search extended words
+    if (N4Util::find(tkn, PRM, rst))             return TKN_PRM; // PRM search primitives
+    if (N4Util::getnum(tkn, (S16*)rst))          return TKN_NUM; // NUM parse as number literal
+    return TKN_ERR;                                              // ERR unknown token
 }
-//
-// NanoForth compiler - create word onto dictionary
-//
+///
+/// * NanoForth compiler - create word onto dictionary
+///
 void N4Asm::compile(U16 *rp0)
 {
     rp = rp0;                    // capture current return pointer
@@ -99,73 +105,74 @@ void N4Asm::compile(U16 *rp0)
 
     last = here;
     SET16(here, tmp);            // pointer to previous word
-    SETNM(here, tkn);            // 3-byte name
+    SETNM(here, tkn);            // store token into 3-byte name field
 
     for (; tkn;) {               // terminate if tkn==NULL
         N4Util::memdump(dic, p0, (U16)(here-p0), 0);
 
         tkn = N4Util::token();
-        p0  = here;
-        switch(parse_token(tkn, &tmp, 0)) {
-        case TKN_EXE:
+        p0  = here;                         // keep current top of dictionary (for memdump)
+        switch(parse_token(tkn, &tmp, 0)) { // determinie type of operation, and keep opcode in tmp
+        case TKN_IMM:                       // immediate command
             if (tmp==0) {
-                SET8(here, I_RET);              // terminate COLON definitions
-                tkn = NULL;
+                SET8(here, I_RET);          // terminate COLON definitions
+                tkn = NULL;                 // clear token to exit compile mode
             }
-            else _do_branch(tmp);               // add branching opcode
+            else _do_branch(tmp);           // add branching opcode
             break;
-        case TKN_DIC:                           // add found word: addr + adr(2) + name(3)
+        case TKN_DIC:                       // add found word: addr + adr(2) + name(3)
             JMPBCK(tmp+2+3, PFX_CALL);
             break;
-        case TKN_EXT:                           // add extended primitive word
+        case TKN_EXT:                       // add extended primitive word
             SET8(here, I_EXT);
-            SET8(here, (U8)tmp);                // extra 256 words available
+            SET8(here, (U8)tmp);            // extra 256 words available
             break;
-        case TKN_PRM:
-            SET8(here, PFX_PRM | (U8)tmp);      // add found primitive opcode
+        case TKN_PRM:                       // built-in primives
+            SET8(here, PFX_PRM | (U8)tmp);  // add found primitive opcode
             break;
-        case TKN_NUM:
+        case TKN_NUM:                       // literal
             if (tmp < 128) {
-                SET8(here, (U8)tmp);            // 1-byte literal
+                SET8(here, (U8)tmp);        // 1-byte literal
             }
             else {
-                SET8(here, I_LIT);              // 3-byte literal
+                SET8(here, I_LIT);          // 3-byte literal
                 SET16(here, tmp);
             }
             break;
-        default:  putstr("!\n");                // error
+        default:  putstr("!\n");            // token type not found, bail!
         }
     }
     // debug memory dump
     N4Util::memdump(dic, last, (U16)(here-last), ' ');
 }
-//
-//  create variable on dictionary
-//
+///
+/// * create variable on dictionary
+/// * note: 9 or 11-byte per variable
+///
 void N4Asm::variable()
 {
-    U8 *tkn = N4Util::token(); // get token
-    U16 tmp = IDX(last);
+    U8 *tkn = N4Util::token();              // get token
+    U16 tmp = IDX(last);                    // index to last word
     
     last = here;
-    SET16(here, tmp);          // link addr of previous word
-    SETNM(here, tkn);          // 3-byte variable name
+    SET16(here, tmp);                       // link addr of previous word
+    SETNM(here, tkn);                       // store token into 3-byte variable name field
 
-    tmp = IDX(here + 2);       // next addr
-    if (tmp < 128) {           // 1-byte immediate
+    tmp = IDX(here+2);                      // address to variable storage
+    if (tmp < 128) {                        // 1-byte address + RET(1)
         SET8(here, (U8)tmp);
     }
 	else {
-        tmp = IDX(here + 4);   // alloc LIT(1)+storage_addr(2)+RET(1)
+        tmp += 2;                           // extra bytes for 16-bit address
         SET8(here, I_LIT);
         SET16(here, tmp);
     }
     SET8(here, I_RET);
-    SET16(here, 0);	           // actual storage area
+    SET16(here, 0);	                        // actual storage area
 }
-//
-// display words in dictionary
-//
+///
+/// * display words in dictionary
+///
 void N4Asm::words()
 {
     U8 n = 0;
@@ -173,14 +180,14 @@ void N4Asm::words()
         if (n%10==0) D_CHR('\n');
 #if EXE_TRACE
         D_ADR(IDX(p)); D_CHR(':');                            // optionally show address
-#endif // EXE_TRACE
+#endif /// EXE_TRACE
         D_CHR(p[2]); D_CHR(p[3]); D_CHR(p[4]); D_CHR(' ');    // 3-char name + space
     }
     _list_voc();
 }
-//
-// scan the keyword through dictionary linked-list
-//
+///
+/// * scan the keyword through dictionary linked-list
+///
 U8 N4Asm::query(U8 *tkn, U16 *adr)
 {
     for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {
@@ -191,26 +198,26 @@ U8 N4Asm::query(U8 *tkn, U16 *adr)
     }
     return 0;
 }
-//
-//  drop words from the dictionary
-//
+///
+/// * drop words from the dictionary
+///
 void N4Asm::forget()
 {
     U16 adr;
-    if (!query(N4Util::token(), &adr)) { // query token in dictionary
-        putstr("??");                    // not found, bail
+    if (!query(N4Util::token(), &adr)) {    // query token in dictionary
+        putstr("??");                       // not found, bail
         return;
     }
     //
     // word found, rollback here
     //
-    U8 *p = PTR(adr);                    // address of word
-    last  = PTR(GET16(p));               // reset last word address
-    here  = p;                           // reset current pointer
+    U8 *p = PTR(adr);                       // address of word
+    last  = PTR(GET16(p));                  // reset last word address
+    here  = p;                              // reset current pointer
 }
-//
-// persist dictionary from RAM into EEPROM
-//
+///
+/// * persist dictionary from RAM into EEPROM
+///
 void N4Asm::save()
 {
     U16 last_i = IDX(last);
@@ -222,9 +229,9 @@ void N4Asm::save()
         EEPROM.update(i+4, *dic++);
     }
 }
-//
-// restore dictionary from EEPROM into RAM
-//
+///
+/// * restore dictionary from EEPROM into RAM
+///
 void N4Asm::load()
 {
     U16 last_i = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
@@ -235,18 +242,18 @@ void N4Asm::load()
     last = PTR(last_i);
     here = PTR(here_i);
 }
-//
-// execution tracer
-//
+///
+/// * NanoForth execution tracer (debugger, can be modified into single-stepper)
+///
 const char PMX[] PROGMEM = " LOPI  RD2DO ";
 void N4Asm::trace(U16 a, U8 ir, U8 *pc)
 {
-    D_ADR(a);                                                // opcode address
+    D_ADR(a);                                         // opcode address
     
-    if ((ir & 0x80)==0) { D_CHR('#'); D_HEX(ir);                   } // 1-byte literal
-    else if (ir==I_LIT) { D_CHR('#'); N4Util::putnum(GET16(pc));   } // 3-byte literal
-    else if (ir==I_RET) { D_CHR(';'); tab -= tab ? 1 : 0;          } // RET
-    else if (ir==I_EXT) { D_CHR('_'); _opname(*pc, EXT, 0);        } // EXT extended words
+    if ((ir & 0x80)==0) { D_CHR('#'); D_HEX(ir);                 }   // 1-byte literal
+    else if (ir==I_LIT) { D_CHR('#'); N4Util::putnum(GET16(pc)); }   // 3-byte literal
+    else if (ir==I_RET) { D_CHR(';'); tab -= tab ? 1 : 0;        }   // RET
+    else if (ir==I_EXT) { D_CHR('_'); _opname(*pc, EXT, 0);      }   // EXT extended words
     else {
         U8 op = ir & 0x1f;                            // opcode or top 5-bit of offset
         a += ((U16)op<<8) + *pc - JMP_BIT;            // JMP_BIT ensure 2's complement (for backward jump)
@@ -262,7 +269,7 @@ void N4Asm::trace(U16 a, U8 ir, U8 *pc)
                 putstr("  ");
             }
             break;
-        case PFX_PRM:
+        case PFX_PRM:                                 // primitive words
             D_CHR('_');
             _opname(op<25 ? op : op-25, op<25 ? PRM : PMX, 0);
             break;
@@ -270,25 +277,29 @@ void N4Asm::trace(U16 a, U8 ir, U8 *pc)
     }
     D_CHR(' ');
 }
-//
-// list words in built-in vocabularies
-//
+///
+/// * list words in built-in vocabularies
+///
 void N4Asm::_list_voc()
 {
-    const char *lst[] PROGMEM = { CMD, JMP, PRM, EXT };
-    U8 n = 0;
-    for (U8 i=0; i<4; i++) {
+#define WORDS_PER_ROW 10
+    const char *lst[] PROGMEM = { CMD, JMP, PRM, EXT };      // list of built-in primitives
+    for (U8 i=0, n=0; i<4; i++) {
         U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
         for (U8 op=0; op<sz; op++) {
-            D_CHR(n++%10==0 ? '\n' : ' ');
+            D_CHR(n++%WORDS_PER_ROW==0 ? '\n' : ' ');
             _opname(op, lst[i], 1);
         }
     }
     D_CHR('\n');
 }
-//
-// branching instructions
-//
+///
+/// * create branching for instructions
+///
+///   #### f IF...THN, f IF...ELS...THN
+///   #### BGN...RPT, BGN...f UTL, BGN...f WHL...RPT, BGN...f WHL...f UTL
+///   #### n1 n0 DO...LOP
+///
 void N4Asm::_do_branch(U8 op)
 {
     switch (op) {
@@ -328,13 +339,13 @@ void N4Asm::_do_branch(U8 op)
         SET8(here, I_RD2);
         break;
     case 10: /* I */
-        SET8(here, I_I);
+        SET8(here, I_I);                // fetch loop counter
         break;
     }
 }
-//
-// display an opcode name
-// 
+///
+/// * display the opcode name
+/// 
 void N4Asm::_opname(U8 op, const char *lst, U8 space)
 {
     PGM_P p = reinterpret_cast<PGM_P>(lst)+1+op*3;

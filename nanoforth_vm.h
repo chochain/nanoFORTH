@@ -1,38 +1,49 @@
+///
+/// \file nanoforth_vm.h
+/// \brief NanoForth Virtual Machine class
+///
 #ifndef __SRC_NANOFORTH_VM_H
 #define __SRC_NANOFORTH_VM_H
 #include "nanoforth.h"
 
-class N4Asm;
-class N4VM              // NanoForth VM (16-byte header)
-{
-    N4Asm  *n4asm;      // assembler
+class N4Asm;            // forward declaration
+///
+/// NanoForth Virtual Machine class
+///
+class N4VM
+{                       //  (16-byte header)
+    N4Asm  *n4asm;      ///< assembler object pointer
     
-    U16    msz;         // memory size        mem[dic->...<-stk]
-    U16    ssz;         // stack size
+    U16    msz;         ///< memory size        mem[dic->...<-stk]
+    U16    ssz;         ///< stack size
     
-    U8     *dic;        // dictionary base
-    U16    *rp;         // return stack pointer
-    S16    *sp;         // parameter stack pinter
+    U8     *dic;        ///< dictionary base
+    U16    *rp;         ///< return stack pointer
+    S16    *sp;         ///< parameter stack pinter
     
-    U8     trc;         // tracing flags
-    U8     xxx;         // reserved
+    U8     trc;         ///< tracing flags
+    U8     xxx;         ///< reserved
     
 public:
-    N4VM();
-    void init(U8 *mem, U16 mem_sz, U16 stk_sz); // Arduino does not have dynamic constructor
-    void info();
+    N4VM();                   ///< NanoForth Virtual Machine constructor
+    /// intializer (Arduino does not have dynamic constructor)
+    void init(
+        U8 *mem,              ///< pointer to a heap block
+        U16 mem_sz,           ///< memory size
+        U16 stk_sz            ///< parameter/return stack size
+        );
     
-    void step();
-    void set_trace(U16 f);
+    void info();              ///< display VM system info
+    void step();              ///< execute one-cycle of virtual machine
+    void set_trace(U16 f);    ///< enable/disable execution tracing
     
 private:
-    void _init();
-    void _ok();              // console prompt (with stack dump)
-    //
-    // VM execution units
-    //
-    void _execute(U16 adr);  // opcode execution unit
-    void _primitive(U8 op);  // execute a primitive instruction
-    void _extended(U8 op);   // extended opcode dispatcher
+    void _init();             ///< restart virtual machine (reseting internals)
+    void _ok();               ///< console prompt (with stack dump)
+
+    /// VM execution units
+    void _execute(U16 adr);   ///< opcode execution unit
+    void _primitive(U8 op);   ///< execute a primitive instruction
+    void _extended(U8 op);    ///< execute an extended opcode
 };
 #endif //__SRC_NANOFORTH_VM_H

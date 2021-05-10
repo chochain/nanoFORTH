@@ -1,19 +1,22 @@
+///
+/// \file nanoforth_util.cpp
+/// \brief NanoForth Utility class implementation
+///
 #include <avr/pgmspace.h>
 #include "nanoforth_util.h"
 //
 // tracing instrumentation
 //
 void N4Util::d_chr(char c)     { Serial.write(c);   }
-//void N4Util::d_chr(char c)     { printf("%c", c);   }
 void N4Util::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
 void N4Util::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
 void N4Util::d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff)); }
 void N4Util::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('^'); d_adr(a); }
 //
 // IO and Search Functions =================================================
-//
-//  emit a 16-bit integer
-//
+///
+/// * emit a 16-bit integer
+///
 void N4Util::putnum(S16 n)
 {
     if (n < 0) { n = -n; putchr('-'); }        // process negative number
@@ -21,9 +24,9 @@ void N4Util::putnum(S16 n)
     if (t) putnum(t);                          // recursively call higher digits
     putchr('0' + (n%10));
 }
-//
-//  Get a Token
-//
+///
+/// * capture a token from console input buffer
+///
 U8 *N4Util::token(void)
 {
     static U8 tib[TIB_SZ];
@@ -36,7 +39,7 @@ U8 *N4Util::token(void)
     while (*tp++!=' ') sz++;                  // advance to next word
     while (*tp==' ')   tp++;                  // skip blanks
 
-    if (*tp=='\r' || *tp=='\n') tp = tib;     // rewind buffer
+    if (*tp=='\r' || *tp=='\n') tp = tib;     // rewind input buffer
 
 #if ASM_TRACE
     // debug info
@@ -47,9 +50,9 @@ U8 *N4Util::token(void)
 #endif // ASM_TRACE
     return p;
 }
-//
-// Process a Literal
-//
+///
+/// * parse a literal from string
+///
 U8 N4Util::getnum(U8 *str, S16 *num)
 {
     U8  neg = 0;
@@ -73,9 +76,9 @@ U8 N4Util::getnum(U8 *str, S16 *num)
     }
     return 0;
 }
-//
-// byte-stream dumper with delimiter option
-// 
+///
+/// * dump byte-stream with delimiter option
+/// 
 void N4Util::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
 {
 	d_adr((U16)(p0 - base)); d_chr(':');
@@ -85,25 +88,25 @@ void N4Util::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
 	}
     d_chr(delim);
 }
-//
-// show a section of memory in Forth dump format
-//
-void N4Util::dump(U8* base, U8* p, U16 sz)         // idx: memory offset, sz: bytes
+///
+/// * show a section of memory in Forth dump format
+///
+void N4Util::dump(U8* base, U8* p, U16 sz)
 {
     putchr('\n');
     for (U16 i=0; i<sz; i+=0x20) {
         memdump(base, p, 0x20, ' ');
         putchr(' ');
-        for (U8 j=0; j<0x20; j++, p++) { // print and advance to next byte
+        for (U8 j=0; j<0x20; j++, p++) {         // print and advance to next byte
             char c = *p & 0x7f;
             putchr((c==0x7f||c<0x20) ? '_' : c);
         }
         putchr('\n');
     }
 }
-//
-// search keyword in a List
-//
+///
+/// * search keyword in a NanoForth name field list
+///
 U8 N4Util::find(U8 *tkn, const char *lst, U16 *id)
 {
     for (int n=1, m=pgm_read_byte(lst); n < m*3; n+=3) {
@@ -116,9 +119,9 @@ U8 N4Util::find(U8 *tkn, const char *lst, U16 *id)
     }
     return 0;
 }
-//
-// fill input buffer from console input
-//
+///
+/// * fill input buffer from console char-by-char til CR or LF hit
+///
 void N4Util::_console_input(U8 *tib)
 {
     U8 *p = tib;

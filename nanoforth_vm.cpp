@@ -1,17 +1,20 @@
-//
-// NanoForth VM core
-//
+///
+/// \file nanoforth_vm.cpp
+/// \brief NanoForth Virtual Machine class implementation
+///
+///> Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)<p>
+///
+///>>    `                              SP0 (sp max to protect overwritten of vm object)`<p>
+///>>    ` mem[...dic_sz...[...stk_sz...]`<p>
+///>>    `    |            |            |`<p>
+///>>    `    dic-->       +->rp    sp<-+`<p>
+///>>    `                      TOS TOS1 (top of stack)`<p>
+///
 #include "nanoforth_util.h"
 #include "nanoforth_asm.h"
 #include "nanoforth_vm.h"
 //
-// Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)
-//
-//                              SP0 (sp max to protect overwritten of vm object)
-// mem[...dic_sz...[...stk_sz...]
-//    |            |            |
-//    dic-->       +->rp    sp<-+
-//                          TOS TOS1 (top of stack)
+// parameter, return stack ops
 //
 #define SP0            ((S16*)(dic+msz))
 #define TOS            (*sp)
@@ -25,13 +28,13 @@
 //
 #define PTR(n)         ((U8*)dic + (n))
 #define IDX(p)         ((U16)((U8*)(p) - dic))
-//
-// NanoForth Virtual Machine initializer
-//
+///
+/// * constructor and initializer
+///
 N4VM::N4VM() {}
 void N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
 {
-    n4asm = new N4Asm();
+    n4asm = new N4Asm();     // create and initialze assembler
     n4asm->init(mem);
     
     dic = &mem[0];
@@ -40,9 +43,9 @@ void N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
     
     _init();
 }
-//
-// show system info
-//
+///
+/// * show system info
+///
 void N4VM::info()
 {
     char tmp;
@@ -58,44 +61,46 @@ void N4VM::info()
     putstr(" [");          N4Util::d_ptr((U8*)&tmp);
 #else
     putstr("] Free=x");    puthex(free);
-#endif // EXE_TRACE
+#endif /// EXE_TRACE
     putstr(" ");
 }
-//
-// single step
-//
+///
+/// * virtual machine execute single step
+///
 void N4VM::step() {
     _ok();                                      // stack check and prompt OK
     
     U8  *tkn = N4Util::token();                 // get a token from console
     U16 tmp;
-    switch (n4asm->parse_token(tkn, &tmp, 1)) {
-    case TKN_EXE:
+    switch (n4asm->parse_token(tkn, &tmp, 1)) { ///> parse action from token (keep opcode in tmp)
+    case TKN_IMM:                               ///>> immediate words
         switch (tmp) {
-        case 0:	n4asm->compile(rp);  break;     // : (COLON), create word
-        case 1:	n4asm->variable();   break;     // VAR, create variable    
-        case 2:	n4asm->forget();     break;     // FGT
-        case 3: N4Util::dump(
+        case 0:	n4asm->compile(rp); break;      ///>>> : (COLON), switch into compile mode (for new word)
+        case 1:	n4asm->variable();  break;      ///>>> VAR, create new variable
+        case 2:	n4asm->forget();    break;      ///>>> FGT, rollback word created
+        case 3: N4Util::dump(                   ///>>> DMP, memory dump
             dic,
             PTR(POP()&0xfff0),
-            POP()&0xfff0);           break;     // DMP
-        case 4: _init();             break;     // BYE
-        }                                  break;
-    case TKN_DIC: _execute(tmp + 2 + 3);   break;
-    case TKN_EXT: _extended((U8)tmp);      break;
-    case TKN_PRM: _primitive((U8)tmp);     break;
-    case TKN_NUM: PUSH(tmp);               break;
-    default:
+            POP()&0xfff0);          break;      
+        case 4: _init();            break;      ///>>> BYE, restart the virtual machine
+        }                                break;
+    case TKN_DIC: _execute(tmp + 2 + 3); break; ///>> execute word from dictionary (user defined)
+    case TKN_EXT: _extended((U8)tmp);    break; ///>> execute word in extended built-in list
+    case TKN_PRM: _primitive((U8)tmp);   break; ///>> execute primitive built-in word
+    case TKN_NUM: PUSH(tmp);             break; ///>> push a number (literal) to stack top
+    default:                                    ///>> or, error (unknow action)
         putstr("?\n");
     }
 }
-
+///
+/// * enable/disable execution tracing
+///
 void N4VM::set_trace(U16 f)
 {
     trc += f ? 1 : (trc ? -1 : 0);
 }
 //
-// initializer
+// reset virtual machine
 //
 void N4VM::_init() {
     //
@@ -125,7 +130,7 @@ void N4VM::_ok()
     putstr("ok ");
 }
 //
-//  opcode execution unit
+// opcode execution unit
 //
 void N4VM::_execute(U16 adr)
 {
@@ -162,7 +167,7 @@ void N4VM::_execute(U16 adr)
     }
 }
 //
-//  execute a primitive opcode
+// execute a primitive opcode
 //
 void N4VM::_primitive(U8 op)
 {
@@ -210,7 +215,7 @@ void N4VM::_primitive(U8 op)
     }
 }
 //
-// NanoForth extended opcode dispatcher =====================================================================
+// extended opcode dispatcher
 //
 void N4VM::_extended(U8 op)
 {

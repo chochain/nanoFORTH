@@ -3,8 +3,6 @@
 //
 #include "nanoforth.h"
 
-NanoForth *n4;                 // create a nanoForth instance
-
 N4_FUNC(blink)                 // 
 {
     N4_BEGIN();
@@ -35,15 +33,15 @@ N4_FUNC(led_toggle)
 void setup()
 {
     Serial.begin(115200);
-    n4 = new NanoForth(0x480, 0x80);
     
-    n4->add(blink);            // add blink
-    n4->add(led_toggle);
+    N4::begin(0x480, 0x80);
+    N4::add(blink);            // add blink
+    N4::add(led_toggle);
 }
 
 void loop()
 {
-    n4->run();                 // execute one vm cycle
+    N4::step();                // execute one vm cycle
 }
 
 
