@@ -2,8 +2,7 @@
 /// \file nanoforth.h
 /// \brief NanoForth main controller
 ///
-/// #### ||lib objects|[dictionary->...|sp-> ..stack.. <-rp],vm,asm ..free.. <-heap||
-///             
+///> `lib objects..[dictionary->...|sp-> ..stack.. <-rp],vm,asm ..free.. <-heap|`
 ///
 #ifndef __SRC_NANOFORTH_H
 #define __SRC_NANOFORTH_H
@@ -17,8 +16,8 @@
 //
 // default heap sizing
 //
-#define N4_STK_SZ    0x80                     /**< parameter/return stack size               */
-#define N4_DIC_SZ    0x400                    /**< dictionary size                           */
+#define N4_STK_SZ    0x80                     /**< default parameter/return stack size       */
+#define N4_DIC_SZ    0x400                    /**< default dictionary size                   */
 #define N4_MEM_SZ    (N4_DIC_SZ+N4_STK_SZ)    /**< total memory block allocate for NanoForth */
 //
 // commonly used portable types
@@ -31,22 +30,27 @@ typedef uint32_t     U32;                     ///< 32-bit unsigned integer, for 
 /// NanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
 ///
 typedef struct n4_task {    
-    void (*func)(n4_task*); ///< function pointer
-    n4_task *next;          ///< next item in linked-list (root=0)
-    U32  t;                 ///< delay timer
-    U16  ci;                ///< protothread case index
+    void (*func)(n4_task*);                   ///< function pointer
+    n4_task *next;                            ///< next item in linked-list (root=0)
+    U32  t;                                   ///< delay timer
+    U16  ci;                                  ///< protothread case index
 } *n4_tptr;
 //
 // NanoForth multi-tasking macros
 //
-/// define a user function.
+/// \def N4_FUNC
+/// \brief define a user function.
+/// \def N4_BEGIN
+/// \brief begin of the user function block.
+/// \def N4_DELAY
+/// \brief pause the user function for ms microseconds
+/// \def N4_END
+/// \brief end of the user function block.
+///
 #define N4_FUNC(fname)  void fname(n4_tptr _p_)
-/// begin of the user function.
 #define N4_BEGIN()      switch((_p_)->ci) { case 0:
-/// N4_DELAY delay().
 #define N4_DELAY(ms)    (_p_)->t = millis()+(U32)(ms); (_p_)->ci = __LINE__; case __LINE__: \
                         if (millis() < (_p_)->t) return;
-/// end of the user function.
 #define N4_END()        } (_p_)->ci = 0;
 ///
 /// NanoForth main control object (with static members that support multi-threading)
