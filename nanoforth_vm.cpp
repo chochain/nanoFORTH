@@ -2,13 +2,13 @@
 /// \file nanoforth_vm.cpp
 /// \brief NanoForth Virtual Machine class implementation
 ///
-///> Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)<p>
+///> Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)<br>
 ///
-///>>    `                              SP0 (sp max to protect overwritten of vm object)`<p>
-///>>    ` mem[...dic_sz...[...stk_sz...]`<p>
-///>>    `    |            |            |`<p>
-///>>    `    dic-->       +->rp    sp<-+`<p>
-///>>    `                      TOS TOS1 (top of stack)`<p>
+///>>    `                              SP0 (sp max to protect overwritten of vm object)`<br>
+///>>    ` mem[...dic_sz...[...stk_sz...]`<br>
+///>>    `    |            |            |`<br>
+///>>    `    dic-->       +->rp    sp<-+`<br>
+///>>    `                      TOS TOS1 (top of stack)`<br>
 ///
 #include "nanoforth_util.h"
 #include "nanoforth_asm.h"
@@ -16,18 +16,18 @@
 //
 // parameter, return stack ops
 //
-#define SP0            ((S16*)(dic+msz))
-#define TOS            (*sp)
-#define TOS1           (*(sp+1))
-#define PUSH(v)        (*(--sp)=(S16)(v))
-#define POP()          (sp<SP0 ? *sp++ : 0)
-#define RPUSH(v)       (*(rp++)=(U16)(v))
-#define RPOP()         (*(--rp))
+#define SP0            ((S16*)(dic+msz))            /**< base of parameter stack             */
+#define TOS            (*sp)                        /**< pointer to top of current stack     */
+#define TOS1           (*(sp+1))                    /**< pointer to the second item on stack */
+#define PUSH(v)        (*(--sp)=(S16)(v))           /**< push v onto parameter stack         */
+#define POP()          (sp<SP0 ? *sp++ : 0)         /**< pop value off parameter stack       */
+#define RPUSH(v)       (*(rp++)=(U16)(a))           /**< push address onto return stack      */
+#define RPOP()         (*(--rp))                    /**< pop address from return stack       */
 //
 // dictionary index <=> pointer translation macros
 //
-#define PTR(n)         ((U8*)dic + (n))
-#define IDX(p)         ((U16)((U8*)(p) - dic))
+#define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
+#define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
 ///
 /// * constructor and initializer
 ///
