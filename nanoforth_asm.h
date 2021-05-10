@@ -2,17 +2,16 @@
 /// \file nanoforth_asm.h
 /// \brief NanoForth Assembler class
 ///
-///> NanoForth Opcode formats<p>
-///>>    `primitive : 111c cccc                      (32 primitive)`<p>
-///>>    `branching : 1BBo oooo oooo oooo            (+- 12-bit relative offset, i.e. portable)`<p>
-///>>    `1-byte lit: 0nnn nnnn                      (0..127)`<p>
-///>>    `3-byte lit: 1111 1110 nnnn nnnn nnnn nnnn  FE xxxx xxxx (16-bit signed integer)`<p>
+///> NanoForth Opcode formats<br>
+///>>    `primitive : 111c cccc                      (32 primitive)`<br>
+///>>    `branching : 1BBo oooo oooo oooo            (+- 12-bit relative offset, i.e. portable)`<br>
+///>>    `1-byte lit: 0nnn nnnn                      (0..127)`<br>
+///>>    `3-byte lit: 1111 1110 nnnn nnnn nnnn nnnn  FE xxxx xxxx (16-bit signed integer)`<br>
 ///
 #ifndef __SRC_NANOFORTH_ASM_H
 #define __SRC_NANOFORTH_ASM_H
 #include "nanoforth.h"
 ///
-/// \enum
 /// parser actions enum used by execution and assembler units
 /// 
 enum N4OP {
@@ -32,7 +31,7 @@ enum N4OP {
 #define PFX_CALL   0xc0       /**< 1100 0000 */
 #define PFX_PRM    0xe0       /**< 1110 0000 */
 ///
-/// \enum opcodes for loop control (in compiler mode)
+/// opcodes for loop control (in compiler mode)
 ///
 enum {
     I_LOOP = (PFX_PRM | 25),  ///< f 9

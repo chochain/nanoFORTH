@@ -3,9 +3,9 @@
 /// \brief NanoForth Assmebler implementation
 ///
 ///> assembler memory organization:
-///>>    `mem[...dic_sz...[...stk_sz...]`<p>
-///>>    `   |                         |`<p>
-///>>    `  dic-->                rp<-+`<p>
+///>>    `mem[...dic_sz...[...stk_sz...]`<br>
+///>>    `   |                         |`<br>
+///>>    `  dic-->                rp<-+`<br>
 ///
 #include <EEPROM.h>
 #include "nanoforth_util.h"
@@ -39,15 +39,16 @@ PROGMEM const char EXT[] = "\x10" \
 //
 // Forth assembler stack opcode macros (note: rp grows downward)
 //
-#define RPUSH(v)       (*(rp++)=(U16)(v))
-#define RPOP()         (*(--rp))
+#define RPUSH(v)       (*(rp++)=(U16)(a))           /**< push address onto return stack */
+#define RPOP()         (*(--rp))                    /**< pop address from return stack  */
 //
 // dictionary index <=> pointer translation macros
 //
-#define PTR(n)         ((U8*)dic + (n))
-#define IDX(p)         ((U16)((U8*)(p) - dic))
+#define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
+#define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
 //
-// name creation macro
+// \defSETNM
+// \brief name field creation
 //
 #define SETNM(p, s) do {                   \
     SET8(p, (s)[0]);                       \
