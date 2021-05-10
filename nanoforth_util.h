@@ -23,7 +23,13 @@
 #define puthex(v)      Serial.print((U16)v, HEX)
 //
 // memory access opcodes
-//
+/// \def SET8
+/// \brief 1-byte write
+/// \def SET16
+/// \brief 2-byte write, prevent alignment issue (on 32-bit CPU) and preseve Big-Endian encoding
+/// \def GET16
+/// \brief 2-byte read, prevent aligntment issue (on 32-bit CPU) and preseve Big-Endian encoding
+///
 #define SET8(p, c)     (*(U8*)(p)++=(U8)(c))
 #define SET16(p, n)    do { U16 x=(U16)(n); SET8(p,(x)>>8); SET8(p,(x)&0xff); } while(0)
 #define GET16(p)       (((U16)(*(U8*)(p))<<8) + *((U8*)(p)+1))
@@ -42,11 +48,11 @@ public:
     //
     // tracing instrumentation
     //
-    static void d_chr(char c);  ///< print a char to console
-    static void d_nib(U8 n);    ///< print a nibble
-    static void d_hex(U8 c);    ///< print a 8-bit hex number
-    static void d_adr(U16 a);   ///< print a 12-bit address
-    static void d_ptr(U8 *p);   ///< print a pointer
+    static void d_chr(char c);             ///< print a char to console
+    static void d_nib(U8 n);               ///< print a nibble
+    static void d_hex(U8 c);               ///< print a 8-bit hex number
+    static void d_adr(U16 a);              ///< print a 12-bit address
+    static void d_ptr(U8 *p);              ///< print a pointer
     //
     // IO and Search Functions
     //
@@ -71,9 +77,9 @@ public:
     /// find token in string list
     ///
     static U8   find(
-        U8 *tkn,                            ///< token to be found
-        const char *lst,                    ///< string list to be scanned
-        U16 *id                             ///< resultant index if found
+        U8 *tkn,                           ///< token to be found
+        const char *lst,                   ///< string list to be scanned
+        U16 *id                            ///< resultant index if found
         );
     
 private:

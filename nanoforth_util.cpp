@@ -15,7 +15,7 @@ void N4Util::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('^'); d_adr(a); }
 //
 // IO and Search Functions =================================================
 ///
-/// * emit a 16-bit integer
+///> emit a 16-bit integer
 ///
 void N4Util::putnum(S16 n)
 {
@@ -25,7 +25,7 @@ void N4Util::putnum(S16 n)
     putchr('0' + (n%10));
 }
 ///
-/// * capture a token from console input buffer
+///> capture a token from console input buffer
 ///
 U8 *N4Util::token(void)
 {
@@ -51,7 +51,7 @@ U8 *N4Util::token(void)
     return p;
 }
 ///
-/// * parse a literal from string
+///> parse a literal from string
 ///
 U8 N4Util::getnum(U8 *str, S16 *num)
 {
@@ -77,7 +77,7 @@ U8 N4Util::getnum(U8 *str, S16 *num)
     return 0;
 }
 ///
-/// * dump byte-stream with delimiter option
+///> dump byte-stream with delimiter option
 /// 
 void N4Util::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
 {
@@ -89,7 +89,7 @@ void N4Util::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
     d_chr(delim);
 }
 ///
-/// * show a section of memory in Forth dump format
+///> show a section of memory in Forth dump format
 ///
 void N4Util::dump(U8* base, U8* p, U16 sz)
 {
@@ -105,7 +105,7 @@ void N4Util::dump(U8* base, U8* p, U16 sz)
     }
 }
 ///
-/// * search keyword in a NanoForth name field list
+///> search keyword in a NanoForth name field list
 ///
 U8 N4Util::find(U8 *tkn, const char *lst, U16 *id)
 {
@@ -120,7 +120,7 @@ U8 N4Util::find(U8 *tkn, const char *lst, U16 *id)
     return 0;
 }
 ///
-/// * fill input buffer from console char-by-char til CR or LF hit
+///> fill input buffer from console char-by-char til CR or LF hit
 ///
 void N4Util::_console_input(U8 *tib)
 {
