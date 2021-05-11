@@ -1,0 +1,22 @@
+{
+  "name": "nanoFORTH",
+  "keywords": "Forth, Nano, UNO, multi-task",
+  "description": "A simple and useful FORTH for Nano",
+  "authors":
+  [
+    {
+      "name": "Chochain Lee",
+      "email": "chochain@yahoo.com",
+      "maintainer": true
+    }
+  ],
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/chochain/nanoforth.git"
+  },
+  "version": "1.0.8",
+  "license": "MIT",
+  "frameworks": "arduino",
+  "platforms": [ "nano", "uno" ]
+}
