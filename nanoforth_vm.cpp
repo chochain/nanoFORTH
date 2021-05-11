@@ -236,15 +236,34 @@ void N4VM::_extended(U8 op)
     case 7:  n4asm->save();                   break; // SAV
     case 8:  n4asm->load();                   break; // LD
     case 9:  set_trace(POP());                break; // TRC
-    case 10: /* todo */                       break; // D+
-    case 11: /* todo */                       break; // D-
-    case 12: /* todo */                       break; // CLK
-    case 13: NanoForth::wait((U32)POP());     break; // DLY
-    case 14: pinMode(POP(), POP());           break; // PIN
-    case 15: PUSH(digitalRead(POP()));        break; // IN
-    case 16: digitalWrite(POP(), POP());      break; // OUT
-    case 17: PUSH(analogRead(POP()));         break; // AIN
-    case 18: analogWrite(POP(), POP());       break; // PWM
+    case 10: {                                       // CLK
+        U32 u = millis();       // Arduino clock
+        PUSH((U16)(u>>16));
+        PUSH((U16)(u&0xffff));
+    }                                         break;
+    case 11: {                                       // D+
+        S32 v = *(S32*)(sp+2) + *(S32*)sp;
+        POP(); POP();
+        TOS1 = (S16)(v>>16);
+        TOS  = (S16)v&0xffff;
+    }                                         break;
+    case 12: {                                       // D-
+        S32 v = *(S32*)(sp+2) - *(S32*)sp;
+        POP(); POP();
+        TOS1 = (S16)(v>>16);
+        TOS  = (S16)(v&0xffff);
+    }                                         break;
+    case 13: {                                       // DNG
+        S32 v = -(*(S32*)sp);
+        TOS1 = (S16)(v>>16);
+        TOS  = (S16)(v&0xffff);
+    }                                         break;
+    case 14: NanoForth::wait((U32)POP());     break; // DLY
+    case 15: pinMode(POP(), POP());           break; // PIN
+    case 16: PUSH(digitalRead(POP()));        break; // IN
+    case 17: digitalWrite(POP(), POP());      break; // OUT
+    case 18: PUSH(analogRead(POP()));         break; // AIN
+    case 19: analogWrite(POP(), POP());       break; // PWM
     }
 }
 

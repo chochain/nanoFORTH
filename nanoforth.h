@@ -26,6 +26,7 @@ typedef uint8_t      U8;                      ///< 8-bit unsigned integer, for c
 typedef uint16_t     U16;                     ///< 16-bit unsigned integer, for return stack, and pointers
 typedef int16_t      S16;                     ///< 16-bit signed integer, for general numbers
 typedef uint32_t     U32;                     ///< 32-bit unsigned integer, for millis()
+typedef int32_t      S32;                     ///< 32-bit signed integer
 
 /// NanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
 ///
