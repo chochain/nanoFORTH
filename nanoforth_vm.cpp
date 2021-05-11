@@ -21,7 +21,7 @@
 #define TOS1           (*(sp+1))                    /**< pointer to the second item on stack */
 #define PUSH(v)        (*(--sp)=(S16)(v))           /**< push v onto parameter stack         */
 #define POP()          (sp<SP0 ? *sp++ : 0)         /**< pop value off parameter stack       */
-#define RPUSH(v)       (*(rp++)=(U16)(a))           /**< push address onto return stack      */
+#define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack      */
 #define RPOP()         (*(--rp))                    /**< pop address from return stack       */
 //
 // dictionary index <=> pointer translation macros
@@ -143,8 +143,14 @@ void N4VM::_execute(U16 adr)
         
         if ((ir & 0x80)==0) { PUSH(ir);               }   // 1-byte literal
         else if (ir==I_LIT) { PUSH(GET16(pc)); pc+=2; }   // 3-byte literal
-        else if (ir==I_RET) { pc = PTR(RPOP());       }   // RET
-        else if (ir==I_EXT) { _extended(*pc++);       }   // EXT extended words
+        else if (ir==I_RET) { pc = PTR(RPOP());       }   // RET pop address from return stack
+        else if (ir==I_EXT) {                             // EXT extended words
+            U8 op = *pc++;                                // fetch opcode
+            if (op==0) {                                  // handle ."
+                for (U8 i=0, sz=*pc++; i<sz; i++) D_CHR(*pc++);
+            }
+            else _extended(op);                           // handle other opcodes
+        }
         else {
             U8 op = ir & 0x1f;                            // opcode or top 5-bit of offset
             a += ((U16)op<<8) + *pc - JMP_BIT;            // JMP_BIT ensure 2's complement (for backward jump)
@@ -156,8 +162,8 @@ void N4VM::_execute(U16 adr)
                 pc = POP() ? pc+1 : PTR(a);               // next or target
                 break;
             case PFX_CALL:                                // 0xd0 word call
-                RPUSH(IDX(pc+1));                         // keep next as return address
-                pc = PTR(a);
+                RPUSH(IDX(pc+1));                         // keep next instruction on return stack
+                pc = PTR(a);                              // jump to subroutine till I_RET
                 break;
             case PFX_PRM:                                 // 0xe0 primitive
                 _primitive(op);                           // call primitve function with opcode
@@ -179,23 +185,23 @@ void N4VM::_primitive(U8 op)
         TOS1  = TOS;
         TOS   = x;
     } break;
-    case 3:  RPUSH(POP());               break; // >R
-    case 4:  PUSH(RPOP());               break; // R>
-    case 5:	 TOS += POP();               break; // +
-    case 6:	 TOS -= POP();               break; // -
-    case 7:	 TOS *= POP();               break; // *
-    case 8:	 TOS /= POP();               break; // /
-    case 9:	 TOS %= POP();               break; // MOD
+    case 3:  PUSH(TOS1);                 break; // OVR
+    case 4:	 TOS += POP();               break; // +
+    case 5:	 TOS -= POP();               break; // -
+    case 6:	 TOS *= POP();               break; // *
+    case 7:	 TOS /= POP();               break; // /
+    case 8:	 TOS %= POP();               break; // MOD
+    case 9:  TOS = -TOS;                 break; // NEG
     case 10: TOS &= POP();               break;	// AND
     case 11: TOS |= POP();               break;	// OR
     case 12: TOS ^= POP();               break; // XOR
-    case 13: TOS = POP()==TOS;           break; // =
-    case 14: TOS = POP()> TOS;           break; // <
-    case 15: TOS = POP()< TOS;           break; // >
-    case 16: TOS = POP()>=TOS;           break; // <=
-    case 17: TOS = POP()<=TOS;           break; // >=
-    case 18: TOS = POP()!=TOS;           break; // <>
-    case 19: TOS = (TOS==0);             break;	// NOT
+    case 13: TOS = TOS ? -1 : 0;         break;	// NOT
+    case 14: TOS = POP()==TOS;           break; // =
+    case 15: TOS = POP()> TOS;           break; // <
+    case 16: TOS = POP()< TOS;           break; // >
+    case 17: TOS = POP()>=TOS;           break; // <=
+    case 18: TOS = POP()<=TOS;           break; // >=
+    case 19: TOS = POP()!=TOS;           break; // <>
     case 20: { U8 *p = PTR(POP()); PUSH(GET16(p));  } break; // @
     case 21: { U8 *p = PTR(POP()); SET16(p, POP()); } break; // !
     case 22: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
@@ -220,22 +226,25 @@ void N4VM::_primitive(U8 op)
 void N4VM::_extended(U8 op)
 {
     switch (op) {
-    case 0:  PUSH(IDX(n4asm->here));          break; // HRE
-    case 1:  PUSH(IDX(n4asm->last));          break; // CP
-    case 2:  PUSH(TOS1);                      break; // OVR
-    case 3:  TOS = -TOS;                      break; // INV
-    case 4:  PUSH(POP()*sizeof(U16));         break; // CEL
-    case 5:  n4asm->here += POP();            break; // ALO
-    case 6:  n4asm->words();                  break; // WRD
+    case 0:  /* handled at one level up */    break; // ."
+    case 1:  RPUSH(POP());                    break; // >R
+    case 2:  PUSH(RPOP());                    break; // R>
+    case 3:  n4asm->words();                  break; // WRD
+    case 4:  PUSH(IDX(n4asm->here));          break; // HRE
+    case 5:  PUSH(POP()*sizeof(U16));         break; // CEL
+    case 6:  n4asm->here += POP();            break; // ALO
     case 7:  n4asm->save();                   break; // SAV
     case 8:  n4asm->load();                   break; // LD
     case 9:  set_trace(POP());                break; // TRC
-    case 10: NanoForth::wait((U32)POP());     break; // DLY
-    case 11: pinMode(POP(), POP());           break; // PIN
-    case 12: PUSH(digitalRead(POP()));        break; // IN
-    case 13: digitalWrite(POP(), POP());      break; // OUT
-    case 14: PUSH(analogRead(POP()));         break; // AIN
-    case 15: analogWrite(POP(), POP());       break; // AOT
+    case 10: /* todo */                       break; // D+
+    case 11: /* todo */                       break; // D-
+    case 12: /* todo */                       break; // CLK
+    case 13: NanoForth::wait((U32)POP());     break; // DLY
+    case 14: pinMode(POP(), POP());           break; // PIN
+    case 15: PUSH(digitalRead(POP()));        break; // IN
+    case 16: digitalWrite(POP(), POP());      break; // OUT
+    case 17: PUSH(analogRead(POP()));         break; // AIN
+    case 18: analogWrite(POP(), POP());       break; // PWM
     }
 }
 
