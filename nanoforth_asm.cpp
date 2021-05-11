@@ -15,11 +15,11 @@
 ///
 /// \var CMD
 /// \brief words for interpret mode.
-/// \var JMP
+/// \var JMP (note: ; is hardcoded at position 0, do not change it)
 /// \brief words for branching op in compile mode.
 /// \var PRM
 /// \brief primitive words.
-/// \var EXT
+/// \var EXT (note: ." is hardcoded at position 0, do not change it)
 /// \brief extended words for I/O, and Arduino specific ops.
 /// \var PMX
 /// \brief loop control opcodes
@@ -30,16 +30,16 @@ PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "DO " "LOP" \
     "I  ";
 PROGMEM const char PRM[] = "\x19" \
-    "DRP" "DUP" "SWP" ">R " "R> " "+  " "-  " "*  " "/  " "MOD" \
-    "AND" "OR " "XOR" "=  " "<  " ">  " "<= " ">= " "<> " "NOT" \
-    "@  " "!  " "C@ " "C! " ".  ";
-PROGMEM const char EXT[] = "\x10" \
-    "HRE" "CP " "OVR" "INV" "CEL" "ALO" "WRD" "SAV" "LD " "TRC" \
-    "DLY" "PIN" "IN " "OUT" "AIN" "AOT";
+    "DRP" "DUP" "SWP" "OVR" "+  " "-  " "*  " "/  " "MOD" "NEG" \
+    "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " "<> " \
+    "@  " "!  " "C@ " "C! " ".  " ;
+PROGMEM const char EXT[] = "\x13" \
+    ".\" "">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" \
+    "D+ " "D- " "CLK" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
 //
 // Forth assembler stack opcode macros (note: rp grows downward)
 //
-#define RPUSH(v)       (*(rp++)=(U16)(a))           /**< push address onto return stack */
+#define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack */
 #define RPOP()         (*(--rp))                    /**< pop address from return stack  */
 //
 // dictionary index <=> pointer translation macros
@@ -121,7 +121,7 @@ void N4Asm::compile(U16 *rp0)
         p0  = here;                         // keep current top of dictionary (for memdump)
         switch(parse_token(tkn, &tmp, 0)) { ///#### determinie type of operation, and keep opcode in tmp
         case TKN_IMM:                       ///> immediate command
-            if (tmp==0) {
+            if (tmp==0) {                   // handle ;
                 SET8(here, I_RET);          /// * terminate COLON definitions, or
                 tkn = NULL;                 //    clear token to exit compile mode
             }
@@ -133,6 +133,7 @@ void N4Asm::compile(U16 *rp0)
         case TKN_EXT:                       ///> add extended primitive word
             SET8(here, I_EXT);
             SET8(here, (U8)tmp);            /// * extra 256 words available
+            if (tmp==0) _do_str();          // handle ."
             break;
         case TKN_PRM:                       ///> built-in primives
             SET8(here, PFX_PRM | (U8)tmp);  /// * add found primitive opcode
@@ -361,4 +362,14 @@ void N4Asm::_opname(U8 op, const char *lst, U8 space)
     if ((c=pgm_read_byte(p+1))!=' ' || space) D_CHR(c);
     if ((c=pgm_read_byte(p+2))!=' ' || space) D_CHR(c);
 }
-
+///
+///> display the opcode name
+/// 
+void N4Asm::_do_str()
+{
+    U8 *p0 = N4Util::token();            // get string from input buffer
+    U8 sz  = 0;
+    for (U8 *p=p0; *p!='"'; p++, sz++);
+    SET8(here, sz);
+    for (int i=0; i<sz; i++) SET8(here, *p0++);
+}

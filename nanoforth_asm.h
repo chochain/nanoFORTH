@@ -87,5 +87,6 @@ private:
     void _list_voc();                                ///< list words from all vocabularies
     void _do_branch(U8 op);                          ///< manage branching opcodes
     void _opname(U8 op, const char *lst, U8 space);  ///< display opcode 3-char name
+    void _do_str();                                  ///< add string for ."
 };    
 #endif //__SRC_NANOFORTH_ASM_H
