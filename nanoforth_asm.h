@@ -34,7 +34,7 @@ enum N4OP {
 /// opcodes for loop control (in compiler mode)
 ///
 enum {
-    I_LOOP = (PFX_PRM | 25),  ///< f 9
+    I_NXT  = (PFX_PRM | 25),  ///< f 9
     I_I,                      ///< f a
     I_RD2,                    ///< f b
     I_P2R2,                   ///< f c

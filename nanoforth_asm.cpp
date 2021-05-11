@@ -27,7 +27,7 @@
 PROGMEM const char CMD[] = "\x05" \
     ":  " "VAR" "FGT" "DMP" "BYE";
 PROGMEM const char JMP[] = "\x0b" \
-    ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "DO " "LOP" \
+    ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "FOR" "NXT" \
     "I  ";
 PROGMEM const char PRM[] = "\x19" \
     "DRP" "DUP" "SWP" "OVR" "+  " "-  " "*  " "/  " "MOD" "NEG" \
@@ -253,7 +253,7 @@ void N4Asm::load()
 ///
 ///> NanoForth execution tracer (debugger, can be modified into single-stepper)
 ///
-PROGMEM const char PMX[] = " LOPI  RD2DO ";
+PROGMEM const char PMX[] = " NXTI  RD2FOR";
 void N4Asm::trace(U16 a, U8 ir, U8 *pc)
 {
     D_ADR(a);                                         // opcode address
@@ -306,7 +306,7 @@ void N4Asm::_list_voc()
 ///
 ///>> f IF...THN, f IF...ELS...THN
 ///>> BGN...RPT, BGN...f UTL, BGN...f WHL...RPT, BGN...f WHL...f UTL
-///>> n1 n0 DO...LOP
+///>> n1 n0 FOR...NXT
 ///
 void N4Asm::_do_branch(U8 op)
 {
@@ -337,12 +337,12 @@ void N4Asm::_do_branch(U8 op)
         JMPSET(RPOP(), here+2);         // update A2 with next addr
         JMPBCK(RPOP(), PFX_UDJ);        // unconditional jump back to A1
         break;
-    case 8:	/* DO */
+    case 8:	/* FOR */
         RPUSH(IDX(here+1));             // save current addr A1
         SET8(here, I_P2R2);
         break;
-    case 9:	/* LOP */
-        SET8(here, I_LOOP);
+    case 9:	/* NXT */
+        SET8(here, I_NXT);
         JMPBCK(RPOP(), PFX_CDJ);        // conditionally jump back to A1
         SET8(here, I_RD2);
         break;

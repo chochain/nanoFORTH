@@ -207,7 +207,7 @@ void N4VM::_primitive(U8 op)
     case 22: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
     case 23: { U8 *p = PTR(POP()); *p = (U8)POP();  } break; // C!
     case 24: N4Util::putnum(POP()); putchr(' ');      break; // .
-    case 25: {	                                // LOP
+    case 25: {	                                // NXT
         (*(rp-2))++;                      // counter+1
         PUSH(*(rp-2) >= *(rp-1));         // range checkU8
     } break;
