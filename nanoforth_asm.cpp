@@ -7,9 +7,12 @@
 ///>>    `   |                         |`<br>
 ///>>    `  dic-->                rp<-+`<br>
 ///
-#include <EEPROM.h>
+
 #include "nanoforth_util.h"
 #include "nanoforth_asm.h"
+#if ARDUINO
+#include <EEPROM.h>
+#endif //ARDUINO
 ///
 /// NanoForth built-in vocabularies
 ///
@@ -18,9 +21,7 @@
 /// \var JMP (note: ; is hardcoded at position 0, do not change it)
 /// \brief words for branching op in compile mode.
 /// \var PRM
-/// \brief primitive words.
-/// \var EXT (note: ." is hardcoded at position 0, do not change it)
-/// \brief extended words for I/O, and Arduino specific ops.
+/// \brief primitive words (45 allocated, 64 max).
 /// \var PMX
 /// \brief loop control opcodes
 ///
@@ -29,13 +30,12 @@ PROGMEM const char CMD[] = "\x05" \
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "FOR" "NXT" \
     "I  ";
-PROGMEM const char PRM[] = "\x19" \
+PROGMEM const char PRM[] = "\x2d" \
     "DRP" "DUP" "SWP" "OVR" "+  " "-  " "*  " "/  " "MOD" "NEG" \
     "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " "<> " \
-    "@  " "!  " "C@ " "C! " ".  " ;
-PROGMEM const char EXT[] = "\x14" \
-    ".\" "">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" \
-    "CLK" "D+ " "D- " "DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
+    "@  " "!  " "C@ " "C! " ".  " ".\"" ">R " "R> " "WRD" "HRE" \
+    "CEL" "ALO" "SAV" "LD " "TRC" "CLK" "D+ " "D- " "DNG" "DLY" \
+    "PIN" "IN " "OUT" "AIN" "PWM";
 //
 // Forth assembler stack opcode macros (note: rp grows downward)
 //
@@ -62,13 +62,11 @@ PROGMEM const char EXT[] = "\x14" \
 #define JMPSET(idx, p1) do {               \
     U8  *p = PTR(idx);                     \
     U8  f8 = *(p);                         \
-    U16 a  = ((U8*)(p1) - p) + JMP_BIT;    \
+    U16 a  = IDX(p1);                      \
     SET16(p, (a | (U16)f8<<8));            \
     } while(0)
 #define JMPBCK(idx, f) do {                \
-    U8  *p = PTR(idx);                     \
-    U16 a  = (U16)(p - here) + JMP_BIT;    \
-    SET16(here, a | (f<<8));               \
+    SET16(here, idx | (f<<8));             \
     } while(0)
 ///
 ///> NanoForth Assembler initializer
@@ -95,7 +93,6 @@ N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 {
     if (query(tkn, rst))                         return TKN_DIC; /// * DIC search word dictionary adr(2),name(3)
     if (N4Util::find(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM immediate word
-    if (N4Util::find(tkn, EXT, rst))             return TKN_EXT; /// * EXT search extended words
     if (N4Util::find(tkn, PRM, rst))             return TKN_PRM; /// * PRM search primitives
     if (N4Util::getnum(tkn, (S16*)rst))          return TKN_NUM; /// * NUM parse as number literal
     return TKN_ERR;                                              /// * ERR unknown token
@@ -122,7 +119,7 @@ void N4Asm::compile(U16 *rp0)
         switch(parse_token(tkn, &tmp, 0)) { ///#### determinie type of operation, and keep opcode in tmp
         case TKN_IMM:                       ///> immediate command
             if (tmp==0) {                   // handle ;
-                SET8(here, I_RET);          /// * terminate COLON definitions, or
+                SET8(here, PFX_RET);        /// * terminate COLON definitions, or
                 tkn = NULL;                 //    clear token to exit compile mode
             }
             else _do_branch(tmp);           /// * add branching opcode
@@ -130,13 +127,9 @@ void N4Asm::compile(U16 *rp0)
         case TKN_DIC:                       ///> add found word: addr + adr(2) + name(3)
             JMPBCK(tmp+2+3, PFX_CALL);
             break;
-        case TKN_EXT:                       ///> add extended primitive word
-            SET8(here, I_EXT);
-            SET8(here, (U8)tmp);            /// * extra 256 words available
-            if (tmp==0) _do_str();          // handle ."
-            break;
-        case TKN_PRM:                       ///> built-in primives
-            SET8(here, PFX_PRM | (U8)tmp);  /// * add found primitive opcode
+        case TKN_PRM:                       ///> built-in primitives
+        	SET8(here, PRM_BIT | (U8)tmp);  /// * add found primitive opcode
+        	if (tmp==I_DQ) _do_str();  		// handle ."
             break;
         case TKN_NUM:                       ///> literal (number)
             if (tmp < 128) {
@@ -175,7 +168,7 @@ void N4Asm::variable()
         SET8(here, I_LIT);
         SET16(here, tmp);
     }
-    SET8(here, I_RET);
+    SET8(here, PFX_RET);
     SET16(here, 0);	                        // actual storage area
 }
 ///
@@ -228,6 +221,7 @@ void N4Asm::forget()
 ///
 void N4Asm::save()
 {
+#if ARDUINO
     U16 last_i = IDX(last);
     U16 here_i = IDX(here);
     
@@ -236,12 +230,14 @@ void N4Asm::save()
     for (int i=0; i<here_i; i++) {
         EEPROM.update(i+4, *dic++);
     }
+#endif //ARDUINO
 }
 ///
 ///> restore dictionary from EEPROM into RAM
 ///
 void N4Asm::load()
 {
+#if ARDUINO
     U16 last_i = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
     U16 here_i = ((U16)EEPROM.read(2)<<8) + EEPROM.read(3);
     for (int i=0; i<here_i; i++) {
@@ -249,40 +245,53 @@ void N4Asm::load()
     }
     last = PTR(last_i);
     here = PTR(here_i);
+#endif //ARDUINO
 }
 ///
 ///> NanoForth execution tracer (debugger, can be modified into single-stepper)
 ///
-PROGMEM const char PMX[] = " NXTI  RD2FOR";
-void N4Asm::trace(U16 a, U8 ir, U8 *pc)
+PROGMEM const char PMX[] = " FORNXTBRKI  ";
+void N4Asm::trace(U16 a, U8 ir)
 {
     D_ADR(a);                                         // opcode address
     
-    if ((ir & 0x80)==0) { D_CHR('#'); D_HEX(ir);                 }   // 1-byte literal
-    else if (ir==I_LIT) { D_CHR('#'); N4Util::putnum(GET16(pc)); }   // 3-byte literal
-    else if (ir==I_RET) { D_CHR(';'); tab -= tab ? 1 : 0;        }   // RET
-    else if (ir==I_EXT) { D_CHR('_'); _opname(*pc, EXT, 0);      }   // EXT extended words
-    else {
-        U8 op = ir & 0x1f;                            // opcode or top 5-bit of offset
-        a += ((U16)op<<8) + *pc - JMP_BIT;            // JMP_BIT ensure 2's complement (for backward jump)
-        switch (ir & 0xe0) {
-        case PFX_UDJ: D_CHR('j'); D_ADR(a); break;    // 0x80 unconditional jump
-        case PFX_CDJ: D_CHR('?'); D_ADR(a); break;    // 0xa0 conditional jump
-        case PFX_CALL:                                // 0xc0 word call
+    if (ir & JMP_BIT) {                               ///> is it a branching instruction?
+        a = GET16(PTR(a)) & ADR_MASK;                 // target address
+        switch (ir & JMP_MASK) {					  // get branching opcode
+        case PFX_UDJ: D_CHR('j'); D_ADR(a); break;    // 0x40 UDJ  unconditional jump
+        case PFX_CDJ: D_CHR('?'); D_ADR(a); break;    // 0x50 CDJ  conditional jump
+        case PFX_CALL: {                              // 0x60 CALL word call
+            U8 *p = PTR(a)-3;                         // backtrack 3-byte (name field)
             D_CHR(':');
-            pc = PTR(a)-3;                            // backtrack 3-byte (name field)
-            D_CHR(*pc++); D_CHR(*pc++); D_CHR(*pc);
+            D_CHR(*p++); D_CHR(*p++); D_CHR(*p);
             putstr("\n....");
             for (int i=0, n=++tab; i<n; i++) {        // indentation per call-depth
                 putstr("  ");
             }
-            break;
-        case PFX_PRM:                                 // primitive words
-            D_CHR('_');
-            _opname(op<25 ? op : op-25, op<25 ? PRM : PMX, 0);
+        } break;
+        case PFX_RET:                                 // 0x70 RET return
+            D_CHR(';');
+            tab -= tab ? 1 : 0;
             break;
         }
     }
+    else if (ir & PRM_BIT) {                         ///> is it a primitives?
+        U8 op = ir & PRM_MASK;
+        switch (op) {
+        case I_LIT: {                                // 3-byte literal
+            U8 *p = PTR(a)+1;                        // address to the 16-bit number
+        	D_CHR('#');
+        	N4Util::putnum(GET16(p));
+        } break;
+        default: {                                   // other opcodes
+            U8 ci = op >= I_FOR;                     // loop controller flag
+            D_CHR('_');
+            _opname(ci ? op-I_FOR : op, ci ? PMX : PRM, 0);
+        } break;
+        }
+    }
+    else { D_CHR('#'); D_HEX(ir); }                  ///> it is a number (i.e. 1-byte literal)
+    
     D_CHR(' ');
 }
 ///
@@ -291,9 +300,13 @@ void N4Asm::trace(U16 a, U8 ir, U8 *pc)
 void N4Asm::_list_voc()
 {
 #define WORDS_PER_ROW 10
-    const char *lst[] PROGMEM = { CMD, JMP, PRM, EXT };      // list of built-in primitives
+    PROGMEM const char *lst[] = { CMD, JMP, PRM };      // list of built-in primitives
     for (U8 i=0, n=0; i<4; i++) {
+#if ARDUINO
         U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
+#else
+        U8 sz = *(lst[i]);
+#endif //ARDUINO
         for (U8 op=0; op<sz; op++) {
             D_CHR(n++%WORDS_PER_ROW==0 ? '\n' : ' ');
             _opname(op, lst[i], 1);
@@ -339,15 +352,15 @@ void N4Asm::_do_branch(U8 op)
         break;
     case 8:	/* FOR */
         RPUSH(IDX(here+1));             // save current addr A1
-        SET8(here, I_P2R2);
+        SET8(here, PRM_BIT | I_FOR);
         break;
     case 9:	/* NXT */
-        SET8(here, I_NXT);
+        SET8(here, PRM_BIT | I_NXT);
         JMPBCK(RPOP(), PFX_CDJ);        // conditionally jump back to A1
-        SET8(here, I_RD2);
+        SET8(here, PRM_BIT | I_BRK);
         break;
     case 10: /* I */
-        SET8(here, I_I);                // fetch loop counter
+        SET8(here, PRM_BIT | I_I);      // fetch loop counter
         break;
     }
 }
@@ -356,7 +369,11 @@ void N4Asm::_do_branch(U8 op)
 /// 
 void N4Asm::_opname(U8 op, const char *lst, U8 space)
 {
+#if ARDUINO
     PGM_P p = reinterpret_cast<PGM_P>(lst)+1+op*3;
+#else
+    U8 *p = (U8*)lst+1+op*3;
+#endif //ARDUINO
     char  c;
     D_CHR(pgm_read_byte(p));
     if ((c=pgm_read_byte(p+1))!=' ' || space) D_CHR(c);

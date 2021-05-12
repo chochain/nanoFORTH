@@ -3,8 +3,8 @@
 /// \brief NanoForth Assembler class
 ///
 ///> NanoForth Opcode formats<br>
-///>>    `primitive : 111c cccc                      (32 primitive)`<br>
-///>>    `branching : 1BBo oooo oooo oooo            (+- 12-bit relative offset, i.e. portable)`<br>
+///>>    `primitive : 10cc cccc                      (64 primitive)`<br>
+///>>    `branching : 11BB oooo oooo oooo            (12-bit absolute address)`<br>
 ///>>    `1-byte lit: 0nnn nnnn                      (0..127)`<br>
 ///>>    `3-byte lit: 1111 1110 nnnn nnnn nnnn nnnn  FE xxxx xxxx (16-bit signed integer)`<br>
 ///
@@ -23,27 +23,27 @@ enum N4OP {
     TKN_ERR          ///< parse error (unknown token)
 };
 ///
-/// branch flags (1BBx)
+/// branch flags   (01BB)
 ///
-#define JMP_BIT    0x1000     /**< 0001 0000 0000 0000 12-bit offset */
-#define PFX_UDJ    0x80       /**< 1000 0000 */
-#define PFX_CDJ    0xa0       /**< 1010 0000 */
-#define PFX_CALL   0xc0       /**< 1100 0000 */
-#define PFX_PRM    0xe0       /**< 1110 0000 */
+#define ADR_MASK   0x0fff     /**< 0000 1111 1111 1111 12-bit address */
+#define PRM_BIT    0x80       /**< 1000 0000 */
+#define PRM_MASK   0x3f       /**< 0011 1111 */
+#define JMP_BIT    0x40       /**< 0100 0000 */
+#define JMP_MASK   0x70       /**< 0111 0000 */
+#define PFX_UDJ    0x40       /**< 0100 0000 */
+#define PFX_CDJ    0x50       /**< 0101 0000 */
+#define PFX_CALL   0x60       /**< 0110 0000 */
+#define PFX_RET    0x70       /**< 0111 0000 */
 ///
 /// opcodes for loop control (in compiler mode)
 ///
 enum {
-    I_NXT  = (PFX_PRM | 25),  ///< f 9
-    I_I,                      ///< f a
-    I_RD2,                    ///< f b
-    I_P2R2,                   ///< f c
-    I_RET,                    ///< f d
-    ///
-    /// extended opcode and literal (in compiler mode)
-    ///
-    I_LIT,                    ///< f e
-    I_EXT                     ///< f f
+	I_DQ   = 0x19,            ///< ." handler (adjust, if field name list changed)
+    I_FOR  = 0x3b,            ///< 0x3b
+    I_NXT,                    ///< 0x3c
+    I_BRK,                    ///< 0x3d
+    I_I,                      ///< 0x3e loop counter
+    I_LIT                     ///< 0x3f 3-byte literal
 };
 ///
 /// NanoForth Assembler class
@@ -81,7 +81,7 @@ public:
     void load();                        ///< restore user dictionary from EEPROM
 
     // execution tracing
-    void trace(U16 a, U8 ir, U8 *pc);   ///< print execution tracing info
+    void trace(U16 a, U8 ir);           ///< print execution tracing info
     
 private:
     void _list_voc();                                ///< list words from all vocabularies
