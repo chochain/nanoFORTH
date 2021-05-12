@@ -10,17 +10,15 @@
 //
 // Serial IO macros
 //
-/* for debugging
-#define PROGMEM
-#define pgm_read_byte(p)  (*(p))
-#define millis()          0
-#define putstr(msg)    printf("%s", msg)
-#define putchr(c)      printf("%c", c)
-#define puthex(v)      printf("%02x", v)
-*/
+#if ARDUINO
 #define putstr(msg)    Serial.print(F(msg))
 #define putchr(c)      Serial.write((char)c)
 #define puthex(v)      Serial.print((U16)v, HEX)
+#else
+#define putstr(msg)    printf("%s", msg)
+#define putchr(c)      printf("%c", c)
+#define puthex(v)      printf("%02x", v)
+#endif //ARDUINO
 //
 // memory access opcodes
 /// \def SET8

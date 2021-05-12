@@ -9,10 +9,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <Arduino.h>
 
+#define ARDUINO      defined(__AVR_ATmega328P__)
 #define ASM_TRACE    1                        /**< enable assembler tracing    */
 #define EXE_TRACE    1                        /**< enable VM execution tracing */
+
+#if ARDUINO
+#include <Arduino.h>
+#else
+#define PROGMEM
+#define millis()          10000
+#define pgm_read_byte(p)  (*(p))
+#endif // ARDUINO
 //
 // default heap sizing
 //
@@ -61,8 +69,8 @@ class NanoForth
 public:
     /// constructor with dynamic memory sizing
     static void begin(
-        unsigned int mem_sz=N4_MEM_SZ,  ///< memory size
-        unsigned int stk_sz=N4_STK_SZ   ///< parameter+return stack size
+        U16 mem_sz=N4_MEM_SZ,     ///< memory size
+        U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size
         );   
     
     static void add(void (*ufunc)(n4_tptr));  ///< add the user function to NanoForth task manager

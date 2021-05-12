@@ -2,16 +2,22 @@
 /// \file nanoforth_util.cpp
 /// \brief NanoForth Utility class implementation
 ///
-#include <avr/pgmspace.h>
 #include "nanoforth_util.h"
+#if ARDUINO
+#include <avr/pgmspace.h>
+#endif //ARDUINO
 //
 // tracing instrumentation
 //
+#if ARDUINO
 void N4Util::d_chr(char c)     { Serial.write(c);   }
+void N4Util::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('^'); d_adr(a); }
+#else
+void N4Util::d_chr(char c)     { printf("%c", c);   }
+#endif //ARDUINO
 void N4Util::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
 void N4Util::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
 void N4Util::d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff)); }
-void N4Util::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('^'); d_adr(a); }
 //
 // IO and Search Functions =================================================
 ///

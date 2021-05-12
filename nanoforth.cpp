@@ -89,8 +89,12 @@ void NanoForth::yield()
 ///
 char NanoForth::key()
 {
+#if ARDUINO
     while (!Serial.available()) yield();
     return Serial.read();
+#else
+	return getchar();
+#endif //ARDUINO
 }
 ///
 /// * aka Arduino delay(), yield to hardware context while waiting
@@ -103,17 +107,17 @@ void NanoForth::wait(U32 ms)
 //
 // for Eclipse debugging
 //
-/*
+#if !ARDUINO
 int main(int argc, char **argv)
 {
 	setvbuf(stdout, NULL, _IONBF, 0);		// autoflush (turn STDOUT buffering off)
     
-	NanoForth n4;
+	NanoForth::begin();
     while (1) {
-        n4.run();
+        NanoForth::step();
     }
 	return 0;
 }
-*/
+#endif //!ARDUINO
 
 
