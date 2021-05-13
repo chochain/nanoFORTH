@@ -147,8 +147,9 @@ void N4VM::_execute(U16 adr)
 
         if (trc) n4asm->trace(a, ir);                     // executioU8n tracing when enabled
 
-        if (!(ir & PRM_BIT)) { PUSH(ir); }                ///> is it a number? (1-byte literal), or
-        else if (ir & JMP_BIT) {                          ///> is it a branching instruction?
+        U8  op = ir & CTL_BITS;                           ///> determine control bits
+        switch (op) {
+        case 0xc0:                                        ///> handle branching instruction
             a = GET16(pc-1) & ADR_MASK;                   // target address
             switch (ir & JMP_MASK) {					  // get branch opcode
             case PFX_UDJ:                                 // 0x40 unconditional jump
@@ -165,9 +166,9 @@ void N4VM::_execute(U16 adr)
                 pc = NULL;                                // break
                 break;
             }
-        }
-        else {                                            ///> it must be a primitive word
-        	U8 op = ir & PRM_MASK;
+            break;
+        case 0x80:                                        ///> handle primitive word
+        	op = ir & PRM_MASK;                           // capture opcode
             switch(op) {
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
             case I_DQ:                          		  // handle ."
@@ -177,7 +178,9 @@ void N4VM::_execute(U16 adr)
                 break;
             default: _primitive(op);                      // handle other opcodes
             }
-        }
+            break;
+        default: PUSH(ir);                                ///> handle number (1-byte literal)
+        }                
         NanoForth::yield();
     }
 }

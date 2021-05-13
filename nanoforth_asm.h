@@ -25,19 +25,19 @@ enum N4OP {
 ///
 /// branch flags   (01BB)
 ///
+#define CTL_BITS   0xc0       /**< 1100 0000, 11xx: JMP, 10xx: PRM, 0xxx: NUM */
+#define PFX_PRM    0x80       /**< 1000 0000 */
+#define PRM_MASK   0x3f       /**< 0011 1111, 6-bit primitive opcodes */
+#define JMP_MASK   0xf0       /**< 1111 0000 */
+#define PFX_UDJ    0xc0       /**< 1100 0000 */
+#define PFX_CDJ    0xd0       /**< 1101 0000 */
+#define PFX_CALL   0xe0       /**< 1110 0000 */
+#define PFX_RET    0xf0       /**< 1111 0000 */
 #define ADR_MASK   0x0fff     /**< 0000 aaaa aaaa aaaa 12-bit address */
-#define PRM_BIT    0x80       /**< 1000 0000 */
-#define JMP_BIT    0x40       /**< 0100 0000 */
-#define PRM_MASK   0x3f       /**< 0011 1111 */
-#define JMP_MASK   0x70       /**< 0111 0000 */
-#define PFX_UDJ    0x40       /**< 0100 0000 */
-#define PFX_CDJ    0x50       /**< 0101 0000 */
-#define PFX_CALL   0x60       /**< 0110 0000 */
-#define PFX_RET    0x70       /**< 0111 0000 */
 ///
 /// opcodes for loop control (in compiler mode)
 ///
-enum {
+enum N4_EXT_OP {              ///< extended opcode (used by for...nxt loop)
 	I_DQ   = 0x19,            ///< ." handler (adjust, if field name list changed)
     I_FOR  = 0x3b,            ///< 0x3b
     I_NXT,                    ///< 0x3c
