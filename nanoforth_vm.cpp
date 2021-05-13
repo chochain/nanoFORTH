@@ -141,7 +141,8 @@ void N4VM::_ok()
 //
 void N4VM::_execute(U16 adr)
 {
-    for (U8 *pc=PTR(adr); pc; ) {                         ///> walk through instruction sequences
+	RPUSH(0xffff);                                        // enter function call
+    for (U8 *pc=PTR(adr); pc!=PTR(0xffff); ) {            ///> walk through instruction sequences
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
@@ -163,7 +164,8 @@ void N4VM::_execute(U16 adr)
                 pc = PTR(a);                              // jump to subroutine till I_RET
                 break;
             case PFX_RET:                                 // 0x70 return from subroutine
-                pc = NULL;                                // done, exit execution unit
+                a  = RPOP();                              // pop return address
+                pc = PTR(a);                              // caller's next instruction (or break loop if 0xffff)
                 break;
             }
             break;
@@ -203,7 +205,7 @@ void N4VM::_primitive(U8 op)
     case 10: TOS &= POP();                break; // AND
     case 11: TOS |= POP();                break; // OR
     case 12: TOS ^= POP();                break; // XOR
-    case 13: TOS = TOS ? -1 : 0;          break; // NOT
+    case 13: TOS = TOS ? 0 : 1;           break; // NOT
     case 14: TOS = POP()==TOS;            break; // =
     case 15: TOS = POP()> TOS;            break; // <
     case 16: TOS = POP()< TOS;            break; // >
