@@ -314,8 +314,8 @@ void N4Asm::trace(U16 a, U8 ir)
 void N4Asm::_list_voc()
 {
 #define WORDS_PER_ROW 10
-    PROGMEM const char *lst[] = { CMD, JMP, PRM };      // list of built-in primitives
-    for (U8 i=0, n=0; i<4; i++) {
+    const char *lst[] PROGMEM = { CMD, JMP, PRM };      // list of built-in primitives
+    for (U8 i=0, n=0; i<3; i++) {
 #if ARDUINO
         U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
 #else
