@@ -33,7 +33,7 @@ PROGMEM const char JMP[] = "\x0b" \
 PROGMEM const char PRM[] = "\x2d" \
     "DRP" "DUP" "SWP" "OVR" "+  " "-  " "*  " "/  " "MOD" "NEG" \
     "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " "<> " \
-    "@  " "!  " "C@ " "C! " ".  " ".\"" ">R " "R> " "WRD" "HRE" \
+    "@  " "!  " "C@ " "C! " ".  " ".\" "">R " "R> " "WRD" "HRE" \
     "CEL" "ALO" "SAV" "LD " "TRC" "CLK" "D+ " "D- " "DNG" "DLY" \
     "PIN" "IN " "OUT" "AIN" "PWM";
 //
@@ -104,14 +104,14 @@ void N4Asm::compile(U16 *rp0)
 {
     rp = rp0;                    // capture current return pointer
     U8  *tkn = N4Util::token();  ///#### fetch one token from console
-    U8  *p0  = here;
     U16 tmp  = IDX(last);        // link to previous word
+    U8  *l0  = last, *h0 = here, *p0 = here;
 
     last = here;                 ///#### create 3-byte name field
     SET16(here, tmp);            // pointer to previous word
     SETNM(here, tkn);            // store token into 3-byte name field
 
-    for (; tkn;) {               // terminate if tkn==NULL
+    for (;tkn;) {                // terminate if tkn==NULL
         N4Util::memdump(dic, p0, (U16)(here-p0), 0);
 
         tkn = N4Util::token();
@@ -140,11 +140,16 @@ void N4Asm::compile(U16 *rp0)
                 SET16(here, tmp);
             }
             break;
-        default:  putstr("!\n");            ///> token type not found, bail!
+        default:                            ///> token type not found, bail!
+        	putstr("!\n");
+        	last = l0;                      // restore last, here pointers
+        	here = h0;
+        	N4Util::token(TIB_CLR);
+        	tkn  = NULL;
         }
     }
     // debug memory dump
-    N4Util::memdump(dic, last, (U16)(here-last), ' ');
+    if (last>l0) N4Util::memdump(dic, last, (U16)(here-last), ' ');
 }
 ///
 ///> create variable on dictionary
@@ -279,20 +284,26 @@ void N4Asm::trace(U16 a, U8 ir)
         break;
     case 0x80:                                        ///> a primitive
         op = ir & PRM_MASK;                           // capture primitive opcode
-        if (op==I_LIT) {                              // 3-byte literal (i.e. 16-bit signed integer)
+        switch (op) {
+        case I_LIT:                                   // 3-byte literal (i.e. 16-bit signed integer)
         	D_CHR('#');
             p = PTR(a)+1;                             // address to the 16-bit number
             a = GET16(p);                             // fetch the number (reuse a, bad, but to save)
         	D_HEX(a>>8); D_HEX(a&0xff);
-        }
-        else {                                        // other opcodes
+            break;
+        case I_DQ:                                    // print string
+        	D_CHR('"');
+        	p = PTR(a)+1;                             // address to string header
+            D_STR(p);                                 // print the string to console
+        	break;
+        default:                                      // other opcodes
             D_CHR('_');
             U8 ci = op >= I_FOR;                      // loop controller flag
             _opname(ci ? op-I_FOR : op, ci ? PMX : PRM, 0);
         }
         break;
-    default:
-        D_CHR('#'); D_HEX(ir);                        ///> a number (i.e. 1-byte literal)
+    default:                                          ///> a number (i.e. 1-byte literal)
+        D_CHR('#'); D_HEX(ir);
     }
 
     D_CHR(' ');
