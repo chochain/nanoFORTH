@@ -5,7 +5,7 @@
 ///> assembler memory organization:
 ///>>    `mem[...dic_sz...[...stk_sz...]`<br>
 ///>>    `   |                         |`<br>
-///>>    `  dic-->                rp<-+`<br>
+///>>    `  dic-->                 rp<-+`<br>
 ///
 
 #include "nanoforth_util.h"
@@ -136,7 +136,7 @@ void N4Asm::compile(U16 *rp0)
                 SET8(here, (U8)tmp);        /// * 1-byte literal, or
             }
             else {
-                SET8(here, I_LIT);          /// * 3-byte literal
+                SET8(here, PRM_BIT | I_LIT);/// * 3-byte literal
                 SET16(here, tmp);
             }
             break;
@@ -279,9 +279,10 @@ void N4Asm::trace(U16 a, U8 ir)
         U8 op = ir & PRM_MASK;
         switch (op) {
         case I_LIT: {                                // 3-byte literal
-            U8 *p = PTR(a)+1;                        // address to the 16-bit number
+            U8  *p = PTR(a)+1;                       // address to the 16-bit number
+            U16  n = GET16(p);
         	D_CHR('#');
-        	N4Util::putnum(GET16(p));
+        	D_HEX(n>>8); D_HEX(n&0xff);
         } break;
         default: {                                   // other opcodes
             U8 ci = op >= I_FOR;                     // loop controller flag
