@@ -1,4 +1,4 @@
-# simple and useful FORTH for Arduino Nano
+# Journey of an Arduino Maker
 
 **You unboxed the Arduino UNO** from Amazon with excitement, opened the awaiting Arduino IDE, carefully followed one of the numerous available online tutorials, found and compiled the Blink sketch in the included examples, hit the -> button and seconds later, the orange light started blinking! Success! You told yourself that "I think I can be pretty good at this"!
 
@@ -13,6 +13,20 @@
 One day, **ESP shows up** on you radar. It can do everything you've imagined thus far. Web serving, mesh-network, LoRa, even MySQL,... Programming-wise, there're C, microPython, even Ruby after some hard digging. Soon, the universe started to expand and what came into view is a Raspberry Pi. The final frontier suddenly became bondless. Your imagination was pushed far beyond the black holes and the vast void. **Life became meaningful** and sure got excited again. MotionEyes, OctaPi, robot buggy, and the plan to try some AI stuffs, ... Your heart were filled with joy and temptations. The limitation of CPU resource or storage is already a distant memory.
 
 **One night**, while you felt the new path is set and the final destination is in sight, you were driving home with the cresting moon hanging over the horizon, a thought came through your mine. **What happened to the Nanos?**
+<br>
+<br>
+<br>
+***
+### Flash backs...
 
-<a href="../nanoforth.md">Hyper Jump here...</a>
+Compling code as Scetches in the IDE and Upload via the tethered USB cable has been the way of life in Arduino universe. Makers are used to getting feedback directly from Serial Monitor as well. This self-contained round-trip development cycle from the comfort of all inside one IDE is the major reason making this platform so popular.
+
+FORTH, a simple yet extensible interactive language, arms embedded platforms with REPL coding/debugging process, makes it a natual candidate for microcollers. Its interactive shell can eliminate the bulk of the repetitive compile/upload cycles.
+
+Currenly, there are **AmForth** and **FlashForth** avaiable for Arduino. Though no direct support from the IDE yet, they demonstrated the value of such on tiny systems. However, in order to run a simplest command, both of them are **required to overwrite the Arduino bootloader** whcich also needs an additional burner (or called programmer). The additional process not only is an entry barier for beginners but render your kit a 'non-Arduino' which can leaves a "your warrenty is void" taste in your mouth even if done correctly. An often asked question is "how do I turn it back?".
+
+So, may the FORTH be with you, and here comes one for our **Nanos**!
+
+<a href="page2.html">[Buckle up! Ready for Hyper Jump...]</a>
+
 
