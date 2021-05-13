@@ -7,6 +7,7 @@
 #include "nanoforth.h"
 
 #define TIB_SZ         0x40              /**< console(terminal) input buffer size */
+#define TIB_CLR        0x1
 //
 // Serial IO macros
 //
@@ -37,6 +38,7 @@
 #define D_CHR(c)       N4Util::d_chr(c)
 #define D_HEX(h)       N4Util::d_hex(h)
 #define D_ADR(a)       N4Util::d_adr(a)
+#define D_STR(p)       N4Util::d_str(p)
 ///
 /// NanoForth helper class
 ///
@@ -44,19 +46,20 @@ class N4Util
 {
 public:
     //
-    // tracing instrumentation
+    // dot_* for tracing instrumentation
     //
     static void d_chr(char c);             ///< print a char to console
     static void d_nib(U8 n);               ///< print a nibble
     static void d_hex(U8 c);               ///< print a 8-bit hex number
     static void d_adr(U16 a);              ///< print a 12-bit address
+    static void d_str(U8 *p);              ///< handle dot string (byte-stream leading with length)
     static void d_ptr(U8 *p);              ///< print a pointer
     //
     // IO and Search Functions
     //
     static void putnum(S16 n);             ///< sent a number literal to console
     static U8   getnum(U8 *str, S16 *num); ///< process a literal from string given
-    static U8   *token(void);              ///< get a token from console input
+    static U8   *token(U8 clear=0);        ///< get a token from console input
     //
     // memory dummpers
     //

@@ -17,7 +17,8 @@ void N4Util::d_chr(char c)     { printf("%c", c);   }
 #endif //ARDUINO
 void N4Util::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
 void N4Util::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
-void N4Util::d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff)); }
+void N4Util::d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff));   }
+void N4Util::d_str(U8 *p)      { for (int i=0, sz=*p++; i<sz; i++) d_chr(*p++); }
 //
 // IO and Search Functions =================================================
 ///
@@ -33,11 +34,12 @@ void N4Util::putnum(S16 n)
 ///
 ///> capture a token from console input buffer
 ///
-U8 *N4Util::token(void)
+U8 *N4Util::token(U8 clear)
 {
-    static U8 tib[TIB_SZ];
-    static U8 *tp = tib;
-    
+	static U8  tib[TIB_SZ];
+	static U8 *tp = tib;
+
+	if (clear)   { tp=tib; return 0; }        // clear buffer
     if (tp==tib) _console_input(tib);         // buffer empty, read from console
 
     U8 *p = tp;                               // keep original tib pointer
