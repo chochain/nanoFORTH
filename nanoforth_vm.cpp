@@ -163,7 +163,7 @@ void N4VM::_execute(U16 adr)
                 pc = PTR(a);                              // jump to subroutine till I_RET
                 break;
             case PFX_RET:                                 // 0x70 return from subroutine
-                pc = NULL;                                // break
+                pc = NULL;                                // done, exit execution unit
                 break;
             }
             break;
@@ -171,11 +171,7 @@ void N4VM::_execute(U16 adr)
         	op = ir & PRM_MASK;                           // capture opcode
             switch(op) {
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
-            case I_DQ:                          		  // handle ."
-                for (U8 i=0, sz=*pc++; i<sz; i++) {
-                	D_CHR(*pc++);
-                }
-                break;
+            case I_DQ:  D_STR(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
             default: _primitive(op);                      // handle other opcodes
             }
             break;

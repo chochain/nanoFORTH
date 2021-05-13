@@ -1,4 +1,3 @@
-\mainpage
 # simple and useful FORTH for Arduino Nano
 
 **You unboxed the Arduino UNO** from Amazon with excitement, opened the awaiting Arduino IDE, carefully followed one of the numerous available online tutorials, found and compiled the Blink sketch in the included examples, hit the -> button and seconds later, the orange light started blinking! Success! You told yourself that "I think I can be pretty good at this"!
