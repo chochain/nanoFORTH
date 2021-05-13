@@ -147,25 +147,26 @@ void N4VM::_execute(U16 adr)
 
         if (trc) n4asm->trace(a, ir);                     // executioU8n tracing when enabled
 
-        if (ir & JMP_BIT) {                               ///> is it a branching instruction?
+        if (!(ir & PRM_BIT)) { PUSH(ir); }                ///> is it a number? (1-byte literal), or
+        else if (ir & JMP_BIT) {                          ///> is it a branching instruction?
             a = GET16(pc-1) & ADR_MASK;                   // target address
             switch (ir & JMP_MASK) {					  // get branch opcode
-            case PFX_UDJ:                                 // 0x80 unconditional jump
+            case PFX_UDJ:                                 // 0x40 unconditional jump
                 pc = PTR(a);                              // set jump target
                 break;
-            case PFX_CDJ:                                 // 0xa0 conditional jump
+            case PFX_CDJ:                                 // 0x50 conditional jump
                 pc = POP() ? pc+1 : PTR(a);               // next or target
                 break;
-            case PFX_CALL:                                // 0xd0 word call
+            case PFX_CALL:                                // 0x60 subroutine call
                 RPUSH(IDX(pc+1));                         // keep next instruction on return stack
                 pc = PTR(a);                              // jump to subroutine till I_RET
                 break;
-            case PFX_RET:                                 // 0x70 RET return
+            case PFX_RET:                                 // 0x70 return from subroutine
                 pc = NULL;                                // break
                 break;
             }
         }
-        else if (ir & PRM_BIT) {                          ///> is it a primitive word?
+        else {                                            ///> it must be a primitive word
         	U8 op = ir & PRM_MASK;
             switch(op) {
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
@@ -177,8 +178,6 @@ void N4VM::_execute(U16 adr)
             default: _primitive(op);                      // handle other opcodes
             }
         }
-        else { PUSH(ir); }                                ///> it is a number (1-byte literal)
-        
         NanoForth::yield();
     }
 }

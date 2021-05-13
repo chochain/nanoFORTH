@@ -39,6 +39,9 @@
 ///  * [11750,280] add mem,stk sizing; VM and ASM objects dynamically created
 ///  * [11956,272] add struct n4_task and N4_FUNC multi-tasker
 ///
+///> 2021-05-11: chochain@yahoo.com
+///  * [         ] reformat opcodes for 64-primitives
+///
 #include "nanoforth_vm.h"
 //
 // user function linked-list

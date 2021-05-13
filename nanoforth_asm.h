@@ -3,10 +3,10 @@
 /// \brief NanoForth Assembler class
 ///
 ///> NanoForth Opcode formats<br>
-///>>    `primitive : 10cc cccc                      (64 primitive)`<br>
-///>>    `branching : 11BB oooo oooo oooo            (12-bit absolute address)`<br>
 ///>>    `1-byte lit: 0nnn nnnn                      (0..127)`<br>
-///>>    `3-byte lit: 1111 1110 nnnn nnnn nnnn nnnn  FE xxxx xxxx (16-bit signed integer)`<br>
+///>>    `3-byte lit: 1011 1111 nnnn nnnn nnnn nnnn  bf xxxx xxxx (16-bit signed integer)`<br>
+///>>    `primitive : 10cc cccc                      (64 primitives)`<br>
+///>>    `branching : 11BB oooo oooo oooo            (12-bit absolute address)`<br>
 ///
 #ifndef __SRC_NANOFORTH_ASM_H
 #define __SRC_NANOFORTH_ASM_H
@@ -25,10 +25,10 @@ enum N4OP {
 ///
 /// branch flags   (01BB)
 ///
-#define ADR_MASK   0x0fff     /**< 0000 1111 1111 1111 12-bit address */
+#define ADR_MASK   0x0fff     /**< 0000 aaaa aaaa aaaa 12-bit address */
 #define PRM_BIT    0x80       /**< 1000 0000 */
-#define PRM_MASK   0x3f       /**< 0011 1111 */
 #define JMP_BIT    0x40       /**< 0100 0000 */
+#define PRM_MASK   0x3f       /**< 0011 1111 */
 #define JMP_MASK   0x70       /**< 0111 0000 */
 #define PFX_UDJ    0x40       /**< 0100 0000 */
 #define PFX_CDJ    0x50       /**< 0101 0000 */

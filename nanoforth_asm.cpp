@@ -254,45 +254,43 @@ PROGMEM const char PMX[] = " FORNXTBRKI  ";
 void N4Asm::trace(U16 a, U8 ir)
 {
     D_ADR(a);                                         // opcode address
-    
-    if (ir & JMP_BIT) {                               ///> is it a branching instruction?
+
+    U8 *p;
+    if (!(ir & PRM_BIT)) { D_CHR('#'); D_HEX(ir); }   ///> a number? (i.e. 1-byte literal), or
+    else if (ir & JMP_BIT) {                          ///> a jump instruction?
         a = GET16(PTR(a)) & ADR_MASK;                 // target address
         switch (ir & JMP_MASK) {					  // get branching opcode
         case PFX_UDJ: D_CHR('j'); D_ADR(a); break;    // 0x40 UDJ  unconditional jump
         case PFX_CDJ: D_CHR('?'); D_ADR(a); break;    // 0x50 CDJ  conditional jump
-        case PFX_CALL: {                              // 0x60 CALL word call
-            U8 *p = PTR(a)-3;                         // backtrack 3-byte (name field)
+        case PFX_CALL:                                // 0x60 CALL word call
             D_CHR(':');
+            p = PTR(a)-3;                             // backtrack 3-byte (name field)
             D_CHR(*p++); D_CHR(*p++); D_CHR(*p);
             putstr("\n....");
             for (int i=0, n=++tab; i<n; i++) {        // indentation per call-depth
                 putstr("  ");
             }
-        } break;
+            break;
         case PFX_RET:                                 // 0x70 RET return
             D_CHR(';');
             tab -= tab ? 1 : 0;
             break;
         }
     }
-    else if (ir & PRM_BIT) {                         ///> is it a primitives?
+    else {                                            ///> it must be a primitive
         U8 op = ir & PRM_MASK;
-        switch (op) {
-        case I_LIT: {                                // 3-byte literal
-            U8  *p = PTR(a)+1;                       // address to the 16-bit number
-            U16  n = GET16(p);
+        if (op==I_LIT) {                              // 3-byte literal (i.e. 16-bit signed integer)
         	D_CHR('#');
-        	D_HEX(n>>8); D_HEX(n&0xff);
-        } break;
-        default: {                                   // other opcodes
-            U8 ci = op >= I_FOR;                     // loop controller flag
+            p = PTR(a)+1;                             // address to the 16-bit number
+            a = GET16(p);                             // fetch the number (reuse a, bad, but to save)
+        	D_HEX(a>>8); D_HEX(a&0xff);
+        }
+        else {                                        // other opcodes
             D_CHR('_');
+            U8 ci = op >= I_FOR;                      // loop controller flag
             _opname(ci ? op-I_FOR : op, ci ? PMX : PRM, 0);
-        } break;
         }
     }
-    else { D_CHR('#'); D_HEX(ir); }                  ///> it is a number (i.e. 1-byte literal)
-    
     D_CHR(' ');
 }
 ///
@@ -353,12 +351,12 @@ void N4Asm::_do_branch(U8 op)
         break;
     case 8:	/* FOR */
         RPUSH(IDX(here+1));             // save current addr A1
-        SET8(here, PRM_BIT | I_FOR);
+        SET8(here, PRM_BIT | I_FOR);    // encode FOR opcode
         break;
     case 9:	/* NXT */
-        SET8(here, PRM_BIT | I_NXT);
+        SET8(here, PRM_BIT | I_NXT);    // encode NXT opcode
         JMPBCK(RPOP(), PFX_CDJ);        // conditionally jump back to A1
-        SET8(here, PRM_BIT | I_BRK);
+        SET8(here, PRM_BIT | I_BRK);    // encode BRK opcode
         break;
     case 10: /* I */
         SET8(here, PRM_BIT | I_I);      // fetch loop counter
