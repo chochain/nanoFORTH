@@ -80,8 +80,8 @@ void N4VM::step() {
         case 2:	n4asm->forget();    break; ///>>> FGT, rollback word created
         case 3: N4Util::dump(              ///>>> DMP, memory dump
             dic,
-            PTR(POP()&0xfff0),
-            POP()&0xfff0);          break;      
+            PTR(POP()&0xffe0),
+            (POP()+0x1f)&0xffe0);   break;
 #if ARDUINO
         case 4: _init();            break; ///>>> BYE, restart the virtual machine
 #else
