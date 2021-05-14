@@ -18,7 +18,7 @@
 //
 #define SP0            ((S16*)(dic+msz))            /**< base of parameter stack             */
 #define TOS            (*sp)                        /**< pointer to top of current stack     */
-#define TOS1           (*(sp+1))                    /**< pointer to the second item on stack */
+#define SP(i)          (*(sp+(i)))                  /**< pointer to the nth on stack         */
 #define PUSH(v)        (*(--sp)=(S16)(v))           /**< push v onto parameter stack         */
 #define POP()          (sp<SP0 ? *sp++ : 0)         /**< pop value off parameter stack       */
 #define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack      */
@@ -192,71 +192,78 @@ void N4VM::_primitive(U8 op)
     case 0:  POP();                       break; // DRP
     case 1:  PUSH(TOS);                   break; // DUP
     case 2:  {                                   // SWP
-        U16 x = TOS1;
-        TOS1  = TOS;
+        U16 x = SP(1);
+        SP(1) = TOS;
         TOS   = x;
     } break;
-    case 3:  PUSH(TOS1);                  break; // OVR
-    case 4:	 TOS += POP();                break; // +
-    case 5:	 TOS -= POP();                break; // -
-    case 6:	 TOS *= POP();                break; // *
-    case 7:	 TOS /= POP();                break; // /
-    case 8:	 TOS %= POP();                break; // MOD
-    case 9:  TOS = -TOS;                  break; // NEG
-    case 10: TOS &= POP();                break; // AND
-    case 11: TOS |= POP();                break; // OR
-    case 12: TOS ^= POP();                break; // XOR
-    case 13: TOS = TOS ? 0 : 1;           break; // NOT
-    case 14: TOS = POP()==TOS;            break; // =
-    case 15: TOS = POP()> TOS;            break; // <
-    case 16: TOS = POP()< TOS;            break; // >
-    case 17: TOS = POP()>=TOS;            break; // <=
-    case 18: TOS = POP()<=TOS;            break; // >=
-    case 19: TOS = POP()!=TOS;            break; // <>
-    case 20: { U8 *p = PTR(POP()); PUSH(GET16(p));  } break; // @
-    case 21: { U8 *p = PTR(POP()); SET16(p, POP()); } break; // !
-    case 22: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
-    case 23: { U8 *p = PTR(POP()); *p = (U8)POP();  } break; // C!
-    case 24: N4Util::putnum(POP()); putchr(' ');      break; // .
-    case 25: /* handle one level up */    break; // ."
-    case 26: RPUSH(POP());                break; // >R
-    case 27: PUSH(RPOP());                break; // R>
-    case 28: n4asm->words();              break; // WRD
-    case 29: PUSH(IDX(n4asm->here));      break; // HRE
-    case 30: PUSH(POP()*sizeof(U16));     break; // CEL
-    case 31: n4asm->here += POP();        break; // ALO
-    case 32: n4asm->save();               break; // SAV
-    case 33: n4asm->load();               break; // LD
-    case 34: set_trace(POP());            break; // TRC
-    case 35: {                                   // CLK
+    case 3:  PUSH(SP(1));                 break; // OVR
+	case 4:  {                                   // ROT
+		U16 x = SP(2);
+		SP(2) = SP(1);
+		SP(1) = TOS;
+		TOS   = x;
+	} break;
+    case 5:	 TOS += POP();                break; // +
+    case 6:	 TOS -= POP();                break; // -
+    case 7:	 TOS *= POP();                break; // *
+    case 8:	 TOS /= POP();                break; // /
+    case 9:  TOS %= POP();                break; // MOD
+    case 10: TOS = -TOS;                  break; // NEG
+    case 11: TOS &= POP();                break; // AND
+    case 12: TOS |= POP();                break; // OR
+    case 13: TOS ^= POP();                break; // XOR
+    case 14: TOS = TOS ? 0 : 1;           break; // NOT
+    case 15: TOS = POP()==TOS;            break; // =
+    case 16: TOS = POP()> TOS;            break; // <
+    case 17: TOS = POP()< TOS;            break; // >
+    case 18: TOS = POP()>=TOS;            break; // <=
+    case 19: TOS = POP()<=TOS;            break; // >=
+    case 20: TOS = POP()!=TOS;            break; // <>
+    case 21: { U8 *p = PTR(POP()); PUSH(GET16(p));  } break; // @
+    case 22: { U8 *p = PTR(POP()); SET16(p, POP()); } break; // !
+    case 23: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
+    case 24: { U8 *p = PTR(POP()); *p = (U8)POP();  } break; // C!
+	case 25: D_CHR((U8)POP());                        break; // EMT
+    case 26: N4Util::putnum(POP()); putchr(' ');      break; // .
+    case 27: /* handle one level up */    break; // ."
+    case 28: RPUSH(POP());                break; // >R
+    case 29: PUSH(RPOP());                break; // R>
+    case 30: n4asm->words();              break; // WRD
+    case 31: PUSH(IDX(n4asm->here));      break; // HRE
+    case 32: PUSH(POP()*sizeof(U16));     break; // CEL
+    case 33: n4asm->here += POP();        break; // ALO
+    case 34: n4asm->save();               break; // SAV
+    case 35: n4asm->load();               break; // LD
+    case 36: set_trace(POP());            break; // TRC
+    case 37: {                                   // CLK
         U32 u = millis();    // Arduino clock
         PUSH((U16)(u>>16));
         PUSH((U16)(u&0xffff));
     }                                     break;
-    case 36: {                                   // D+
+    case 38: {                                   // D+
         S32 v = *(S32*)(sp+2) + *(S32*)sp;
         POP(); POP();
-        TOS1 = (S16)(v>>16);
-        TOS  = (S16)v&0xffff;
+        SP(1) = (S16)(v>>16);
+        TOS   = (S16)v&0xffff;
     }                                     break;
-    case 37: {                                   // D-
+    case 39: {                                   // D-
         S32 v = *(S32*)(sp+2) - *(S32*)sp;
         POP(); POP();
-        TOS1 = (S16)(v>>16);
-        TOS  = (S16)(v&0xffff);
+        SP(1) = (S16)(v>>16);
+        TOS   = (S16)(v&0xffff);
     }                                     break;
-    case 38: {                                   // DNG
+    case 40: {                                   // DNG
         S32 v = -(*(S32*)sp);
-        TOS1 = (S16)(v>>16);
-        TOS  = (S16)(v&0xffff);
+        SP(1) = (S16)(v>>16);
+        TOS   = (S16)(v&0xffff);
     }                                     break;
-    case 39: NanoForth::wait((U32)POP()); break; // DLY
+    case 41: NanoForth::wait((U32)POP()); break; // DLY
 #if ARDUINO
-    case 40: pinMode(POP(), POP());       break; // PIN
-    case 41: PUSH(digitalRead(POP()));    break; // IN
-    case 42: digitalWrite(POP(), POP());  break; // OUT
-    case 43: PUSH(analogRead(POP()));     break; // AIN
-    case 44: analogWrite(POP(), POP());   break; // PWM
+    case 42: pinMode(POP(), POP());       break; // PIN
+    case 43: PUSH(digitalRead(POP()));    break; // IN
+    case 44: digitalWrite(POP(), POP());  break; // OUT
+    case 45: PUSH(analogRead(POP()));     break; // AIN
+    case 46: analogWrite(POP(), POP());   break; // PWM
 #endif //ARDUINO
     case 59: RPUSH(POP()); RPUSH(POP());  break; // FOR
     case 60: {	                                 // NXT
