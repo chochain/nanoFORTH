@@ -30,10 +30,10 @@ enum N4OP {
 #define PFX_PRM    0x80       /**< 1000 0000 */
 #define PRM_MASK   0x3f       /**< 0011 1111, 6-bit primitive opcodes */
 #define JMP_MASK   0xf0       /**< 1111 0000 */
-#define PFX_UDJ    0xc0       /**< 1100 0000 */
-#define PFX_CDJ    0xd0       /**< 1101 0000 */
-#define PFX_CALL   0xe0       /**< 1110 0000 */
-#define PFX_RET    0xf0       /**< 1111 0000 */
+#define PFX_CALL   0xc0       /**< 1100 0000 */
+#define PFX_RET    0xd0       /**< 1111 0000 */
+#define PFX_CDJ    0xe0       /**< 1101 0000 */
+#define PFX_UDJ    0xf0       /**< 1110 0000 */
 #define ADR_MASK   0x0fff     /**< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions */
 ///
 /// opcodes for loop control (in compiler mode)
@@ -54,8 +54,8 @@ class N4Asm                         // (10-byte header)
     U8  *dic;                       ///< dictionary base
     U16 *rp;                        ///< return stack pointer
     
+    U8  trc;                        ///< tracing flag
     U8  tab;                        ///< tracing indentation counter
-    U8  xxx;                        ///< reserved          
     
 public:
     U8  *last;                      ///< pointer to last word (exposed to _vm::_extended for debugging)
@@ -64,6 +64,7 @@ public:
     N4Asm();                        ///< NanoForth Assembler object constructor
     void init(U8 *mem);             ///< intializer (Arduino does not have dynamic constructor)
     void reset();                   ///< reset internal pointers (for BYE)
+    void set_trace(U8 f);           ///< enable/disable assembler tracing
 
     /// NanoForth Instruction Decoder
     N4OP parse_token(U8 *tkn, U16 *rst, U8 run); 

@@ -70,22 +70,22 @@ void N4VM::info()
 void N4VM::step() {
     _ok();                                      // stack check and prompt OK
     
-    U8  *tkn = N4Util::token();                 // get a token from console
+    U8  *tkn = N4Util::token(trc);              // get a token from console
     U16 tmp;
     switch (n4asm->parse_token(tkn, &tmp, 1)) { ///> parse action from token (keep opcode in tmp)
     case TKN_IMM:                               ///>> immediate words
         switch (tmp) {
-        case 0:	n4asm->compile(rp); break;      ///>>> : (COLON), switch into compile mode (for new word)
-        case 1:	n4asm->variable();  break;      ///>>> VAR, create new variable
-        case 2:	n4asm->forget();    break;      ///>>> FGT, rollback word created
-        case 3: N4Util::dump(                   ///>>> DMP, memory dump
+        case 0:	n4asm->compile(rp); break; ///>>> : (COLON), switch into compile mode (for new word)
+        case 1:	n4asm->variable();  break; ///>>> VAR, create new variable
+        case 2:	n4asm->forget();    break; ///>>> FGT, rollback word created
+        case 3: N4Util::dump(              ///>>> DMP, memory dump
             dic,
             PTR(POP()&0xfff0),
             POP()&0xfff0);          break;      
 #if ARDUINO
-        case 4: _init();            break;      ///>>> BYE, restart the virtual machine
+        case 4: _init();            break; ///>>> BYE, restart the virtual machine
 #else
-        case 4: exit(0);            break;      ///>>> BYE, bail!
+        case 4: exit(0);            break; ///>>> BYE, bail!
 #endif //ARDUINO
         }                                break;
     case TKN_DIC: _execute(tmp + 2 + 3); break; ///>> execute word from dictionary (user defined)
@@ -100,6 +100,7 @@ void N4VM::step() {
 ///
 void N4VM::set_trace(U16 f)
 {
+    n4asm->set_trace(f);
     trc += f ? 1 : (trc ? -1 : 0);
 }
 //
@@ -153,19 +154,19 @@ void N4VM::_execute(U16 adr)
         case 0xc0:                                        ///> handle branching instruction
             a = GET16(pc-1) & ADR_MASK;                   // target address
             switch (ir & JMP_MASK) {					  // get branch opcode
-            case PFX_UDJ:                                 // 0x40 unconditional jump
-                pc = PTR(a);                              // set jump target
-                break;
-            case PFX_CDJ:                                 // 0x50 conditional jump
-                pc = POP() ? pc+1 : PTR(a);               // next or target
-                break;
-            case PFX_CALL:                                // 0x60 subroutine call
+            case PFX_CALL:                                // 0xc0 subroutine call
                 RPUSH(IDX(pc+1));                         // keep next instruction on return stack
                 pc = PTR(a);                              // jump to subroutine till I_RET
                 break;
-            case PFX_RET:                                 // 0x70 return from subroutine
+            case PFX_RET:                                 // 0xd0 return from subroutine
                 a  = RPOP();                              // pop return address
                 pc = PTR(a);                              // caller's next instruction (or break loop if 0xffff)
+                break;
+            case PFX_CDJ:                                 // 0xe0 conditional jump
+                pc = POP() ? pc+1 : PTR(a);               // next or target
+                break;
+            case PFX_UDJ:                                 // 0xf0 unconditional jump
+                pc = PTR(a);                              // set jump target
                 break;
             }
             break;

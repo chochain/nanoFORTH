@@ -36,6 +36,7 @@ PROGMEM const char PRM[] = "\x2d" \
     "@  " "!  " "C@ " "C! " ".  " ".\" "">R " "R> " "WRD" "HRE" \
     "CEL" "ALO" "SAV" "LD " "TRC" "CLK" "D+ " "D- " "DNG" "DLY" \
     "PIN" "IN " "OUT" "AIN" "PWM";
+#define OP_SMC          0                           /**< semi-colon, end of function definition */
 //
 // Forth assembler stack opcode macros (note: rp grows downward)
 //
@@ -84,7 +85,14 @@ void N4Asm::reset()
 {
     here = dic;                       // rewind to dictionary base
     last = PTR(0xffff);               // -1
-    tab  = 0;
+    trc  = tab  = 0;
+}
+///
+///> set tracing flag
+///
+void N4Asm::set_trace(U8 f)
+{
+    trc = f ? 1 : 0;
 }
 ///
 ///> parse given token into actionable item
@@ -102,30 +110,30 @@ N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 ///
 void N4Asm::compile(U16 *rp0)
 {
-    rp = rp0;                    // capture current return pointer
-    U8  *tkn = N4Util::token();  ///#### fetch one token from console
-    U16 tmp  = IDX(last);        // link to previous word
+    rp = rp0;                       // capture current return pointer
+    U8  *tkn = N4Util::token(trc);  ///#### fetch one token from console
+    U16 tmp  = IDX(last);           // link to previous word
     U8  *l0  = last, *h0 = here, *p0 = here;
 
-    last = here;                 ///#### create 3-byte name field
-    SET16(here, tmp);            // pointer to previous word
-    SETNM(here, tkn);            // store token into 3-byte name field
+    last = here;                    ///#### create 3-byte name field
+    SET16(here, tmp);               // pointer to previous word
+    SETNM(here, tkn);               // store token into 3-byte name field
 
-    for (;tkn;) {                // terminate if tkn==NULL
-        N4Util::memdump(dic, p0, (U16)(here-p0), 0);
+    for (;tkn;) {                   // terminate if tkn==NULL
+        if (trc) N4Util::memdump(dic, p0, (U16)(here-p0), 0);
 
-        tkn = N4Util::token();
+        tkn = N4Util::token(trc);
         p0  = here;                         // keep current top of dictionary (for memdump)
         switch(parse_token(tkn, &tmp, 0)) { ///#### determinie type of operation, and keep opcode in tmp
         case TKN_IMM:                       ///> immediate command
-            if (tmp==0) {                   // handle ;
+            if (tmp==OP_SMC) {              // handle ; (semi-colon)
                 SET8(here, PFX_RET);        /// * terminate COLON definitions, or
                 tkn = NULL;                 //    clear token to exit compile mode
             }
             else _do_branch(tmp);           /// * add branching opcode
             break;
         case TKN_DIC:                       ///> add found word: addr + adr(2) + name(3)
-            JMPBCK(tmp+2+3, PFX_CALL);
+            JMPBCK(tmp+2+3, PFX_CALL);      //  call subroutine
             break;
         case TKN_PRM:                       ///> built-in primitives
         	SET8(here, PFX_PRM | (U8)tmp);  /// * add found primitive opcode
@@ -144,12 +152,12 @@ void N4Asm::compile(U16 *rp0)
         	putstr("!\n");
         	last = l0;                      // restore last, here pointers
         	here = h0;
-        	N4Util::token(TIB_CLR);
+        	N4Util::token(trc, TIB_CLR);
         	tkn  = NULL;
         }
     }
     // debug memory dump
-    if (last>l0) N4Util::memdump(dic, last, (U16)(here-last), ' ');
+    if (trc && last>l0) N4Util::memdump(dic, last, (U16)(here-last), ' ');
 }
 ///
 ///> create variable on dictionary
@@ -157,7 +165,7 @@ void N4Asm::compile(U16 *rp0)
 ///
 void N4Asm::variable()
 {
-    U8 *tkn = N4Util::token();              // get token
+    U8 *tkn = N4Util::token(trc);           // get token
     U16 tmp = IDX(last);                    // index to last word
     
     last = here;
@@ -184,9 +192,7 @@ void N4Asm::words()
     U8 n = 0;
     for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p)), n++) {
         if (n%10==0) D_CHR('\n');
-#if EXE_TRACE
-        D_ADR(IDX(p)); D_CHR(':');                            // optionally show address
-#endif /// EXE_TRACE
+        if (trc) { D_ADR(IDX(p)); D_CHR(':'); }               // optionally show address
         D_CHR(p[2]); D_CHR(p[3]); D_CHR(p[4]); D_CHR(' ');    // 3-char name + space
     }
     _list_voc();
@@ -210,7 +216,7 @@ U8 N4Asm::query(U8 *tkn, U16 *adr)
 void N4Asm::forget()
 {
     U16 adr;
-    if (!query(N4Util::token(), &adr)) {    // query token in dictionary
+    if (!query(N4Util::token(trc), &adr)) { // query token in dictionary
         putstr("??");                       // not found, bail
         return;
     }
@@ -265,9 +271,7 @@ void N4Asm::trace(U16 a, U8 ir)
     case 0xc0:                                        ///> a jump instruction
         a = GET16(PTR(a)) & ADR_MASK;                 // target address
         switch (ir & JMP_MASK) {					  // get branching opcode
-        case PFX_UDJ: D_CHR('j'); D_ADR(a); break;    // 0x40 UDJ  unconditional jump
-        case PFX_CDJ: D_CHR('?'); D_ADR(a); break;    // 0x50 CDJ  conditional jump
-        case PFX_CALL:                                // 0x60 CALL word call
+        case PFX_CALL:                                // 0xc0 CALL word call
             D_CHR(':');
             p = PTR(a)-3;                             // backtrack 3-byte (name field)
             D_CHR(*p++); D_CHR(*p++); D_CHR(*p);
@@ -276,10 +280,12 @@ void N4Asm::trace(U16 a, U8 ir)
                 putstr("  ");
             }
             break;
-        case PFX_RET:                                 // 0x70 RET return
+        case PFX_RET:                                 // 0xd0 RET return
             D_CHR(';');
             tab -= tab ? 1 : 0;
             break;
+        case PFX_CDJ: D_CHR('?'); D_ADR(a); break;    // 0xe0 CDJ  conditional jump
+        case PFX_UDJ: D_CHR('j'); D_ADR(a); break;    // 0xf0 UDJ  unconditional jump
         }
         break;
     case 0x80:                                        ///> a primitive
@@ -398,7 +404,7 @@ void N4Asm::_opname(U8 op, const char *lst, U8 space)
 /// 
 void N4Asm::_do_str()
 {
-    U8 *p0 = N4Util::token();            // get string from input buffer
+    U8 *p0 = N4Util::token(trc);        // get string from input buffer
     U8 sz  = 0;
     for (U8 *p=p0; *p!='"'; p++, sz++);
     SET8(here, sz);
