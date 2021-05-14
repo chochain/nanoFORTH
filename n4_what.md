@@ -36,8 +36,8 @@ todo: wait until Arduino forum accept the package
 * define a word **p6** to turn red LED off and turn blue LED on
 > : **p6** 5 0 OUT 6 1 OUT ;
 
-* execute **p5**, i.e. to turn red LED on, and blue LED off
-> **p5**
+* execute **p6**, i.e. to turn red LED off, and blue LED on
+> **p6**
 
 * to read the photoresister value from analog pin 1
 > 1 AIN<br>
@@ -46,9 +46,9 @@ todo: wait until Arduino forum accept the package
 * define (a word) **lit** to read from photoresister and determine whether its value is > 200
 > : **lit** 1 AIN 200 > ;
 
-* execute **lit**, put -1 on top of stack if bright enough, 0 if not (FORTH uses -1 instead of 1 for TRUE)
+* execute **lit**, put 1 on top of stack if bright enough, 0 if not
 > **lit**<br>
-> -1_ok
+> 1_ok
 
 * define **xx** that turns on red or blue depends on light condition
 > : **xx** **lit** IF **p5** ELS **p6** THN ;
@@ -59,6 +59,41 @@ todo: wait until Arduino forum accept the package
 * define a word **yy** to blink red/blue every 500 ms alternatively
 > : **yy** 0 FOR **p5** 500 DLY **p6** 500 DLY NXT ;
 
-* run 100 cycles of **yy**
-> 100 **yy**
+* run 10 cycles of **yy**
+> 10 **yy**
+
+* too slow, let's redefine **yy** to make it faster and uneven
+> FGT **yy**<br>
+> : **yy** 0 FOR **p5** 200 DLY **p6** 400 DLY NXT ;
+
+* try 20 cycles of **yy** this time
+> 20 **yy**
+
+* show all words available, including **yy**, **xx**, **lit**, **p6**, **p5** that we've just created
+> WRD
+
+* now, to see what nanoFORTH did, turn the tracing flag on and try everything we just did again
+> 1 TRC
+
+***
+
+* find out how many bytes of memory we have used
+> HRE<br>
+> 76_ok
+
+* you can dump the memory to see how all these words are encoded in the dictionary
+> 0 HRE DMP
+
+* let's save what we've done so far into EEPROM, in case of power outage (or reset)
+> SAV
+
+* if really needed, you can reset nanoFORTH system pointers for a clean slate
+> BYE<br>
+> nanoFORTH v1.0 ok
+
+* after restart you Arduino, words defined can be restored from EEPROM
+> LD<br>
+> 0 HRE DMP
+
+
 

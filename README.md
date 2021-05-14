@@ -23,9 +23,9 @@ Compling code as Scetches in the IDE and Upload via the tethered USB cable has b
 
 FORTH, a simple yet extensible interactive language, arms embedded platforms with REPL coding/debugging process, makes it a natual candidate for microcollers. Its interactive shell can eliminate the bulk of the repetitive compile/upload cycles.
 
-Currenly, there are **AmForth** and **FlashForth** avaiable for Arduino. Though no direct support from the IDE yet, they demonstrated the value of such on tiny systems. However, in order to run a simplest command, both of them are **required to overwrite the Arduino bootloader** whcich also needs an additional burner (or called programmer). The additional process not only is an entry barier for beginners but render your kit a 'non-Arduino' which can leaves a "your warrenty is void" taste in your mouth even if done correctly. An often asked question is "how do I turn it back?".
+Currenly, there are **AmForth** and **FlashForth** avaiable for Arduino. Though no direct support from the IDE yet, they demonstrated the value of such on tiny systems. However, in order to run a simplest command, both of them are **required to overwrite the Arduino bootloader** whcich also needs an additional burner (or called programmer). The additional process not only is an entry barier for beginners but render your kit a 'non-Arduino' which can leaves a "your warrenty is void" taste in your mouth even if done correctly. An often asked question is "how do I turn it back?". Well, you don't have to anymore.
 
-So, may the FORTH be with you, and here comes one for our **Nanos**!
+May the FORTH be with you, and here comes one for our **Nanos**!
 
 <a href="page2.html">[Buckle up! Ready for Hyper Jump...]</a>
 
