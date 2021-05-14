@@ -187,11 +187,12 @@ void N4Asm::variable()
 ///
 ///> display words in dictionary
 ///
+#define WORDS_PER_ROW 20                    /**< words per row when showing dictionary */
 void N4Asm::words()
 {
-    U8 n = 0;
+    U8 n = 0, wpr = WORDS_PER_ROW >> ((trc) ? 1 : 0);
     for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p)), n++) {
-        if (n%10==0) D_CHR('\n');
+        if ((n%wpr)==0) D_CHR('\n');
         if (trc) { D_ADR(IDX(p)); D_CHR(':'); }               // optionally show address
         D_CHR(p[2]); D_CHR(p[3]); D_CHR(p[4]); D_CHR(' ');    // 3-char name + space
     }
@@ -319,7 +320,6 @@ void N4Asm::trace(U16 a, U8 ir)
 ///
 void N4Asm::_list_voc()
 {
-#define WORDS_PER_ROW 10
     const char *lst[] PROGMEM = { CMD, JMP, PRM };      // list of built-in primitives
     for (U8 i=0, n=0; i<3; i++) {
 #if ARDUINO

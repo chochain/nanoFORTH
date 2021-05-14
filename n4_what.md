@@ -30,46 +30,46 @@ todo: wait until Arduino forum accept the package
 * turn off LED(blue) on digital pin 6
 > 6 0 OUT
 
-* define a function(called 'word' in FORTH) **p5** to turn red LED on, and blue LED off
-> : **p5** 5 1 OUT 6 0 OUT ;
+* define a function(called 'word' in FORTH) **red** to turn red LED on, and blue LED off
+> : **red** 5 1 OUT 6 0 OUT ;
 
-* define a word **p6** to turn red LED off and turn blue LED on
-> : **p6** 5 0 OUT 6 1 OUT ;
+* define a word **blu** to turn red LED off and turn blue LED on (sorry, nanoFORTH takes max 3 characters only)
+> : **blu** 5 0 OUT 6 1 OUT ;
 
-* execute **p6**, i.e. to turn red LED off, and blue LED on
-> **p6**
+* execute **blu**, i.e. to turn red LED off, and blue LED on 
+> **blu**
 
-* to read the photoresister value from analog pin 1
+* define a word **xy** to blink red/blue every 500 ms alternatively
+> : **xy** 0 FOR **red** 500 DLY **blu** 500 DLY NXT ;
+
+* run 10 cycles of **xy**
+> 10 **xy**
+
+* too slow! nanoFORTH lets you redefine **xy** (ig. to make it faster and uneven)
+> FGT **xy**<br>
+> : **xy** 0 FOR I . **red** 200 DLY **blu** 400 DLY NXT ;
+
+* try 20 cycles of **xy** this time
+> 20 **xy**
+
+* let's read analog pin 1 (photoresister value 0~1023)
 > 1 AIN<br>
 > 258_ok
 
 * define (a word) **lit** to read from photoresister and determine whether its value is > 200
 > : **lit** 1 AIN 200 > ;
 
-* execute **lit**, put 1 on top of stack if bright enough, 0 if not
+* execute **lit**, return value 1 if bright enough, 0 if not
 > **lit**<br>
 > 1_ok
 
-* define **xx** that turns on red or blue depends on light condition
-> : **xx** **lit** IF **p5** ELS **p6** THN ;
+* define **XY** that turns on red or blue depends on light condition (nanoFORTH is case sensitive)
+> : **XY** **lit** IF **red** ELS **blu** THN ;
 
-* run **xx** to turns on red or blue (try blocking the photoregister)
-> **xx**
+* run **XY** to turns on red or blue (try blocking the photoregister)
+> **XY**
 
-* define a word **yy** to blink red/blue every 500 ms alternatively
-> : **yy** 0 FOR **p5** 500 DLY **p6** 500 DLY NXT ;
-
-* run 10 cycles of **yy**
-> 10 **yy**
-
-* too slow, let's redefine **yy** to make it faster and uneven
-> FGT **yy**<br>
-> : **yy** 0 FOR **p5** 200 DLY **p6** 400 DLY NXT ;
-
-* try 20 cycles of **yy** this time
-> 20 **yy**
-
-* show all words available, including **yy**, **xx**, **lit**, **p6**, **p5** that we've just created
+* show all words available, including **XY**, **xy**, **lit**, **blu**, **red** that we've just created
 > WRD
 
 * now, to see what nanoFORTH did, turn the tracing flag on and try everything we just did again
