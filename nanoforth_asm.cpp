@@ -30,12 +30,12 @@ PROGMEM const char CMD[] = "\x05" \
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "FOR" "NXT" \
     "I  ";
-PROGMEM const char PRM[] = "\x2d" \
-    "DRP" "DUP" "SWP" "OVR" "+  " "-  " "*  " "/  " "MOD" "NEG" \
-    "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " "<> " \
-    "@  " "!  " "C@ " "C! " ".  " ".\" "">R " "R> " "WRD" "HRE" \
-    "CEL" "ALO" "SAV" "LD " "TRC" "CLK" "D+ " "D- " "DNG" "DLY" \
-    "PIN" "IN " "OUT" "AIN" "PWM";
+PROGMEM const char PRM[] = "\x2f" \
+    "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
+	"NEG" "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " \
+	"<> " "@  " "!  " "C@ " "C! " "EMT" ".  " ".\" "">R " "R> " \
+	"WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" "D+ " "D- " \
+	"DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
 #define OP_SMC          0                           /**< semi-colon, end of function definition */
 //
 // Forth assembler stack opcode macros (note: rp grows downward)
