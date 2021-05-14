@@ -59,7 +59,7 @@ public:
     //
     static void putnum(S16 n);             ///< sent a number literal to console
     static U8   getnum(U8 *str, S16 *num); ///< process a literal from string given
-    static U8   *token(U8 clear=0);        ///< get a token from console input
+    static U8   *token(U8 trc, U8 clr=0);  ///< get a token from console input
     //
     // memory dummpers
     //

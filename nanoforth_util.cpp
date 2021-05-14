@@ -34,12 +34,12 @@ void N4Util::putnum(S16 n)
 ///
 ///> capture a token from console input buffer
 ///
-U8 *N4Util::token(U8 clear)
+U8 *N4Util::token(U8 trc, U8 clr)
 {
 	static U8  tib[TIB_SZ];
 	static U8 *tp = tib;
 
-	if (clear)   { tp=tib; return 0; }        // clear buffer
+	if (clr) { tp=tib; return 0; }            // clear buffer
     if (tp==tib) _console_input(tib);         // buffer empty, read from console
 
     U8 *p = tp;                               // keep original tib pointer
@@ -47,15 +47,16 @@ U8 *N4Util::token(U8 clear)
     while (*tp++!=' ') sz++;                  // advance to next word
     while (*tp==' ')   tp++;                  // skip blanks
 
-    if (*tp=='\r' || *tp=='\n') tp = tib;     // rewind input buffer
-
-#if ASM_TRACE
-    // debug info
-    d_chr('\n');
-    for (int i=0; i<5; i++) {
-    	d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
+    if (*tp=='\r' || *tp=='\n') tp=tib;
+    if (trc) {
+        // debug info
+        d_chr('\n');
+        for (int i=0; i<5; i++) {
+            d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
+        }
     }
-#endif // ASM_TRACE
+    else if (tp==tib) d_chr('\n');
+    
     return p;
 }
 ///
@@ -90,9 +91,9 @@ U8 N4Util::getnum(U8 *str, S16 *num)
 void N4Util::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
 {
 	d_adr((U16)(p0 - base)); d_chr(':');
-	for (int n=0; n<sz; n++, p0++) {
+	for (int n=0; n<sz; n++) {
 		if (delim && (n&0x3)==0) d_chr(delim);
-		d_hex(*p0);
+		d_hex(*p0++);
 	}
     d_chr(delim);
 }
