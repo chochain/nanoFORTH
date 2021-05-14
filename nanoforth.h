@@ -11,8 +11,6 @@
 #include <stdint.h>
 
 #define ARDUINO      defined(__AVR_ATmega328P__)
-#define ASM_TRACE    1                        /**< enable assembler tracing    */
-#define EXE_TRACE    1                        /**< enable VM execution tracing */
 
 #if ARDUINO
 #include <Arduino.h>
