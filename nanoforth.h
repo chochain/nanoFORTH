@@ -72,7 +72,7 @@ public:
         );   
     
     static void add(void (*ufunc)(n4_tptr));  ///< add the user function to NanoForth task manager
-    static bool step();                       ///< run one NanoForth VM cycle, and to each of user tasks
+    static void step();                       ///< run one NanoForth VM cycle, and to each of user tasks
     
     static void yield();          ///< NanoForth yield to user tasks
     static char key();            ///< Arduino's getchar(), yield to user tasks when waiting

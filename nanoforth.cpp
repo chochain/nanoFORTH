@@ -73,7 +73,7 @@ void NanoForth::add(void (*ufunc)(n4_tptr))
 ///
 /// * n4 execute one virtual machine opcode
 ///
-bool NanoForth::step()
+void NanoForth::step()
 {
     _n4vm->step();
     yield();
