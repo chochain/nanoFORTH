@@ -68,30 +68,31 @@ void N4VM::info()
 /// * virtual machine execute single step
 ///
 void N4VM::step() {
-    _ok();                                      // stack check and prompt OK
+    _ok();                                       // stack check and prompt OK
     
-    U8  *tkn = N4Util::token(trc);              // get a token from console
+    U8  *tkn = N4Util::token(trc);               // get a token from console
     U16 tmp;
-    switch (n4asm->parse_token(tkn, &tmp, 1)) { ///> parse action from token (keep opcode in tmp)
-    case TKN_IMM:                               ///>> immediate words
+    switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
+    case TKN_IMM:                                ///>> immediate words
         switch (tmp) {
-        case 0:	n4asm->compile(rp); break; ///>>> : (COLON), switch into compile mode (for new word)
-        case 1:	n4asm->variable();  break; ///>>> VAR, create new variable
-        case 2:	n4asm->forget();    break; ///>>> FGT, rollback word created
-        case 3: N4Util::dump(              ///>>> DMP, memory dump
+        case 0:	n4asm->compile(rp);     break;   ///>>> : (COLON), switch into compile mode (for new word)
+        case 1:	n4asm->variable();      break;   ///>>> VAR, create new variable
+        case 2: n4asm->constant(POP()); break;   ///>>> CST, create new constant
+        case 3:	n4asm->forget();        break;   ///>>> FGT, rollback word created
+        case 4: N4Util::dump(                    ///>>> DMP, memory dump
             dic,
             PTR(POP()&0xffe0),
-            (POP()+0x1f)&0xffe0);   break;
+            (POP()+0x1f)&0xffe0);       break;
 #if ARDUINO
-        case 4: _init();            break; ///>>> BYE, restart the virtual machine
+        case 5: _init();                break;   ///>>> BYE, restart the virtual machine
 #else
-        case 4: exit(0);            break; ///>>> BYE, bail!
+        case 5: exit(0);                break;   ///>>> BYE, bail!
 #endif //ARDUINO
-        }                                break;
-    case TKN_DIC: _execute(tmp + 2 + 3); break; ///>> execute word from dictionary (user defined)
-    case TKN_PRM: _primitive((U8)tmp);   break; ///>> execute primitive built-in word
-    case TKN_NUM: PUSH(tmp);             break; ///>> push a number (literal) to stack top
-    default:                                    ///>> or, error (unknow action)
+        }                                 break;
+    case TKN_DIC: _execute(tmp + 2 + 3);  break; ///>> execute word from dictionary (user defined)
+    case TKN_PRM: _primitive((U8)tmp);    break; ///>> execute primitive built-in word
+    case TKN_NUM: PUSH(tmp);              break; ///>> push a number (literal) to stack top
+    default:                                     ///>> or, error (unknow action)
         putstr("?\n");
     }
 }

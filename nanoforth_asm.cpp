@@ -25,8 +25,8 @@
 /// \var PMX
 /// \brief loop control opcodes
 ///
-PROGMEM const char CMD[] = "\x05" \
-    ":  " "VAR" "FGT" "DMP" "BYE";
+PROGMEM const char CMD[] = "\x06" \
+    ":  " "VAR" "CST" "FGT" "DMP" "BYE";
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "FOR" "NXT" \
     "I  ";
@@ -111,15 +111,13 @@ N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 void N4Asm::compile(U16 *rp0)
 {
     rp = rp0;                       // capture current return pointer
-    U8  *tkn = N4Util::token(trc);  ///#### fetch one token from console
-    U16 tmp  = IDX(last);           // link to previous word
-    U8  *l0  = last, *h0 = here, *p0 = here;
+    U8 *l0 = last, *h0 = here;
+    U8 *p0 = here;
 
-    last = here;                    ///#### create 3-byte name field
-    SET16(here, tmp);               // pointer to previous word
-    SETNM(here, tkn);               // store token into 3-byte name field
+    _do_header();                   ///#### fetch token, create name field linked to previous word
 
-    for (;tkn;) {                   // terminate if tkn==NULL
+    for (U8 *tkn=p0; tkn;) {        // terminate if tkn==NULL
+        U16 tmp;
         if (trc) N4Util::memdump(dic, p0, (U16)(here-p0), 0);
 
         tkn = N4Util::token(trc);
@@ -160,29 +158,41 @@ void N4Asm::compile(U16 *rp0)
     if (trc && last>l0) N4Util::memdump(dic, last, (U16)(here-last), ' ');
 }
 ///
-///> create variable on dictionary
-///  * note: 9 or 11-byte per variable
+///> create a variable on dictionary
+///  * note: 8 or 10-byte per variable
 ///
 void N4Asm::variable()
 {
-    U8 *tkn = N4Util::token(trc);           // get token
-    U16 tmp = IDX(last);                    // index to last word
-    
-    last = here;
-    SET16(here, tmp);                       // link addr of previous word
-    SETNM(here, tkn);                       // store token into 3-byte variable name field
+    _do_header();                           ///#### fetch token, create name field linked to previous word
 
-    tmp = IDX(here+2);                      // address to variable storage
+    U8 tmp = IDX(here+2);                   // address to variable storage
     if (tmp < 128) {                        // 1-byte address + RET(1)
         SET8(here, (U8)tmp);
     }
 	else {
         tmp += 2;                           // extra bytes for 16-bit address
-        SET8(here, I_LIT);
+        SET8(here, PFX_PRM | I_LIT);
         SET16(here, tmp);
     }
     SET8(here, PFX_RET);
     SET16(here, 0);	                        // actual storage area
+}
+///
+///> create a constant on dictionary
+///  * note: 8 or 10-byte per variable
+///
+void N4Asm::constant(S16 v)
+{
+    _do_header();                           ///#### fetch token, create name field linked to previous word
+
+    if (v < 128) {                          // 1-byte constant
+        SET8(here, (U8)v);
+    }
+	else {
+        SET8(here, PFX_PRM | I_LIT);        // constant stored as 3-byte literal 
+        SET16(here, v);
+    }
+    SET8(here, PFX_RET);
 }
 ///
 ///> display words in dictionary
@@ -316,23 +326,15 @@ void N4Asm::trace(U16 a, U8 ir)
     D_CHR(' ');
 }
 ///
-///> list words in built-in vocabularies
+///> create name field with link back to previous word
 ///
-void N4Asm::_list_voc()
+void N4Asm::_do_header()
 {
-    const char *lst[] PROGMEM = { CMD, JMP, PRM };      // list of built-in primitives
-    for (U8 i=0, n=0; i<3; i++) {
-#if ARDUINO
-        U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
-#else
-        U8 sz = *(lst[i]);
-#endif //ARDUINO
-        for (U8 op=0; op<sz; op++) {
-            D_CHR(n++%WORDS_PER_ROW==0 ? '\n' : ' ');
-            _opname(op, lst[i], 1);
-        }
-    }
-    D_CHR('\n');
+    U8  *tkn = N4Util::token(trc);  ///#### fetch one token from console
+    U16 tmp  = IDX(last);           // link to previous word
+    last = here;                    ///#### create 3-byte name field
+    SET16(here, tmp);               // pointer to previous word
+    SETNM(here, tkn);               // store token into 3-byte name field
 }
 ///
 ///> create branching for instructions
@@ -409,4 +411,23 @@ void N4Asm::_do_str()
     for (U8 *p=p0; *p!='"'; p++, sz++);
     SET8(here, sz);
     for (int i=0; i<sz; i++) SET8(here, *p0++);
+}
+///
+///> list words in built-in vocabularies
+///
+void N4Asm::_list_voc()
+{
+    const char *lst[] PROGMEM = { CMD, JMP, PRM };      // list of built-in primitives
+    for (U8 i=0, n=0; i<3; i++) {
+#if ARDUINO
+        U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
+#else
+        U8 sz = *(lst[i]);
+#endif //ARDUINO
+        for (U8 op=0; op<sz; op++) {
+            D_CHR(n++%WORDS_PER_ROW==0 ? '\n' : ' ');
+            _opname(op, lst[i], 1);
+        }
+    }
+    D_CHR('\n');
 }
