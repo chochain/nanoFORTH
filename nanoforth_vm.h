@@ -27,7 +27,7 @@ class N4VM
 public:
     N4VM();                   ///< NanoForth Virtual Machine constructor
     /// intializer (Arduino does not have dynamic constructor)
-    void init(
+    int init(
         U8 *mem,              ///< pointer to a heap block
         U16 mem_sz,           ///< memory size
         U16 stk_sz            ///< parameter/return stack size
@@ -44,6 +44,5 @@ private:
     /// VM execution units
     void _execute(U16 adr);   ///< opcode execution unit
     void _primitive(U8 op);   ///< execute a primitive instruction
-    void _extended(U8 op);    ///< execute an extended opcode
 };
 #endif //__SRC_NANOFORTH_VM_H

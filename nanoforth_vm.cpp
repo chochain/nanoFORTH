@@ -18,7 +18,7 @@
 //
 #define SP0            ((S16*)(dic+msz))            /**< base of parameter stack             */
 #define TOS            (*sp)                        /**< pointer to top of current stack     */
-#define SP(i)          (*(sp+(i)))                  /**< pointer to the nth on stack         */
+#define SS(i)          (*(sp+(i)))                  /**< pointer to the nth on stack         */
 #define PUSH(v)        (*(--sp)=(S16)(v))           /**< push v onto parameter stack         */
 #define POP()          (sp<SP0 ? *sp++ : 0)         /**< pop value off parameter stack       */
 #define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack      */
@@ -32,9 +32,11 @@
 /// * constructor and initializer
 ///
 N4VM::N4VM() {}
-void N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
+int N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
 {
     n4asm = new N4Asm();     // create and initialze assembler
+    if (!n4asm) return 1;
+    
     n4asm->init(mem);
     
     dic = &mem[0];
@@ -42,27 +44,23 @@ void N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
     ssz = stk_sz;
     
     _init();
+
+    return 0;
 }
 ///
 /// * show system info
 ///
 void N4VM::info()
 {
-    char tmp;
-    putstr("MEM=x");       puthex(msz);
-    putstr("[DIC=x");      puthex(msz - ssz);
-    putstr(", STK=x");     puthex(ssz);
-    U16 free = IDX(&tmp) - IDX(sp);
+    U16 free = IDX(&free) - IDX(sp);
 #if ARDUINO
-    putstr("] dic[");      N4Util::d_ptr(dic);
-    putstr("..|rp=");      N4Util::d_ptr((U8*)rp);
-    putstr(",");           N4Util::d_ptr((U8*)sp);
-    putstr("=sp] free=x"); puthex(free);
-    putstr(" [");          N4Util::d_ptr((U8*)&tmp);
-#else
-    putstr("] Free=x");    puthex(free);
-#endif /// EXE_TRACE
-    putstr(" ");
+    putstr(" dic=");       N4Util::d_ptr(dic);
+    putstr("[...rp=");     N4Util::d_ptr((U8*)rp);
+    putstr("...");         N4Util::d_ptr((U8*)sp);
+    putstr("=sp]...");     N4Util::d_ptr((U8*)&free);
+#endif // ARDUINO
+    putstr(" Free=");      N4Util::putnum(free);
+    putstr(" bytes\n");
 }
 ///
 /// * virtual machine execute single step
@@ -193,15 +191,15 @@ void N4VM::_primitive(U8 op)
     case 0:  POP();                       break; // DRP
     case 1:  PUSH(TOS);                   break; // DUP
     case 2:  {                                   // SWP
-        U16 x = SP(1);
-        SP(1) = TOS;
+        U16 x = SS(1);
+        SS(1) = TOS;
         TOS   = x;
     } break;
-    case 3:  PUSH(SP(1));                 break; // OVR
+    case 3:  PUSH(SS(1));                 break; // OVR
 	case 4:  {                                   // ROT
-		U16 x = SP(2);
-		SP(2) = SP(1);
-		SP(1) = TOS;
+		U16 x = SS(2);
+		SS(2) = SS(1);
+		SS(1) = TOS;
 		TOS   = x;
 	} break;
     case 5:	 TOS += POP();                break; // +
@@ -245,18 +243,18 @@ void N4VM::_primitive(U8 op)
     case 39: {                                   // D+
         S32 v = *(S32*)(sp+2) + *(S32*)sp;
         POP(); POP();
-        SP(1) = (S16)(v>>16);
+        SS(1) = (S16)(v>>16);
         TOS   = (S16)v&0xffff;
     }                                     break;
     case 40: {                                   // D-
         S32 v = *(S32*)(sp+2) - *(S32*)sp;
         POP(); POP();
-        SP(1) = (S16)(v>>16);
+        SS(1) = (S16)(v>>16);
         TOS   = (S16)(v&0xffff);
     }                                     break;
     case 41: {                                   // DNG
         S32 v = -(*(S32*)sp);
-        SP(1) = (S16)(v>>16);
+        SS(1) = (S16)(v>>16);
         TOS   = (S16)(v&0xffff);
     }                                     break;
     case 42: NanoForth::wait((U32)POP()); break; // DLY
