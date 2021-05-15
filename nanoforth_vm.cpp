@@ -53,7 +53,7 @@ void N4VM::info()
     putstr("[DIC=x");      puthex(msz - ssz);
     putstr(", STK=x");     puthex(ssz);
     U16 free = IDX(&tmp) - IDX(sp);
-#if EXE_TRACE && ARDUINO
+#if ARDUINO
     putstr("] dic[");      N4Util::d_ptr(dic);
     putstr("..|rp=");      N4Util::d_ptr((U8*)rp);
     putstr(",");           N4Util::d_ptr((U8*)sp);
