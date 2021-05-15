@@ -30,12 +30,12 @@ PROGMEM const char CMD[] = "\x06" \
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "FOR" "NXT" \
     "I  ";
-PROGMEM const char PRM[] = "\x30" \
+PROGMEM const char PRM[] = "\x31" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
 	"NEG" "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " \
-	"<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" ".  " ".\" "">R " \
-    "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" "D+ " \
-    "D- " "DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
+	"<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
+    ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" \
+    "D+ " "D- " "DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
 PROGMEM const char PMX[] = " FORNXTBRKI  ";
 #define OP_SMC          0                           /**< semi-colon, end of function definition */
 //

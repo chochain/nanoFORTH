@@ -222,48 +222,49 @@ void N4VM::_primitive(U8 op)
     case 22: { U8 *p = PTR(POP()); SET16(p, POP()); } break; // !
     case 23: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
     case 24: { U8 *p = PTR(POP()); *p = (U8)POP();  } break; // C!
-    case 25: PUSH((U16)NanoForth::key());             break; // KEY
-	case 26: D_CHR((U8)POP());                        break; // EMT
-    case 27: N4Util::putnum(POP()); putchr(' ');      break; // .
-    case 28: /* handle one level up */    break; // ."
-    case 29: RPUSH(POP());                break; // >R
-    case 30: PUSH(RPOP());                break; // R>
-    case 31: n4asm->words();              break; // WRD
-    case 32: PUSH(IDX(n4asm->here));      break; // HRE
-    case 33: PUSH(POP()*sizeof(U16));     break; // CEL
-    case 34: n4asm->here += POP();        break; // ALO
-    case 35: n4asm->save();               break; // SAV
-    case 36: n4asm->load();               break; // LD
-    case 37: set_trace(POP());            break; // TRC
-    case 38: {                                   // CLK
+    case 25: PUSH((U16)NanoForth::key()); break; // KEY
+	case 26: D_CHR((U8)POP());            break; // EMT
+    case 27: D_CHR('\n');                 break; // CR
+    case 28: N4Util::putnum(POP()); putchr(' ');      break; // .
+    case 29: /* handle one level up */    break; // ."
+    case 30: RPUSH(POP());                break; // >R
+    case 31: PUSH(RPOP());                break; // R>
+    case 32: n4asm->words();              break; // WRD
+    case 33: PUSH(IDX(n4asm->here));      break; // HRE
+    case 34: PUSH(POP()*sizeof(U16));     break; // CEL
+    case 35: n4asm->here += POP();        break; // ALO
+    case 36: n4asm->save();               break; // SAV
+    case 37: n4asm->load();               break; // LD
+    case 38: set_trace(POP());            break; // TRC
+    case 39: {                                   // CLK
         U32 u = millis();    // Arduino clock
         PUSH((U16)(u>>16));
         PUSH((U16)(u&0xffff));
     }                                     break;
-    case 39: {                                   // D+
+    case 40: {                                   // D+
         S32 v = *(S32*)(sp+2) + *(S32*)sp;
         POP(); POP();
         SS(1) = (S16)(v>>16);
         TOS   = (S16)v&0xffff;
     }                                     break;
-    case 40: {                                   // D-
+    case 41: {                                   // D-
         S32 v = *(S32*)(sp+2) - *(S32*)sp;
         POP(); POP();
         SS(1) = (S16)(v>>16);
         TOS   = (S16)(v&0xffff);
     }                                     break;
-    case 41: {                                   // DNG
+    case 42: {                                   // DNG
         S32 v = -(*(S32*)sp);
         SS(1) = (S16)(v>>16);
         TOS   = (S16)(v&0xffff);
     }                                     break;
-    case 42: NanoForth::wait((U32)POP()); break; // DLY
+    case 43: NanoForth::wait((U32)POP()); break; // DLY
 #if ARDUINO
-    case 43: pinMode(POP(), POP());       break; // PIN
-    case 44: PUSH(digitalRead(POP()));    break; // IN
-    case 45: digitalWrite(POP(), POP());  break; // OUT
-    case 46: PUSH(analogRead(POP()));     break; // AIN
-    case 47: analogWrite(POP(), POP());   break; // PWM
+    case 44: pinMode(POP(), POP());       break; // PIN
+    case 45: PUSH(digitalRead(POP()));    break; // IN
+    case 46: digitalWrite(POP(), POP());  break; // OUT
+    case 47: PUSH(analogRead(POP()));     break; // AIN
+    case 48: analogWrite(POP(), POP());   break; // PWM
         /* case 48-58 available for future expansion */
 #endif //ARDUINO
     case 59: RPUSH(POP()); RPUSH(POP());  break; // FOR
