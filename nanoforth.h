@@ -6,15 +6,12 @@
 ///
 #ifndef __SRC_NANOFORTH_H
 #define __SRC_NANOFORTH_H
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-
-#define ARDUINO      defined(__AVR_ATmega328P__)
-
 #if ARDUINO
 #include <Arduino.h>
 #else
+#include <stdint.h>                           // uint_t
+#include <stdio.h>                            // printf
+#include <stdlib.h>                           // malloc
 #define PROGMEM
 #define millis()          10000
 #define pgm_read_byte(p)  (*(p))
@@ -65,8 +62,8 @@ typedef struct n4_task {
 class NanoForth
 {
 public:
-    /// constructor with dynamic memory sizing
-    static void begin(
+    /// constructor with dynamic memory sizing (return 1 if allocation failed)
+    static int begin(                         
         U16 mem_sz=N4_MEM_SZ,     ///< memory size
         U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size
         );   

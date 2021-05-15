@@ -40,8 +40,10 @@
 ///  * [11956,272] add struct n4_task and N4_FUNC multi-tasker
 ///
 ///> 2021-05-11: chochain@yahoo.com
-///  * [         ] reformat opcodes for 64-primitives
+///  * [12124,270] reformat opcodes for 64-primitives
+///  * [12420,270] display more system memory info and malloc error catch
 ///
+#include "nanoforth_util.h"
 #include "nanoforth_vm.h"
 //
 // user function linked-list
@@ -51,12 +53,20 @@ static N4VM    *_n4vm  = new N4VM();
 ///
 /// * initialize NanoForth's virtual machine and assembler
 ///
-void NanoForth::begin(U16 mem_sz, U16 stk_sz)
+int NanoForth::begin(U16 mem_sz, U16 stk_sz)
 {
     U8 *_mem = (U8*)malloc(mem_sz);                      // allocate heap
+    if (!_mem  ||
+        !_n4vm ||
+        _n4vm->init(_mem, mem_sz, stk_sz)) return 1;     // instantiate NanoForth VM
+    
+    putstr("MEM=$");   puthex(mem_sz);                   // forth memory block 
+    putstr("[DIC=$");  puthex(mem_sz - stk_sz);          // dictionary size
+    putstr(",STK=$");  puthex(stk_sz);  putstr("]");     // stack size
+    
+    _n4vm->info();                                       // display detailed pointers
 
-    _n4vm->init(_mem, mem_sz, stk_sz);                   // instanciate NanoForth VM
-    _n4vm->info();
+    return 0;
 }
 ///
 /// * single step for Arduino loop
@@ -121,6 +131,6 @@ int main(int argc, char **argv)
     }
 	return 0;
 }
-#endif //!ARDUINO
+#endif // !ARDUINO
 
 

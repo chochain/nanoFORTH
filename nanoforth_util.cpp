@@ -5,13 +5,13 @@
 #include "nanoforth_util.h"
 #if ARDUINO
 #include <avr/pgmspace.h>
-#endif //ARDUINO
+#endif // ARDUINO
 //
 // tracing instrumentation
 //
 #if ARDUINO
 void N4Util::d_chr(char c)     { Serial.write(c);   }
-void N4Util::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('^'); d_adr(a); }
+void N4Util::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
 #else
 void N4Util::d_chr(char c)     { printf("%c", c);   }
 #endif //ARDUINO

@@ -34,9 +34,11 @@ void setup()
 {
     Serial.begin(115200);
     
-    N4::begin(0x480, 0x80);
+    if (N4::begin()) {
+        Serial.print(F("ERROR: memory allocation failed!"));
+    }
     N4::add(blink);            // add blink
-    N4::add(led_toggle);
+    //N4::add(led_toggle);
 }
 
 void loop()

@@ -36,6 +36,7 @@ PROGMEM const char PRM[] = "\x30" \
 	"<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" ".  " ".\" "">R " \
     "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" "D+ " \
     "D- " "DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
+PROGMEM const char PMX[] = " FORNXTBRKI  ";
 #define OP_SMC          0                           /**< semi-colon, end of function definition */
 //
 // Forth assembler stack opcode macros (note: rp grows downward)
@@ -147,7 +148,7 @@ void N4Asm::compile(U16 *rp0)
             }
             break;
         default:                            ///> token type not found, bail!
-        	putstr("!\n");
+        	putstr("?\n");
         	last = l0;                      // restore last, here pointers
         	here = h0;
         	N4Util::token(trc, TIB_CLR);
@@ -228,7 +229,7 @@ void N4Asm::forget()
 {
     U16 adr;
     if (!query(N4Util::token(trc), &adr)) { // query token in dictionary
-        putstr("??");                       // not found, bail
+        putstr("?!");                       // not found, bail
         return;
     }
     //
@@ -272,7 +273,6 @@ void N4Asm::load()
 ///
 ///> NanoForth execution tracer (debugger, can be modified into single-stepper)
 ///
-PROGMEM const char PMX[] = " FORNXTBRKI  ";
 void N4Asm::trace(U16 a, U8 ir)
 {
     D_ADR(a);                                         // opcode address
