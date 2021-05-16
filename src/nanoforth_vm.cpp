@@ -10,7 +10,6 @@
 ///>>    `    dic-->       +->rp    sp<-+`<br>
 ///>>    `                      TOS TOS1 (top of stack)`<br>
 ///
-#include "nanoforth_util.h"
 #include "nanoforth_asm.h"
 #include "nanoforth_vm.h"
 //
@@ -51,12 +50,12 @@ void N4VM::info()
 {
     U16 free = IDX(&free) - IDX(sp);
 #if ARDUINO
-    putstr(" dic=");       N4Util::d_ptr(dic);
-    putstr("[...rp=");     N4Util::d_ptr((U8*)rp);
-    putstr("...");         N4Util::d_ptr((U8*)sp);
-    putstr("=sp]...");     N4Util::d_ptr((U8*)&free);
+    putstr(" dic=");       d_ptr(dic);
+    putstr("[...rp=");     d_ptr((U8*)rp);
+    putstr("...");         d_ptr((U8*)sp);
+    putstr("=sp]...");     d_ptr((U8*)&free);
 #endif // ARDUINO
-    putstr(" Free=");      N4Util::putnum(free);
+    putstr(" Free=");      putnum(free);
     putstr(" bytes\n");
 }
 ///
@@ -65,7 +64,7 @@ void N4VM::info()
 void N4VM::step() {
     _ok();                                       // stack check and prompt OK
     
-    U8  *tkn = N4Util::token(trc);               // get a token from console
+    U8  *tkn = token(trc);                       // get a token from console
     U16 tmp;
     switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
     case TKN_IMM:                                ///>> immediate words
@@ -126,7 +125,7 @@ void N4VM::_ok()
         sp = s0;                        // reset to top of stack block
     }
     for (S16 *p=s0-1; p >= sp; p--) {
-        N4Util::putnum(*p); putchr('_'); 
+        putnum(*p); putchr('_'); 
     }
     putstr("ok ");
 }
@@ -167,7 +166,7 @@ void N4VM::_execute(U16 adr)
         	op = ir & PRM_MASK;                           // capture opcode
             switch(op) {
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
-            case I_DQ:  D_STR(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
+            case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
             default: _primitive(op);                      // handle other opcodes
             }
             break;
@@ -217,9 +216,9 @@ void N4VM::_primitive(U8 op)
     case 23: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
     case 24: { U8 *p = PTR(POP()); *p = (U8)POP();  } break; // C!
     case 25: PUSH((U16)NanoForth::key()); break; // KEY
-	case 26: D_CHR((U8)POP());            break; // EMT
-    case 27: D_CHR('\n');                 break; // CR
-    case 28: N4Util::putnum(POP()); putchr(' ');      break; // .
+	case 26: d_chr((U8)POP());            break; // EMT
+    case 27: d_chr('\n');                 break; // CR
+    case 28: putnum(POP()); putchr(' ');  break; // .
     case 29: /* handle one level up */    break; // ."
     case 30: RPUSH(POP());                break; // >R
     case 31: PUSH(RPOP());                break; // R>
@@ -280,7 +279,7 @@ void N4VM::_dump(U16 p0, U16 sz0)
     U16 sz = (sz0+0x1f)&0xffe0;
     putchr('\n');
     for (U16 i=0; i<sz; i+=0x20) {
-        N4Util::memdump(dic, p, 0x20, ' ');
+        memdump(dic, p, 0x20, ' ');
         putchr(' ');
         for (U8 j=0; j<0x20; j++, p++) {         // print and advance to next byte
             char c = *p & 0x7f;

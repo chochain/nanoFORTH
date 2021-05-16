@@ -11,7 +11,7 @@
 ///
 #ifndef __SRC_NANOFORTH_ASM_H
 #define __SRC_NANOFORTH_ASM_H
-#include "nanoforth.h"
+#include "nanoforth_core.h"
 ///
 /// parser actions enum used by execution and assembler units
 /// 
@@ -49,7 +49,7 @@ enum N4_EXT_OP {              ///< extended opcode (used by for...nxt loop)
 ///
 /// NanoForth Assembler class
 ///
-class N4Asm                         // (10-byte header)
+class N4Asm : N4Core                // (10-byte header)
 {
     U8  *dic;                       ///< dictionary base
     U16 *rp;                        ///< return stack pointer

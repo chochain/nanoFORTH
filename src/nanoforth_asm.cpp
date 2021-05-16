@@ -7,8 +7,6 @@
 ///>>    `   |                         |`<br>
 ///>>    `  dic-->                 rp<-+`<br>
 ///
-
-#include "nanoforth_util.h"
 #include "nanoforth_asm.h"
 #if ARDUINO
 #include <EEPROM.h>
@@ -36,30 +34,12 @@ PROGMEM const char PRM[] = "\x31" \
 	"<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" \
     "D+ " "D- " "DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
-PROGMEM const char PMX[] = " FORNXTBRKI  ";
+PROGMEM const char PMX[] = "\x4" \
+    "FOR" "NXT" "BRK" "I  ";
 #define OP_SMC          0                           /**< semi-colon, end of function definition */
-//
-// Forth assembler stack opcode macros (note: rp grows downward)
-//
-#define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack */
-#define RPOP()         (*(--rp))                    /**< pop address from return stack  */
-//
-// dictionary index <=> pointer translation macros
-//
-#define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
-#define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
-//
-// \defSETNM
-// \brief name field creation
-//
-#define SETNM(p, s) do {                   \
-    SET8(p, (s)[0]);                       \
-    SET8(p, (s)[1]);                       \
-    SET8(p, ((s)[1]!=' ') ? (s)[2] : ' '); \
-    } while(0)
-//
-// branching opcodes
-//
+///
+///> macros for branching instruction
+///
 #define JMP000(p,j) SET16(p, (j)<<8)
 #define JMPSET(idx, p1) do {               \
     U8  *p = PTR(idx);                     \
@@ -70,6 +50,16 @@ PROGMEM const char PMX[] = " FORNXTBRKI  ";
 #define JMPBCK(idx, f) do {                \
     SET16(here, idx | (f<<8));             \
     } while(0)
+//
+// Forth assembler stack opcode macros (note: rp grows downward)
+//
+#define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack */
+#define RPOP()         (*(--rp))                    /**< pop address from return stack  */
+//
+// dictionary index <=> pointer translation macros
+//
+#define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
+#define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
 ///
 ///> NanoForth Assembler initializer
 ///
@@ -100,11 +90,11 @@ void N4Asm::set_trace(U8 f)
 ///
 N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 {
-    if (query(tkn, rst))                         return TKN_DIC; /// * DIC search word dictionary adr(2),name(3)
-    if (N4Util::find(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM immediate word
-    if (N4Util::find(tkn, PRM, rst))             return TKN_PRM; /// * PRM search primitives
-    if (N4Util::getnum(tkn, (S16*)rst))          return TKN_NUM; /// * NUM parse as number literal
-    return TKN_ERR;                                              /// * ERR unknown token
+    if (query(tkn, rst))                 return TKN_DIC; /// * DIC search word dictionary adr(2),name(3)
+    if (find(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM immediate word
+    if (find(tkn, PRM, rst))             return TKN_PRM; /// * PRM search primitives
+    if (getnum(tkn, (S16*)rst))          return TKN_NUM; /// * NUM parse as number literal
+    return TKN_ERR;                                      /// * ERR unknown token
 }
 ///
 ///> NanoForth compiler - create word onto dictionary
@@ -119,9 +109,9 @@ void N4Asm::compile(U16 *rp0)
 
     for (U8 *tkn=p0; tkn;) {        // terminate if tkn==NULL
         U16 tmp;
-        if (trc) N4Util::memdump(dic, p0, (U16)(here-p0), 0);
+        if (trc) memdump(dic, p0, (U16)(here-p0), 0);
 
-        tkn = N4Util::token(trc);
+        tkn = token(trc);
         p0  = here;                         // keep current top of dictionary (for memdump)
         switch(parse_token(tkn, &tmp, 0)) { ///#### determinie type of operation, and keep opcode in tmp
         case TKN_IMM:                       ///> immediate command
@@ -151,12 +141,12 @@ void N4Asm::compile(U16 *rp0)
         	putstr("?\n");
         	last = l0;                      // restore last, here pointers
         	here = h0;
-        	N4Util::token(trc, TIB_CLR);
+        	token(trc, TIB_CLR);
         	tkn  = NULL;
         }
     }
     // debug memory dump
-    if (trc && last>l0) N4Util::memdump(dic, last, (U16)(here-last), ' ');
+    if (trc && last>l0) memdump(dic, last, (U16)(here-last), ' ');
 }
 ///
 ///> create a variable on dictionary
@@ -203,9 +193,9 @@ void N4Asm::words()
 {
     U8 n = 0, wpr = WORDS_PER_ROW >> ((trc) ? 1 : 0);
     for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p)), n++) {
-        if ((n%wpr)==0) D_CHR('\n');
-        if (trc) { D_ADR(IDX(p)); D_CHR(':'); }               // optionally show address
-        D_CHR(p[2]); D_CHR(p[3]); D_CHR(p[4]); D_CHR(' ');    // 3-char name + space
+        if ((n%wpr)==0) d_chr('\n');
+        if (trc) { d_adr(IDX(p)); d_chr(':'); }               // optionally show address
+        d_chr(p[2]); d_chr(p[3]); d_chr(p[4]); d_chr(' ');    // 3-char name + space
     }
     _list_voc();
 }
@@ -228,7 +218,7 @@ U8 N4Asm::query(U8 *tkn, U16 *adr)
 void N4Asm::forget()
 {
     U16 adr;
-    if (!query(N4Util::token(trc), &adr)) { // query token in dictionary
+    if (!query(token(trc), &adr)) { // query token in dictionary
         putstr("?!");                       // not found, bail
         return;
     }
@@ -275,7 +265,7 @@ void N4Asm::load()
 ///
 void N4Asm::trace(U16 a, U8 ir)
 {
-    D_ADR(a);                                         // opcode address
+    d_adr(a);                                         // opcode address
 
     U8 *p, op = ir & CTL_BITS;
     switch (op) {
@@ -283,58 +273,61 @@ void N4Asm::trace(U16 a, U8 ir)
         a = GET16(PTR(a)) & ADR_MASK;                 // target address
         switch (ir & JMP_MASK) {					  // get branching opcode
         case PFX_CALL:                                // 0xc0 CALL word call
-            D_CHR(':');
+            d_chr(':');
             p = PTR(a)-3;                             // backtrack 3-byte (name field)
-            D_CHR(*p++); D_CHR(*p++); D_CHR(*p);
+            d_chr(*p++); d_chr(*p++); d_chr(*p);
             putstr("\n....");
             for (int i=0, n=++tab; i<n; i++) {        // indentation per call-depth
                 putstr("  ");
             }
             break;
         case PFX_RET:                                 // 0xd0 RET return
-            D_CHR(';');
+            d_chr(';');
             tab -= tab ? 1 : 0;
             break;
-        case PFX_CDJ: D_CHR('?'); D_ADR(a); break;    // 0xe0 CDJ  conditional jump
-        case PFX_UDJ: D_CHR('j'); D_ADR(a); break;    // 0xf0 UDJ  unconditional jump
+        case PFX_CDJ: d_chr('?'); d_adr(a); break;    // 0xe0 CDJ  conditional jump
+        case PFX_UDJ: d_chr('j'); d_adr(a); break;    // 0xf0 UDJ  unconditional jump
         }
         break;
     case 0x80:                                        ///> a primitive
         op = ir & PRM_MASK;                           // capture primitive opcode
         switch (op) {
         case I_LIT:                                   // 3-byte literal (i.e. 16-bit signed integer)
-        	D_CHR('#');
+        	d_chr('#');
             p = PTR(a)+1;                             // address to the 16-bit number
             a = GET16(p);                             // fetch the number (reuse a, bad, but to save)
-        	D_HEX(a>>8); D_HEX(a&0xff);
+        	d_hex(a>>8); d_hex(a&0xff);
             break;
         case I_DQ:                                    // print string
-        	D_CHR('"');
+        	d_chr('"');
         	p = PTR(a)+1;                             // address to string header
-            D_STR(p);                                 // print the string to console
+            d_str(p);                                 // print the string to console
         	break;
         default:                                      // other opcodes
-            D_CHR('_');
+            d_chr('_');
             U8 ci = op >= I_FOR;                      // loop controller flag
             _opname(ci ? op-I_FOR : op, ci ? PMX : PRM, 0);
         }
         break;
     default:                                          ///> a number (i.e. 1-byte literal)
-        D_CHR('#'); D_HEX(ir);
+        d_chr('#'); d_hex(ir);
     }
 
-    D_CHR(' ');
+    d_chr(' ');
 }
 ///
 ///> create name field with link back to previous word
 ///
 void N4Asm::_do_header()
 {
-    U8  *tkn = N4Util::token(trc);  ///#### fetch one token from console
+    U8  *tkn = token(trc);          ///#### fetch one token from console
     U16 tmp  = IDX(last);           // link to previous word
+    
     last = here;                    ///#### create 3-byte name field
     SET16(here, tmp);               // pointer to previous word
-    SETNM(here, tkn);               // store token into 3-byte name field
+    SET8(here, tkn[0]);             // store token into 3-byte name field
+    SET8(here, tkn[1]);
+    SET8(here, tkn[1]!=' ' ? tkn[2] : ' ');
 }
 ///
 ///> create branching for instructions
@@ -397,16 +390,16 @@ void N4Asm::_opname(U8 op, const char *lst, U8 space)
     U8 *p = (U8*)lst+1+op*3;
 #endif //ARDUINO
     char  c;
-    D_CHR(pgm_read_byte(p));
-    if ((c=pgm_read_byte(p+1))!=' ' || space) D_CHR(c);
-    if ((c=pgm_read_byte(p+2))!=' ' || space) D_CHR(c);
+    d_chr(pgm_read_byte(p));
+    if ((c=pgm_read_byte(p+1))!=' ' || space) d_chr(c);
+    if ((c=pgm_read_byte(p+2))!=' ' || space) d_chr(c);
 }
 ///
 ///> display the opcode name
 /// 
 void N4Asm::_do_str()
 {
-    U8 *p0 = N4Util::token(trc);        // get string from input buffer
+    U8 *p0 = token(trc);        // get string from input buffer
     U8 sz  = 0;
     for (U8 *p=p0; *p!='"'; p++, sz++);
     SET8(here, sz);
@@ -425,9 +418,9 @@ void N4Asm::_list_voc()
         U8 sz = *(lst[i]);
 #endif //ARDUINO
         while (sz--) {
-            D_CHR(n++%WORDS_PER_ROW==0 ? '\n' : ' ');
+            d_chr(n++%WORDS_PER_ROW==0 ? '\n' : ' ');
             _opname(sz, lst[i], 1);
         }
     }
-    D_CHR('\n');
+    d_chr('\n');
 }

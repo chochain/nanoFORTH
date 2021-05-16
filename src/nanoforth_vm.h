@@ -4,13 +4,13 @@
 ///
 #ifndef __SRC_NANOFORTH_VM_H
 #define __SRC_NANOFORTH_VM_H
-#include "nanoforth.h"
+#include "nanoforth_core.h"
 
 class N4Asm;            // forward declaration
 ///
 /// NanoForth Virtual Machine class
 ///
-class N4VM
+class N4VM : N4Core
 {                       //  (16-byte header)
     N4Asm  *n4asm;      ///< assembler object pointer
 
