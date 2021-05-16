@@ -44,25 +44,21 @@
 ///  * [12420,270] display more system memory info and malloc error catch
 ///
 ///> 2021-05-16: chochain@yahoo.com
+///  * [12360,272] move static variables into NanoForth class
 
 #include "nanoforth_util.h"
 #include "nanoforth_vm.h"
 //
 // user function linked-list
 //
-//static n4_tptr _n4tsk = 0;
-//static N4VM    *_n4vm  = new N4VM();
+n4_tptr NanoForth::_n4tsk{ NULL };                       ///< initialize task linked-list (static member)
 ///
 /// * initialize NanoForth's virtual machine and assembler
 ///
-static n4_tptr _n4tsk;                                   ///< user function linked-list
-
-NanoForth::NanoForth() {}
-
 int NanoForth::begin(U16 mem_sz, U16 stk_sz)
 {
-    _mem  = (U8*)malloc(mem_sz);
-    _n4vm = new N4VM(_mem, mem_sz, stk_sz);
+    _mem  = (U8*)malloc(mem_sz);                         ///< allocate Forth memory block
+    _n4vm = new N4VM(_mem, mem_sz, stk_sz);              ///< create Virtual Machine
 
     if (!_mem || !_n4vm) return -1;
     

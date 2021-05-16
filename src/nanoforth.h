@@ -61,13 +61,13 @@ typedef struct n4_task {
 class N4VM;
 class NanoForth
 {
-    U8      *_mem;                ///< pointer to nanoForth memory block
-    N4VM    *_n4vm;               ///< virtual machine object pointer
+    static n4_tptr _n4tsk;        ///< user function linked-list
+
+    U8     *_mem;                 ///< pointer to nanoForth memory block
+    N4VM   *_n4vm;                ///< virtual machine object pointer
 
 public:
-    NanoForth();                  ///< constructor
-    
-    // constructor with dynamic memory sizing (return 1 if allocation failed)
+    // initiator with dynamic memory sizing (return 1 if allocation failed)
     int  begin(                   ///< NanoForth initializer
         U16 mem_sz=N4_MEM_SZ,     ///< memory size (default: N4_MEM_SZ=0x480)
         U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size (default: N4_STK_SZ=0x80)
