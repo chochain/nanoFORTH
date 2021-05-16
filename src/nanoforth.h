@@ -59,18 +59,23 @@ typedef struct n4_task {
 ///
 /// NanoForth main control object (with static members that support multi-threading)
 ///
+class N4VM;
 class NanoForth
 {
+    U8      *_mem;                ///< pointer to nanoForth memory block
+    N4VM    *_n4vm;               ///< virtual machine object pointer
+
 public:
-    /// constructor with dynamic memory sizing (return 1 if allocation failed)
-    static int begin(                         
-        U16 mem_sz=N4_MEM_SZ,     ///< memory size
-        U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size
-        );   
+    NanoForth();                  ///< constructor
+    
+    // constructor with dynamic memory sizing (return 1 if allocation failed)
+    int  begin(                   ///< NanoForth initializer
+        U16 mem_sz=N4_MEM_SZ,     ///< memory size (default: N4_MEM_SZ=0x480)
+        U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size (default: N4_STK_SZ=0x80)
+        );
+    void step();                  ///< run one NanoForth VM cycle, and to each of user tasks
     
     static void add(void (*ufunc)(n4_tptr));  ///< add the user function to NanoForth task manager
-    static void step();                       ///< run one NanoForth VM cycle, and to each of user tasks
-    
     static void yield();          ///< NanoForth yield to user tasks
     static char key();            ///< Arduino's getchar(), yield to user tasks when waiting
     static void wait(U32 ms);     ///< pause NanoForth thread for ms microseconds, yield to user tasks

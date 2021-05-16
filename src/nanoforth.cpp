@@ -43,29 +43,35 @@
 ///  * [12124,270] reformat opcodes for 64-primitives
 ///  * [12420,270] display more system memory info and malloc error catch
 ///
+///> 2021-05-16: chochain@yahoo.com
+
 #include "nanoforth_util.h"
 #include "nanoforth_vm.h"
 //
 // user function linked-list
 //
-static n4_tptr _n4tsk = 0;
-static N4VM    *_n4vm  = new N4VM();
+//static n4_tptr _n4tsk = 0;
+//static N4VM    *_n4vm  = new N4VM();
 ///
 /// * initialize NanoForth's virtual machine and assembler
 ///
+static n4_tptr _n4tsk;                                   ///< user function linked-list
+
+NanoForth::NanoForth() {}
+
 int NanoForth::begin(U16 mem_sz, U16 stk_sz)
 {
-    U8 *_mem = (U8*)malloc(mem_sz);                      // allocate heap
-    if (!_mem  ||
-        !_n4vm ||
-        _n4vm->init(_mem, mem_sz, stk_sz)) return 1;     // instantiate NanoForth VM
+    _mem  = (U8*)malloc(mem_sz);
+    _n4vm = new N4VM(_mem, mem_sz, stk_sz);
+
+    if (!_mem || !_n4vm) return -1;
     
     putstr("MEM=$");   puthex(mem_sz);                   // forth memory block 
     putstr("[DIC=$");  puthex(mem_sz - stk_sz);          // dictionary size
     putstr(",STK=$");  puthex(stk_sz);  putstr("]");     // stack size
     
     _n4vm->info();                                       // display detailed pointers
-
+    
     return 0;
 }
 ///
