@@ -417,16 +417,16 @@ void N4Asm::_do_str()
 ///
 void N4Asm::_list_voc()
 {
-    const char *lst[] PROGMEM = { CMD, JMP, PRM };      // list of built-in primitives
+    const char *lst[] PROGMEM = { PRM, JMP, CMD };      // list of built-in primitives
     for (U8 i=0, n=0; i<3; i++) {
 #if ARDUINO
         U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
 #else
         U8 sz = *(lst[i]);
 #endif //ARDUINO
-        for (U8 op=0; op<sz; op++) {
+        while (sz--) {
             D_CHR(n++%WORDS_PER_ROW==0 ? '\n' : ' ');
-            _opname(op, lst[i], 1);
+            _opname(sz, lst[i], 1);
         }
     }
     D_CHR('\n');
