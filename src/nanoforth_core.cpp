@@ -1,8 +1,8 @@
 ///
-/// \file nanoforth_util.cpp
-/// \brief NanoForth Utility class implementation
+/// \file nanoforth_core.cpp
+/// \brief NanoForth Core Utility abstract class implementation
 ///
-#include "nanoforth_util.h"
+#include "nanoforth_core.h"
 #if ARDUINO
 #include <avr/pgmspace.h>
 #endif // ARDUINO
@@ -10,21 +10,21 @@
 // tracing instrumentation
 //
 #if ARDUINO
-void N4Util::d_chr(char c)     { Serial.write(c);   }
-void N4Util::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
+void N4Core::d_chr(char c)     { Serial.write(c);   }
+void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
 #else
-void N4Util::d_chr(char c)     { printf("%c", c);   }
+void N4Core::d_chr(char c)     { printf("%c", c);   }
 #endif //ARDUINO
-void N4Util::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
-void N4Util::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
-void N4Util::d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff));   }
-void N4Util::d_str(U8 *p)      { for (int i=0, sz=*p++; i<sz; i++) d_chr(*p++); }
+void N4Core::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
+void N4Core::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
+void N4Core::d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff));   }
+void N4Core::d_str(U8 *p)      { for (int i=0, sz=*p++; i<sz; i++) d_chr(*p++); }
 //
 // IO and Search Functions =================================================
 ///
 ///> emit a 16-bit integer
 ///
-void N4Util::putnum(S16 n)
+void N4Core::putnum(S16 n)
 {
     if (n < 0) { n = -n; putchr('-'); }        // process negative number
     U16 t = n/10;
@@ -34,7 +34,7 @@ void N4Util::putnum(S16 n)
 ///
 ///> capture a token from console input buffer
 ///
-U8 *N4Util::token(U8 trc, U8 clr)
+U8 *N4Core::token(U8 trc, U8 clr)
 {
 	static U8  tib[TIB_SZ];
 	static U8 *tp = tib;
@@ -62,7 +62,7 @@ U8 *N4Util::token(U8 trc, U8 clr)
 ///
 ///> parse a literal from string
 ///
-U8 N4Util::getnum(U8 *str, S16 *num)
+U8 N4Core::getnum(U8 *str, S16 *num)
 {
     U8  neg = 0;
     S16 n   = 0;
@@ -88,7 +88,7 @@ U8 N4Util::getnum(U8 *str, S16 *num)
 ///
 ///> dump byte-stream with delimiter option
 /// 
-void N4Util::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
+void N4Core::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
 {
 	d_adr((U16)(p0 - base)); d_chr(':');
 	for (int n=0; n<sz; n++) {
@@ -100,7 +100,7 @@ void N4Util::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
 ///
 ///> search keyword in a NanoForth name field list
 ///
-U8 N4Util::find(U8 *tkn, const char *lst, U16 *id)
+U8 N4Core::find(U8 *tkn, const char *lst, U16 *id)
 {
     for (int n=1, m=pgm_read_byte(lst); n < m*3; n+=3) {
         if (tkn[0]==pgm_read_byte(lst+n) &&
@@ -115,7 +115,7 @@ U8 N4Util::find(U8 *tkn, const char *lst, U16 *id)
 ///
 ///> fill input buffer from console char-by-char til CR or LF hit
 ///
-void N4Util::_console_input(U8 *tib)
+void N4Core::_console_input(U8 *tib)
 {
     U8 *p = tib;
     for (;;) {

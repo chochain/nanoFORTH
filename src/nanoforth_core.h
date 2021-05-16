@@ -1,9 +1,9 @@
 ///
-/// \file nanoforth_util.h
-/// \brief NanoForth Utility class
+/// \file nanoforth_core.h
+/// \brief NanoForth Core Utility abstract class
 ///
-#ifndef __SRC_NANOFORTH_UTIL_H
-#define __SRC_NANOFORTH_UTIL_H
+#ifndef __SRC_NANOFORTH_CORE_H
+#define __SRC_NANOFORTH_CORE_H
 #include "nanoforth.h"
 
 #define TIB_SZ         0x40              /**< console(terminal) input buffer size */
@@ -19,7 +19,7 @@
 #define putstr(msg)    printf("%s", msg)
 #define putchr(c)      printf("%c", c)
 #define puthex(v)      printf("%02x", v)
-#endif //ARDUINO
+#endif // ARDUINO
 //
 // memory access opcodes
 /// \def SET8
@@ -32,17 +32,10 @@
 #define SET8(p, c)     (*(U8*)(p)++=(U8)(c))
 #define SET16(p, n)    do { U16 x=(U16)(n); SET8(p,(x)>>8); SET8(p,(x)&0xff); } while(0)
 #define GET16(p)       (((U16)(*(U8*)(p))<<8) + *((U8*)(p)+1))
-//
-// common console output macros
-//
-//#define D_CHR(c)       N4Util::d_chr(c)
-//#define D_HEX(h)       N4Util::d_hex(h)
-//#define D_ADR(a)       N4Util::d_adr(a)
-//#define D_STR(p)       N4Util::d_str(p)
 ///
 /// NanoForth helper class
 ///
-class N4Util
+class N4Core
 {
 public:
     //
@@ -81,5 +74,5 @@ public:
 private:
     static void _console_input(U8 *tib);
 };
-#endif //__SRC_NANOFORTH_UTIL_H
+#endif //__SRC_NANOFORTH_CORE_H
 
