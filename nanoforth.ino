@@ -1,24 +1,19 @@
 //
 // nanoFORTH - Forth for Arduino Nano (and UNO)
 //
-#include "nanoforth.h"
+#include "src/nanoforth.h"
 
-N4_FUNC(blink)                 // 
+N4_TASK(blink)                    ///< create blinking task (i.e. built-in LED on pin 13)
 {
-    N4_BEGIN();
-    
     digitalWrite(LED_BUILTIN, HIGH);
     N4_DELAY(500);
     digitalWrite(LED_BUILTIN, LOW);
     N4_DELAY(500);
-
-    N4_END();
 }
+N4_END;
 
-N4_FUNC(led_toggle)
+N4_TASK(led_toggle)               ///< create a LED toggle task
 {
-    N4_BEGIN();
-
     digitalWrite(5, HIGH);
     digitalWrite(6, LOW);
     N4_DELAY(250);
@@ -26,24 +21,25 @@ N4_FUNC(led_toggle)
     digitalWrite(5, LOW);
     digitalWrite(6, HIGH);
     N4_DELAY(250);
-
-    N4_END();
 }
+N4_END;
+
+NanoForth n4;                     ///< create NanoForth instance
 
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(115200);         ///< init Serial IO, make sure it is set to 'Both BL & CR' to capture input
     
-    if (N4::begin()) {
+    if (n4.begin()) {             /// default: (0x480,0x80), try (0x240, 0x40) if memory is constrained
         Serial.print(F("ERROR: memory allocation failed!"));
     }
-    N4::add(blink);            // add blink
-    //N4::add(led_toggle);
+    n4.add(blink);                ///< add blink task to NanoForth task manager
+    n4.add(led_toggle);           ///< add led_toggle task
 }
 
 void loop()
 {
-    N4::step();                // execute one vm cycle
+    n4.step();                // execute one vm cycle
 }
 
 

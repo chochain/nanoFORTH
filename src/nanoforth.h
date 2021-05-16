@@ -51,11 +51,10 @@ typedef struct n4_task {
 /// \def N4_END
 /// \brief end of the user function block.
 ///
-#define N4_FUNC(fname)  void fname(n4_tptr _p_)
-#define N4_BEGIN()      switch((_p_)->ci) { case 0:
+#define N4_TASK(fname)  void fname(n4_tptr _p_) { switch((_p_)->ci) { case 0:
 #define N4_DELAY(ms)    (_p_)->t = millis()+(U32)(ms); (_p_)->ci = __LINE__; case __LINE__: \
                         if (millis() < (_p_)->t) return;
-#define N4_END()        } (_p_)->ci = 0;
+#define N4_END          } (_p_)->ci = 0; }
 ///
 /// NanoForth main control object (with static members that support multi-threading)
 ///
