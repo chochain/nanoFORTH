@@ -35,10 +35,10 @@
 //
 // common console output macros
 //
-#define D_CHR(c)       N4Util::d_chr(c)
-#define D_HEX(h)       N4Util::d_hex(h)
-#define D_ADR(a)       N4Util::d_adr(a)
-#define D_STR(p)       N4Util::d_str(p)
+//#define D_CHR(c)       N4Util::d_chr(c)
+//#define D_HEX(h)       N4Util::d_hex(h)
+//#define D_ADR(a)       N4Util::d_adr(a)
+//#define D_STR(p)       N4Util::d_str(p)
 ///
 /// NanoForth helper class
 ///
