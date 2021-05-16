@@ -47,6 +47,7 @@ int N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
 
     return 0;
 }
+
 ///
 /// * show system info
 ///
@@ -242,13 +243,13 @@ void N4VM::_primitive(U8 op)
         PUSH((U16)(u&0xffff));
     }                                     break;
     case 40: {                                   // D+
-        S32 v = *(S32*)(sp+2) + *(S32*)sp;
+        S32 v = *(S32*)SS(2) + *(S32*)TOS;
         POP(); POP();
         SS(1) = (S16)(v>>16);
         TOS   = (S16)v&0xffff;
     }                                     break;
     case 41: {                                   // D-
-        S32 v = *(S32*)(sp+2) - *(S32*)sp;
+        S32 v = *(S32*)SS(2) - *(S32*)TOS;
         POP(); POP();
         SS(1) = (S16)(v>>16);
         TOS   = (S16)(v&0xffff);
@@ -260,13 +261,13 @@ void N4VM::_primitive(U8 op)
     }                                     break;
     case 43: NanoForth::wait((U32)POP()); break; // DLY
 #if ARDUINO
-    case 44: pinMode(POP(), POP());       break; // PIN
-    case 45: PUSH(digitalRead(POP()));    break; // IN
-    case 46: digitalWrite(POP(), POP());  break; // OUT
-    case 47: PUSH(analogRead(POP()));     break; // AIN
-    case 48: analogWrite(POP(), POP());   break; // PWM
-        /* case 48-58 available for future expansion */
+    case 44: pinMode(TOS, SS(1));      POP(); POP(); break; // PIN
+    case 45: PUSH(digitalRead(POP()));               break; // IN
+    case 46: digitalWrite(TOS, SS(1)); POP(); POP(); break; // OUT
+    case 47: PUSH(analogRead(POP()));                break; // AIN
+    case 48: analogWrite(TOS, SS(1));  POP(), POP(); break; // PWM
 #endif //ARDUINO
+        /* case 48-58 available for future expansion */
     case 59: RPUSH(POP()); RPUSH(POP());  break; // FOR
     case 60: {	                                 // NXT
         (*(rp-2))++;               // counter+1

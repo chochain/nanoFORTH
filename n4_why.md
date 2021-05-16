@@ -1,22 +1,84 @@
-\page page3
+\page page1 Why
 
-## nanoFORTH
-### With the following assumptions for our Nanos,
+Following the footstep of Nakagawa and circuit4u@medium.com's **TinyForth**, a light-weight protothreaded FORTH with 3-character keywords for Arduino, I have a thought!
+
+## nanoFORTH - a simple and useful FORTH for Arduino Nano
+### Assumptions
 * more than 80% of Arduino makers are using UNO or Nano,
-* most of the makers do not need the full blown FORTH vocabularies,
+* most of the makers do not need the full-blown FORTH vocabularies,
 * most of them are not familer with standard FORTH words, so abbriviation for words is OK,
 * the meta-compiler is unlikely needed either, i.e. not to create a new type of Forth from within nanoForth,
-* only a small set of core primitive words are needed for the most of Arduino projects,
-  the rational being anything that requires more complicated syntax, one might need the power of ESP.
+* only a small set of, say 50+, core primitive words are needed for the most of Arduino projects,
+  the rational being anything that requires more elaborated syntax, one might need the power of ESPs.
 
-### The requirements for nanoFORTH are:
+### Requirements
 * be as simple to use as any example Sketch that comes with the IDE (no bootloader burning),
 * provide a REPL development/operating environment for Arduino,
 * provide core Arduino functions (i.g. pinMode, digitalRead,Write, analogRead,Write, millis, delay),
 * provide hardware thread(s) in addition to nanoFORTH thread so new components can be added (ig. Bluetooth),
+* provide an Arduino library that developers can include easily,
 * provide at least 1K RAM dictionary for resonablly size of work,
 * provide EEPROM persisted storage for new words which can be automatically reloaded on next start-up,
 * optionally show byte-code stream while assembled to help beginers understand FORTH internal,
-* optionally show execution tracing to help debugging, also provision for single-stepping,
-* optionally implemented as an Arduino library that developers can include easily.
+* optionally show execution tracing to help debugging, also provision for single-stepping.
 
+### Syntax Examples
+* turn on LED(red) on digital pin 5, 1 is HIGH
+> 1 5 OUT
+
+* turn off LED(blue) on digital pin 6, 0 is LOW
+> 0 6 OUT
+
+* define a function, or a 'word' in FORTH, **red** to turn red LED on, and blue LED off
+> : **red** 1 5 OUT 0 6 OUT ;
+
+* define a word **blu** to turn red LED off and turn blue LED on (sorry, nanoFORTH takes max 3 characters only)
+> : **blu** 1 6 OUT 1 5 OUT ;
+
+* execute **blu**, i.e. to turn red LED off, and blue LED on 
+> **blu**
+
+* define a word **xy** to blink red/blue every 500 ms alternatively
+> : **xy** 0 FOR **red** 500 DLY **blu** 500 DLY NXT ;
+
+* run 10 cycles of **xy**
+> 10 **xy**
+
+* too slow! nanoFORTH lets you redefine **xy** by "forget" it first
+> FGT **xy**<br>
+> : **xy** 0 FOR **red** 200 DLY **blu** 400 DLY I . NXT ;
+
+* now try 20 cycles of **xy** this time
+> 20 **xy**
+
+* let's read analog pin 1 (photoresister value 0~1023)
+> 1 AIN<br>
+> 258_ok
+
+* define **lit** to read from photoresister and determine whether its value is > 200
+> : **lit** 1 AIN 200 > ;
+
+* execute **lit**, return value 1 on stack (FORTH's memory) if it's bright enough, 0 if not
+> **lit**<br>
+> 1_ok
+
+* define **?Z** that turns on red or blue depends on input value on stack (yes, nanoFORTH is case sensitive, and you can create some really strange function name)
+> : **?Z** IF **red** ELS **blu** THN ;
+
+* run **?Z** which take input from stack, 1 turns on red or 0 turn on blue
+> 1 **?Z**<br>
+> 0 **?Z**
+
+* now we can turn on red or blue LED depends on lighting condition (try blocking the photoresister), **lit** leave 1 or 0 on stack, **?Z** takes the value and turns on red or blue
+> **lit** **?Z**
+
+* if you really want to, we can even make it into an infinite loop. But why? OK, running over-night or maybe something like a web-server.
+> : **xyz** BGN **lit** **?Z** RPT ;<br>
+> 100 **xyz**
+
+* show all words available, including **?Z**, **xy**, **lit**, **blu**, **red** that we've just created
+> WRD
+
+OK, if that captured your imaginations, you might have an idea of what nanoFORTH is trying to do. Remember, you do these without any compilation but, instead, "talk" directly with your Arduino once nanoFORTH uploaded. How the interactions can change what we are so used to do? Further more, what if we can do it via WiFi or BLE? Look Mom! No cable!
+
+<a href="page2.html">Ready to get nanoFORTH for a trial?</a>
