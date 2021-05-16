@@ -31,11 +31,10 @@
 ///
 /// * constructor and initializer
 ///
-N4VM::N4VM() {}
-int N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
+N4VM::N4VM(U8 *mem, U16 mem_sz, U16 stk_sz)
 {
     n4asm = new N4Asm();     // create and initialze assembler
-    if (!n4asm) return 1;
+    if (!n4asm) return;
     
     n4asm->init(mem);
     
@@ -44,10 +43,7 @@ int N4VM::init(U8 *mem, U16 mem_sz, U16 stk_sz)
     ssz = stk_sz;
     
     _init();
-
-    return 0;
 }
-
 ///
 /// * show system info
 ///
@@ -74,18 +70,15 @@ void N4VM::step() {
     switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
     case TKN_IMM:                                ///>> immediate words
         switch (tmp) {
-        case 0:	n4asm->compile(rp);     break;   ///>>> : (COLON), switch into compile mode (for new word)
-        case 1:	n4asm->variable();      break;   ///>>> VAR, create new variable
-        case 2: n4asm->constant(POP()); break;   ///>>> CST, create new constant
-        case 3:	n4asm->forget();        break;   ///>>> FGT, rollback word created
-        case 4: N4Util::dump(                    ///>>> DMP, memory dump
-            dic,
-            PTR(POP()&0xffe0),
-            (POP()+0x1f)&0xffe0);       break;
+        case 0:	n4asm->compile(rp);     break; ///>>> : (COLON), switch into compile mode (for new word)
+        case 1:	n4asm->variable();      break; ///>>> VAR, create new variable
+        case 2: n4asm->constant(POP()); break; ///>>> CST, create new constant
+        case 3:	n4asm->forget();        break; ///>>> FGT, rollback word created
+        case 4: _dump(POP(), POP());    break; ///>>> DMP, memory dump
 #if ARDUINO
-        case 5: _init();                break;   ///>>> BYE, restart the virtual machine
+        case 5: _init();                break; ///>>> BYE, restart the virtual machine
 #else
-        case 5: exit(0);                break;   ///>>> BYE, bail!
+        case 5: exit(0);                break; ///>>> BYE, bail!
 #endif //ARDUINO
         }                                 break;
     case TKN_DIC: _execute(tmp + 2 + 3);  break; ///>> execute word from dictionary (user defined)
@@ -278,5 +271,21 @@ void N4VM::_primitive(U8 op)
     case 63: /* handled one level up */   break; // LIT
     }
 }
-
-
+///
+///> show a section of memory in Forth dump format
+///
+void N4VM::_dump(U16 p0, U16 sz0)
+{
+    U8  *p = PTR((p0&0xffe0));
+    U16 sz = (sz0+0x1f)&0xffe0;
+    putchr('\n');
+    for (U16 i=0; i<sz; i+=0x20) {
+        N4Util::memdump(dic, p, 0x20, ' ');
+        putchr(' ');
+        for (U8 j=0; j<0x20; j++, p++) {         // print and advance to next byte
+            char c = *p & 0x7f;
+            putchr((c==0x7f||c<0x20) ? '_' : c);
+        }
+        putchr('\n');
+    }
+}
