@@ -69,11 +69,6 @@ public:
         U16 sz,                            ///< number of bytes to print
         U8 delim                           ///< delimiter, ' ' for space, 0 for none
         );
-    static void dump(                      ///< mem block with dictionary offset and length
-        U8 *base,                          ///< reference memory pointer (start of dictionary)
-        U8 *p,                             ///< starting memory pointer
-        U16 sz                             ///< number of bytes to print
-        );
     ///
     /// find token in string list
     ///

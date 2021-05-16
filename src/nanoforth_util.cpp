@@ -98,22 +98,6 @@ void N4Util::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
     d_chr(delim);
 }
 ///
-///> show a section of memory in Forth dump format
-///
-void N4Util::dump(U8* base, U8* p, U16 sz)
-{
-    putchr('\n');
-    for (U16 i=0; i<sz; i+=0x20) {
-        memdump(base, p, 0x20, ' ');
-        putchr(' ');
-        for (U8 j=0; j<0x20; j++, p++) {         // print and advance to next byte
-            char c = *p & 0x7f;
-            putchr((c==0x7f||c<0x20) ? '_' : c);
-        }
-        putchr('\n');
-    }
-}
-///
 ///> search keyword in a NanoForth name field list
 ///
 U8 N4Util::find(U8 *tkn, const char *lst, U16 *id)
