@@ -21,12 +21,14 @@ One day, **ESP shows up** on you radar. It can do everything you've imagined thu
 
 Compling code as Scetches in the IDE and Upload via the tethered USB cable has been the way of life in Arduino universe. Makers are used to getting feedback directly from Serial Monitor as well. This self-contained round-trip development cycle from the comfort of all inside one IDE is the major reason making this platform so popular.
 
-FORTH, a simple yet extensible interactive language, arms embedded platforms with REPL coding/debugging process, makes it a natual candidate for microcollers. Its interactive shell can eliminate the bulk of the repetitive compile/upload cycles.
+FORTH, a simple yet extensible interactive language, is the only programming language that runs and compiles on the ATmega328 so far. Arms embedded platforms with REPL coding/debugging process makes it a natual candidate for microcollers. Its interactive shell can eliminate the bulk of the repetitive compile/upload cycles.
 
-Currenly, there are **AmForth** and **FlashForth** avaiable for Arduino. Though no direct support from the IDE yet, they demonstrated the value of such on tiny systems. However, in order to run a simplest command, both of them are **required to overwrite the Arduino bootloader** whcich also needs an additional burner (or called programmer). The additional process not only is an entry barier for beginners but render your kit a 'non-Arduino' which can leaves a "your warrenty is void" taste in your mouth even if done correctly. An often asked question is "how do I turn it back?". Well, you don't have to anymore.
+Currenly, two popular implementations, **AmForth**, **FlashForth**, and a lesser known **328eForth** are avaiable for Arduino Uno. Though no direct support from the IDE yet, they demonstrated the value of such on tiny systems. However, in order to run a simplest command, all of them are **required to overwrite the Arduino bootloader** whcich also needs an additional burner (or called programmer). The additional process not only is an entry barier for beginners but render your kit a 'non-Arduino' which can leaves a "your warrenty is void" taste in your mouth even if done correctly. An often asked question is "how do I turn it back?".
 
-May the FORTH be with you, and here comes one for our **Nanos**!
+Alternatively, **YAFFA** (Yet-Another-Forth-For-Arduino), can be pulled from GitHub directly and compiled in IDE as a Sketch with just an extra download of a memory library. It can fit tightly onto Uno/Nano and do adhere to standard FORTH synatx. The complete 150+ word vocabulary can be a little overwhelming for beginners but should work well for someone already comfortable with FORTH. It might be **a bit constrained** with available memory left, not yet able to remember your work after restart, but certainly is done nicely if you like to experience what a "normal" FORTH does. If interested in how cleanly FORTH can be coded in C++ and tons of macros, there is **FVM** (Forth-Virtual-Machine). It can be compiled directly using Arduino IDE as well. Though not as complete, the extensibility and **fast multi-tasking** capabilities can teach us a great lesson. Aside from the few entries mentioned above, a search on Goggle does not yield you a lot more on the subject. So, there you have it.
 
-<a href="page2.html">[Buckle up! Ready for Hyper Jump...]</a>
+May the FORTH be with you! Here comes **a simple and useful** one for our **Nanos**!
+
+<a href="page1.html">[Buckle up! Ready for Hyper Jump...]</a>
 
 
