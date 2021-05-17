@@ -42,16 +42,14 @@ typedef struct n4_task {
 //
 // NanoForth multi-tasking macros
 //
-/// \def N4_FUNC
-/// \brief define a user function.
-/// \def N4_BEGIN
-/// \brief begin of the user function block.
+/// \def N4_TASK
+/// \brief define a user task block with name
 /// \def N4_DELAY
-/// \brief pause the user function for ms microseconds
+/// \brief pause the user task for ms microseconds
 /// \def N4_END
-/// \brief end of the user function block.
+/// \brief end of the user task block.
 ///
-#define N4_TASK(fname)  void fname(n4_tptr _p_) { switch((_p_)->ci) { case 0:
+#define N4_TASK(tname)  void tname(n4_tptr _p_) { switch((_p_)->ci) { case 0:
 #define N4_DELAY(ms)    (_p_)->t = millis()+(U32)(ms); (_p_)->ci = __LINE__; case __LINE__: \
                         if (millis() < (_p_)->t) return;
 #define N4_END          } (_p_)->ci = 0; }
@@ -67,20 +65,24 @@ class NanoForth
     N4VM   *_n4vm;                ///< virtual machine object pointer
 
 public:
-    // initiator with dynamic memory sizing (return 1 if allocation failed)
-    int  begin(                   ///< NanoForth initializer
+    ///
+    /// initializer with dynamic memory sizing (return 1 if allocation failed)
+    ///
+    int  begin(
         U16 mem_sz=N4_MEM_SZ,     ///< memory size (default: N4_MEM_SZ=0x480)
         U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size (default: N4_STK_SZ=0x80)
         );
     void step();                  ///< run one NanoForth VM cycle, and to each of user tasks
-    
+    //
+    // protothreading support
+    //
     static void add(void (*ufunc)(n4_tptr));  ///< add the user function to NanoForth task manager
     static void yield();          ///< NanoForth yield to user tasks
     static char key();            ///< Arduino's getchar(), yield to user tasks when waiting
     static void wait(U32 ms);     ///< pause NanoForth thread for ms microseconds, yield to user tasks
 };
 ///
-/// short hand to NanoForth class
+/// short-hand to NanoForth class
 ///
 typedef NanoForth N4;
 

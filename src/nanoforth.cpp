@@ -55,10 +55,10 @@ n4_tptr NanoForth::_n4tsk{ NULL };                       ///< initialize task li
 ///
 /// * initialize NanoForth's virtual machine and assembler
 ///
-int NanoForth::begin(U16 mem_sz, U16 stk_sz)
+int NanoForth::begin(U16 mem_sz, U16 stk_sz)             ///< class intializer
 {
-    _mem  = (U8*)malloc(mem_sz);                         ///< allocate Forth memory block
-    _n4vm = new N4VM(_mem, mem_sz, stk_sz);              ///< create Virtual Machine
+    _mem  = (U8*)malloc(mem_sz);                         /// * allocate Forth memory block
+    _n4vm = new N4VM(_mem, mem_sz, stk_sz);              /// * create Virtual Machine
 
     if (!_mem || !_n4vm) return -1;
     
