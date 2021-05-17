@@ -34,7 +34,6 @@ N4VM::N4VM(Stream &io, U8 *mem, U16 mem_sz, U16 stk_sz) :
     n4asm(new N4Asm(mem)), dic(mem), msz(mem_sz), ssz(stk_sz)
 {
     set_io(io);              ///< set io stream (static member, shared with N4ASM)
-    
     if (n4asm) _init();      ///< bail if creation failed
 }
 ///
@@ -49,7 +48,7 @@ void N4VM::info()
     putstr("...");         d_ptr((U8*)sp);
     putstr("=sp]...");     d_ptr((U8*)&free);
 #endif // ARDUINO
-    putstr(" Free=");      putnum(free);
+    putstr(" Free=");      d_num(free);
     putstr(" bytes\n");
 }
 ///
@@ -119,7 +118,7 @@ void N4VM::_ok()
         sp = s0;                        // reset to top of stack block
     }
     for (S16 *p=s0-1; p >= sp; p--) {
-        putnum(*p); d_chr('_'); 
+        d_num(*p); d_chr('_');
     }
     putstr("ok ");
 }
@@ -212,7 +211,7 @@ void N4VM::_primitive(U8 op)
     case 25: PUSH((U16)key());            break; // KEY
 	case 26: d_chr((U8)POP());            break; // EMT
     case 27: d_chr('\n');                 break; // CR
-    case 28: putnum(POP()); d_chr(' ');   break; // .
+    case 28: d_num(POP()); d_chr(' ');    break; // .
     case 29: /* handle one level up */    break; // ."
     case 30: RPUSH(POP());                break; // >R
     case 31: PUSH(RPOP());                break; // R>
@@ -229,19 +228,19 @@ void N4VM::_primitive(U8 op)
         PUSH((U16)(u&0xffff));
     }                                     break;
     case 40: {                                   // D+
-        S32 v = *(S32*)SS(2) + *(S32*)TOS;
+        S32 v = (S32)SS(2) + (S32)TOS;
         POP(); POP();
         SS(1) = (S16)(v>>16);
         TOS   = (S16)v&0xffff;
     }                                     break;
     case 41: {                                   // D-
-        S32 v = *(S32*)SS(2) - *(S32*)TOS;
+        S32 v = (S32)SS(2) - (S32)TOS;
         POP(); POP();
         SS(1) = (S16)(v>>16);
         TOS   = (S16)(v&0xffff);
     }                                     break;
     case 42: {                                   // DNG
-        S32 v = -(*(S32*)sp);
+        S32 v = -(S32)TOS;
         SS(1) = (S16)(v>>16);
         TOS   = (S16)(v&0xffff);
     }                                     break;
@@ -273,7 +272,7 @@ void N4VM::_dump(U16 p0, U16 sz0)
     U16 sz = (sz0+0x1f)&0xffe0;
     d_chr('\n');
     for (U16 i=0; i<sz; i+=0x20) {
-        memdump(dic, p, 0x20, ' ');
+        d_mem(dic, p, 0x20, ' ');
         d_chr(' ');
         for (U8 j=0; j<0x20; j++, p++) {         // print and advance to next byte
             char c = *p & 0x7f;
