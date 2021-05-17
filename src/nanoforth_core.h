@@ -13,11 +13,9 @@
 //
 #if ARDUINO
 #define putstr(msg)    Serial.print(F(msg))
-#define putchr(c)      Serial.write((char)c)
 #define puthex(v)      Serial.print((U16)v, HEX)
 #else
 #define putstr(msg)    printf("%s", msg)
-#define putchr(c)      printf("%c", c)
 #define puthex(v)      printf("%02x", v)
 #endif // ARDUINO
 //
@@ -33,13 +31,17 @@
 #define SET16(p, n)    do { U16 x=(U16)(n); SET8(p,(x)>>8); SET8(p,(x)&0xff); } while(0)
 #define GET16(p)       (((U16)(*(U8*)(p))<<8) + *((U8*)(p)+1))
 ///
-/// NanoForth helper class
+/// NanoForth Core Helper abstract class
 ///
 class N4Core
 {
+    static Stream &_io;                    ///< io stream (static member)
+    
 public:
+    static void set_io(Stream &io);        ///< initialize or redirect io stream
+    static char key();                     ///< Arduino's Serial.getchar(), yield to user tasks when waiting
     //
-    // dot_* for tracing instrumentation
+    // dot_* for console output routines
     //
     static void d_chr(char c);             ///< print a char to console
     static void d_nib(U8 n);               ///< print a nibble

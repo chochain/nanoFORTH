@@ -3,17 +3,31 @@
 /// \brief NanoForth Core Utility abstract class implementation
 ///
 #include "nanoforth_core.h"
-#if ARDUINO
-#include <avr/pgmspace.h>
-#endif // ARDUINO
 //
 // tracing instrumentation
 //
+Stream &N4Core::_io{ Serial };                           ///< default to Arduino Serial Monitor
+
+void N4Core::set_io(Stream &io) { _io = io; }
+
 #if ARDUINO
-void N4Core::d_chr(char c)     { Serial.write(c);   }
+#include <avr/pgmspace.h>
+///
+/// * console input with cooperative threading
+///
+char N4Core::key()
+{
+    while (!_io.available()) NanoForth::yield();
+    return _io.read();
+}
+///
+/// * console output single-char
+///
+void N4Core::d_chr(char c)     { _io.write(c); }
 void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
 #else
-void N4Core::d_chr(char c)     { printf("%c", c);   }
+char N4Core::key()             { getchar();       }
+void N4Core::d_chr(char c)     { printf("%c", c); }
 #endif //ARDUINO
 void N4Core::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
 void N4Core::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
@@ -26,10 +40,10 @@ void N4Core::d_str(U8 *p)      { for (int i=0, sz=*p++; i<sz; i++) d_chr(*p++); 
 ///
 void N4Core::putnum(S16 n)
 {
-    if (n < 0) { n = -n; putchr('-'); }        // process negative number
+    if (n < 0) { n = -n; d_chr('-'); }        // process negative number
     U16 t = n/10;
     if (t) putnum(t);                          // recursively call higher digits
-    putchr('0' + (n%10));
+    d_chr('0' + (n%10));
 }
 ///
 ///> capture a token from console input buffer
@@ -119,7 +133,7 @@ void N4Core::_console_input(U8 *tib)
 {
     U8 *p = tib;
     for (;;) {
-        char c = NanoForth::key();
+        char c = key();                      // get one char from input stream
         if (c=='\r' || c=='\n') {            // split on RETURN
             if (p > tib) {
                 *p     = ' ';                // terminate input string
@@ -129,8 +143,8 @@ void N4Core::_console_input(U8 *tib)
         }
         else if (c=='\b' && p > tib) {       // backspace
             *(--p) = ' ';
-            putchr(' ');
-            putchr('\b');
+            d_chr(' ');
+            d_chr('\b');
         }
         else if ((p - tib) >= (TIB_SZ-1)) {
             putstr("TIB!\n");
