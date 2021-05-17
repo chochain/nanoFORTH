@@ -88,7 +88,7 @@ void N4Asm::set_trace(U8 f)
 ///
 N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 {
-    if (query(tkn, rst))                 return TKN_DIC; /// * DIC search word dictionary adr(2),name(3)
+    if (_query(tkn, rst))                return TKN_DIC; /// * DIC search word dictionary adr(2),name(3)
     if (find(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM immediate word
     if (find(tkn, PRM, rst))             return TKN_PRM; /// * PRM search primitives
     if (number(tkn, (S16*)rst))          return TKN_NUM; /// * NUM parse as number literal
@@ -198,25 +198,12 @@ void N4Asm::words()
     _list_voc();
 }
 ///
-///> scan the keyword through dictionary linked-list
-///
-U8 N4Asm::query(U8 *tkn, U16 *adr)
-{
-    for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {
-        if (p[2]==tkn[0] && p[3]==tkn[1] && (p[3]==' ' || p[4]==tkn[2])) {
-            *adr = IDX(p);
-            return 1;
-        }
-    }
-    return 0;
-}
-///
 ///> drop words from the dictionary
 ///
 void N4Asm::forget()
 {
     U16 adr;
-    if (!query(token(trc), &adr)) { // query token in dictionary
+    if (!_query(token(trc), &adr)) {        // query token in dictionary
         putstr("?!");                       // not found, bail
         return;
     }
@@ -304,7 +291,7 @@ void N4Asm::trace(U16 a, U8 ir)
         default:                                      // other opcodes
             d_chr('_');
             U8 ci = op >= I_FOR;                      // loop controller flag
-            _opname(ci ? op-I_FOR : op, ci ? PMX : PRM, 0);
+            d_name(ci ? op-I_FOR : op, ci ? PMX : PRM, 0);
         }
         break;
     default:                                          ///> a number (i.e. 1-byte literal)
@@ -312,6 +299,19 @@ void N4Asm::trace(U16 a, U8 ir)
     }
 
     d_chr(' ');
+}
+///
+///> scan the keyword through dictionary linked-list
+///
+U8 N4Asm::_query(U8 *tkn, U16 *adr)
+{
+    for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {
+        if (p[2]==tkn[0] && p[3]==tkn[1] && (p[3]==' ' || p[4]==tkn[2])) {
+            *adr = IDX(p);
+            return 1;
+        }
+    }
+    return 0;
 }
 ///
 ///> create name field with link back to previous word
@@ -380,21 +380,6 @@ void N4Asm::_do_branch(U8 op)
 ///
 ///> display the opcode name
 /// 
-void N4Asm::_opname(U8 op, const char *lst, U8 space)
-{
-#if ARDUINO
-    PGM_P p = reinterpret_cast<PGM_P>(lst)+1+op*3;
-#else
-    U8 *p = (U8*)lst+1+op*3;
-#endif //ARDUINO
-    char  c;
-    d_chr(pgm_read_byte(p));
-    if ((c=pgm_read_byte(p+1))!=' ' || space) d_chr(c);
-    if ((c=pgm_read_byte(p+2))!=' ' || space) d_chr(c);
-}
-///
-///> display the opcode name
-/// 
 void N4Asm::_do_str()
 {
     U8 *p0 = token(trc);        // get string from input buffer
@@ -417,7 +402,7 @@ void N4Asm::_list_voc()
 #endif //ARDUINO
         while (sz--) {
             d_chr(n++%WORDS_PER_ROW==0 ? '\n' : ' ');
-            _opname(sz, lst[i], 1);
+            d_name(sz, lst[i], 1);
         }
     }
     d_chr('\n');

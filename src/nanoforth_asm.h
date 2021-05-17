@@ -76,7 +76,6 @@ public:
 
     // dictionary, string list scanners
     void words();                       ///< display words in dictionary
-    U8   query(U8 *tkn, U16 *adr);      ///< query(token) in dictionary for existing word
     void forget();                      ///< forgets word in the dictionary
 
     // EEPROM persistence I/O
@@ -87,10 +86,10 @@ public:
     void trace(U16 a, U8 ir);           ///< print execution tracing info
     
 private:
+    U8   _query(U8 *tkn, U16 *adr);                  ///< query(token) in dictionary for existing word
     void _do_header();                               ///< create name field and link to previous word
     void _do_branch(U8 op);                          ///< manage branching opcodes
     void _do_str();                                  ///< add string for ."
-    void _opname(U8 op, const char *lst, U8 space);  ///< display opcode 3-char name
     void _list_voc();                                ///< list words from all vocabularies
 };    
 #endif //__SRC_NANOFORTH_ASM_H

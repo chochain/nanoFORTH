@@ -56,6 +56,7 @@ public:
         U16 sz,                            ///< number of bytes to print
         U8 delim                           ///< delimiter, ' ' for space, 0 for none
         );
+    static void d_name(U8 op, const char *lst, U8 space);    ///< display opcode 3-char name
     //
     // Search Functions
     //

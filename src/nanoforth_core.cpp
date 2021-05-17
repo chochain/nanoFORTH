@@ -58,6 +58,21 @@ void N4Core::d_mem(U8* base, U8 *p0, U16 sz, U8 delim)
     d_chr(delim);
 }
 ///
+///> display the opcode name
+/// 
+void N4Core::d_name(U8 op, const char *lst, U8 space)
+{
+#if ARDUINO
+    PGM_P p = reinterpret_cast<PGM_P>(lst)+1+op*3;
+#else
+    U8 *p = (U8*)lst+1+op*3;
+#endif //ARDUINO
+    char  c;
+    d_chr(pgm_read_byte(p));
+    if ((c=pgm_read_byte(p+1))!=' ' || space) d_chr(c);
+    if ((c=pgm_read_byte(p+2))!=' ' || space) d_chr(c);
+}
+///
 ///> parse a literal from string
 ///
 U8 N4Core::number(U8 *str, S16 *num)
