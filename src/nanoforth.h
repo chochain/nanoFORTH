@@ -9,12 +9,15 @@
 #if ARDUINO
 #include <Arduino.h>
 #else
-#include <stdint.h>                           // uint_t
-#include <stdio.h>                            // printf
-#include <stdlib.h>                           // malloc
+#include <cstdint>                            // uint_t
+#include <cstdio>                             // printf
+#include <cstdlib>                            // malloc
+#include <iostream>
 #define PROGMEM
 #define millis()          10000
 #define pgm_read_byte(p)  (*(p))
+extern int Serial;
+#define Stream            int
 #endif // ARDUINO
 //
 // default heap sizing

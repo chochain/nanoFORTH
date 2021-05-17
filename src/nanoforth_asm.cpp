@@ -91,7 +91,7 @@ N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
     if (query(tkn, rst))                 return TKN_DIC; /// * DIC search word dictionary adr(2),name(3)
     if (find(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM immediate word
     if (find(tkn, PRM, rst))             return TKN_PRM; /// * PRM search primitives
-    if (getnum(tkn, (S16*)rst))          return TKN_NUM; /// * NUM parse as number literal
+    if (number(tkn, (S16*)rst))          return TKN_NUM; /// * NUM parse as number literal
     return TKN_ERR;                                      /// * ERR unknown token
 }
 ///
@@ -107,7 +107,7 @@ void N4Asm::compile(U16 *rp0)
 
     for (U8 *tkn=p0; tkn;) {        // terminate if tkn==NULL
         U16 tmp;
-        if (trc) memdump(dic, p0, (U16)(here-p0), 0);
+        if (trc) d_mem(dic, p0, (U16)(here-p0), 0);
 
         tkn = token(trc);
         p0  = here;                         // keep current top of dictionary (for memdump)
@@ -144,7 +144,7 @@ void N4Asm::compile(U16 *rp0)
         }
     }
     // debug memory dump
-    if (trc && last>l0) memdump(dic, last, (U16)(here-last), ' ');
+    if (trc && last>l0) d_mem(dic, last, (U16)(here-last), ' ');
 }
 ///
 ///> create a variable on dictionary

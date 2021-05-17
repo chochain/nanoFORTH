@@ -79,7 +79,7 @@ public:
     U8   query(U8 *tkn, U16 *adr);      ///< query(token) in dictionary for existing word
     void forget();                      ///< forgets word in the dictionary
 
-    // EEPROM persistance I/O
+    // EEPROM persistence I/O
     void save();                        ///< persist user dictionary to EEPROM
     void load();                        ///< restore user dictionary from EEPROM
 

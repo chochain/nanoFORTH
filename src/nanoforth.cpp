@@ -110,13 +110,15 @@ void NanoForth::wait(U32 ms)
 // for Eclipse debugging
 //
 #if !ARDUINO
+int Serial;
 int main(int argc, char **argv)
 {
 	setvbuf(stdout, NULL, _IONBF, 0);		// autoflush (turn STDOUT buffering off)
     
-	NanoForth::begin();
+	NanoForth n4;
+	n4.begin();
     while (1) {
-        NanoForth::step();
+        n4.step();
     }
 	return 0;
 }
