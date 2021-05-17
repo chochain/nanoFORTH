@@ -61,8 +61,8 @@ public:
     U8  *last;                      ///< pointer to last word (exposed to _vm::_extended for debugging)
     U8  *here;                      ///< top of dictionary    (exposed to _vm::_extended for debugging)
     
-    N4Asm();                        ///< NanoForth Assembler object constructor
-    void init(U8 *mem);             ///< intializer (Arduino does not have dynamic constructor)
+    N4Asm(U8 *mem);                 ///< NanoForth Assembler constructor
+    
     void reset();                   ///< reset internal pointers (for BYE)
     void set_trace(U8 f);           ///< enable/disable assembler tracing
 

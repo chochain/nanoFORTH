@@ -63,14 +63,12 @@ PROGMEM const char PMX[] = "\x4" \
 ///
 ///> NanoForth Assembler initializer
 ///
-N4Asm::N4Asm() {}
-void N4Asm::init(U8 *mem)
+N4Asm::N4Asm(U8 *mem) : dic(mem)
 {
-    dic = &mem[0];
     reset();
 }
 ///
-///> reset internal pointers
+///> reset internal pointers (called by VM::reset)
 ///
 void N4Asm::reset()
 {
