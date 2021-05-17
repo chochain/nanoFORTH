@@ -45,29 +45,28 @@
 ///
 ///> 2021-05-16: chochain@yahoo.com
 ///  * [12360,272] move static variables into NanoForth class
-
-#include "nanoforth_util.h"
+///
 #include "nanoforth_vm.h"
 //
 // user function linked-list
 //
 n4_tptr NanoForth::_n4tsk{ NULL };                       ///< initialize task linked-list (static member)
 ///
-/// * initialize NanoForth's virtual machine and assembler
+/// * return 0 if all allocation are OK
 ///
-int NanoForth::begin(U16 mem_sz, U16 stk_sz)             ///< class intializer
+int NanoForth::begin(Stream &io, U16 mem_sz, U16 stk_sz)
 {
     _mem  = (U8*)malloc(mem_sz);                         /// * allocate Forth memory block
-    _n4vm = new N4VM(_mem, mem_sz, stk_sz);              /// * create Virtual Machine
-
-    if (!_mem || !_n4vm) return -1;
+    _n4vm = new N4VM(io, _mem, mem_sz, stk_sz);          /// * create Virtual Machine
     
+    if (!_mem || !_n4vm) return -1;
+
     putstr("MEM=$");   puthex(mem_sz);                   // forth memory block 
     putstr("[DIC=$");  puthex(mem_sz - stk_sz);          // dictionary size
     putstr(",STK=$");  puthex(stk_sz);  putstr("]");     // stack size
     
     _n4vm->info();                                       // display detailed pointers
-    
+
     return 0;
 }
 ///
@@ -98,18 +97,6 @@ void NanoForth::yield()
     for (n4_tptr tp=_n4tsk; tp; tp=tp->next) {
         tp->func(tp);
     }
-}
-///
-/// * console input with cooperative threading
-///
-char NanoForth::key()
-{
-#if ARDUINO
-    while (!Serial.available()) yield();
-    return Serial.read();
-#else
-	return getchar();
-#endif //ARDUINO
 }
 ///
 /// * aka Arduino delay(), yield to hardware context while waiting

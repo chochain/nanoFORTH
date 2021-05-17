@@ -60,7 +60,7 @@ class N4VM;
 class NanoForth
 {
     static n4_tptr _n4tsk;        ///< user function linked-list
-
+    
     U8     *_mem;                 ///< pointer to nanoForth memory block
     N4VM   *_n4vm;                ///< virtual machine object pointer
 
@@ -69,16 +69,16 @@ public:
     /// initializer with dynamic memory sizing (return 1 if allocation failed)
     ///
     int  begin(
+        Stream &io=Serial,        ///< iostream which can be redirected to SoftwareSerial
         U16 mem_sz=N4_MEM_SZ,     ///< memory size (default: N4_MEM_SZ=0x480)
         U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size (default: N4_STK_SZ=0x80)
-        );
+        );                        ///< placeholder for extra setup
     void step();                  ///< run one NanoForth VM cycle, and to each of user tasks
     //
     // protothreading support
     //
     static void add(void (*ufunc)(n4_tptr));  ///< add the user function to NanoForth task manager
     static void yield();          ///< NanoForth yield to user tasks
-    static char key();            ///< Arduino's getchar(), yield to user tasks when waiting
     static void wait(U32 ms);     ///< pause NanoForth thread for ms microseconds, yield to user tasks
 };
 ///
