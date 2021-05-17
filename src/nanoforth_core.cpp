@@ -38,12 +38,50 @@ void N4Core::d_str(U8 *p)      { for (int i=0, sz=*p++; i<sz; i++) d_chr(*p++); 
 ///
 ///> emit a 16-bit integer
 ///
-void N4Core::putnum(S16 n)
+void N4Core::d_num(S16 n)
 {
     if (n < 0) { n = -n; d_chr('-'); }        // process negative number
     U16 t = n/10;
-    if (t) putnum(t);                          // recursively call higher digits
+    if (t) d_num(t);                          // recursively call higher digits
     d_chr('0' + (n%10));
+}
+///
+///> dump byte-stream with delimiter option
+///
+void N4Core::d_mem(U8* base, U8 *p0, U16 sz, U8 delim)
+{
+	d_adr((U16)(p0 - base)); d_chr(':');
+	for (int n=0; n<sz; n++) {
+		if (delim && (n&0x3)==0) d_chr(delim);
+		d_hex(*p0++);
+	}
+    d_chr(delim);
+}
+///
+///> parse a literal from string
+///
+U8 N4Core::number(U8 *str, S16 *num)
+{
+    U8  neg = 0;
+    S16 n   = 0;
+    if (*str=='$') {
+        for (str++; *str != ' '; str++) {    // hex number
+            n *= 16;
+            n += (*str<='9') ? *str-'0' : (*str&0x5f)-'A'+10;
+        }
+        *num = n;
+        return 1;
+    }
+    if (*str=='-') { str++; neg=1; }         // negative sign
+    if ('0' <= *str && *str <= '9') {        // decimal number
+        for (n=0; *str != ' '; str++) {
+            n *= 10;
+            n += *str - '0';
+        }
+        *num = neg ? -n : n;
+        return 1;
+    }
+    return 0;
 }
 ///
 ///> capture a token from console input buffer
@@ -72,44 +110,6 @@ U8 *N4Core::token(U8 trc, U8 clr)
     else if (tp==tib) d_chr('\n');
     
     return p;
-}
-///
-///> parse a literal from string
-///
-U8 N4Core::getnum(U8 *str, S16 *num)
-{
-    U8  neg = 0;
-    S16 n   = 0;
-    if (*str=='$') {
-        for (str++; *str != ' '; str++) {    // hex number
-            n *= 16;
-            n += (*str<='9') ? *str-'0' : (*str&0x5f)-'A'+10;
-        }
-        *num = n;
-        return 1;
-    }
-    if (*str=='-') { str++; neg=1; }         // negative sign
-    if ('0' <= *str && *str <= '9') {        // decimal number
-        for (n=0; *str != ' '; str++) {
-            n *= 10;
-            n += *str - '0';
-        }
-        *num = neg ? -n : n;
-        return 1;
-    }
-    return 0;
-}
-///
-///> dump byte-stream with delimiter option
-/// 
-void N4Core::memdump(U8* base, U8 *p0, U16 sz, U8 delim)
-{
-	d_adr((U16)(p0 - base)); d_chr(':');
-	for (int n=0; n<sz; n++) {
-		if (delim && (n&0x3)==0) d_chr(delim);
-		d_hex(*p0++);
-	}
-    d_chr(delim);
 }
 ///
 ///> search keyword in a NanoForth name field list

@@ -49,21 +49,18 @@ public:
     static void d_adr(U16 a);              ///< print a 12-bit address
     static void d_str(U8 *p);              ///< handle dot string (byte-stream leading with length)
     static void d_ptr(U8 *p);              ///< print a pointer
-    //
-    // IO and Search Functions
-    //
-    static void putnum(S16 n);             ///< sent a number literal to console
-    static U8   getnum(U8 *str, S16 *num); ///< process a literal from string given
-    static U8   *token(U8 trc, U8 clr=0);  ///< get a token from console input
-    //
-    // memory dummpers
-    //
-    static void memdump(                   ///< mem between pointers (d: delimiter option)
+    static void d_num(S16 n);              ///< sent a number literal to console
+    static void d_mem(                     ///< mem between pointers (d: delimiter option)
         U8 *base,                          ///< reference memory pointer (start of dictionary)
         U8 *p0,                            ///< starting memory pointer
         U16 sz,                            ///< number of bytes to print
         U8 delim                           ///< delimiter, ' ' for space, 0 for none
         );
+    //
+    // Search Functions
+    //
+    static U8   number(U8 *str, S16 *num); ///< process a literal from string given
+    static U8   *token(U8 trc, U8 clr=0);  ///< get a token from console input
     ///
     /// find token in string list
     ///
