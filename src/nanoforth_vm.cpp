@@ -30,18 +30,12 @@
 ///
 /// * constructor and initializer
 ///
-N4VM::N4VM(U8 *mem, U16 mem_sz, U16 stk_sz)
+N4VM::N4VM(Stream &io, U8 *mem, U16 mem_sz, U16 stk_sz) :
+    n4asm(new N4Asm(mem)), dic(mem), msz(mem_sz), ssz(stk_sz)
 {
-    n4asm = new N4Asm();     // create and initialze assembler
-    if (!n4asm) return;
+    set_io(io);              ///< set io stream (static member, shared with N4ASM)
     
-    n4asm->init(mem);
-    
-    dic = &mem[0];
-    msz = mem_sz;
-    ssz = stk_sz;
-    
-    _init();
+    if (n4asm) _init();      ///< bail if creation failed
 }
 ///
 /// * show system info
@@ -125,7 +119,7 @@ void N4VM::_ok()
         sp = s0;                        // reset to top of stack block
     }
     for (S16 *p=s0-1; p >= sp; p--) {
-        putnum(*p); putchr('_'); 
+        putnum(*p); d_chr('_'); 
     }
     putstr("ok ");
 }
@@ -215,10 +209,10 @@ void N4VM::_primitive(U8 op)
     case 22: { U8 *p = PTR(POP()); SET16(p, POP()); } break; // !
     case 23: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
     case 24: { U8 *p = PTR(POP()); *p = (U8)POP();  } break; // C!
-    case 25: PUSH((U16)NanoForth::key()); break; // KEY
+    case 25: PUSH((U16)key());            break; // KEY
 	case 26: d_chr((U8)POP());            break; // EMT
     case 27: d_chr('\n');                 break; // CR
-    case 28: putnum(POP()); putchr(' ');  break; // .
+    case 28: putnum(POP()); d_chr(' ');   break; // .
     case 29: /* handle one level up */    break; // ."
     case 30: RPUSH(POP());                break; // >R
     case 31: PUSH(RPOP());                break; // R>
@@ -277,14 +271,14 @@ void N4VM::_dump(U16 p0, U16 sz0)
 {
     U8  *p = PTR((p0&0xffe0));
     U16 sz = (sz0+0x1f)&0xffe0;
-    putchr('\n');
+    d_chr('\n');
     for (U16 i=0; i<sz; i+=0x20) {
         memdump(dic, p, 0x20, ' ');
-        putchr(' ');
+        d_chr(' ');
         for (U8 j=0; j<0x20; j++, p++) {         // print and advance to next byte
             char c = *p & 0x7f;
-            putchr((c==0x7f||c<0x20) ? '_' : c);
+            d_chr((c==0x7f||c<0x20) ? '_' : c);
         }
-        putchr('\n');
+        d_chr('\n');
     }
 }

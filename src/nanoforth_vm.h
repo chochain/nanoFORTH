@@ -6,29 +6,32 @@
 #define __SRC_NANOFORTH_VM_H
 #include "nanoforth_core.h"
 
-class N4Asm;            // forward declaration
+class N4Asm;                   // forward declaration
 ///
 /// NanoForth Virtual Machine class
 ///
 class N4VM : N4Core
-{                       //  (16-byte header)
-    N4Asm  *n4asm;      ///< assembler object pointer
+{                             //  (16-byte header)
+    N4Asm  *n4asm;            ///< assembler object pointer
 
-    U16    msz;         ///< memory size        mem[dic->...<-stk]
-    U16    ssz;         ///< stack size
+    U8     *dic;              ///< dictionary base
+    U16    msz;               ///< memory size        mem[dic->...<-stk]
+    U16    ssz;               ///< stack size
         
-    U8     *dic;        ///< dictionary base
-    U16    *rp;         ///< return stack pointer
-    S16    *sp;         ///< parameter stack pinter
+    U16    *rp;               ///< return stack pointer
+    S16    *sp;               ///< parameter stack pinter
     
-    U8     trc;         ///< tracing flags
-    U8     xxx;         ///< reserved
+    U8     trc;               ///< tracing flags
+    U8     xxx;               ///< reserved
     
 public:
     // NanoForth Virtual Machine constructor    
-    N4VM(U8 *mem,             ///< memory base pointer
-         U16 mem_sz,          ///< memory block size
-         U16 stk_sz);         ///< stack block size
+    N4VM(
+        Stream &io,           ///< io stream
+        U8 *mem,              ///< memory base pointer
+        U16 mem_sz,           ///< memory block size
+        U16 stk_sz            ///< stack block size
+        );
     
     void info();              ///< display VM system info
     void step();              ///< execute one-cycle of virtual machine
