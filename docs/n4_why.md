@@ -81,4 +81,5 @@ Following the footstep of Nakagawa and circuit4u@medium.com's **TinyForth**, a l
 
 OK, if that captured your imaginations, you might have an idea of what nanoFORTH is trying to do. Remember, you do these without any compilation but, instead, "talk" directly with your Arduino once nanoFORTH uploaded. How the interactions can change what we are so used to do? Further more, what if we can do it via WiFi or BLE? Look Mom! No cable!
 
-<a href="page2.html">Ready to get nanoFORTH for a trial?</a>
+<a href="page2.html">Ready to get nanoFORTH for a trial?</a><br>
+<a href="page3.html">References and all the details...</a>

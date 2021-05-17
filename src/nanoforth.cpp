@@ -86,16 +86,16 @@ void NanoForth::add(void (*ufunc)(n4_tptr))
 ///
 void NanoForth::step()
 {
-    _n4vm->step();
     yield();
+    _n4vm->step();
 }
 ///
-/// * n4 yield to hardware tasks
+/// * n4 yield, execute one round of hardware tasks
 ///
 void NanoForth::yield()
 {
-    for (n4_tptr tp=_n4tsk; tp; tp=tp->next) {
-        tp->func(tp);
+    for (n4_tptr tp=_n4tsk; tp; tp=tp->next) { // follow task linked list
+        tp->func(tp);                          // execute task function once
     }
 }
 ///
