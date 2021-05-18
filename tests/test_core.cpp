@@ -63,7 +63,7 @@ TEST_CASE("U8 number(U8 *str, S16 *num)")
                 SECTION(v.str) {
                     U8 n = n4.number((U8*)v.str, &num);
                     REQUIRE(n==1);
-                    REQUIRE((U16)num==v.rst);
+                    REQUIRE(v.rst==(U16)num);
                 }
             }
         }
@@ -81,30 +81,50 @@ TEST_CASE("U8 number(U8 *str, S16 *num)")
     }
 }
 
-TEST_CASE("U8 *token(U8 trc, U8 clr=0)")
-{
-    REQUIRE(1==1);
-
-    SECTION("short") {
-        REQUIRE(1==1);
-    }
-    SECTION("long") {
-        REQUIRE(1==1);
-    }
-    SECTION("neg") {
-        REQUIRE(1==1);
-    }
-}
-
 TEST_CASE("U8 find(U8 *tkn, const char *lst, U16 id)")
 {
-    SECTION("empty string") {
-        REQUIRE(1==1);
+    const char _long_list[] = "\x31"                            \
+    "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
+	"NEG" "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " \
+	"<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
+    ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" \
+    "D+ " "D- " "DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
+    const char _short_list[] = "\x1" "DUP";
+    const char _empty_list[] = "\x0" "DUP";
+    vec tkn[] = {
+        { "DRP", 0  },
+        { "DUP", 1  },
+        { "PWM", 48 },
+    };
+    SECTION("found long") {
+        for (U16 i=0; i<sizeof(tkn)/sizeof(vec); i++) {
+            SECTION(tkn[i].str) {
+                U16 id;
+                U8 n = n4.find((U8*)tkn[i].str, _long_list, &id);
+                REQUIRE(1==n);
+                REQUIRE(tkn[i].rst==id);
+            }
+        }
     }
-    SECTION("found") {
-        REQUIRE(1==1);
+    SECTION("found short") {
+        U16 id;
+        U8 n = n4.find((U8*)"DUP", _short_list, &id);
+        REQUIRE(1==n);
+        REQUIRE(0==id);
     }
     SECTION("not found") {
-        REQUIRE(1==1);
+        U16 id;
+        U8 n = n4.find((U8*)"XXX", _long_list, &id);
+        REQUIRE(0==n);
+    }
+    SECTION("empty list") {
+        U16 id;
+        U8 n = n4.find((U8*)"DUP", _empty_list, &id);
+        REQUIRE(0==n);
+    }
+    SECTION("short token") {
+        U16 id;
+        U8 n = n4.find((U8*)"X", _short_list, &id);
+        REQUIRE(0==n);
     }
 }
