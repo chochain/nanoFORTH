@@ -6,8 +6,8 @@
 #define __SRC_NANOFORTH_CORE_H
 #include "nanoforth.h"
 
-#define TIB_SZ         0x40              /**< console(terminal) input buffer size */
-#define TIB_CLR        0x1
+constexpr U16 TIB_SZ   = 0x40;             /**< console(terminal) input buffer size */
+constexpr U8  TIB_CLR  = 0x1;
 //
 // Serial IO macros
 //

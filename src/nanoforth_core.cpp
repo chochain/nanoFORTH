@@ -26,8 +26,9 @@ char N4Core::key()
 void N4Core::d_chr(char c)     { _io.write(c); }
 void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
 #else
-char N4Core::key()             { getchar();       }
-void N4Core::d_chr(char c)     { printf("%c", c); }
+int  Serial;
+char N4Core::key()             { return getchar(); }
+void N4Core::d_chr(char c)     { printf("%c", c);  }
 #endif //ARDUINO
 void N4Core::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
 void N4Core::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
@@ -77,26 +78,18 @@ void N4Core::d_name(U8 op, const char *lst, U8 space)
 ///
 U8 N4Core::number(U8 *str, S16 *num)
 {
-    U8  neg = 0;
     S16 n   = 0;
-    if (*str=='$') {
-        for (str++; *str != ' '; str++) {    // hex number
-            n *= 16;
-            n += (*str<='9') ? *str-'0' : (*str&0x5f)-'A'+10;
-        }
-        *num = n;
-        return 1;
+    U8  neg = (*str=='-') ? (str++, 1)  : 0;      // negative sign0;
+    S16 base= (*str=='$') ? (str++, 16) : 10;
+
+    for (; *str>='0'; str++) {
+        if (base==10 && *str > '9') return 0;
+        n *= base;
+        n += (*str<='9') ? *str-'0' : (*str&0x5f)-'A'+10;
     }
-    if (*str=='-') { str++; neg=1; }         // negative sign
-    if ('0' <= *str && *str <= '9') {        // decimal number
-        for (n=0; *str != ' '; str++) {
-            n *= 10;
-            n += *str - '0';
-        }
-        *num = neg ? -n : n;
-        return 1;
-    }
-    return 0;
+    *num = neg ? -n : n;
+    
+    return 1;
 }
 ///
 ///> capture a token from console input buffer
