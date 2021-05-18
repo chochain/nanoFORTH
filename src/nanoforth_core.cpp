@@ -7,6 +7,7 @@
 // tracing instrumentation
 //
 Stream &N4Core::_io{ Serial };                           ///< default to Arduino Serial Monitor
+U8      N4Core::_empty{ 1 };                             ///< empty flag for terminal input buffer
 
 void N4Core::set_io(Stream &io) { _io = io; }
 
@@ -37,7 +38,7 @@ void N4Core::d_str(U8 *p)      { for (int i=0, sz=*p++; i<sz; i++) d_chr(*p++); 
 //
 // IO and Search Functions =================================================
 ///
-///> emit a 16-bit integer
+/// * emit a 16-bit integer
 ///
 void N4Core::d_num(S16 n)
 {
@@ -47,7 +48,7 @@ void N4Core::d_num(S16 n)
     d_chr('0' + (n%10));
 }
 ///
-///> dump byte-stream with delimiter option
+/// * dump byte-stream with delimiter option
 ///
 void N4Core::d_mem(U8* base, U8 *p0, U16 sz, U8 delim)
 {
@@ -59,7 +60,7 @@ void N4Core::d_mem(U8* base, U8 *p0, U16 sz, U8 delim)
     d_chr(delim);
 }
 ///
-///> display the opcode name
+/// * display the opcode name
 /// 
 void N4Core::d_name(U8 op, const char *lst, U8 space)
 {
@@ -74,7 +75,7 @@ void N4Core::d_name(U8 op, const char *lst, U8 space)
     if ((c=pgm_read_byte(p+2))!=' ' || space) d_chr(c);
 }
 ///
-///> parse a literal from string
+/// * parse a literal from string
 ///
 U8 N4Core::number(U8 *str, S16 *num)
 {
@@ -92,22 +93,33 @@ U8 N4Core::number(U8 *str, S16 *num)
     return 1;
 }
 ///
-///> capture a token from console input buffer
+/// * check whether token available in input buffer
+///
+U8 N4Core::tib_empty()
+{
+    return _empty;
+}
+///
+/// * capture a token from console input buffer
 ///
 U8 *N4Core::token(U8 trc, U8 clr)
 {
-	static U8  tib[TIB_SZ];
-	static U8 *tp = tib;
-
-	if (clr) { tp=tib; return 0; }            // clear buffer
+    static U8 tib[TIB_SZ];
+    static U8 *tp = tib;
+    
+	if (clr) {                                // clean input buffer
+        _empty = 1;
+        tp=tib;
+        return 0;
+    }
     if (tp==tib) _console_input(tib);         // buffer empty, read from console
 
-    U8 *p = tp;                               // keep original tib pointer
+    U8 *p = tp;                              // keep original tib pointer
     U8 sz = 0;
-    while (*tp++!=' ') sz++;                  // advance to next word
-    while (*tp==' ')   tp++;                  // skip blanks
+    while (*tp++!=' ') sz++;                 // advance to next word
+    while (*tp==' ')   tp++;                // skip blanks
 
-    if (*tp=='\r' || *tp=='\n') tp=tib;
+    if (*tp=='\r' || *tp=='\n') { tp=tib; _empty=1; }
     if (trc) {
         // debug info
         d_chr('\n');
@@ -149,7 +161,7 @@ void N4Core::_console_input(U8 *tib)
                 break;                       // skip empty token
             }
         }
-        else if (c=='\b' && p > tib) {       // backspace
+        else if (c=='\b' && p > tib) {      // backspace
             *(--p) = ' ';
             d_chr(' ');
             d_chr('\b');
@@ -161,4 +173,5 @@ void N4Core::_console_input(U8 *tib)
         }
         else *p++ = c;
     }
+    _empty = (p==tib);
 }    

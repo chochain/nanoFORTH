@@ -36,6 +36,7 @@ constexpr U8  TIB_CLR  = 0x1;
 class N4Core
 {
     static Stream &_io;                    ///< io stream (static member)
+    static U8   _empty;                    ///< token ininput buffer empty flag
     
 public:
     static void set_io(Stream &io);        ///< initialize or redirect io stream
@@ -60,8 +61,9 @@ public:
     //
     // Search Functions
     //
-    static U8   number(U8 *str, S16 *num); ///< process a literal from string given
+    static U8   tib_empty();               ///< check input buffer
     static U8   *token(U8 trc, U8 clr=0);  ///< get a token from console input
+    static U8   number(U8 *str, S16 *num); ///< process a literal from string given
     ///
     /// find token in string list
     ///
@@ -72,7 +74,7 @@ public:
         );
     
 private:
-    static void _console_input(U8 *tib);
+    static void _console_input(U8 *tib);   ///< retrieve input stream from console
 };
 #endif //__SRC_NANOFORTH_CORE_H
 
