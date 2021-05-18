@@ -34,7 +34,7 @@ public:
         );
     
     void info();              ///< display VM system info
-    void step();              ///< execute one-cycle of virtual machine
+    U8   step();              ///< execute one-cycle of virtual machine
     void set_trace(U16 f);    ///< enable/disable execution tracing
     
 private:

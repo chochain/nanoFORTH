@@ -53,10 +53,14 @@ void N4VM::info()
 }
 ///
 /// * virtual machine execute single step
+/// @return
+///  1: more token(s) in input buffer<br/>
+///  0: buffer empty (yield control back to hardware)
 ///
-void N4VM::step() {
-    _ok();                                       // stack check and prompt OK
-    
+U8 N4VM::step()
+{
+	if (tib_empty()) _ok();                      // console prompt
+
     U8  *tkn = token(trc);                       // get a token from console
     U16 tmp;
     switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
@@ -79,6 +83,7 @@ void N4VM::step() {
     default:                                     ///>> or, error (unknow action)
         putstr("?\n");
     }
+    return !tib_empty();                         // stack check and prompt OK
 }
 ///
 /// * enable/disable execution tracing
@@ -244,8 +249,8 @@ void N4VM::_primitive(U8 op)
         SS(1) = (S16)(v>>16);
         TOS   = (S16)(v&0xffff);
     }                                     break;
-    case 43: NanoForth::wait((U32)POP()); break; // DLY
 #if ARDUINO
+    case 43: NanoForth::wait((U32)POP()); break; // DLY
     case 44: pinMode(TOS, SS(1));      POP(); POP(); break; // PIN
     case 45: PUSH(digitalRead(POP()));               break; // IN
     case 46: digitalWrite(TOS, SS(1)); POP(); POP(); break; // OUT
