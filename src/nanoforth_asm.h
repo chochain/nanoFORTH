@@ -26,15 +26,15 @@ enum N4OP {
 ///
 /// opcode masks and prefixes
 ///
-#define CTL_BITS   0xc0       /**< 1100 0000, 11xx: JMP, 10xx: PRM, 0xxx: NUM */
-#define PFX_PRM    0x80       /**< 1000 0000 */
-#define PRM_MASK   0x3f       /**< 0011 1111, 6-bit primitive opcodes */
-#define JMP_MASK   0xf0       /**< 1111 0000 */
-#define PFX_CALL   0xc0       /**< 1100 0000 */
-#define PFX_RET    0xd0       /**< 1111 0000 */
-#define PFX_CDJ    0xe0       /**< 1101 0000 */
-#define PFX_UDJ    0xf0       /**< 1110 0000 */
-#define ADR_MASK   0x0fff     /**< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions */
+constexpr U8  CTL_BITS = 0xc0;   /**< 1100 0000, 11xx: JMP, 10xx: PRM, 0xxx: NUM */
+constexpr U8  PFX_PRM  = 0x80;   /**< 1000 0000 */
+constexpr U8  PRM_MASK = 0x3f;   /**< 0011 1111, 6-bit primitive opcodes */
+constexpr U8  JMP_MASK = 0xf0;   /**< 1111 0000 */
+constexpr U8  PFX_CALL = 0xc0;   /**< 1100 0000 */
+constexpr U8  PFX_RET  = 0xd0;   /**< 1111 0000 */
+constexpr U8  PFX_CDJ  = 0xe0;   /**< 1101 0000 */
+constexpr U8  PFX_UDJ  = 0xf0;   /**< 1110 0000 */
+constexpr U16 ADR_MASK = 0x0fff; /**< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions */
 ///
 /// opcodes for loop control (in compiler mode)
 ///

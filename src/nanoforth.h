@@ -20,19 +20,19 @@ extern int Serial;
 #define Stream            int
 #endif // ARDUINO
 //
-// default heap sizing
-//
-#define N4_STK_SZ    0x80                     /**< default parameter/return stack size       */
-#define N4_DIC_SZ    0x400                    /**< default dictionary size                   */
-#define N4_MEM_SZ    (N4_DIC_SZ+N4_STK_SZ)    /**< total memory block allocate for NanoForth */
-//
 // commonly used portable types
 //
-typedef uint8_t      U8;                      ///< 8-bit unsigned integer, for char and short int
-typedef uint16_t     U16;                     ///< 16-bit unsigned integer, for return stack, and pointers
-typedef int16_t      S16;                     ///< 16-bit signed integer, for general numbers
-typedef uint32_t     U32;                     ///< 32-bit unsigned integer, for millis()
-typedef int32_t      S32;                     ///< 32-bit signed integer
+typedef uint8_t      U8;                         ///< 8-bit unsigned integer, for char and short int
+typedef uint16_t     U16;                        ///< 16-bit unsigned integer, for return stack, and pointers
+typedef int16_t      S16;                        ///< 16-bit signed integer, for general numbers
+typedef uint32_t     U32;                        ///< 32-bit unsigned integer, for millis()
+typedef int32_t      S32;                        ///< 32-bit signed integer
+//
+// default heap sizing
+//
+constexpr U16 N4_STK_SZ = 0x80;                  /**< default parameter/return stack size       */
+constexpr U16 N4_DIC_SZ = 0x400;                 /**< default dictionary size                   */
+constexpr U16 N4_MEM_SZ = (N4_DIC_SZ+N4_STK_SZ); /**< total memory block allocate for NanoForth */
 
 /// NanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
 ///
