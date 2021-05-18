@@ -82,12 +82,13 @@ void NanoForth::add(void (*ufunc)(n4_tptr))
     _n4tsk   = tp;      // reset head
 }
 ///
-/// * n4 execute one virtual machine opcode
+/// * n4 execute one line of command from input buffer
 ///
-void NanoForth::step()
+void NanoForth::exec()
 {
-    yield();
-    _n4vm->step();
+	while (_n4vm->step()) {                    // step through commands from input buffer
+		yield();
+	}
 }
 ///
 /// * n4 yield, execute one round of hardware tasks
@@ -117,7 +118,7 @@ int main(int argc, char **argv)
 	NanoForth n4;
 	n4.begin();
     while (1) {
-        n4.step();
+        n4.exec();
     }
 	return 0;
 }

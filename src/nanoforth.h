@@ -76,7 +76,7 @@ public:
         U16 mem_sz=N4_MEM_SZ,     ///< memory size (default: N4_MEM_SZ=0x480)
         U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size (default: N4_STK_SZ=0x80)
         );                        ///< placeholder for extra setup
-    void step();                  ///< run one NanoForth VM cycle, and to each of user tasks
+    void exec();                  ///< NanoForth run one line of command input
     //
     // protothreading support
     //
