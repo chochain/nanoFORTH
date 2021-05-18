@@ -26,7 +26,7 @@ void setup()
     }
     n4.add(blink);                ///< add blink task to NanoForth task manager
 
-    pinMode(BUILTIN, OUTPUT);
+    pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop()

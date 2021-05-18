@@ -3,9 +3,12 @@
 Start wiring up your breadboard and ready to have fun? Well, since FORTH is such a different language, a better preparation is always recommended...
 
 ### An Interactive FORTH Tutorial
-Since FORTH is quite a different language if your exposure so far has been pretty much C, Java, or even Python. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. So, before you dive right into the deep-end, here's a good online interactive tutorial for FORTH primer. It teaches you how FORTH fundamentally work such as the numbers, the stack, and the dictionary.
+Since FORTH is quite a different language if your exposure so far has been pretty much C, Java, or even Python. Quote Nick: <em>"It's no functional or object oriented, it doesn't have type-checking, and it basically has zero syntax"</em>. So, before you dive right into the deep-end, here's a good online materials.
+* Interactive tutorial for FORTH primer. It teaches you how FORTH fundamentally works such as the numbers, the stack, and the dictionary.
 > <a href="https://skilldrick.github.io/easyforth/#introduction" target="_blank">Easy Forth Tutorial by Nick Morgan</a>
-You can skip to Installation Section and start getting your hand dirty. However, if you prefer gethering all the sticks before starting a fire or enjoy imensing yourself in the philosophical beauty of FORTH, Leo Brodie's timeless classic are online free for you here.
+
+You can skip to Installation Section and start getting your hands dirty. However, if you prefer gethering all the sticks before starting a fire or enjoy imensing yourself in the philosophical wonder of FORTH, excellent online e-books are here free for you.
+* Timeless classic for the history, paths, and thoughts behind FORTH language.
 > <a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">Starting Forth by Leo Brodie</a><br/>
 > <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a>
 
@@ -13,7 +16,18 @@ Jump back <a href="page1.html">here</a> to privious page to review the examples 
 
 ### Install nanoFORTH - to be simple and useful
 
-todo: wait until Arduino forum accept the package
+* From GitHub directly
+> <br/>
+> \> git clone https://github.com/chochain/nanoFORTH onto your local machine<br/><br/>
+> \> copy one example, i.g. blink.ino, from examples sub-directory, rename it as nanoFORTH.ino<br/><br/>
+> \> open nanoFORTH.ino with Arduino IDE, setup for your Nano/Uno development board<br/><br/>
+> \> open Serial Monitor, set baud rate to 115200, line ending to 'Both BL & CR'<br/><br/>
+> \> compile and upload, you should see the 'ok' prompt, and the built-in LED is blinking<br/><br/>
+> \> in Serial Monitor input bar at top, type WRD and hit return. See what nanoFORTH says.<br/><br/>
+
+* From Arduino Library Manager
+> <br/>
+> TODO: wait until Arduino forum accept the package<br/><br/>
 
 ### Exercise
 
