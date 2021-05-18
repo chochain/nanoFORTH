@@ -34,26 +34,26 @@ Jump back <a href="page1.html">here</a> to privious page to review the examples 
 Right after reading any FORTH language tutorial, you will notice that words of nanoFORTH, unlike most are 31-character, are all 3 characters or less. For a start, I like to be brief. Our target platform is a very small MCU and our application has probably a dozen of functions. Aside from easier to read, it has benefit in simplifying some internal handling. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable.
 
 * now some fancy stuffs, to see what nanoFORTH did, turn the tracing flag on and try everything we did in privious page
-> 1 TRC<br/>
+> 1 TRC ⏎<br/>
 > **lit** **?Z**
 
 * find out how many bytes of memory we have used
-> HRE<br/>
+> HRE ⏎<br/>
 > 76_ok
 
 * dump the memory to see how all these words are encoded in the dictionary
-> 0 HRE DMP
+> 0 HRE DMP ⏎
 
 * at the end of day, or in case of a power outage, let's save what's been done so far into EEPROM
-> SAV
+> SAV ⏎
 
 * when needed, you can clean up the playground i.e. reset nanoFORTH system pointers for a fresh start
-> BYE<br/>
+> BYE ⏎<br/>
 > nanoFORTH v1.0 ok
 
 * after restart your Arduino, words can be restored from EEPROM which you saved earlier
-> LD<br/>
-> 0 HRE DMP
+> LD ⏎<br/>
+> 0 HRE DMP ⏎
 
 <br/>
 <a href="page1.html">Review nanoFORTH command examples</a><br/>
