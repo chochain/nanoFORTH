@@ -75,6 +75,7 @@ public:
     void constant(S16 v);               ///< create a constant on dictionary
 
     // dictionary, string list scanners
+    U8   query(U8 *tkn, U16 *adr);      ///< query(token) in dictionary for existing word
     void words();                       ///< display words in dictionary
     void forget();                      ///< forgets word in the dictionary
 
@@ -86,7 +87,6 @@ public:
     void trace(U16 a, U8 ir);           ///< print execution tracing info
     
 private:
-    U8   _query(U8 *tkn, U16 *adr);                  ///< query(token) in dictionary for existing word
     void _do_header();                               ///< create name field and link to previous word
     void _do_branch(U8 op);                          ///< manage branching opcodes
     void _do_str();                                  ///< add string for ."

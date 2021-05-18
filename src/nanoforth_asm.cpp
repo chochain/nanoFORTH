@@ -36,20 +36,18 @@ PROGMEM const char PRM[] = "\x31" \
     "D+ " "D- " "DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
 PROGMEM const char PMX[] = "\x4" \
     "FOR" "NXT" "BRK" "I  ";
-#define OP_SMC          0                           /**< semi-colon, end of function definition */
+constexpr U16 OP_SEMI = 0;                           /**< semi-colon, end of function definition */
 ///
 ///> macros for branching instruction
 ///
-#define JMP000(p,j) SET16(p, (j)<<8)
+#define JMP000(p,j)     SET16(p, (j)<<8)
 #define JMPSET(idx, p1) do {               \
     U8  *p = PTR(idx);                     \
     U8  f8 = *(p);                         \
     U16 a  = IDX(p1);                      \
     SET16(p, (a | (U16)f8<<8));            \
     } while(0)
-#define JMPBCK(idx, f) do {                \
-    SET16(here, idx | (f<<8));             \
-    } while(0)
+#define JMPBCK(idx, f) SET16(here, (idx) | ((f)<<8))
 //
 // Forth assembler stack opcode macros (note: rp grows downward)
 //
@@ -88,7 +86,7 @@ void N4Asm::set_trace(U8 f)
 ///
 N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 {
-    if (_query(tkn, rst))                return TKN_DIC; /// * DIC search word dictionary adr(2),name(3)
+    if (query(tkn, rst))                 return TKN_DIC; /// * DIC search word dictionary adr(2),name(3)
     if (find(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM immediate word
     if (find(tkn, PRM, rst))             return TKN_PRM; /// * PRM search primitives
     if (number(tkn, (S16*)rst))          return TKN_NUM; /// * NUM parse as number literal
@@ -113,7 +111,7 @@ void N4Asm::compile(U16 *rp0)
         p0  = here;                         // keep current top of dictionary (for memdump)
         switch(parse_token(tkn, &tmp, 0)) { ///#### determinie type of operation, and keep opcode in tmp
         case TKN_IMM:                       ///> immediate command
-            if (tmp==OP_SMC) {              // handle ; (semi-colon)
+            if (tmp==OP_SEMI) {             // handle ; (semi-colon)
                 SET8(here, PFX_RET);        /// * terminate COLON definitions, or
                 tkn = NULL;                 //    clear token to exit compile mode
             }
@@ -184,6 +182,19 @@ void N4Asm::constant(S16 v)
     SET8(here, PFX_RET);
 }
 ///
+///> scan the keyword through dictionary linked-list
+///
+U8 N4Asm::query(U8 *tkn, U16 *adr)
+{
+    for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {
+        if (p[2]==tkn[0] && p[3]==tkn[1] && (p[3]==' ' || p[4]==tkn[2])) {
+            *adr = IDX(p);
+            return 1;
+        }
+    }
+    return 0;
+}
+///
 ///> display words in dictionary
 ///
 #define WORDS_PER_ROW 20                    /**< words per row when showing dictionary */
@@ -203,7 +214,7 @@ void N4Asm::words()
 void N4Asm::forget()
 {
     U16 adr;
-    if (!_query(token(trc), &adr)) {        // query token in dictionary
+    if (!query(token(trc), &adr)) {         // query token in dictionary
         putstr("?!");                       // not found, bail
         return;
     }
@@ -299,19 +310,6 @@ void N4Asm::trace(U16 a, U8 ir)
     }
 
     d_chr(' ');
-}
-///
-///> scan the keyword through dictionary linked-list
-///
-U8 N4Asm::_query(U8 *tkn, U16 *adr)
-{
-    for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {
-        if (p[2]==tkn[0] && p[3]==tkn[1] && (p[3]==' ' || p[4]==tkn[2])) {
-            *adr = IDX(p);
-            return 1;
-        }
-    }
-    return 0;
 }
 ///
 ///> create name field with link back to previous word
