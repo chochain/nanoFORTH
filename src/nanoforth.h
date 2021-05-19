@@ -69,7 +69,7 @@ class NanoForth
 
 public:
     ///
-    /// initializer with dynamic memory sizing (return 1 if allocation failed)
+    /// initializer with dynamic memory sizing
     ///
     int  begin(
         Stream &io=Serial,        ///< iostream which can be redirected to SoftwareSerial
@@ -80,7 +80,9 @@ public:
     //
     // protothreading support
     //
-    static void add(void (*ufunc)(n4_tptr));  ///< add the user function to NanoForth task manager
+    static void add(              ///< add the user function to NanoForth task manager
+        void (*ufunc)(n4_tptr)    ///< user task pointer to be added
+        );  
     static void yield();          ///< NanoForth yield to user tasks
     static void wait(U32 ms);     ///< pause NanoForth thread for ms microseconds, yield to user tasks
 };

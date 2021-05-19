@@ -52,7 +52,9 @@
 //
 n4_tptr NanoForth::_n4tsk{ NULL };                       ///< initialize task linked-list (static member)
 ///
-/// * return 0 if all allocation are OK
+/// @return
+///   0 - if all allocation are OK<br>
+///   1 - any allocation failure
 ///
 int NanoForth::begin(Stream &io, U16 mem_sz, U16 stk_sz)
 {
@@ -70,37 +72,37 @@ int NanoForth::begin(Stream &io, U16 mem_sz, U16 stk_sz)
     return 0;
 }
 ///
-/// * single step for Arduino loop
+///> single step for Arduino loop
 ///
 void NanoForth::add(void (*ufunc)(n4_tptr))
 {
     n4_tptr tp = (n4_tptr)malloc(sizeof(n4_task));
 
-    tp->func = ufunc;   // assign user function
-    tp->ci   = 0;       // reset case index 
-    tp->next = _n4tsk;  // push into linked-list
-    _n4tsk   = tp;      // reset head
+    tp->func = ufunc;   /// * assign user function
+    tp->ci   = 0;       /// * reset case index 
+    tp->next = _n4tsk;  /// * push into linked-list
+    _n4tsk   = tp;      /// * reset head
 }
 ///
-/// * n4 execute one line of command from input buffer
+///> n4 execute one line of command from input buffer
 ///
 void NanoForth::exec()
 {
-	while (_n4vm->step()) {                    // step through commands from input buffer
+	while (_n4vm->step()) {                    /// * step through commands from input buffer
 		yield();
 	}
 }
 ///
-/// * n4 yield, execute one round of hardware tasks
+///> n4 yield, execute one round of hardware tasks
 ///
 void NanoForth::yield()
 {
-    for (n4_tptr tp=_n4tsk; tp; tp=tp->next) { // follow task linked list
-        tp->func(tp);                          // execute task function once
+    for (n4_tptr tp=_n4tsk; tp; tp=tp->next) { /// * follow task linked list
+        tp->func(tp);                          /// * execute task function once
     }
 }
 ///
-/// * aka Arduino delay(), yield to hardware context while waiting
+///> aka Arduino delay(), yield to hardware context while waiting
 ///
 void NanoForth::wait(U32 ms)
 {

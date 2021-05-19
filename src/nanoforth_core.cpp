@@ -14,7 +14,7 @@ void N4Core::set_io(Stream &io) { _io = io; }
 #if ARDUINO
 #include <avr/pgmspace.h>
 ///
-/// * console input with cooperative threading
+///> console input with cooperative threading
 ///
 char N4Core::key()
 {
@@ -22,7 +22,7 @@ char N4Core::key()
     return _io.read();
 }
 ///
-/// * console output single-char
+///> console output single-char
 ///
 void N4Core::d_chr(char c)     { _io.write(c); }
 void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
@@ -38,7 +38,7 @@ void N4Core::d_str(U8 *p)      { for (int i=0, sz=*p++; i<sz; i++) d_chr(*p++); 
 //
 // IO and Search Functions =================================================
 ///
-/// * emit a 16-bit integer
+///> emit a 16-bit integer
 ///
 void N4Core::d_num(S16 n)
 {
@@ -48,7 +48,7 @@ void N4Core::d_num(S16 n)
     d_chr('0' + (n%10));
 }
 ///
-/// * dump byte-stream with delimiter option
+///> dump byte-stream between pointers with delimiter option
 ///
 void N4Core::d_mem(U8* base, U8 *p0, U16 sz, U8 delim)
 {
@@ -60,7 +60,7 @@ void N4Core::d_mem(U8* base, U8 *p0, U16 sz, U8 delim)
     d_chr(delim);
 }
 ///
-/// * display the opcode name
+///> display the opcode name
 /// 
 void N4Core::d_name(U8 op, const char *lst, U8 space)
 {
@@ -75,7 +75,7 @@ void N4Core::d_name(U8 op, const char *lst, U8 space)
     if ((c=pgm_read_byte(p+2))!=' ' || space) d_chr(c);
 }
 ///
-/// * parse a literal from string
+///> parse a literal from string
 ///
 U8 N4Core::number(U8 *str, S16 *num)
 {
@@ -93,14 +93,14 @@ U8 N4Core::number(U8 *str, S16 *num)
     return 1;
 }
 ///
-/// * check whether token available in input buffer
+///> check whether token available in input buffer
 ///
 U8 N4Core::tib_empty()
 {
     return _empty;
 }
 ///
-/// * capture a token from console input buffer
+///> capture a token from console input buffer
 ///
 U8 *N4Core::token(U8 trc, U8 clr)
 {

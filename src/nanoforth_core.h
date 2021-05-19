@@ -51,19 +51,29 @@ public:
     static void d_str(U8 *p);              ///< handle dot string (byte-stream leading with length)
     static void d_ptr(U8 *p);              ///< print a pointer
     static void d_num(S16 n);              ///< sent a number literal to console
-    static void d_mem(                     ///< mem between pointers (d: delimiter option)
-        U8 *base,                          ///< reference memory pointer (start of dictionary)
-        U8 *p0,                            ///< starting memory pointer
-        U16 sz,                            ///< number of bytes to print
+    static void d_mem(                     ///< display memory block
+        U8 *base,                          ///< reference memory pointer (start of dictionary)<br/>
+        U8 *p0,                            ///< starting memory pointer<br/>
+        U16 sz,                            ///< number of bytes to print<br/>
         U8 delim                           ///< delimiter, ' ' for space, 0 for none
         );
-    static void d_name(U8 op, const char *lst, U8 space);    ///< display opcode 3-char name
+    static void d_name(                    ///< display opcode 3-char name
+        U8 op,                             ///< opcode
+        const char *lst,                   ///< NanoForth string formatted list
+        U8 space                           ///< delimiter to append at the end
+        );                         
     //
     // Search Functions
     //
     static U8   tib_empty();               ///< check input buffer
-    static U8   *token(U8 trc, U8 clr=0);  ///< get a token from console input
-    static U8   number(U8 *str, S16 *num); ///< process a literal from string given
+    static U8   *token(                    ///< get a token from console input
+        U8 trc,                            ///< tracing flag
+        U8 clr=0                           ///< clear token buffer
+        );        
+    static U8   number(                    ///< process a literal from string given
+        U8 *tkn,                           ///< token string of a number
+        S16 *num                           ///< number pointer for return value
+        ); 
     ///
     /// find token in string list
     ///

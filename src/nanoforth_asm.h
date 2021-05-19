@@ -26,70 +26,87 @@ enum N4OP {
 ///
 /// opcode masks and prefixes
 ///
-constexpr U8  CTL_BITS = 0xc0;   /**< 1100 0000, 11xx: JMP, 10xx: PRM, 0xxx: NUM */
-constexpr U8  PFX_PRM  = 0x80;   /**< 1000 0000 */
-constexpr U8  PRM_MASK = 0x3f;   /**< 0011 1111, 6-bit primitive opcodes */
-constexpr U8  JMP_MASK = 0xf0;   /**< 1111 0000 */
-constexpr U8  PFX_CALL = 0xc0;   /**< 1100 0000 */
-constexpr U8  PFX_RET  = 0xd0;   /**< 1111 0000 */
-constexpr U8  PFX_CDJ  = 0xe0;   /**< 1101 0000 */
-constexpr U8  PFX_UDJ  = 0xf0;   /**< 1110 0000 */
-constexpr U16 ADR_MASK = 0x0fff; /**< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions */
+constexpr U8  CTL_BITS = 0xc0;   ///< 1100 0000, 11xx: JMP, 10xx: PRM, 0xxx: NUM
+constexpr U8  PFX_PRM  = 0x80;   ///< 1000 0000
+constexpr U8  PRM_MASK = 0x3f;   ///< 0011 1111, 6-bit primitive opcodes
+constexpr U8  JMP_MASK = 0xf0;   ///< 1111 0000
+constexpr U8  PFX_CALL = 0xc0;   ///< 1100 0000
+constexpr U8  PFX_RET  = 0xd0;   ///< 1111 0000
+constexpr U8  PFX_CDJ  = 0xe0;   ///< 1101 0000
+constexpr U8  PFX_UDJ  = 0xf0;   ///< 1110 0000
+constexpr U16 ADR_MASK = 0x0fff; ///< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions
 ///
 /// opcodes for loop control (in compiler mode)
 ///
-enum N4_EXT_OP {              ///< extended opcode (used by for...nxt loop)
-	I_DQ   = 0x1d,            ///< ." handler (adjust, if field name list changed)
-    I_FOR  = 0x3b,            ///< 0x3b
-    I_NXT,                    ///< 0x3c
-    I_BRK,                    ///< 0x3d
-    I_I,                      ///< 0x3e loop counter
-    I_LIT                     ///< 0x3f 3-byte literal
+enum N4_EXT_OP {                 ///< extended opcode (used by for...nxt loop)
+	I_DQ   = 0x1d,               ///< ." handler (adjust, if field name list changed)
+    I_FOR  = 0x3b,               ///< 0x3b
+    I_NXT,                       ///< 0x3c
+    I_BRK,                       ///< 0x3d
+    I_I,                         ///< 0x3e loop counter
+    I_LIT                        ///< 0x3f 3-byte literal
 };
 ///
-/// NanoForth Assembler class
+/// Assembler class
 ///
 class N4Asm : N4Core                // (10-byte header)
 {
     U8  *dic;                       ///< dictionary base
+    U8  *last;                      ///< pointer to last word
     U16 *rp;                        ///< return stack pointer
     
     U8  trc;                        ///< tracing flag
     U8  tab;                        ///< tracing indentation counter
     
 public:
-    U8  *last;                      ///< pointer to last word (exposed to _vm::_extended for debugging)
-    U8  *here;                      ///< top of dictionary    (exposed to _vm::_extended for debugging)
+    U8  *here;                      ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
     
-    N4Asm(U8 *mem);                 ///< NanoForth Assembler constructor
+    /// Assembler constructor
+    N4Asm(                          
+        U8 *mem                     ///< pointer of memory block for dictionary
+        );                 
     
     void reset();                   ///< reset internal pointers (for BYE)
     void set_trace(U8 f);           ///< enable/disable assembler tracing
+    
+    /// Instruction Decoder
+    N4OP parse_token(
+        U8 *tkn,                    ///< token to be parsed
+        U16 *rst,                   ///< parsed result 
+        U8 run                      ///< run mode flag (1: run mode, 0: compile mode)
+        ); 
 
-    /// NanoForth Instruction Decoder
-    N4OP parse_token(U8 *tkn, U16 *rst, U8 run); 
-
-    /// proxy to NanoForth assembler
-    void compile(U16 *rp0);             ///< create a word on dictionary
-    void variable();                    ///< create a variable on dictionary
-    void constant(S16 v);               ///< create a constant on dictionary
+    /// proxy to Assembler
+    void compile(
+        U16 *rp0                    ///< memory address to be used as assembler return stack
+        );             
+    void variable();                ///< create a variable on dictionary
+    void constant(S16 v);           ///< create a constant on dictionary
 
     // dictionary, string list scanners
-    U8   query(U8 *tkn, U16 *adr);      ///< query(token) in dictionary for existing word
-    void words();                       ///< display words in dictionary
-    void forget();                      ///< forgets word in the dictionary
+    /// query(token) in dictionary for existing word
+    U8   query(                         
+        U8 *tkn,                    ///< token to be searched
+        U16 *adr                    ///< function addreess of the found word
+        );      
+    void words();                   ///< display words in dictionary
+    void forget();                  ///< forgets word in the dictionary
 
     // EEPROM persistence I/O
-    void save();                        ///< persist user dictionary to EEPROM
-    void load();                        ///< restore user dictionary from EEPROM
+    void save();                    ///< persist user dictionary to EEPROM
+    void load();                    ///< restore user dictionary from EEPROM
 
     // execution tracing
-    void trace(U16 a, U8 ir);           ///< print execution tracing info
+    /// print execution tracing info
+    void trace(                         
+        U16 adr,                    ///< address to word to be executed
+        U8 ir                       ///< instruction register value
+        );           
     
 private:
-    void _do_header();                               ///< create name field and link to previous word
-    void _do_branch(U8 op);                          ///< manage branching opcodes
-    void _do_str();                                  ///< add string for ."
-    void _list_voc();                                ///< list words from all vocabularies
+    void _do_header();              ///< create name field and link to previous word
+    void _do_branch(U8 op);         ///< manage branching opcodes
+    void _do_str();                 ///< add string for ."
+    void _list_voc();               ///< list words from all vocabularies
 };    
 #endif //__SRC_NANOFORTH_ASM_H
