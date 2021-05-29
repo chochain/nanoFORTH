@@ -1,5 +1,7 @@
 \page page1 Why
 
+The emerging microcontroller communities are being built no more around specific hardware form factor, but rather around higher level languages. Without introducing an interactive shell like Javascript or microPython supported by ESP or Raspberry, the once popular Arduino platform will gradually lose out the market. However, no matter how the hardware environment evolved, on the edge of IoT universe, a mimimalist system resemble the Aruino UNO will always have its value of existance provided that some of the form-factor might one-day shrunk down to micro or even nano-scale. Being chip argnostic, the Arduino IDE does serve as an excellent learning tool for future systems to come. Factor software develpment time into the mix, an interactive/interpreted language is not only cheaper but more fun than the good old C in many cases.
+
 Following the footstep of Nakagawa and circuit4u@medium.com's **TinyForth**, a light-weight protothreaded FORTH with 3-character keywords for Arduino, I have a thought!
 
 ## nanoFORTH - a simple and useful FORTH for Arduino Nano
