@@ -33,23 +33,24 @@
 N4VM::N4VM(Stream &io, U8 *mem, U16 mem_sz, U16 stk_sz) :
     n4asm(new N4Asm(mem)), dic(mem), msz(mem_sz), ssz(stk_sz)
 {
-    set_io(io);              /// * set io stream (static member, shared with N4ASM)
+    set_io(&io);             /// * set io stream pointer (static member, shared with N4ASM)
     if (n4asm) _init();      /// * bail if creation failed
 }
 ///
-///> show system info
+///> show system memory allocation info
 ///
-void N4VM::info()
+void N4VM::meminfo()
 {
     U16 free = IDX(&free) - IDX(sp);
-#if ARDUINO
-    putstr(" dic=");       d_ptr(dic);
-    putstr("[...rp=");     d_ptr((U8*)rp);
-    putstr("...");         d_ptr((U8*)sp);
-    putstr("=sp]...");     d_ptr((U8*)&free);
-#endif // ARDUINO
-    putstr(" Free=");      d_num(free);
-    putstr(" bytes\n");
+
+#if !ARDUINO
+    tx_str(" dic=");       d_ptr(dic);
+    tx_str("[...rp=");     d_ptr((U8*)rp);
+    tx_str("...");         d_ptr((U8*)sp);
+    tx_str("=sp]...");     d_ptr((U8*)&free);
+#endif // !ARDUINO
+    
+    tx_str("Free=");       d_num(free);
 }
 ///
 ///> virtual machine execute single step
@@ -81,7 +82,7 @@ U8 N4VM::step()
     case TKN_PRM: _primitive((U8)tmp);    break; ///>> execute primitive built-in word,
     case TKN_NUM: PUSH(tmp);              break; ///>> push a number (literal) to stack top,
     default:                                     ///>> or, error (unknow action)
-        putstr("?\n");
+        tx_str("?\n");
     }
     return !tib_empty();                         // stack check and prompt OK
 }
@@ -110,7 +111,7 @@ void N4VM::_init() {
 #endif //ARDUINO
     n4asm->reset();                      /// * reset assember
 
-    putstr("\nnanoFORTH v1.0 ");
+    tx_str("N4_v1");
 }
 //
 // console prompt with stack dump
@@ -119,13 +120,13 @@ void N4VM::_ok()
 {
     S16 *s0 = (S16*)&dic[msz];          // top of heap
     if (sp > s0) {                      // check stack overflow
-        putstr("OVF!\n");
+        tx_str("OVF!\n");
         sp = s0;                        // reset to top of stack block
     }
     for (S16 *p=s0-1; p >= sp; p--) {
         d_num(*p); d_chr('_');
     }
-    putstr("ok ");
+    tx_str("ok ");
 }
 //
 // opcode execution unit

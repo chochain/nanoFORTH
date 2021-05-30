@@ -33,7 +33,7 @@ public:
         U16 stk_sz            ///< stack block size
         );
     
-    void info();              ///< display VM system info
+    void meminfo();           ///< display VM system info
     U8   step();              ///< execute one-cycle of virtual machine
     void set_trace(U16 f);    ///< enable/disable execution tracing
     
