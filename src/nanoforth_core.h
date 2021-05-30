@@ -12,11 +12,11 @@ constexpr U8  TIB_CLR  = 0x1;
 // Serial IO macros
 //
 #if ARDUINO
-#define putstr(msg)    Serial.print(F(msg))
-#define puthex(v)      Serial.print((U16)v, HEX)
+#define tx_str(msg)    _io->print(F(msg))
+#define tx_hex(v)      _io->print((U16)v, HEX)
 #else
-#define putstr(msg)    printf("%s", msg)
-#define puthex(v)      printf("%02x", v)
+#define tx_str(msg)    printf("%s", msg)
+#define tx_hex(v)      printf("%02x", v)
 #endif // ARDUINO
 //
 // memory access opcodes
@@ -35,11 +35,14 @@ constexpr U8  TIB_CLR  = 0x1;
 ///
 class N4Core
 {
-    static Stream &_io;                    ///< io stream (static member)
     static U8   _empty;                    ///< token ininput buffer empty flag
     
+protected:
+    static Stream *_io;                    ///< io stream (static member)
+    
 public:
-    static void set_io(Stream &io);        ///< initialize or redirect io stream
+    static void set_io(Stream *io);        ///< initialize or redirect io stream
+    static Stream *get_io();
     static char key();                     ///< Arduino's Serial.getchar(), yield to user tasks when waiting
     //
     // dot_* for console output routines

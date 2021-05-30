@@ -6,10 +6,11 @@
 //
 // tracing instrumentation
 //
-Stream &N4Core::_io{ Serial };                           ///< default to Arduino Serial Monitor
+Stream *N4Core::_io{ &Serial };                          ///< default to Arduino Serial Monitor
 U8      N4Core::_empty{ 1 };                             ///< empty flag for terminal input buffer
 
-void N4Core::set_io(Stream &io) { _io = io; }
+void N4Core::set_io(Stream *io) { _io = io; }
+Stream *N4Core::get_io() { return _io; }
 
 #if ARDUINO
 #include <avr/pgmspace.h>
@@ -18,16 +19,16 @@ void N4Core::set_io(Stream &io) { _io = io; }
 ///
 char N4Core::key()
 {
-    while (!_io.available()) NanoForth::yield();
-    return _io.read();
+    while (!_io->available()) NanoForth::yield();
+    return _io->read();
 }
 ///
 ///> console output single-char
 ///
-void N4Core::d_chr(char c)     { _io.write(c); }
+void N4Core::d_chr(char c)     { _io->write(c); }
 void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
 #else
-int  Serial;
+int  Serial;                   // fake serial interface
 char N4Core::key()             { return getchar(); }
 void N4Core::d_chr(char c)     { printf("%c", c);  }
 #endif //ARDUINO
@@ -167,7 +168,7 @@ void N4Core::_console_input(U8 *tib)
             d_chr('\b');
         }
         else if ((p - tib) >= (TIB_SZ-1)) {
-            putstr("TIB!\n");
+            tx_str("TIB!\n");
             *p = '\n';
             break;
         }
