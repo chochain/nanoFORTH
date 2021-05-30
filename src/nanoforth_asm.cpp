@@ -134,7 +134,7 @@ void N4Asm::compile(U16 *rp0)
             }
             break;
         default:                            ///>> then, token type not found
-        	putstr("?\n");
+        	tx_str("?\n");
         	last = l0;                      /// * restore last, here pointers
         	here = h0;
         	token(trc, TIB_CLR);
@@ -218,7 +218,7 @@ void N4Asm::forget()
 {
     U16 adr;
     if (!query(token(trc), &adr)) {         /// check if token is in dictionary
-        putstr("?!");                       /// * not found, bail
+        tx_str("?!");                       /// * not found, bail
         return;
     }
     ///
@@ -275,9 +275,9 @@ void N4Asm::trace(U16 a, U8 ir)
             d_chr(':');
             p = PTR(a)-3;                             // backtrack 3-byte (name field)
             d_chr(*p++); d_chr(*p++); d_chr(*p);
-            putstr("\n....");
+            tx_str("\n....");
             for (int i=0, n=++tab; i<n; i++) {        // indentation per call-depth
-                putstr("  ");
+                tx_str("  ");
             }
             break;
         case PFX_RET:                                 // 0xd0 RET return

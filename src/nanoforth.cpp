@@ -56,6 +56,9 @@ n4_tptr NanoForth::_n4tsk{ NULL };                       ///< initialize task li
 ///   0 - if all allocation are OK<br>
 ///   1 - any allocation failure
 ///
+#define putstr(msg)   Serial.print(F(msg))
+#define puthex(v)     Serial.print((U16)v, HEX)
+
 int NanoForth::begin(Stream &io, U16 mem_sz, U16 stk_sz)
 {
     _mem  = (U8*)malloc(mem_sz);                         /// * allocate Forth memory block
@@ -63,11 +66,13 @@ int NanoForth::begin(Stream &io, U16 mem_sz, U16 stk_sz)
     
     if (!_mem || !_n4vm) return -1;
 
-    putstr("MEM=$");   puthex(mem_sz);                   // forth memory block 
-    putstr("[DIC=$");  puthex(mem_sz - stk_sz);          // dictionary size
-    putstr(",STK=$");  puthex(stk_sz);  putstr("]");     // stack size
-    
-    _n4vm->info();                                       // display detailed pointers
+    putstr("\nnanoFORTH v1.0 ");
+    putstr("mem=$");    puthex(mem_sz);                 // forth memory block 
+    putstr("[dic=$");   puthex(mem_sz - stk_sz);        // dictionary size
+    putstr(",stk=$");   puthex(stk_sz);                 // stack size
+    putstr("] ");
+
+    _n4vm->meminfo();                                   // display detailed pointers
 
     return 0;
 }
@@ -88,6 +93,13 @@ void NanoForth::add(void (*ufunc)(n4_tptr))
 ///
 void NanoForth::exec()
 {
+    Stream *bt = N4Core::get_io();
+    if (bt->available()) {
+        char c = bt->read();
+        Serial.write(c);
+    }
+    return;
+    
 	while (_n4vm->step()) {                    /// * step through commands from input buffer
 		yield();
 	}
