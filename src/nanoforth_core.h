@@ -12,7 +12,7 @@ constexpr U8  TIB_CLR  = 0x1;
 // Serial IO macros
 //
 #if ARDUINO
-#define tx_str(msg)    _io->print(F(msg))
+#define tx_str(msg)    { Serial.print(F(msg)); _io->print(F(msg)); }
 #define tx_hex(v)      _io->print((U16)v, HEX)
 #else
 #define tx_str(msg)    printf("%s", msg)
@@ -42,7 +42,6 @@ protected:
     
 public:
     static void set_io(Stream *io);        ///< initialize or redirect io stream
-    static Stream *get_io();
     static char key();                     ///< Arduino's Serial.getchar(), yield to user tasks when waiting
     //
     // dot_* for console output routines

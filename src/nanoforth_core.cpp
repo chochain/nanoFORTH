@@ -9,8 +9,7 @@
 Stream *N4Core::_io{ &Serial };                          ///< default to Arduino Serial Monitor
 U8      N4Core::_empty{ 1 };                             ///< empty flag for terminal input buffer
 
-void N4Core::set_io(Stream *io) { _io = io; }
-Stream *N4Core::get_io() { return _io; }
+void    N4Core::set_io(Stream *io) { _io = io; }
 
 #if ARDUINO
 #include <avr/pgmspace.h>
@@ -25,7 +24,7 @@ char N4Core::key()
 ///
 ///> console output single-char
 ///
-void N4Core::d_chr(char c)     { _io->write(c); }
+void N4Core::d_chr(char c)     { Serial.write(c); _io->write(c); }
 void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
 #else
 int  Serial;                   // fake serial interface
@@ -108,17 +107,17 @@ U8 *N4Core::token(U8 trc, U8 clr)
     static U8 tib[TIB_SZ];
     static U8 *tp = tib;
     
-	if (clr) {                                // clean input buffer
+	if (clr) {                               // clean input buffer
         _empty = 1;
         tp=tib;
         return 0;
     }
-    if (tp==tib) _console_input(tib);         // buffer empty, read from console
+    if (tp==tib) _console_input(tib);        // buffer empty, read from console
 
     U8 *p = tp;                              // keep original tib pointer
     U8 sz = 0;
     while (*tp++!=' ') sz++;                 // advance to next word
-    while (*tp==' ')   tp++;                // skip blanks
+    while (*tp==' ')   tp++;                 // skip blanks
 
     if (*tp=='\r' || *tp=='\n') { tp=tib; _empty=1; }
     if (trc) {
@@ -162,7 +161,7 @@ void N4Core::_console_input(U8 *tib)
                 break;                       // skip empty token
             }
         }
-        else if (c=='\b' && p > tib) {      // backspace
+        else if (c=='\b' && p > tib) {       // backspace
             *(--p) = ' ';
             d_chr(' ');
             d_chr('\b');
