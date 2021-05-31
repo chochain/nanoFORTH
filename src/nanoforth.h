@@ -6,8 +6,11 @@
 ///
 #ifndef __SRC_NANOFORTH_H
 #define __SRC_NANOFORTH_H
+
 #if ARDUINO
 #include <Arduino.h>
+#define putstr(msg)       Serial.print(F(msg))
+#define puthex(v)         Serial.print((U16)v, HEX)
 #else
 #include <cstdint>                            // uint_t
 #include <cstdio>                             // printf
@@ -16,8 +19,10 @@
 #define PROGMEM
 #define millis()          10000
 #define pgm_read_byte(p)  (*(p))
-extern int Serial;
+#define putstr(msg)       printf("%s", msg)
+#define puthex(v)         printf("%x", (U16)v)
 #define Stream            int
+extern  int Serial;
 #endif // ARDUINO
 //
 // commonly used portable types
