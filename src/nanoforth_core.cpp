@@ -24,7 +24,10 @@ char N4Core::key()
 ///
 ///> console output single-char
 ///
-void N4Core::d_chr(char c)     { Serial.write(c); _io->write(c); }
+void N4Core::d_chr(char c)     {
+    Serial.write(c);
+    if (c!=10 && c!=13) _io->write(c);
+}
 void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
 #else
 int  Serial;                   // fake serial interface
@@ -104,17 +107,17 @@ U8 N4Core::tib_empty()
 ///
 U8 *N4Core::token(U8 trc, U8 clr)
 {
-    static U8 tib[TIB_SZ];
-    static U8 *tp = tib;
+    volatile static U8 tib[TIB_SZ];
+    volatile static U8 *tp = tib;
     
 	if (clr) {                               // clean input buffer
         _empty = 1;
         tp=tib;
         return 0;
     }
-    if (tp==tib) _console_input(tib);        // buffer empty, read from console
+    if (tp==tib) _console_input((U8*)tib);   // buffer empty, read from console
 
-    U8 *p = tp;                              // keep original tib pointer
+    U8 *p = (U8*)tp;                         // keep original tib pointer
     U8 sz = 0;
     while (*tp++!=' ') sz++;                 // advance to next word
     while (*tp==' ')   tp++;                 // skip blanks
