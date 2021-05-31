@@ -9,29 +9,29 @@
 
 #if ARDUINO
 #include <Arduino.h>
-#define putstr(msg)       Serial.print(F(msg))
-#define puthex(v)         Serial.print((U16)v, HEX)
+#define log(msg)          Serial.print(F(msg))
+#define logx(v)           Serial.print((U16)v, HEX)
 #else
-#include <cstdint>                            // uint_t
-#include <cstdio>                             // printf
-#include <cstdlib>                            // malloc
+#include <cstdint>                // uint_t
+#include <cstdio>                 // printf
+#include <cstdlib>                // malloc
 #include <iostream>
 #define PROGMEM
 #define millis()          10000
 #define pgm_read_byte(p)  (*(p))
-#define putstr(msg)       printf("%s", msg)
-#define puthex(v)         printf("%x", (U16)v)
+#define log(msg)          printf("%s", msg)
+#define logx(v)           printf("%x", (U16)v)
 #define Stream            int
 extern  int Serial;
 #endif // ARDUINO
 //
 // commonly used portable types
 //
-typedef uint8_t      U8;                         ///< 8-bit unsigned integer, for char and short int
-typedef uint16_t     U16;                        ///< 16-bit unsigned integer, for return stack, and pointers
-typedef int16_t      S16;                        ///< 16-bit signed integer, for general numbers
-typedef uint32_t     U32;                        ///< 32-bit unsigned integer, for millis()
-typedef int32_t      S32;                        ///< 32-bit signed integer
+typedef uint8_t      U8;          ///< 8-bit unsigned integer, for char and short int
+typedef uint16_t     U16;         ///< 16-bit unsigned integer, for return stack, and pointers
+typedef int16_t      S16;         ///< 16-bit signed integer, for general numbers
+typedef uint32_t     U32;         ///< 32-bit unsigned integer, for millis()
+typedef int32_t      S32;         ///< 32-bit signed integer
 //
 // default heap sizing
 //
@@ -42,10 +42,10 @@ constexpr U16 N4_MEM_SZ = (N4_DIC_SZ+N4_STK_SZ); /**< total memory block allocat
 /// NanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
 ///
 typedef struct n4_task {    
-    void (*func)(n4_task*);                   ///< function pointer
-    n4_task *next;                            ///< next item in linked-list (root=0)
-    U32  t;                                   ///< delay timer
-    U16  ci;                                  ///< protothread case index
+    void (*func)(n4_task*);       ///< function pointer
+    n4_task *next;                ///< next item in linked-list (root=0)
+    U32  t;                       ///< delay timer
+    U16  ci;                      ///< protothread case index
 } *n4_tptr;
 //
 // NanoForth multi-tasking macros
@@ -78,6 +78,7 @@ public:
     ///
     int  begin(
         Stream &io=Serial,        ///< iostream which can be redirected to SoftwareSerial
+        U8  ucase=1,              ///< case sensitiveness (default: insensitive)
         U16 mem_sz=N4_MEM_SZ,     ///< memory size (default: N4_MEM_SZ=0x480)
         U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size (default: N4_STK_SZ=0x80)
         );                        ///< placeholder for extra setup

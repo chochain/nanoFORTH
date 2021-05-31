@@ -56,18 +56,18 @@ n4_tptr NanoForth::_n4tsk{ NULL };                       ///< initialize task li
 ///   0 - if all allocation are OK<br>
 ///   1 - any allocation failure
 ///
-int NanoForth::begin(Stream &io, U16 mem_sz, U16 stk_sz)
+int NanoForth::begin(Stream &io, U8 ucase, U16 mem_sz, U16 stk_sz)
 {
     _mem  = (U8*)malloc(mem_sz);                         /// * allocate Forth memory block
-    _n4vm = new N4VM(io, _mem, mem_sz, stk_sz);          /// * create Virtual Machine
+    _n4vm = new N4VM(io, ucase, _mem, mem_sz, stk_sz);   /// * create Virtual Machine
     
     if (!_mem || !_n4vm) return -1;
 
-    putstr("\nnanoFORTH v1.0 ");
-    putstr("mem=$");    puthex(mem_sz);                 // forth memory block 
-    putstr("[dic=$");   puthex(mem_sz - stk_sz);        // dictionary size
-    putstr(",stk=$");   puthex(stk_sz);                 // stack size
-    putstr("] ");
+    log("\nnanoFORTH v1.0 ");
+    log("mem=$");    logx(mem_sz);                      // forth memory block
+    log("[dic=$");   logx(mem_sz - stk_sz);             // dictionary size
+    log(",stk=$");   logx(stk_sz);                      // stack size
+    log("]");
 
     _n4vm->meminfo();                                   // display detailed pointers
 
