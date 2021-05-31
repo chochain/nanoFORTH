@@ -64,7 +64,7 @@ Following the footstep of Nakagawa and circuit4u@medium.com's **TinyForth**, a l
 > **lit** ⏎<br>
 > 1_ok
 
-* define **?Z** that turns on red or blue depends on input value on stack (yes, nanoFORTH is case sensitive, and you can create some really strange function name)
+* define **?Z** that turns on red or blue depends on input value on stack. unlike other languages, you can create really strange function names
 > : **?Z** IF **red** ELS **blu** THN ; ⏎
 
 * run **?Z** which take input from stack, 1 turns on red or 0 turn on blue

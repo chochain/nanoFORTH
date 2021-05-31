@@ -1,6 +1,6 @@
 # Journey of an Arduino Maker
 
-**You unboxed the Arduino UNO** from Amazon with excitement, opened the awaiting Arduino IDE, carefully followed one of the numerous available online tutorials, found and compiled the Blink sketch in the included examples, hit the -> button and seconds later, the orange light started blinking! Success! You told yourself that "I think I can be pretty good at this"!
+**You unboxed the Arduino UNO** from Amazon with excitement, opened the awaited Arduino IDE, carefully followed one of the numerous available online tutorials, dug and compiled the Blink sketch from the included examples, hit the -> button and seconds later, the orange light started blinking! Success! You told yourself that "I think I can be pretty good at this"!
 
 **What comes next** is weeks of ego-boosting of new component badges you collected. From the simple humidity-temperature (DHT), ultrasound (HC-SR04), to how-do-i-read-the-resistor-code LEDs, why-NEC infrared remote (HX1838), flimsy SG90 servos, and finally the damn gyro (MPU6050). OK, that was a pretty good run, you thought. Kids were facinated, and even my typically unconcerning wife seemed to be impressed.
 
