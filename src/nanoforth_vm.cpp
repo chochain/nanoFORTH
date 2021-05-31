@@ -30,10 +30,11 @@
 ///
 ///> constructor and initializer
 ///
-N4VM::N4VM(Stream &io, U8 *mem, U16 mem_sz, U16 stk_sz) :
+N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
     n4asm(new N4Asm(mem)), dic(mem), msz(mem_sz), ssz(stk_sz)
 {
     set_io(&io);             /// * set io stream pointer (static member, shared with N4ASM)
+    set_ucase(ucase);		 /// * set case sensitiveness
     if (n4asm) _init();      /// * bail if creation failed
 }
 ///
@@ -41,16 +42,19 @@ N4VM::N4VM(Stream &io, U8 *mem, U16 mem_sz, U16 stk_sz) :
 ///
 void N4VM::meminfo()
 {
-    S16 free = IDX(&free) - IDX(sp);
-
-#if !ARDUINO
+	S16 free;
     tx_str(" dic=");       d_ptr(dic);
+#if ARDUINO
     tx_str("[...rp=");     d_ptr((U8*)rp);
     tx_str("...");         d_ptr((U8*)sp);
     tx_str("=sp]...");     d_ptr((U8*)&free);
-#endif // !ARDUINO
-    
-    tx_str("Free=");       d_num(free);
+
+    free = IDX(&free) - IDX(sp);                // in bytes
+#else
+    free = (IDX(&free) - IDX(sp))>>10;			// in K-bytes
+#endif // ARDUINO
+    tx_str(" Free=");      d_num(free);
+    tx_str("\n");
 }
 ///
 ///> virtual machine execute single step

@@ -8,11 +8,15 @@
 //
 Stream *N4Core::_io{ &Serial };                          ///< default to Arduino Serial Monitor
 U8      N4Core::_empty{ 1 };                             ///< empty flag for terminal input buffer
+U8      N4Core::_ucase{ 1 };                             ///< empty flag for terminal input buffer
 
-void    N4Core::set_io(Stream *io) { _io = io; }
+void N4Core::set_io(Stream *io) { _io    = io; }
+void N4Core::set_ucase(U8 uc)   { _ucase = uc; }
+char N4Core::uc(char c)         { return (_ucase && (c>='A')) ? c&0x5f : c; }
 
 #if ARDUINO
 #include <avr/pgmspace.h>
+#include <AltSoftSerial.h>
 ///
 ///> console input with cooperative threading
 ///
@@ -25,14 +29,19 @@ char N4Core::key()
 ///> console output single-char
 ///
 void N4Core::d_chr(char c)     {
-    Serial.write(c);
-    if (c!=10 && c!=13) _io->write(c);
+    if (c==13) AltSoftSerial::flushOutput();
+    else {
+        _io->write(c);         // send to output buffer
+        NanoForth::yield();    // slow down a bit
+    }
+    Serial.write(c);           // for debugging
 }
 void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
 #else
 int  Serial;                   // fake serial interface
 char N4Core::key()             { return getchar(); }
 void N4Core::d_chr(char c)     { printf("%c", c);  }
+void N4Core::d_ptr(U8 *p)      { printf("%p", p);  }
 #endif //ARDUINO
 void N4Core::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
 void N4Core::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
@@ -48,7 +57,8 @@ void N4Core::d_num(S16 n)
     if (n < 0) { n = -n; d_chr('-'); }        // process negative number
     U16 t = n/10;
     if (t) d_num(t);                          // recursively call higher digits
-    d_chr('0' + (n%10));
+    char c = '0'+(n%10);
+    d_chr(c);
 }
 ///
 ///> dump byte-stream between pointers with delimiter option
@@ -83,8 +93,8 @@ void N4Core::d_name(U8 op, const char *lst, U8 space)
 U8 N4Core::number(U8 *str, S16 *num)
 {
     S16 n   = 0;
-    U8  neg = (*str=='-') ? (str++, 1)  : 0;      // negative sign0;
-    S16 base= (*str=='$') ? (str++, 16) : 10;
+    U8  neg = (*str=='-') ? (str++, 1)  : 0;      /// * handle negative sign
+    U8  base= (*str=='$') ? (str++, 16) : 10;     /// * handle hex number
 
     for (; *str>='0'; str++) {
         if (base==10 && *str > '9') return 0;
@@ -110,20 +120,20 @@ U8 *N4Core::token(U8 trc, U8 clr)
     volatile static U8 tib[TIB_SZ];
     volatile static U8 *tp = tib;
     
-	if (clr) {                               // clean input buffer
+	if (clr) {                               /// * optionally clean input buffer
         _empty = 1;
         tp=tib;
         return 0;
     }
-    if (tp==tib) _console_input((U8*)tib);   // buffer empty, read from console
+    if (tp==tib) _console_input((U8*)tib);   /// * buffer empty, read from console (with trailing blank)
 
-    U8 *p = (U8*)tp;                         // keep original tib pointer
+    U8 *p = (U8*)tp;                         /// * keep original tib pointer
     U8 sz = 0;
-    while (*tp++!=' ') sz++;                 // advance to next word
-    while (*tp==' ')   tp++;                 // skip blanks
+    while (*tp++!=' ') sz++;                 /// * advance to next word
+    while (*tp==' ')   tp++;                 /// * skip blanks
 
-    if (*tp=='\r' || *tp=='\n') { tp=tib; _empty=1; }
-    if (trc) {
+    if (*tp=='\r' || *tp=='\n') { tp=tib; _empty=1; }   /// * end of input buffer
+    if (trc) {                               /// * optionally print token for debugging
         // debug info
         d_chr('\n');
         for (int i=0; i<5; i++) {
@@ -132,17 +142,18 @@ U8 *N4Core::token(U8 trc, U8 clr)
     }
     else if (tp==tib) d_chr('\n');
     
-    return p;
+    return p;                                /// * return pointer to token
 }
 ///
 ///> search keyword in a NanoForth name field list
+///  * one blank byte padded at the end of input string
 ///
 U8 N4Core::find(U8 *tkn, const char *lst, U16 *id)
 {
     for (int n=1, m=pgm_read_byte(lst); n < m*3; n+=3) {
-        if (tkn[0]==pgm_read_byte(lst+n) &&
-            tkn[1]==pgm_read_byte(lst+n+1) &&
-            (tkn[1]==' ' || tkn[2]==pgm_read_byte(lst+n+2))) {
+        if (uc(tkn[0])==pgm_read_byte(lst+n)   &&
+            uc(tkn[1])==pgm_read_byte(lst+n+1) &&
+            (tkn[1]==' ' || uc(tkn[2])==pgm_read_byte(lst+n+2))) {
             *id = n/3;
             return 1;
         }

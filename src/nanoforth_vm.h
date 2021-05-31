@@ -28,6 +28,7 @@ public:
     // NanoForth Virtual Machine constructor    
     N4VM(
         Stream &io,           ///< io stream
+        U8 ucase,             ///< case sensitiveness
         U8 *mem,              ///< memory base pointer
         U16 mem_sz,           ///< memory block size
         U16 stk_sz            ///< stack block size

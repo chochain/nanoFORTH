@@ -31,7 +31,7 @@ PROGMEM const char JMP[] = "\x0b" \
 PROGMEM const char PRM[] = "\x31" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
 	"NEG" "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " \
-	"<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
+	"<> " "@  " "!  " "C@ " "C! " "KEY" "WRT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" \
     "D+ " "D- " "DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
 PROGMEM const char PMX[] = "\x4" \
@@ -190,7 +190,9 @@ void N4Asm::constant(S16 v)
 U8 N4Asm::query(U8 *tkn, U16 *adr)
 {
     for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {
-        if (p[2]==tkn[0] && p[3]==tkn[1] && (p[3]==' ' || p[4]==tkn[2])) {
+        if (uc(p[2])==uc(tkn[0]) &&
+            uc(p[3])==uc(tkn[1]) &&
+            (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
             *adr = IDX(p);
             return 1;
         }

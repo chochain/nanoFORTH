@@ -36,12 +36,15 @@ constexpr U8  TIB_CLR  = 0x1;
 class N4Core
 {
     static U8   _empty;                    ///< token ininput buffer empty flag
+    static U8   _ucase;					   ///< case insensitive
     
 protected:
     static Stream *_io;                    ///< io stream (static member)
     
 public:
     static void set_io(Stream *io);        ///< initialize or redirect io stream
+    static void set_ucase(U8 uc);          ///< set case sensitiveness
+    static char uc(char c);                ///< upper case for case-insensitive matching
     static char key();                     ///< Arduino's Serial.getchar(), yield to user tasks when waiting
     //
     // dot_* for console output routines
