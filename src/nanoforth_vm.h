@@ -36,7 +36,7 @@ public:
     void meminfo();           ///< display VM system info
     U8   step();              ///< execute one-cycle of virtual machine
     void set_trace(U16 f);    ///< enable/disable execution tracing
-    
+     
 private:
     void _init();             ///< restart virtual machine (reseting internals)
     void _ok();               ///< console prompt (with stack dump)

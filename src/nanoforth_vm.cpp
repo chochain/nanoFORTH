@@ -41,7 +41,7 @@ N4VM::N4VM(Stream &io, U8 *mem, U16 mem_sz, U16 stk_sz) :
 ///
 void N4VM::meminfo()
 {
-    U16 free = IDX(&free) - IDX(sp);
+    S16 free = IDX(&free) - IDX(sp);
 
 #if !ARDUINO
     tx_str(" dic=");       d_ptr(dic);
