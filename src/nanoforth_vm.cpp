@@ -42,19 +42,13 @@ N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
 ///
 void N4VM::meminfo()
 {
-	S16 free;
-    tx_str(" dic=");       d_ptr(dic);
-#if ARDUINO
-    tx_str("[...rp=");     d_ptr((U8*)rp);
-    tx_str("...");         d_ptr((U8*)sp);
-    tx_str("=sp]...");     d_ptr((U8*)&free);
-
-    free = IDX(&free) - IDX(sp);                // in bytes
-#else
-    free = (IDX(&free) - IDX(sp))>>10;			// in K-bytes
-#endif // ARDUINO
-    tx_str(" Free=");      d_num(free);
-    tx_str("\n");
+	S16 free = IDX(&free) - IDX(sp);                // in bytes
+    tx_str(" [dic=");   d_ptr(dic);
+    tx_str(", rp=");    d_ptr((U8*)rp);
+    tx_str(", sp=");    d_ptr((U8*)sp);
+    tx_str(", max=");   d_ptr((U8*)&free);
+    tx_str("] Free=");  d_num(free);
+    tx_str(" bytes\n");
 }
 ///
 ///> virtual machine execute single step
@@ -115,7 +109,7 @@ void N4VM::_init() {
 #endif //ARDUINO
     n4asm->reset();                      /// * reset assember
 
-    tx_str("N4_v1");
+    tx_str("\nnanoFORTH v1.0");
 }
 //
 // console prompt with stack dump
