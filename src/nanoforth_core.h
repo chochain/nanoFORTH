@@ -8,17 +8,13 @@
 
 constexpr U16 TIB_SZ   = 0x40;             /**< console(terminal) input buffer size */
 constexpr U8  TIB_CLR  = 0x1;
-//
-// Serial IO macros
-//
+
 #if ARDUINO
-#define tx_str(msg)    { Serial.print(F(msg)); _io->print(F(msg)); }
-#define tx_hex(v)      _io->print((U16)v, HEX)
+#define flash(s)      { Serial.print(F(s)); _io->print(F(s)); }
 #else
-#define tx_str(msg)    printf("%s", msg)
-#define tx_hex(v)      printf("%02x", v)
+#define flash(s)      d_str((U8*)s)
 #endif // ARDUINO
-//
+
 // memory access opcodes
 /// \def SET8
 /// \brief 1-byte write
@@ -50,11 +46,11 @@ public:
     // dot_* for console output routines
     //
     static void d_chr(char c);             ///< print a char to console
-    static void d_nib(U8 n);               ///< print a nibble
-    static void d_hex(U8 c);               ///< print a 8-bit hex number
     static void d_adr(U16 a);              ///< print a 12-bit address
     static void d_str(U8 *p);              ///< handle dot string (byte-stream leading with length)
     static void d_ptr(U8 *p);              ///< print a pointer
+    static void d_nib(U8 n);               ///< print a nibble
+    static void d_u8(U8 c);                ///< print a 8-bit hex number
     static void d_num(S16 n);              ///< sent a number literal to console
     static void d_mem(                     ///< display memory block
         U8 *base,                          ///< reference memory pointer (start of dictionary)<br/>
@@ -66,7 +62,7 @@ public:
         U8 op,                             ///< opcode
         const char *lst,                   ///< NanoForth string formatted list
         U8 space                           ///< delimiter to append at the end
-        );                         
+        );
     //
     // Search Functions
     //

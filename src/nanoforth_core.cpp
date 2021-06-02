@@ -16,50 +16,32 @@ char N4Core::uc(char c)         { return (_ucase && (c>='A')) ? c&0x5f : c; }
 
 #if ARDUINO
 #include <avr/pgmspace.h>
-#include <AltSoftSerial.h>
 ///
-///> console input with cooperative threading
+///> console input/output functions with cooperative threading
 ///
 char N4Core::key()
 {
     while (!_io->available()) NanoForth::yield();
     return _io->read();
 }
-///
-///> console output single-char
-///
-void N4Core::d_chr(char c)     {
-    if (c==13) AltSoftSerial::flushOutput();
-    else {
-        _io->write(c);         // send to output buffer
-        NanoForth::yield();    // slow down a bit
-    }
-    Serial.write(c);           // for debugging
-}
+void N4Core::d_chr(char c)     { _io->print(c);        Serial.print(c); }
+void N4Core::d_adr(U16 a)      { _io->print(a, HEX);   Serial.print(a, HEX); }
+void N4Core::d_str(U8 *p)      { _io->print((char*)p); Serial.print((char*)p); }
 void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
+void N4Core::d_num(S16 n)      { _io->print(n);        Serial.print(n); }
 #else
 int  Serial;                   // fake serial interface
-char N4Core::key()             { return getchar(); }
-void N4Core::d_chr(char c)     { printf("%c", c);  }
-void N4Core::d_ptr(U8 *p)      { printf("%p", p);  }
+char N4Core::key()             { return getchar();  }
+void N4Core::d_chr(char c)     { printf("%c", c);   }
+void N4Core::d_adr(U16 a)      { printf("%04x", a); }
+void N4Core::d_str(U8 *p)      { printf("%s", p);   }
+void N4Core::d_ptr(U8 *p)      { printf("%p", p);   }
 #endif //ARDUINO
 void N4Core::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
-void N4Core::d_hex(U8 c)       { d_nib(c>>4); d_nib(c&0xf); }
-void N4Core::d_adr(U16 a)      { d_nib((U8)(a>>8)&0xff); d_hex((U8)(a&0xff));   }
-void N4Core::d_str(U8 *p)      { for (int i=0, sz=*p++; i<sz; i++) d_chr(*p++); }
+void N4Core::d_u8(U8 c)        { d_nib(c>>4); d_nib(c&0xf); }
 //
 // IO and Search Functions =================================================
 ///
-///> emit a 16-bit integer
-///
-void N4Core::d_num(S16 n)
-{
-    if (n < 0) { n = -n; d_chr('-'); }        // process negative number
-    U16 t = n/10;
-    if (t) d_num(t);                          // recursively call higher digits
-    char c = '0'+(n%10);
-    d_chr(c);
-}
 ///
 ///> dump byte-stream between pointers with delimiter option
 ///
@@ -68,7 +50,7 @@ void N4Core::d_mem(U8* base, U8 *p0, U16 sz, U8 delim)
 	d_adr((U16)(p0 - base)); d_chr(':');
 	for (int n=0; n<sz; n++) {
 		if (delim && (n&0x3)==0) d_chr(delim);
-		d_hex(*p0++);
+		d_u8(*p0++);
 	}
     d_chr(delim);
 }
@@ -117,8 +99,8 @@ U8 N4Core::tib_empty()
 ///
 U8 *N4Core::token(U8 trc, U8 clr)
 {
-    volatile static U8 tib[TIB_SZ];
-    volatile static U8 *tp = tib;
+    static U8 tib[TIB_SZ];
+    static U8 *tp = tib;
     
 	if (clr) {                               /// * optionally clean input buffer
         _empty = 1;
@@ -181,7 +163,7 @@ void N4Core::_console_input(U8 *tib)
             d_chr('\b');
         }
         else if ((p - tib) >= (TIB_SZ-1)) {
-            tx_str("TIB!\n");
+            flash("TIB!\n");
             *p = '\n';
             break;
         }
