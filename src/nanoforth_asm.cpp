@@ -134,7 +134,7 @@ void N4Asm::compile(U16 *rp0)
             }
             break;
         default:                            ///>> then, token type not found
-        	tx_str("?\n");
+        	flash("?\n");
         	last = l0;                      /// * restore last, here pointers
         	here = h0;
         	token(trc, TIB_CLR);
@@ -220,7 +220,7 @@ void N4Asm::forget()
 {
     U16 adr;
     if (!query(token(trc), &adr)) {         /// check if token is in dictionary
-        tx_str("?!");                       /// * not found, bail
+        flash("?!");                       /// * not found, bail
         return;
     }
     ///
@@ -277,9 +277,9 @@ void N4Asm::trace(U16 a, U8 ir)
             d_chr(':');
             p = PTR(a)-3;                             // backtrack 3-byte (name field)
             d_chr(*p++); d_chr(*p++); d_chr(*p);
-            tx_str("\n....");
+            flash("\n....");
             for (int i=0, n=++tab; i<n; i++) {        // indentation per call-depth
-                tx_str("  ");
+                flash("  ");
             }
             break;
         case PFX_RET:                                 // 0xd0 RET return
@@ -297,7 +297,7 @@ void N4Asm::trace(U16 a, U8 ir)
         	d_chr('#');
             p = PTR(a)+1;                             // address to the 16-bit number
             a = GET16(p);                             // fetch the number (reuse a, bad, but to save)
-        	d_hex(a>>8); d_hex(a&0xff);
+        	d_u8(a>>8); d_u8(a&0xff);
             break;
         case I_DQ:                                    // print string
         	d_chr('"');
@@ -311,7 +311,7 @@ void N4Asm::trace(U16 a, U8 ir)
         }
         break;
     default:                                          ///> and a number (i.e. 1-byte literal)
-        d_chr('#'); d_hex(ir);
+        d_chr('#'); d_u8(ir);
     }
     d_chr(' ');
 }

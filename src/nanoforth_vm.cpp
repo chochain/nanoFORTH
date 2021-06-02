@@ -43,12 +43,12 @@ N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
 void N4VM::meminfo()
 {
 	S16 free = IDX(&free) - IDX(sp);                // in bytes
-    tx_str(" [dic=");   d_ptr(dic);
-    tx_str(", rp=");    d_ptr((U8*)rp);
-    tx_str(", sp=");    d_ptr((U8*)sp);
-    tx_str(", max=");   d_ptr((U8*)&free);
-    tx_str("] Free=");  d_num(free);
-    tx_str(" bytes\n");
+    flash(" [dic=");   d_ptr(dic);
+    flash(", rp=");    d_ptr((U8*)rp);
+    flash(", sp=");    d_ptr((U8*)sp);
+    flash(", max=");   d_ptr((U8*)&free);
+    flash("] Free=");  d_num(free);
+    flash(" bytes\n");
 }
 ///
 ///> virtual machine execute single step
@@ -80,7 +80,7 @@ U8 N4VM::step()
     case TKN_PRM: _primitive((U8)tmp);    break; ///>> execute primitive built-in word,
     case TKN_NUM: PUSH(tmp);              break; ///>> push a number (literal) to stack top,
     default:                                     ///>> or, error (unknow action)
-        tx_str("?\n");
+        flash("?\n");
     }
     return !tib_empty();                         // stack check and prompt OK
 }
@@ -109,7 +109,7 @@ void N4VM::_init() {
 #endif //ARDUINO
     n4asm->reset();                      /// * reset assember
 
-    tx_str("\nnanoFORTH v1.0");
+    flash("\nnanoForth v1.0");
 }
 //
 // console prompt with stack dump
@@ -118,13 +118,13 @@ void N4VM::_ok()
 {
     S16 *s0 = (S16*)&dic[msz];          // top of heap
     if (sp > s0) {                      // check stack overflow
-        tx_str("OVF!\n");
+        flash("OVF!\n");
         sp = s0;                        // reset to top of stack block
     }
     for (S16 *p=s0-1; p >= sp; p--) {
         d_num(*p); d_chr('_');
     }
-    tx_str("ok ");
+    flash("ok ");
 }
 //
 // opcode execution unit
