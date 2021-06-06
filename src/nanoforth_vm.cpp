@@ -43,12 +43,14 @@ N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
 void N4VM::meminfo()
 {
 	S16 free = IDX(&free) - IDX(sp);                // in bytes
+#if MEM_DEBUG
     flash(" [dic=");   d_ptr(dic);
     flash(", rp=");    d_ptr((U8*)rp);
     flash(", sp=");    d_ptr((U8*)sp);
     flash(", max=");   d_ptr((U8*)&free);
-    flash("] Free=");  d_num(free);
-    flash(" bytes\n");
+    flash("] ");
+#endif // MEM_DEBUG
+    d_num(free); flash(" bytes free\n");
 }
 ///
 ///> virtual machine execute single step
@@ -109,7 +111,7 @@ void N4VM::_init() {
 #endif //ARDUINO
     n4asm->reset();                      /// * reset assember
 
-    flash("\nnanoForth v1.0");
+    flash("nanoForth v1.0\n");
 }
 //
 // console prompt with stack dump
@@ -272,6 +274,7 @@ void N4VM::_primitive(U8 op)
 ///
 void N4VM::_dump(U16 p0, U16 sz0)
 {
+#if MEM_DEBUG
     U8  *p = PTR((p0&0xffe0));
     U16 sz = (sz0+0x1f)&0xffe0;
     d_chr('\n');
@@ -284,4 +287,5 @@ void N4VM::_dump(U16 p0, U16 sz0)
         }
         d_chr('\n');
     }
+#endif // MEM_DEBUG
 }

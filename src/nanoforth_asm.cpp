@@ -402,7 +402,7 @@ void N4Asm::_list_voc()
         U8 sz = *(lst[i]);
 #endif //ARDUINO
         while (sz--) {
-            d_chr(n++%WORDS_PER_ROW==0 ? '\n' : ' ');
+            d_chr(n++%WORDS_PER_ROW ? ' ' : '\n');
             d_name(sz, lst[i], 1);
         }
     }

@@ -24,8 +24,15 @@ char N4Core::key()
     while (!_io->available()) NanoForth::yield();
     return _io->read();
 }
-void N4Core::d_chr(char c)     { _io->print(c);        Serial.print(c); }
-void N4Core::d_adr(U16 a)      { _io->print(a, HEX);   Serial.print(a, HEX); }
+void N4Core::d_chr(char c)     {
+    Serial.print(c);
+    _io->print(c);
+    if (c=='\n') {
+        _io->flush();
+        NanoForth::yield();
+    }
+}
+void N4Core::d_adr(U16 a)      { d_nib(a>>8); d_nib((a>>4)&0xf); d_nib(a&0xf); }
 void N4Core::d_str(U8 *p)      { _io->print((char*)p); Serial.print((char*)p); }
 void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
 void N4Core::d_num(S16 n)      { _io->print(n);        Serial.print(n); }
@@ -33,7 +40,7 @@ void N4Core::d_num(S16 n)      { _io->print(n);        Serial.print(n); }
 int  Serial;                   // fake serial interface
 char N4Core::key()             { return getchar();  }
 void N4Core::d_chr(char c)     { printf("%c", c);   }
-void N4Core::d_adr(U16 a)      { printf("%04x", a); }
+void N4Core::d_adr(U16 a)      { printf("%03x", a); }
 void N4Core::d_str(U8 *p)      { printf("%s", p);   }
 void N4Core::d_ptr(U8 *p)      { printf("%p", p);   }
 #endif //ARDUINO

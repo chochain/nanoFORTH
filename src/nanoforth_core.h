@@ -10,7 +10,7 @@ constexpr U16 TIB_SZ   = 0x40;             /**< console(terminal) input buffer s
 constexpr U8  TIB_CLR  = 0x1;
 
 #if ARDUINO
-#define flash(s)      { Serial.print(F(s)); _io->print(F(s)); }
+#define flash(s)      { Serial.print(F(s)); _io->print(F(s)); _io->flush(); }
 #else
 #define flash(s)      d_str((U8*)s)
 #endif // ARDUINO

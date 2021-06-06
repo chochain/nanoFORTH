@@ -7,6 +7,8 @@
 #ifndef __SRC_NANOFORTH_H
 #define __SRC_NANOFORTH_H
 
+#define MEM_DEBUG         1
+
 #if ARDUINO
 #include <Arduino.h>
 #define log(msg)          Serial.print(F(msg))
