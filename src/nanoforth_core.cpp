@@ -43,6 +43,7 @@ void N4Core::d_chr(char c)     { printf("%c", c);   }
 void N4Core::d_adr(U16 a)      { printf("%03x", a); }
 void N4Core::d_str(U8 *p)      { printf("%s", p);   }
 void N4Core::d_ptr(U8 *p)      { printf("%p", p);   }
+void N4Core::d_num(S16 n)      { printf("%d", n);   }
 #endif //ARDUINO
 void N4Core::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
 void N4Core::d_u8(U8 c)        { d_nib(c>>4); d_nib(c&0xf); }

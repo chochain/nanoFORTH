@@ -66,7 +66,7 @@ int NanoForth::begin(Stream &io, U8 ucase, U16 mem_sz, U16 stk_sz)
 #if ARDUINO
     _n4vm->meminfo();                                    // display detailed pointers
 #else     
-    log(" MEM=$");  logx(mem_sz);                         // forth memory block
+    log("MEM=$");   logx(mem_sz);                        // forth memory block
     log("[DIC=$");  logx(mem_sz - stk_sz);               // dictionary size
     log(",STK=$");  logx(stk_sz);                        // stack size
     log("]\n");

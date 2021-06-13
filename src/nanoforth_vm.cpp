@@ -42,9 +42,9 @@ N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
 ///
 void N4VM::meminfo()
 {
-	S16 free = IDX(&free) - IDX(sp);                // in bytes
-#if MEM_DEBUG
-    flash(" [dic=");   d_ptr(dic);
+	S16 free = IDX(&free) - IDX(sp);               // in bytes
+#if ARDUINO && MEM_DEBUG
+    flash("[dic=");    d_ptr(dic);
     flash(", rp=");    d_ptr((U8*)rp);
     flash(", sp=");    d_ptr((U8*)sp);
     flash(", max=");   d_ptr((U8*)&free);
