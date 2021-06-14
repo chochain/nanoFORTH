@@ -35,6 +35,7 @@ N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
 {
     set_io(&io);             /// * set io stream pointer (static member, shared with N4ASM)
     set_ucase(ucase);		 /// * set case sensitiveness
+    
     if (n4asm) _init();      /// * bail if creation failed
 }
 ///
@@ -62,7 +63,7 @@ U8 N4VM::step()
 {
 	if (tib_empty()) _ok();                      ///> console ok prompt
 
-    U8  *tkn = token(trc);                       ///> get a token from console
+    U8  *tkn = token();                          ///> get a token from console
     U16 tmp;
     switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
     case TKN_IMM:                                ///>> immediate words,
@@ -86,14 +87,6 @@ U8 N4VM::step()
     }
     return !tib_empty();                         // stack check and prompt OK
 }
-///
-///> enable/disable execution tracing
-///
-void N4VM::set_trace(U16 f)
-{
-    n4asm->set_trace(f);
-    trc += f ? 1 : (trc ? -1 : 0);
-}
 //
 // reset virtual machine
 //
@@ -103,30 +96,28 @@ void N4VM::_init() {
     //
     rp  = (U16*)&dic[msz - ssz];         /// * return stack pointer, grow upward
     sp  = (S16*)&dic[msz];               /// * parameter stack pointer, grows downward
-
-#if ARDUINO
-    trc = 0;
-#else
-    trc = 1;
-#endif //ARDUINO
     n4asm->reset();                      /// * reset assember
 
-    flash("nanoForth v1.0\n");
+#if !ARDUINO
+    set_trace(1);                        /// * enable debugging for unit tests
+#endif //ARDUINO
+
+    flash("nanoForth v1.0 ");
 }
 //
 // console prompt with stack dump
 //
 void N4VM::_ok()
 {
-    S16 *s0 = (S16*)&dic[msz];          // top of heap
-    if (sp > s0) {                      // check stack overflow
+    S16 *s0 = (S16*)&dic[msz];          /// * fetch top of heap
+    if (sp > s0) {                      /// * check stack overflow
         flash("OVF!\n");
         sp = s0;                        // reset to top of stack block
     }
-    for (S16 *p=s0-1; p >= sp; p--) {
+    for (S16 *p=s0-1; p >= sp; p--) {   /// * dump stack content
         d_num(*p); d_chr('_');
     }
-    flash("ok ");
+    flash("ok ");                       /// * user input prompt
 }
 //
 // opcode execution unit
@@ -138,7 +129,7 @@ void N4VM::_execute(U16 adr)
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
-        if (trc) n4asm->trace(a, ir);                     // executioU8n tracing when enabled
+        n4asm->trace(a, ir);                              // executioU8n tracing when enabled
 
         U8  op = ir & CTL_BITS;                           ///> determine control bits
         switch (op) {
@@ -258,6 +249,8 @@ void N4VM::_primitive(U8 op)
     case 47: PUSH(analogRead(POP()));                break; // AIN
     case 48: analogWrite(TOS, SS(1));  POP(), POP(); break; // PWM
 #endif //ARDUINO
+    case 49: /* available ... */          break;
+    case 58: /* ... available */          break;
         /* case 48-58 available for future expansion */
     case 59: RPUSH(POP()); RPUSH(POP());  break; // FOR
     case 60: {	                                 // NXT

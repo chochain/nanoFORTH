@@ -11,7 +11,7 @@ class N4Asm;                   // forward declaration
 /// NanoForth Virtual Machine class
 ///
 class N4VM : N4Core
-{                             //  (16-byte header)
+{                             //  (12-byte header)
     N4Asm  *n4asm;            ///< assembler object pointer
 
     U8     *dic;              ///< dictionary base
@@ -20,9 +20,6 @@ class N4VM : N4Core
         
     U16    *rp;               ///< return stack pointer
     S16    *sp;               ///< parameter stack pinter
-    
-    U8     trc;               ///< tracing flags
-    U8     xxx;               ///< reserved
     
 public:
     // NanoForth Virtual Machine constructor    
@@ -36,7 +33,6 @@ public:
     
     void meminfo();           ///< display VM system info
     U8   step();              ///< execute one-cycle of virtual machine
-    void set_trace(U16 f);    ///< enable/disable execution tracing
      
 private:
     void _init();             ///< restart virtual machine (reseting internals)

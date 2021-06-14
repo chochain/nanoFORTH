@@ -55,8 +55,8 @@ class N4Asm : N4Core                // (10-byte header)
     U8  *last;                      ///< pointer to last word
     U16 *rp;                        ///< return stack pointer
     
-    U8  trc;                        ///< tracing flag
     U8  tab;                        ///< tracing indentation counter
+    U8  xxx;                        ///< reserved
     
 public:
     U8  *here;                      ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
@@ -65,9 +65,7 @@ public:
     N4Asm(                          
         U8 *mem                     ///< pointer of memory block for dictionary
         );                 
-    
     void reset();                   ///< reset internal pointers (for BYE)
-    void set_trace(U8 f);           ///< enable/disable assembler tracing
     
     /// Instruction Decoder
     N4OP parse_token(

@@ -6,13 +6,16 @@
 //
 // tracing instrumentation
 //
-Stream *N4Core::_io{ &Serial };                          ///< default to Arduino Serial Monitor
-U8      N4Core::_empty{ 1 };                             ///< empty flag for terminal input buffer
-U8      N4Core::_ucase{ 1 };                             ///< empty flag for terminal input buffer
+Stream *N4Core::_io{ &Serial };                ///< default to Arduino Serial Monitor
+U8      N4Core::_empty{ 1 };                   ///< empty flag for terminal input buffer
+U8      N4Core::_ucase{ 1 };                   ///< empty flag for terminal input buffer
+U8      N4Core::_trc{ 0 };                     ///< tracing flag for debug output
 
 void N4Core::set_io(Stream *io) { _io    = io; }
+void N4Core::set_trace(U8 f)    { _trc   = f;  }
 void N4Core::set_ucase(U8 uc)   { _ucase = uc; }
 char N4Core::uc(char c)         { return (_ucase && (c>='A')) ? c&0x5f : c; }
+U8   N4Core::is_tracing()       { return _trc; }
 
 #if ARDUINO
 #include <avr/pgmspace.h>
@@ -105,7 +108,7 @@ U8 N4Core::tib_empty()
 ///
 ///> capture a token from console input buffer
 ///
-U8 *N4Core::token(U8 trc, U8 clr)
+U8 *N4Core::token(U8 clr)
 {
     static U8 tib[TIB_SZ];
     static U8 *tp = tib;
@@ -123,7 +126,7 @@ U8 *N4Core::token(U8 trc, U8 clr)
     while (*tp==' ')   tp++;                 /// * skip blanks
 
     if (*tp=='\r' || *tp=='\n') { tp=tib; _empty=1; }   /// * end of input buffer
-    if (trc) {                               /// * optionally print token for debugging
+    if (_trc) {                              /// * optionally print token for debugging
         // debug info
         d_chr('\n');
         for (int i=0; i<5; i++) {

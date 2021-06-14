@@ -10,9 +10,9 @@ constexpr U16 TIB_SZ   = 0x40;             /**< console(terminal) input buffer s
 constexpr U8  TIB_CLR  = 0x1;
 
 #if ARDUINO
-#define flash(s)      { Serial.print(F(s)); _io->print(F(s)); _io->flush(); }
+#define flash(s)      { log(s); _io->print(F(s)); _io->flush(); }
 #else
-#define flash(s)      d_str((U8*)s)
+#define flash(s)      log(s)
 #endif // ARDUINO
 
 // memory access opcodes
@@ -33,14 +33,17 @@ class N4Core
 {
     static U8   _empty;                    ///< token ininput buffer empty flag
     static U8   _ucase;					   ///< case insensitive
+    static U8   _trc;                      ///< tracing flags
     
 protected:
     static Stream *_io;                    ///< io stream (static member)
     
 public:
     static void set_io(Stream *io);        ///< initialize or redirect io stream
+    static void set_trace(U8 f);           ///< enable/disable execution tracing
     static void set_ucase(U8 uc);          ///< set case sensitiveness
     static char uc(char c);                ///< upper case for case-insensitive matching
+    static U8   is_tracing();              ///< return tracing flag
     static char key();                     ///< Arduino's Serial.getchar(), yield to user tasks when waiting
     //
     // dot_* for console output routines
@@ -68,7 +71,6 @@ public:
     //
     static U8   tib_empty();               ///< check input buffer
     static U8   *token(                    ///< get a token from console input
-        U8 trc,                            ///< tracing flag
         U8 clr=0                           ///< clear token buffer
         );        
     static U8   number(                    ///< process a literal from string given
