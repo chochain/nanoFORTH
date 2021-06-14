@@ -72,14 +72,9 @@ void N4Asm::reset()
 {
     here = dic;                       // rewind to dictionary base
     last = PTR(0xffff);               // -1
-    trc  = tab  = 0;
-}
-///
-///> set tracing flag
-///
-void N4Asm::set_trace(U8 f)
-{
-    trc = f ? 1 : 0;
+    tab  = 0;
+    
+    set_trace(0);
 }
 ///
 ///> parse given token into actionable item
@@ -100,6 +95,7 @@ void N4Asm::compile(U16 *rp0)
     rp = rp0;                       // set return stack pointer
     U8 *l0 = last, *h0 = here;
     U8 *p0 = here;
+    U8 trc = is_tracing();
 
     _do_header();                   /// **fetch token, create name field linked to previous word**
 
@@ -107,7 +103,7 @@ void N4Asm::compile(U16 *rp0)
         U16 tmp;
         if (trc) d_mem(dic, p0, (U16)(here-p0), 0);
 
-        tkn = token(trc);
+        tkn = token();
         p0  = here;                         // keep current top of dictionary (for memdump)
         switch(parse_token(tkn, &tmp, 0)) { ///>> **determinie type of operation, and keep opcode in tmp**
         case TKN_IMM:                       ///>> an immediate command?
@@ -134,10 +130,10 @@ void N4Asm::compile(U16 *rp0)
             }
             break;
         default:                            ///>> then, token type not found
-        	flash("?\n");
+        	flash("??  ");
         	last = l0;                      /// * restore last, here pointers
         	here = h0;
-        	token(trc, TIB_CLR);
+        	token(TIB_CLR);
         	tkn  = NULL;                    /// * bail, terminate loop!
         }
     }
@@ -205,7 +201,8 @@ U8 N4Asm::query(U8 *tkn, U16 *adr)
 constexpr U8 WORDS_PER_ROW = 20;        ///< words per row when showing dictionary
 void N4Asm::words()
 {
-    U8 n = 0, wpr = WORDS_PER_ROW >> ((trc) ? 1 : 0);
+    U8 trc = is_tracing();
+    U8 n   = 0, wpr = WORDS_PER_ROW >> (trc ? 1 : 0);
     for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p)), n++) {  /// **from last, loop through dictionary**
         if ((n%wpr)==0) d_chr('\n');                          ///>> linefeed for every WORDS_PER_ROW
         if (trc) { d_adr(IDX(p)); d_chr(':'); }               ///>> optionally show address
@@ -219,8 +216,8 @@ void N4Asm::words()
 void N4Asm::forget()
 {
     U16 adr;
-    if (!query(token(trc), &adr)) {         /// check if token is in dictionary
-        flash("?!");                       /// * not found, bail
+    if (!query(token(), &adr)) {            /// check if token is in dictionary
+        flash("?!  ");                      /// * not found, bail
         return;
     }
     ///
@@ -233,39 +230,88 @@ void N4Asm::forget()
 ///
 ///> persist dictionary from RAM into EEPROM
 ///
+constexpr U16 N4_SIG  = (((U16)'N'<<8)+(U16)'4');  ///< EEPROM signature
+constexpr U16 ROM_HDR = 6;                         ///< EEPROM header size
 void N4Asm::save()
 {
-#if ARDUINO
+    U8  trc    = is_tracing();
     U16 last_i = IDX(last);
     U16 here_i = IDX(here);
     
-    EEPROM.update(0, last_i>>8); EEPROM.update(1, last_i&0xff);
-    EEPROM.update(2, here_i>>8); EEPROM.update(3, here_i&0xff);
+    if (trc) flash("dic>>ROM ");
+#if ARDUINO
+    ///
+    /// verify EEPROM capacity to hold user dictionary
+    ///
+    if ((ROM_HDR + here_i) > EEPROM.length()) {
+        flash("ERROR: dictionary larger than EEPROM");
+        return;
+    }
+    ///
+    /// create EEPROM dictionary header
+    ///
+    EEPROM.update(0, N4_SIG>>8); EEPROM.update(1, N4_SIG&0xff);
+    EEPROM.update(2, last_i>>8); EEPROM.update(3, last_i&0xff);
+    EEPROM.update(4, here_i>>8); EEPROM.update(5, here_i&0xff);
+    ///
+    /// copy user dictionary into EEPROM byte-by-byte
+    ///
+    U8 *p = dic;
     for (int i=0; i<here_i; i++) {
-        EEPROM.update(i+4, *dic++);
+        EEPROM.update(ROM_HDR+i, *p++);
     }
 #endif //ARDUINO
+    
+    if (trc) {
+        d_num(here_i);
+        flash(" bytes saved\n");
+    }
 }
 ///
 ///> restore dictionary from EEPROM into RAM
 ///
 void N4Asm::load()
 {
+    U8 trc = is_tracing();
+    
+    if (trc) flash("dic<<ROM ");
 #if ARDUINO
-    U16 last_i = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
-    U16 here_i = ((U16)EEPROM.read(2)<<8) + EEPROM.read(3);
+    ///
+    /// validate EEPROM contains user dictionary (from previous run)
+    ///
+    U16 n4     = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
+    if (n4 != N4_SIG) return;       // not intialized yet
+    ///
+    /// retrieve metadata (sizes) of user dicationary
+    ///
+    U16 last_i = ((U16)EEPROM.read(2)<<8) + EEPROM.read(3);
+    U16 here_i = ((U16)EEPROM.read(4)<<8) + EEPROM.read(5);
+    ///
+    /// retrieve user dictionary byte-by-byte into memory
+    ///
+    U8 *p = dic;
     for (int i=0; i<here_i; i++) {
-        *dic++ = EEPROM.read(i+4);
+        *p++ = EEPROM.read(ROM_HDR+i);
     }
+    ///
+    /// adjust user dictionary pointers
+    ///
     last = PTR(last_i);
     here = PTR(here_i);
 #endif //ARDUINO
+    
+    if (trc) {
+        d_num(here_i);
+        flash(" bytes loaded\n");
+    }
 }
 ///
 ///> execution tracer (debugger, can be modified into single-stepper)
 ///
 void N4Asm::trace(U16 a, U8 ir)
 {
+    if (!is_tracing()) return;                        ///> check tracing flag
+    
     d_adr(a);                                         // opcode address
 
     U8 *p, op = ir & CTL_BITS;
@@ -320,7 +366,7 @@ void N4Asm::trace(U16 a, U8 ir)
 ///
 void N4Asm::_do_header()
 {
-    U8  *tkn = token(trc);          ///#### fetch one token from console
+    U8  *tkn = token();             ///#### fetch one token from console
     U16 tmp  = IDX(last);           // link to previous word
     
     last = here;                    ///#### create 3-byte name field
@@ -383,7 +429,7 @@ void N4Asm::_do_branch(U8 op)
 /// 
 void N4Asm::_do_str()
 {
-    U8 *p0 = token(trc);        // get string from input buffer
+    U8 *p0 = token();                  // get string from input buffer
     U8 sz  = 0;
     for (U8 *p=p0; *p!='"'; p++, sz++);
     SET8(here, sz);

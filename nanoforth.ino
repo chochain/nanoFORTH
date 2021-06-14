@@ -41,7 +41,7 @@ void ble_setup(Stream &bt)
     }
 }
 
-void ble_loop()
+void ble_loop(Stream &bt)
 {
     if (Serial.available()) {       // send Serial console input to Bluetooth device
         bt.write(Serial.read());
