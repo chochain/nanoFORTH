@@ -1,4 +1,4 @@
-\page page2 What
+\page page2 How
 
 Start wiring up your breadboard and ready to have fun? Well, since FORTH is such a different language, a better preparation is always recommended...
 
@@ -31,7 +31,7 @@ Jump back <a href="page1.html">here</a> to privious page to review the examples 
 
 ### Exercise
 
-Right after reading any FORTH language tutorial, you will notice that words of nanoFORTH, unlike most are 31-character, are all 3 characters or less. For a start, I like to be brief. Our target platform is a very small MCU and our application has probably a dozen of functions. Aside from easier to read, it has benefit in simplifying some internal handling. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable.
+Right after reading any FORTH language tutorial, you probably will notice that length of a word of nanoFORTH, unlike most are 31-character, is 3 characters or less. This departs from standard FORTHs and begs the question of whether nanoFORTH is truly a FORTH. Well, our target platform is a very small MCU and our application has probably a dozen of functions. Aside from easier to type, it has benefit in simplifying some internal handling. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable. To qualify it as a FORTH or not, probably doesn't matter that much so long as it behaves well, runs fast enough, and useful for our needs.
 
 * now some fancy stuffs, to see what nanoFORTH did, turn the tracing flag on and try everything we did in privious page
 > 1 TRC ⏎<br/>

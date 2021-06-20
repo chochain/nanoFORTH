@@ -1,6 +1,12 @@
-\page page3 How
+\page page3 What
 
 ## nanoFORTH Operations
+### Internal
+At its core, nanoFORTH is a traditional parse-dispatch virtual machine interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has dual personallities which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is faster and **portable**. The later ability enables future units to send source as well as compiled code to each other. This can bring a big grin but we might need to deal with the red flag raised by security guys later.
+
+### Arduino Nano Memory Map
+TODO
+
 ### Arithmatics Ops
 \+ - * / MOD NEG
 > 17 5 + ⏎
