@@ -1,0 +1,27 @@
+var classN4Core =
+[
+    [ "set_io", "classN4Core.html#ae4f776189195ee5d6440b6ba81316476", null ],
+    [ "set_trace", "classN4Core.html#ab163edb0e543098d6fdefea19e8e3b48", null ],
+    [ "set_ucase", "classN4Core.html#a370606874b2b14eca3ef32481c0fe16e", null ],
+    [ "uc", "classN4Core.html#a0d5cc20491c3146786349fde57c13f5b", null ],
+    [ "is_tracing", "classN4Core.html#aa182b81755365216fa61c7c562f9c7c9", null ],
+    [ "key", "classN4Core.html#ad93f809a92778f2f4fcdabc9350a3ea8", null ],
+    [ "d_chr", "classN4Core.html#a3a3e4ae4954551e76c19625c18e72182", null ],
+    [ "d_adr", "classN4Core.html#aee71abce5f671bc9e867f683e327a6e6", null ],
+    [ "d_str", "classN4Core.html#a8ebd0caea89dd845a216290731901fa9", null ],
+    [ "d_ptr", "classN4Core.html#aae3a814b552f13eb6f533f04e59793e6", null ],
+    [ "d_nib", "classN4Core.html#a00f8c798ee3ddd89c038999180347d17", null ],
+    [ "d_u8", "classN4Core.html#a76fd10331f7f55db3f1a924fcdf7e1d5", null ],
+    [ "d_num", "classN4Core.html#a4579127c2ecf48ea5ed3641446e6f4bc", null ],
+    [ "d_mem", "classN4Core.html#a812d012a57ba1a74c8028cca118cb17d", null ],
+    [ "d_name", "classN4Core.html#a286ee4feeeb87bfd3a44d3d353b2713c", null ],
+    [ "tib_empty", "classN4Core.html#a1567e220ac045f6f1e4fc6707f7ce49d", null ],
+    [ "token", "classN4Core.html#a185dd93448d07ca9c7099e84c9f243ea", null ],
+    [ "number", "classN4Core.html#aa72ada2d7a962375dea0c77d20a803e5", null ],
+    [ "find", "classN4Core.html#a126f05b26c3997c6bab07200aa0ba587", null ],
+    [ "_console_input", "classN4Core.html#a4a1b7f36f770b6ca38a83383bcca44d5", null ],
+    [ "_empty", "classN4Core.html#a576fdfd58a5d48965099bf43ba17098e", null ],
+    [ "_ucase", "classN4Core.html#a06161fdbfa8516401c3c3a7da9c79620", null ],
+    [ "_trc", "classN4Core.html#a2e1fc5bf036ea3c9dcff22cacb8265da", null ],
+    [ "_io", "classN4Core.html#a551c74a307e9c2df5d003116a01ed45e", null ]
+];
