@@ -29,6 +29,6 @@ Alternatively, **YAFFA** (Yet-Another-Forth-For-Arduino), can be pulled from Git
 
 May the FORTH be with you! Here comes **a simple and useful** one for our **Nanos**!
 
-<a href="html/page1.html">[Buckle up! Ready for Hyper Jump...]</a>
+<a href="https://chochain.github.io/nanoFORTH/html/page1.html">[Buckle up! Ready for Hyper Jump...]</a>
 
 
