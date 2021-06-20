@@ -1,8 +1,8 @@
 \page page1 Why
 
-The emerging microcontroller communities are being built no more around specific hardware form factor, but rather around higher level languages. Without introducing an interactive shell like Javascript or microPython supported by ESP or Raspberry, the once popular Arduino platform will gradually lose out the market. However, no matter how the hardware environment evolved, on the edge of IoT universe, a mimimalist system resemble the Aruino UNO will always have its value of existance provided that some of the form-factor might one-day shrunk down to micro or even nano-scale. Being chip argnostic, the Arduino IDE does serve as an excellent learning tool for future systems to come. Factor software develpment time into the mix, an interactive/interpreted language is not only cheaper but more fun than the good old C in many cases.
+The emerging microcontroller communities are being built no more around specific hardware form factor, but rather around higher level languages. Without introducing an interactive shell like Javascript or microPython supported by ESP or Raspberry, the once popular Arduino platform will gradually lose out the market. However, no matter how the hardware environment evolved, on the edge of IoT universe, a mimimalist system resemble the Aruino UNO will always have its value of existance provided that some of the form-factor might one-day shrunk down to micro or even nano-scale. Being chip argnostic, the Arduino IDE does serve as an excellent learning tool for future systems to come. Factor software develpment time into the mix, an interactive/interpreted language is not only cheaper but more fun than the good old static compiled C code in many cases. Check out <a href="https://www.forth.com/resources/space-applications" target="_blank">NASA</a> and contemplate why FORTH is still running on a number of space probes today.
 
-Following the footstep of Nakagawa and circuit4u@medium.com's **TinyForth**, a light-weight protothreaded FORTH with 3-character keywords for Arduino, I have a thought!
+Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tforth.html" target="_blank">Nakagawa</a> and <a href="https://circuit4us.medium.com/tiny-forth-with-arduino-hardware-support-255f408b745a" target="_blank">circuit4u@medium.com's</a> **TinyForth**, a light-weight protothreaded FORTH with 3-character keywords for Arduino, I got an idea!
 
 ## nanoFORTH - a simple and useful FORTH for Arduino Nano
 ### Assumptions
@@ -24,7 +24,7 @@ Following the footstep of Nakagawa and circuit4u@medium.com's **TinyForth**, a l
 * optionally show byte-code stream while assembled to help beginers understand FORTH internal,
 * optionally show execution tracing to help debugging, also provision for single-stepping.
 
-### Syntax Examples
+### Use Cases - Interaction Examples
 * turn on LED(red) on digital pin 5, 1 is HIGH
 > 1 5 OUT ⏎
 
@@ -81,7 +81,7 @@ Following the footstep of Nakagawa and circuit4u@medium.com's **TinyForth**, a l
 * show all words available, including **?Z**, **xy**, **lit**, **blu**, **red** that we've just created
 > WRD ⏎
 
-OK, if that captured your imaginations, you might have an idea of what nanoFORTH is trying to do. Remember, you do these without any compilation but, instead, "talk" directly with your Arduino once nanoFORTH uploaded. How the interactions can change what we are so used to do? Further more, what if we can do it via WiFi or BLE? Look Mom! No cable!
+OK, if that captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Remember, we do these without any compilation but, instead, "talk" directly with Arduino once nanoFORTH uploaded via the USB cable. The interactive nature changes the way we are so used to. Further more, what if we can do it via WiFi or BLE? Look Mom! I can talk to the mailbox. No cable!
 
 <a href="page2.html">Ready to get nanoFORTH for a trial?</a><br>
 <a href="page3.html">References and all the details...</a>
