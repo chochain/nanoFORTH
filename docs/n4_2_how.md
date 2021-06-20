@@ -56,8 +56,8 @@ Right after reading any FORTH language tutorial, you probably will notice that l
 > 0 HRE DMP ⏎
 
 <br/>
-<a href="page1.html">Review nanoFORTH command examples</a><br/>
-<a href="page3.html">Learn nanoFORTH internal details</a>
+<a href="html/page1.html">Review nanoFORTH command examples</a><br/>
+<a href="html/page3.html">Learn nanoFORTH internal details</a>
 
 
 
