@@ -1,8 +1,0 @@
-<map id="src/nanoforth_core.h" name="src/nanoforth_core.h">
-<area shape="rect" id="node2" href="$nanoforth__vm_8h.html" title="NanoForth Virtual Machine class. " alt="" coords="79,80,214,107"/>
-<area shape="rect" id="node5" href="$nanoforth__asm_8h.html" title="NanoForth Assembler class. " alt="" coords="239,80,380,107"/>
-<area shape="rect" id="node7" href="$nanoforth__core_8cpp.html" title="NanoForth Core Utility abstract class implementation. " alt="" coords="404,80,559,107"/>
-<area shape="rect" id="node3" href="$nanoforth_8cpp.html" title="NanoForth main controller class implementation. " alt="" coords="5,155,128,181"/>
-<area shape="rect" id="node4" href="$nanoforth__vm_8cpp.html" title="NanoForth Virtual Machine class implementation. " alt="" coords="153,155,301,181"/>
-<area shape="rect" id="node6" href="$nanoforth__asm_8cpp.html" title="NanoForth Assmebler implementation. " alt="" coords="325,155,480,181"/>
-</map>
