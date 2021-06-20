@@ -72,8 +72,8 @@ BYE DMP TRC
 >    `n-byte str: len, byte, byte, ...           (used in print str)`<br>
 
 <br/>
-<a href="html/page1.html">Review nanoFORTH command examples</a><br/>
-<a href="html/page2.html">Install nanoFORTH</a><br>
+<a href="page1.html">Review nanoFORTH command examples</a><br/>
+<a href="page2.html">Install nanoFORTH</a><br>
 
 
 
