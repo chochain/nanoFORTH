@@ -12,7 +12,7 @@ You can skip to Installation Section and start getting your hands dirty. However
 > <a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">Starting Forth by Leo Brodie</a><br/>
 > <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a>
 
-Jump back <a href="page1.html">here</a> to privious page to review the examples we did.
+Jump back <a href="html/page1.html">here</a> to privious page to review the examples we did.
 
 ### Install nanoFORTH - to be simple and useful
 
@@ -56,8 +56,8 @@ Right after reading any FORTH language tutorial, you probably will notice that l
 > 0 HRE DMP ⏎
 
 <br/>
-<a href="page1.html">Review nanoFORTH command examples</a><br/>
-<a href="page3.html">Learn nanoFORTH internal details</a>
+<a href="html/page1.html">Review nanoFORTH command examples</a><br/>
+<a href="html/page3.html">Learn nanoFORTH internal details</a>
 
 
 
