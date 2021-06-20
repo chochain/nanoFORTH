@@ -83,5 +83,5 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 
 OK, if that captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Remember, we do these without any compilation but, instead, "talk" directly with Arduino once nanoFORTH uploaded via the USB cable. The interactive nature changes the way we are so used to. Further more, what if we can do it via WiFi or BLE? Look Mom! I can talk to the mailbox. No cable!
 
-<a href="html/page2.html">Ready to get nanoFORTH for a trial?</a><br>
-<a href="html/page3.html">References and all the details...</a>
+<a href="page2.html">Ready to get nanoFORTH for a trial?</a><br>
+<a href="page3.html">References and all the details...</a>
