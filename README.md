@@ -13,9 +13,9 @@
 One day, **ESP shows up** on you radar. It can do everything you've imagined thus far. Web serving, mesh-network, LoRa, even MySQL,... Programming-wise, there're C, microPython, even Ruby after some hard digging. Soon, the universe started to expand and what came into view is a Raspberry Pi. The final frontier suddenly became bondless. Your imagination was pushed far beyond the black holes and the vast void. **Life became meaningful** and sure got excited again. MotionEyes, OctaPi, robot buggy, and the plan to try some AI stuffs, ... Your heart were filled with joy and temptations. The limitation of CPU resource or storage is already a distant memory.
 
 **One night**, while you felt the new path is set and the final destination is in sight, you were driving home with the cresting moon hanging over the horizon, a thought came through your mine. **What happened to the Nanos?**
-<br>
-<br>
-<br>
+<br/>
+<br/>
+<br/>
 ***
 ### Flash backs...
 
@@ -29,6 +29,7 @@ Alternatively, **YAFFA** (Yet-Another-Forth-For-Arduino), can be pulled from Git
 
 May the FORTH be with you! Here comes **a simple and useful** one for our **Nanos**!
 
+<br/>
 <a href="https://chochain.github.io/nanoFORTH/html/page1.html">[Buckle up! Ready for Hyper Jump...]</a>
 
 
