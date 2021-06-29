@@ -73,7 +73,7 @@ BYE DMP TRC
 
 </br>
 <a href="html/page1.html">Review nanoFORTH command examples</a><br/>
-<a href="html/page2.html">Ready to get nanoFORTH for a trial?</a><br>
+<a href="html/page2.html">Install nanoFORTH</a><br>
 
 
 
