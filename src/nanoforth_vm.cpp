@@ -223,26 +223,31 @@ void N4VM::_primitive(U8 op)
     case 37: n4asm->load();               break; // LD
     case 38: set_trace(POP());            break; // TRC
     case 39: {                                   // CLK
-        U32 u = millis();    // Arduino clock
-        PUSH((U16)(u>>16));
+        U32 u = millis();       // Arduino clock
         PUSH((U16)(u&0xffff));
+        PUSH((U16)(u>>16));
     }                                     break;
     case 40: {                                   // D+
-        S32 v = (S32)SS(2) + (S32)TOS;
+        S32 d0 = ((S32)TOS<<16)   | (SS(1)&0xffff);
+        S32 d1 = ((S32)SS(2)<<16) | (SS(3)&0xffff);
+        S32 v  = d1 + d0;
         POP(); POP();
-        SS(1) = (S16)(v>>16);
-        TOS   = (S16)v&0xffff;
+        SS(1)  = (S16)(v&0xffff);
+        TOS    = (S16)(v>>16);
     }                                     break;
     case 41: {                                   // D-
-        S32 v = (S32)SS(2) - (S32)TOS;
+        S32 d0 = ((S32)TOS<<16)   | (SS(1)&0xffff);
+        S32 d1 = ((S32)SS(2)<<16) | (SS(3)&0xffff);
+        S32 v  = d1 - d0;
         POP(); POP();
-        SS(1) = (S16)(v>>16);
-        TOS   = (S16)(v&0xffff);
+        SS(1)  = (S16)(v&0xffff);
+        TOS    = (S16)(v>>16);
     }                                     break;
     case 42: {                                   // DNG
-        S32 v = -(S32)TOS;
-        SS(1) = (S16)(v>>16);
-        TOS   = (S16)(v&0xffff);
+        S32 d0 = ((S32)TOS<<16)   | (SS(1)&0xffff);
+        S32 v  = -d0;
+        SS(1)  = (S16)(v&0xffff);
+        TOS    = (S16)(v>>16);
     }                                     break;
 #if ARDUINO
     case 43: NanoForth::wait((U32)POP()); break; // DLY
