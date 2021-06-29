@@ -1,14 +1,17 @@
-///
-/// \file nanoforth_asm.h
-/// \brief NanoForth Assembler class
-///
-///> NanoForth Opcode formats<br>
-///>>    `branching : 11BB oooo oooo oooo            (12-bit absolute address)`<br>
-///>>    `primitive : 10cc cccc                      (64 primitives)`<br>
-///>>    `3-byte lit: 1011 1111 nnnn nnnn nnnn nnnn  bf xxxx xxxx (16-bit signed integer)`<br>
-///>>    `1-byte lit: 0nnn nnnn                      (0..127)`<br>
-///>>    `n-byte str: len, byte, byte, ...           (used in print str i.e. .")`<br>
-///
+/**
+ * @file nanoforth_asm.h
+ * @brief nanoForth Assembler class
+ *
+ * ####nanoForth Opcode formats
+ *
+ * @code
+ *    branching : 11BB oooo oooo oooo            (12-bit absolute address)
+ *    primitive : 10cc cccc                      (64 primitives)
+ *    3-byte lit: 1011 1111 nnnn nnnn nnnn nnnn  bf xxxx xxxx (16-bit signed integer)
+ *    1-byte lit: 0nnn nnnn                      (0..127)
+ *    n-byte str: len, byte, byte, ...           (used in print str i.e. .")
+ * @endcode
+ */
 #ifndef __SRC_NANOFORTH_ASM_H
 #define __SRC_NANOFORTH_ASM_H
 #include "nanoforth_core.h"
@@ -24,17 +27,21 @@ enum N4OP {
     TKN_ERR          ///< parse error (unknown token)
 };
 ///
-/// opcode masks and prefixes
-///
+///@name Opcode Masks
+///@{
 constexpr U8  CTL_BITS = 0xc0;   ///< 1100 0000, 11xx: JMP, 10xx: PRM, 0xxx: NUM
 constexpr U8  PFX_PRM  = 0x80;   ///< 1000 0000
 constexpr U8  PRM_MASK = 0x3f;   ///< 0011 1111, 6-bit primitive opcodes
 constexpr U8  JMP_MASK = 0xf0;   ///< 1111 0000
+constexpr U16 ADR_MASK = 0x0fff; ///< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions
+///@}
+///@name Opcode Prefixies
+///@{
 constexpr U8  PFX_CALL = 0xc0;   ///< 1100 0000
 constexpr U8  PFX_RET  = 0xd0;   ///< 1111 0000
 constexpr U8  PFX_CDJ  = 0xe0;   ///< 1101 0000
 constexpr U8  PFX_UDJ  = 0xf0;   ///< 1110 0000
-constexpr U16 ADR_MASK = 0x0fff; ///< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions
+///@}
 ///
 /// opcodes for loop control (in compiler mode)
 ///

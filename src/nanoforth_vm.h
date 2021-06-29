@@ -1,14 +1,15 @@
-///
-/// \file nanoforth_vm.h
-/// \brief NanoForth Virtual Machine class
-///
+/**
+ * @file nanoforth_vm.h
+ * @brief nanoForth Virtual Machine class
+ *
+ */
 #ifndef __SRC_NANOFORTH_VM_H
 #define __SRC_NANOFORTH_VM_H
 #include "nanoforth_core.h"
 
 class N4Asm;                   // forward declaration
 ///
-/// NanoForth Virtual Machine class
+/// nanoForth Virtual Machine class
 ///
 class N4VM : N4Core
 {                             //  (12-byte header)
@@ -22,7 +23,7 @@ class N4VM : N4Core
     S16    *sp;               ///< parameter stack pinter
     
 public:
-    // NanoForth Virtual Machine constructor    
+    // nanoForth Virtual Machine constructor    
     N4VM(
         Stream &io,           ///< io stream
         U8 ucase,             ///< case sensitiveness
@@ -38,13 +39,17 @@ private:
     void _init();             ///< restart virtual machine (reseting internals)
     void _ok();               ///< console prompt (with stack dump)
 
-    // VM execution units
+    ///@name VM execution units
+    ///@{
     void _execute(U16 adr);   ///< opcode execution unit
     void _primitive(U8 op);   ///< execute a primitive instruction
-    // memory dumper
+    ///@}
+    ///@name Memory Dumper
+    ///@{
     void _dump(               ///< mem block with dictionary offset and length
         U16 p0,               ///< starting dictionary address
         U16 sz0               ///< number of bytes to print
         );
+    ///@}
 };
 #endif //__SRC_NANOFORTH_VM_H

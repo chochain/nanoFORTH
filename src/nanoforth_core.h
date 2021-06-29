@@ -1,7 +1,7 @@
-///
-/// \file nanoforth_core.h
-/// \brief NanoForth Core Utility abstract class
-///
+/**
+ * @file nanoforth_core.h
+ * @brief nanoForth Core Utility abstract class
+ */
 #ifndef __SRC_NANOFORTH_CORE_H
 #define __SRC_NANOFORTH_CORE_H
 #include "nanoforth.h"
@@ -15,19 +15,21 @@ constexpr U8  TIB_CLR  = 0x1;
 #define flash(s)      log(s)
 #endif // ARDUINO
 
-// memory access opcodes
-/// \def SET8
-/// \brief 1-byte write
-/// \def SET16
-/// \brief 2-byte write, prevent alignment issue (on 32-bit CPU) and preseve Big-Endian encoding
-/// \def GET16
-/// \brief 2-byte read, prevent aligntment issue (on 32-bit CPU) and preseve Big-Endian encoding
+///@name Memory Access Ops
 ///
+/// @def SET8
+/// @brief 1-byte write
+/// @def SET16
+/// @brief 2-byte write, prevent alignment issue (on 32-bit CPU) and preseve Big-Endian encoding
+/// @def GET16
+/// @brief 2-byte read, prevent aligntment issue (on 32-bit CPU) and preseve Big-Endian encoding
+///@{
 #define SET8(p, c)     (*(U8*)(p)++=(U8)(c))
 #define SET16(p, n)    do { U16 x=(U16)(n); SET8(p,(x)>>8); SET8(p,(x)&0xff); } while(0)
 #define GET16(p)       (((U16)(*(U8*)(p))<<8) + *((U8*)(p)+1))
+///@}
 ///
-/// NanoForth Core Helper abstract class
+/// nanoForth Core Helper abstract class
 ///
 class N4Core
 {
@@ -45,9 +47,9 @@ public:
     static char uc(char c);                ///< upper case for case-insensitive matching
     static U8   is_tracing();              ///< return tracing flag
     static char key();                     ///< Arduino's Serial.getchar(), yield to user tasks when waiting
-    //
-    // dot_* for console output routines
-    //
+    ///
+    ///@name dot_* for Console Output Routines
+    ///@{
     static void d_chr(char c);             ///< print a char to console
     static void d_adr(U16 a);              ///< print a 12-bit address
     static void d_str(U8 *p);              ///< handle dot string (byte-stream leading with length)
@@ -63,12 +65,13 @@ public:
         );
     static void d_name(                    ///< display opcode 3-char name
         U8 op,                             ///< opcode
-        const char *lst,                   ///< NanoForth string formatted list
+        const char *lst,                   ///< nanoForth string formatted list
         U8 space                           ///< delimiter to append at the end
         );
-    //
-    // Search Functions
-    //
+    ///@}
+    ///
+    ///@name Search Functions
+    ///@{
     static U8   tib_empty();               ///< check input buffer
     static U8   *token(                    ///< get a token from console input
         U8 clr=0                           ///< clear token buffer
@@ -85,6 +88,7 @@ public:
         const char *lst,                   ///< string list to be scanned
         U16 *id                            ///< resultant index if found
         );
+    ///@}
     
 private:
     static void _console_input(U8 *tib);   ///< retrieve input stream from console
