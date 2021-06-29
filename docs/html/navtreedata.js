@@ -1,6 +1,7 @@
 var NAVTREE =
 [
   [ "nanoFORTH", "index.html", [
+    [ "Journey of an Arduino Maker", "index.html", null ],
     [ "Why", "page1.html", null ],
     [ "How", "page2.html", null ],
     [ "What", "page3.html", null ],
