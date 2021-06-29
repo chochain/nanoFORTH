@@ -83,36 +83,34 @@ $(document).ready(function(){initNavTree('nanoforth_8h.html','');});
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
 <a href="#define-members">Macros</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">nanoforth.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="classNanoForth.html">NanoForth</a> main controller.  
+<p>nanoForth main controller  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;cstdint&gt;</code><br />
-<code>#include &lt;cstdio&gt;</code><br />
-<code>#include &lt;cstdlib&gt;</code><br />
-<code>#include &lt;iostream&gt;</code><br />
+<div class="textblock"><code>#include &lt;Arduino.h&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for nanoforth.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="nanoforth_8h__incl.png" border="0" usemap="#src_2nanoforth_8h" alt=""/></div>
+<map name="src_2nanoforth_8h" id="src_2nanoforth_8h">
+</map>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="nanoforth_8h__dep__incl.png" border="0" usemap="#src_2nanoforth_8hdep" alt=""/></div>
 <map name="src_2nanoforth_8hdep" id="src_2nanoforth_8hdep">
-<area shape="rect" id="node2" href="nanoforth__core_8h.html" title="NanoForth Core Utility abstract class. " alt="" coords="239,80,380,107"/>
-<area shape="rect" id="node3" href="nanoforth__vm_8h.html" title="NanoForth Virtual Machine class. " alt="" coords="79,155,214,181"/>
-<area shape="rect" id="node6" href="nanoforth__asm_8h.html" title="NanoForth Assembler class. " alt="" coords="239,155,380,181"/>
-<area shape="rect" id="node8" href="nanoforth__core_8cpp.html" title="NanoForth Core Utility abstract class implementation. " alt="" coords="404,155,559,181"/>
-<area shape="rect" id="node4" href="nanoforth_8cpp.html" title="NanoForth main controller class implementation. " alt="" coords="5,229,128,256"/>
-<area shape="rect" id="node5" href="nanoforth__vm_8cpp.html" title="NanoForth Virtual Machine class implementation. " alt="" coords="153,229,301,256"/>
-<area shape="rect" id="node7" href="nanoforth__asm_8cpp.html" title="NanoForth Assmebler implementation. " alt="" coords="325,229,480,256"/>
+<area shape="rect" id="node2" href="nanoforth__core_8h.html" title="nanoForth Core Utility abstract class " alt="" coords="239,80,380,107"/>
+<area shape="rect" id="node3" href="nanoforth__vm_8h.html" title="nanoForth Virtual Machine class " alt="" coords="79,155,214,181"/>
+<area shape="rect" id="node6" href="nanoforth__asm_8h.html" title="nanoForth Assembler class " alt="" coords="239,155,380,181"/>
+<area shape="rect" id="node8" href="nanoforth__core_8cpp.html" title="nanoForth Core Utility abstract class implementation " alt="" coords="404,155,559,181"/>
+<area shape="rect" id="node4" href="nanoforth_8cpp.html" title="nanoForth main controller class implementation " alt="" coords="5,229,128,256"/>
+<area shape="rect" id="node5" href="nanoforth__vm_8cpp.html" title="nanoForth Virtual Machine class implementation " alt="" coords="153,229,301,256"/>
+<area shape="rect" id="node7" href="nanoforth__asm_8cpp.html" title="nanoForth Assmebler implementation " alt="" coords="325,229,480,256"/>
 </map>
 </div>
 </div>
@@ -129,18 +127,12 @@ Data Structures</h2></td></tr>
 Macros</h2></td></tr>
 <tr class="memitem:a2d7bc380695eeedb1af50c3808613afe"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a2d7bc380695eeedb1af50c3808613afe">MEM_DEBUG</a>&#160;&#160;&#160;1</td></tr>
 <tr class="separator:a2d7bc380695eeedb1af50c3808613afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75acaba9e781937468d0911423bc0c35"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a75acaba9e781937468d0911423bc0c35">PROGMEM</a></td></tr>
-<tr class="separator:a75acaba9e781937468d0911423bc0c35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5b3ec1ce839fa1c4337a7d0312e9749"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#ad5b3ec1ce839fa1c4337a7d0312e9749">millis</a>()&#160;&#160;&#160;10000</td></tr>
-<tr class="separator:ad5b3ec1ce839fa1c4337a7d0312e9749"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae6778ca2c38951f24bd39f9c38cab9b2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#ae6778ca2c38951f24bd39f9c38cab9b2">pgm_read_byte</a>(p)&#160;&#160;&#160;(*(p))</td></tr>
-<tr class="separator:ae6778ca2c38951f24bd39f9c38cab9b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a642fd9241bc9e4219ea15503ca87fefb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a642fd9241bc9e4219ea15503ca87fefb">log</a>(msg)&#160;&#160;&#160;printf(&quot;%s&quot;, msg)</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Arduino Console Output Support</div></td></tr>
+<tr class="memitem:a642fd9241bc9e4219ea15503ca87fefb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a642fd9241bc9e4219ea15503ca87fefb">log</a>(msg)&#160;&#160;&#160;Serial.print(F(msg))</td></tr>
 <tr class="separator:a642fd9241bc9e4219ea15503ca87fefb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c6ed456da2d729add89153d74894f35"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a0c6ed456da2d729add89153d74894f35">logx</a>(v)&#160;&#160;&#160;printf(&quot;%x&quot;, (U16)v)</td></tr>
+<tr class="memitem:a0c6ed456da2d729add89153d74894f35"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a0c6ed456da2d729add89153d74894f35">logx</a>(v)&#160;&#160;&#160;Serial.print((<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)v, HEX)</td></tr>
 <tr class="separator:a0c6ed456da2d729add89153d74894f35"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a373c4aaa698669f83de77543c02dc668"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a373c4aaa698669f83de77543c02dc668">Stream</a>&#160;&#160;&#160;int</td></tr>
-<tr class="separator:a373c4aaa698669f83de77543c02dc668"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">nanoForth multi-tasking</div></td></tr>
 <tr class="memitem:a2a16b4f61312c4f1512548984c4856d0"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a2a16b4f61312c4f1512548984c4856d0">N4_TASK</a>(tname)&#160;&#160;&#160;void tname(<a class="el" href="nanoforth_8h.html#a1c8394224254af4a65ddc05349f1fce8">n4_tptr</a> _p_) { switch((_p_)-&gt;ci) { case 0:</td></tr>
 <tr class="memdesc:a2a16b4f61312c4f1512548984c4856d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">define a user task block with name  <a href="#a2a16b4f61312c4f1512548984c4856d0">More...</a><br /></td></tr>
 <tr class="separator:a2a16b4f61312c4f1512548984c4856d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,6 +145,11 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
+<tr class="memitem:a1c8394224254af4a65ddc05349f1fce8"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structn4__task.html">n4_task</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a1c8394224254af4a65ddc05349f1fce8">n4_tptr</a></td></tr>
+<tr class="separator:a1c8394224254af4a65ddc05349f1fce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f8c7dfe05abb1e969b291e5ae01016f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classNanoForth.html">NanoForth</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a1f8c7dfe05abb1e969b291e5ae01016f">N4</a></td></tr>
+<tr class="separator:a1f8c7dfe05abb1e969b291e5ae01016f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Portable Types</div></td></tr>
 <tr class="memitem:aa63ef7b996d5487ce35a5a66601f3e73"><td class="memItemLeft" align="right" valign="top">typedef uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a></td></tr>
 <tr class="memdesc:aa63ef7b996d5487ce35a5a66601f3e73"><td class="mdescLeft">&#160;</td><td class="mdescRight">8-bit unsigned integer, for char and short int  <a href="#aa63ef7b996d5487ce35a5a66601f3e73">More...</a><br /></td></tr>
 <tr class="separator:aa63ef7b996d5487ce35a5a66601f3e73"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -163,20 +160,15 @@ Typedefs</h2></td></tr>
 <tr class="memdesc:a6d241ad21a823c90d4835380787db5d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">16-bit signed integer, for general numbers  <a href="#a6d241ad21a823c90d4835380787db5d4">More...</a><br /></td></tr>
 <tr class="separator:a6d241ad21a823c90d4835380787db5d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a696390429f2f3b644bde8d0322a24124"><td class="memItemLeft" align="right" valign="top">typedef uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a></td></tr>
-<tr class="memdesc:a696390429f2f3b644bde8d0322a24124"><td class="mdescLeft">&#160;</td><td class="mdescRight">32-bit unsigned integer, for <a class="el" href="nanoforth_8h.html#ad5b3ec1ce839fa1c4337a7d0312e9749">millis()</a>  <a href="#a696390429f2f3b644bde8d0322a24124">More...</a><br /></td></tr>
+<tr class="memdesc:a696390429f2f3b644bde8d0322a24124"><td class="mdescLeft">&#160;</td><td class="mdescRight">32-bit unsigned integer, for millis()  <a href="#a696390429f2f3b644bde8d0322a24124">More...</a><br /></td></tr>
 <tr class="separator:a696390429f2f3b644bde8d0322a24124"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39c786017723555afb9e8b85accec0de"><td class="memItemLeft" align="right" valign="top">typedef int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a39c786017723555afb9e8b85accec0de">S32</a></td></tr>
 <tr class="memdesc:a39c786017723555afb9e8b85accec0de"><td class="mdescLeft">&#160;</td><td class="mdescRight">32-bit signed integer  <a href="#a39c786017723555afb9e8b85accec0de">More...</a><br /></td></tr>
 <tr class="separator:a39c786017723555afb9e8b85accec0de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c8394224254af4a65ddc05349f1fce8"><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structn4__task.html">n4_task</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a1c8394224254af4a65ddc05349f1fce8">n4_tptr</a></td></tr>
-<tr class="separator:a1c8394224254af4a65ddc05349f1fce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f8c7dfe05abb1e969b291e5ae01016f"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="classNanoForth.html">NanoForth</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a1f8c7dfe05abb1e969b291e5ae01016f">N4</a></td></tr>
-<tr class="separator:a1f8c7dfe05abb1e969b291e5ae01016f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a566e15a9997160dae1b1898001c418e9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a566e15a9997160dae1b1898001c418e9">Serial</a></td></tr>
-<tr class="separator:a566e15a9997160dae1b1898001c418e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a6b47c655a4d981330600913136da8a62"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a6b47c655a4d981330600913136da8a62">N4_STK_SZ</a> = 0x80</td></tr>
 <tr class="separator:a6b47c655a4d981330600913136da8a62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0fbd46bf8acfaff6cb92691910ff3ad4"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a0fbd46bf8acfaff6cb92691910ff3ad4">N4_DIC_SZ</a> = 0x400</td></tr>
@@ -185,10 +177,36 @@ Variables</h2></td></tr>
 <tr class="separator:a15245deda66e142583e3e470b61a70c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="classNanoForth.html">NanoForth</a> main controller. </p>
-<blockquote class="doxtable">
-<p><code>lib objects..[dictionary-&gt;...|sp-&gt; ..stack.. &lt;-rp],vm,asm ..free.. &lt;-heap|</code></p>
-</blockquote>
+<div class="textblock"><p>nanoForth main controller </p>
+<h4>Memory Map</h4>
+<table class="doxtable">
+<tr>
+<th align="right">paddr </th><th align="right">forth </th><th align="center">objects </th><th align="center">rom  </th></tr>
+<tr>
+<td align="right">0x0000</td><td align="right"></td><td align="center">Interrupt Vectors </td><td align="center"></td></tr>
+<tr>
+<td align="right">0x0100</td><td align="right"></td><td align="center">Arduino libraries </td><td align="center"></td></tr>
+<tr>
+<td align="right"></td><td align="right">0x0000</td><td align="center">Dictionary==&gt; </td><td align="center">x </td></tr>
+<tr>
+<td align="right"></td><td align="right"></td><td align="center">...1K-byte... </td><td align="center">x </td></tr>
+<tr>
+<td align="right"></td><td align="right">0x0400</td><td align="center">Data Stack==&gt; </td><td align="center"></td></tr>
+<tr>
+<td align="right"></td><td align="right"></td><td align="center">...64 entries... </td><td align="center"></td></tr>
+<tr>
+<td align="right"></td><td align="right"></td><td align="center">&lt;==Return Stack </td><td align="center"></td></tr>
+<tr>
+<td align="right"></td><td align="right">0x0480</td><td align="center">nanoForth VM </td><td align="center"></td></tr>
+<tr>
+<td align="right"></td><td align="right"></td><td align="center">nanoForth Assember</td><td align="center"></td></tr>
+<tr>
+<td align="right"></td><td align="right"></td><td align="center">...free memory... </td><td align="center"></td></tr>
+<tr>
+<td align="right"></td><td align="right"></td><td align="center">Arduino heap </td><td align="center"></td></tr>
+<tr>
+<td align="right">0x0900</td><td align="right"></td><td align="center"></td><td align="center"></td></tr>
+</table>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a2d7bc380695eeedb1af50c3808613afe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2d7bc380695eeedb1af50c3808613afe">&#9670;&nbsp;</a></span>MEM_DEBUG</h2>
@@ -198,55 +216,6 @@ Variables</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define MEM_DEBUG&#160;&#160;&#160;1</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a75acaba9e781937468d0911423bc0c35"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a75acaba9e781937468d0911423bc0c35">&#9670;&nbsp;</a></span>PROGMEM</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define PROGMEM</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad5b3ec1ce839fa1c4337a7d0312e9749"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad5b3ec1ce839fa1c4337a7d0312e9749">&#9670;&nbsp;</a></span>millis</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define millis</td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td>&#160;&#160;&#160;10000</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae6778ca2c38951f24bd39f9c38cab9b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae6778ca2c38951f24bd39f9c38cab9b2">&#9670;&nbsp;</a></span>pgm_read_byte</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define pgm_read_byte</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">p</td><td>)</td>
-          <td>&#160;&#160;&#160;(*(p))</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -264,7 +233,7 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">msg</td><td>)</td>
-          <td>&#160;&#160;&#160;printf(&quot;%s&quot;, msg)</td>
+          <td>&#160;&#160;&#160;Serial.print(F(msg))</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -282,21 +251,7 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">v</td><td>)</td>
-          <td>&#160;&#160;&#160;printf(&quot;%x&quot;, (U16)v)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a373c4aaa698669f83de77543c02dc668"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a373c4aaa698669f83de77543c02dc668">&#9670;&nbsp;</a></span>Stream</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define Stream&#160;&#160;&#160;int</td>
+          <td>&#160;&#160;&#160;Serial.print((<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)v, HEX)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -338,8 +293,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">(_p_)-&gt;t = <a class="code" href="nanoforth_8h.html#ad5b3ec1ce839fa1c4337a7d0312e9749">millis</a>()+(<a class="code" href="nanoforth_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a>)(ms); (_p_)-&gt;ci = __LINE__; <span class="keywordflow">case</span> __LINE__: \</div><div class="line">                        if (<a class="code" href="nanoforth_8h.html#ad5b3ec1ce839fa1c4337a7d0312e9749">millis</a>() &lt; (_p_)-&gt;t) <span class="keywordflow">return</span>;</div><div class="ttc" id="nanoforth_8h_html_ad5b3ec1ce839fa1c4337a7d0312e9749"><div class="ttname"><a href="nanoforth_8h.html#ad5b3ec1ce839fa1c4337a7d0312e9749">millis</a></div><div class="ttdeci">#define millis()</div><div class="ttdef"><b>Definition:</b> nanoforth.h:22</div></div>
-<div class="ttc" id="nanoforth_8h_html_a696390429f2f3b644bde8d0322a24124"><div class="ttname"><a href="nanoforth_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a></div><div class="ttdeci">uint32_t U32</div><div class="ttdoc">32-bit unsigned integer, for millis() </div><div class="ttdef"><b>Definition:</b> nanoforth.h:35</div></div>
+<b>Value:</b><div class="fragment"><div class="line">(_p_)-&gt;t = millis()+(<a class="code" href="nanoforth_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a>)(ms); (_p_)-&gt;ci = __LINE__; <span class="keywordflow">case</span> __LINE__: \</div><div class="line">                        if (millis() &lt; (_p_)-&gt;t) <span class="keywordflow">return</span>;</div><div class="ttc" id="nanoforth_8h_html_a696390429f2f3b644bde8d0322a24124"><div class="ttname"><a href="nanoforth_8h.html#a696390429f2f3b644bde8d0322a24124">U32</a></div><div class="ttdeci">uint32_t U32</div><div class="ttdoc">32-bit unsigned integer, for millis() </div><div class="ttdef"><b>Definition:</b> nanoforth.h:53</div></div>
 </div><!-- fragment -->
 <p>pause the user task for ms microseconds </p>
 
@@ -422,7 +376,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>32-bit unsigned integer, for <a class="el" href="nanoforth_8h.html#ad5b3ec1ce839fa1c4337a7d0312e9749">millis()</a> </p>
+<p>32-bit unsigned integer, for millis() </p>
 
 </div>
 </div>
@@ -453,7 +407,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p><a class="el" href="classNanoForth.html">NanoForth</a> light-weight multi-tasker (aka protothread by Adam Dunkels) </p>
+<p>nanoForth light-weight multi-tasker (aka protothread by Adam Dunkels) </p>
 
 </div>
 </div>
@@ -473,20 +427,6 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="a566e15a9997160dae1b1898001c418e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a566e15a9997160dae1b1898001c418e9">&#9670;&nbsp;</a></span>Serial</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int Serial</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a6b47c655a4d981330600913136da8a62"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6b47c655a4d981330600913136da8a62">&#9670;&nbsp;</a></span>N4_STK_SZ</h2>
 
@@ -528,7 +468,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>total memory block allocate for <a class="el" href="classNanoForth.html">NanoForth</a> </p>
+<p>total memory block allocate for nanoForth </p>
 
 </div>
 </div>

@@ -110,7 +110,7 @@ Collaboration diagram for N4VM:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3531ac0d5b6566151d65cbccd0303dc5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4VM.html#a3531ac0d5b6566151d65cbccd0303dc5">N4VM</a> (<a class="el" href="nanoforth_8h.html#a373c4aaa698669f83de77543c02dc668">Stream</a> &amp;io, <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> ucase, <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *mem, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> mem_sz, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> stk_sz)</td></tr>
+<tr class="memitem:a3531ac0d5b6566151d65cbccd0303dc5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4VM.html#a3531ac0d5b6566151d65cbccd0303dc5">N4VM</a> (Stream &amp;io, <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> ucase, <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *mem, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> mem_sz, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> stk_sz)</td></tr>
 <tr class="separator:a3531ac0d5b6566151d65cbccd0303dc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a224b81d2df781a4fa8c6a37bc47551ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4VM.html#a224b81d2df781a4fa8c6a37bc47551ff">meminfo</a> ()</td></tr>
 <tr class="memdesc:a224b81d2df781a4fa8c6a37bc47551ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">display VM system info  <a href="#a224b81d2df781a4fa8c6a37bc47551ff">More...</a><br /></td></tr>
@@ -127,12 +127,14 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:ae6c606cbed97608df274d595b2fe4d27"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4VM.html#ae6c606cbed97608df274d595b2fe4d27">_ok</a> ()</td></tr>
 <tr class="memdesc:ae6c606cbed97608df274d595b2fe4d27"><td class="mdescLeft">&#160;</td><td class="mdescRight">console prompt (with stack dump)  <a href="#ae6c606cbed97608df274d595b2fe4d27">More...</a><br /></td></tr>
 <tr class="separator:ae6c606cbed97608df274d595b2fe4d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">VM execution units</div></td></tr>
 <tr class="memitem:a1ac91101a9e2ec66e6b131908276a604"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4VM.html#a1ac91101a9e2ec66e6b131908276a604">_execute</a> (<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> adr)</td></tr>
 <tr class="memdesc:a1ac91101a9e2ec66e6b131908276a604"><td class="mdescLeft">&#160;</td><td class="mdescRight">opcode execution unit  <a href="#a1ac91101a9e2ec66e6b131908276a604">More...</a><br /></td></tr>
 <tr class="separator:a1ac91101a9e2ec66e6b131908276a604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0849efba510bd4f2c039e438103bdd26"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4VM.html#a0849efba510bd4f2c039e438103bdd26">_primitive</a> (<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> op)</td></tr>
 <tr class="memdesc:a0849efba510bd4f2c039e438103bdd26"><td class="mdescLeft">&#160;</td><td class="mdescRight">execute a primitive instruction  <a href="#a0849efba510bd4f2c039e438103bdd26">More...</a><br /></td></tr>
 <tr class="separator:a0849efba510bd4f2c039e438103bdd26"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Memory Dumper</div></td></tr>
 <tr class="memitem:a91ade7758e883568be3c28ea7e0d41bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4VM.html#a91ade7758e883568be3c28ea7e0d41bf">_dump</a> (<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> p0, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> sz0)</td></tr>
 <tr class="separator:a91ade7758e883568be3c28ea7e0d41bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -160,23 +162,7 @@ Private Attributes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_static_methods_classN4Core"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classN4Core')"><img src="closed.png" alt="-"/>&#160;Static Private Member Functions inherited from <a class="el" href="classN4Core.html">N4Core</a></td></tr>
-<tr class="memitem:ae4f776189195ee5d6440b6ba81316476 inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#ae4f776189195ee5d6440b6ba81316476">set_io</a> (<a class="el" href="nanoforth_8h.html#a373c4aaa698669f83de77543c02dc668">Stream</a> *io)</td></tr>
-<tr class="memdesc:ae4f776189195ee5d6440b6ba81316476 inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">initialize or redirect io stream  <a href="classN4Core.html#ae4f776189195ee5d6440b6ba81316476">More...</a><br /></td></tr>
-<tr class="separator:ae4f776189195ee5d6440b6ba81316476 inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab163edb0e543098d6fdefea19e8e3b48 inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#ab163edb0e543098d6fdefea19e8e3b48">set_trace</a> (<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> f)</td></tr>
-<tr class="memdesc:ab163edb0e543098d6fdefea19e8e3b48 inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">enable/disable execution tracing  <a href="classN4Core.html#ab163edb0e543098d6fdefea19e8e3b48">More...</a><br /></td></tr>
-<tr class="separator:ab163edb0e543098d6fdefea19e8e3b48 inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a370606874b2b14eca3ef32481c0fe16e inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a370606874b2b14eca3ef32481c0fe16e">set_ucase</a> (<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> <a class="el" href="classN4Core.html#a0d5cc20491c3146786349fde57c13f5b">uc</a>)</td></tr>
-<tr class="memdesc:a370606874b2b14eca3ef32481c0fe16e inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">set case sensitiveness  <a href="classN4Core.html#a370606874b2b14eca3ef32481c0fe16e">More...</a><br /></td></tr>
-<tr class="separator:a370606874b2b14eca3ef32481c0fe16e inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0d5cc20491c3146786349fde57c13f5b inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a0d5cc20491c3146786349fde57c13f5b">uc</a> (char c)</td></tr>
-<tr class="memdesc:a0d5cc20491c3146786349fde57c13f5b inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">upper case for case-insensitive matching  <a href="classN4Core.html#a0d5cc20491c3146786349fde57c13f5b">More...</a><br /></td></tr>
-<tr class="separator:a0d5cc20491c3146786349fde57c13f5b inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa182b81755365216fa61c7c562f9c7c9 inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#aa182b81755365216fa61c7c562f9c7c9">is_tracing</a> ()</td></tr>
-<tr class="memdesc:aa182b81755365216fa61c7c562f9c7c9 inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">return tracing flag  <a href="classN4Core.html#aa182b81755365216fa61c7c562f9c7c9">More...</a><br /></td></tr>
-<tr class="separator:aa182b81755365216fa61c7c562f9c7c9 inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad93f809a92778f2f4fcdabc9350a3ea8 inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#ad93f809a92778f2f4fcdabc9350a3ea8">key</a> ()</td></tr>
-<tr class="memdesc:ad93f809a92778f2f4fcdabc9350a3ea8 inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">Arduino's Serial.getchar(), yield to user tasks when waiting.  <a href="classN4Core.html#ad93f809a92778f2f4fcdabc9350a3ea8">More...</a><br /></td></tr>
 <tr class="separator:ad93f809a92778f2f4fcdabc9350a3ea8 inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a3e4ae4954551e76c19625c18e72182 inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a3a3e4ae4954551e76c19625c18e72182">d_chr</a> (char c)</td></tr>
 <tr class="memdesc:a3a3e4ae4954551e76c19625c18e72182 inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">print a char to console  <a href="classN4Core.html#a3a3e4ae4954551e76c19625c18e72182">More...</a><br /></td></tr>
@@ -212,13 +198,28 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:aa72ada2d7a962375dea0c77d20a803e5 inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a126f05b26c3997c6bab07200aa0ba587 inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a126f05b26c3997c6bab07200aa0ba587">find</a> (<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *tkn, const char *lst, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> *id)</td></tr>
 <tr class="separator:a126f05b26c3997c6bab07200aa0ba587 inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f776189195ee5d6440b6ba81316476 inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#ae4f776189195ee5d6440b6ba81316476">set_io</a> (Stream *io)</td></tr>
+<tr class="memdesc:ae4f776189195ee5d6440b6ba81316476 inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">initialize or redirect io stream  <a href="classN4Core.html#ae4f776189195ee5d6440b6ba81316476">More...</a><br /></td></tr>
+<tr class="separator:ae4f776189195ee5d6440b6ba81316476 inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab163edb0e543098d6fdefea19e8e3b48 inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#ab163edb0e543098d6fdefea19e8e3b48">set_trace</a> (<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> f)</td></tr>
+<tr class="memdesc:ab163edb0e543098d6fdefea19e8e3b48 inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">enable/disable execution tracing  <a href="classN4Core.html#ab163edb0e543098d6fdefea19e8e3b48">More...</a><br /></td></tr>
+<tr class="separator:ab163edb0e543098d6fdefea19e8e3b48 inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a370606874b2b14eca3ef32481c0fe16e inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a370606874b2b14eca3ef32481c0fe16e">set_ucase</a> (<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> <a class="el" href="classN4Core.html#a0d5cc20491c3146786349fde57c13f5b">uc</a>)</td></tr>
+<tr class="memdesc:a370606874b2b14eca3ef32481c0fe16e inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">set case sensitiveness  <a href="classN4Core.html#a370606874b2b14eca3ef32481c0fe16e">More...</a><br /></td></tr>
+<tr class="separator:a370606874b2b14eca3ef32481c0fe16e inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d5cc20491c3146786349fde57c13f5b inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a0d5cc20491c3146786349fde57c13f5b">uc</a> (char c)</td></tr>
+<tr class="memdesc:a0d5cc20491c3146786349fde57c13f5b inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">upper case for case-insensitive matching  <a href="classN4Core.html#a0d5cc20491c3146786349fde57c13f5b">More...</a><br /></td></tr>
+<tr class="separator:a0d5cc20491c3146786349fde57c13f5b inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa182b81755365216fa61c7c562f9c7c9 inherit pub_static_methods_classN4Core"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#aa182b81755365216fa61c7c562f9c7c9">is_tracing</a> ()</td></tr>
+<tr class="memdesc:aa182b81755365216fa61c7c562f9c7c9 inherit pub_static_methods_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">return tracing flag  <a href="classN4Core.html#aa182b81755365216fa61c7c562f9c7c9">More...</a><br /></td></tr>
+<tr class="separator:aa182b81755365216fa61c7c562f9c7c9 inherit pub_static_methods_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_attribs_classN4Core"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classN4Core')"><img src="closed.png" alt="-"/>&#160;Static Private Attributes inherited from <a class="el" href="classN4Core.html">N4Core</a></td></tr>
-<tr class="memitem:a551c74a307e9c2df5d003116a01ed45e inherit pub_static_attribs_classN4Core"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="nanoforth_8h.html#a373c4aaa698669f83de77543c02dc668">Stream</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a551c74a307e9c2df5d003116a01ed45e">_io</a> { &amp;<a class="el" href="nanoforth__core_8cpp.html#a566e15a9997160dae1b1898001c418e9">Serial</a> }</td></tr>
+<tr class="memitem:a551c74a307e9c2df5d003116a01ed45e inherit pub_static_attribs_classN4Core"><td class="memItemLeft" align="right" valign="top">static Stream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a551c74a307e9c2df5d003116a01ed45e">_io</a> { &amp;Serial }</td></tr>
 <tr class="memdesc:a551c74a307e9c2df5d003116a01ed45e inherit pub_static_attribs_classN4Core"><td class="mdescLeft">&#160;</td><td class="mdescRight">io stream (static member)  <a href="classN4Core.html#a551c74a307e9c2df5d003116a01ed45e">More...</a><br /></td></tr>
 <tr class="separator:a551c74a307e9c2df5d003116a01ed45e inherit pub_static_attribs_classN4Core"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="classNanoForth.html">NanoForth</a> Virtual Machine class </p>
+<div class="textblock"><p>nanoForth Virtual Machine class </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a3531ac0d5b6566151d65cbccd0303dc5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3531ac0d5b6566151d65cbccd0303dc5">&#9670;&nbsp;</a></span>N4VM()</h2>
@@ -229,7 +230,7 @@ Additional Inherited Members</h2></td></tr>
         <tr>
           <td class="memname">N4VM::N4VM </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="nanoforth_8h.html#a373c4aaa698669f83de77543c02dc668">Stream</a> &amp;&#160;</td>
+          <td class="paramtype">Stream &amp;&#160;</td>
           <td class="paramname"><em>io</em>, </td>
         </tr>
         <tr>
@@ -348,7 +349,7 @@ Additional Inherited Members</h2></td></tr>
 <li>CST, create new constant</li>
 <li>FGT, rollback word created</li>
 <li>DMP, memory dump</li>
-<li>BYE, bail!</li>
+<li>BYE, restart the virtual machine</li>
 </ul>
 <blockquote class="doxtable">
 <blockquote class="doxtable">
@@ -397,11 +398,13 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>restart virtual machine (reseting internals) </p>
+<blockquote class="doxtable">
+<p>reset virtual machine</p>
+</blockquote>
 <ul>
 <li>return stack pointer, grow upward</li>
 <li>parameter stack pointer, grows downward</li>
-<li>reset assember</li>
-<li>enable debugging for unit tests </li>
+<li>reset assember </li>
 </ul>
 
 </div>
@@ -430,6 +433,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>console prompt (with stack dump) </p>
+<blockquote class="doxtable">
+<p>console prompt with stack dump</p>
+</blockquote>
 <ul>
 <li>fetch top of heap</li>
 <li>check stack overflow</li>
@@ -464,6 +470,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>opcode execution unit </p>
+<blockquote class="doxtable">
+<p>opcode execution unit</p>
+</blockquote>
 <blockquote class="doxtable">
 <p>walk through instruction sequences </p>
 </blockquote>
@@ -507,6 +516,9 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>execute a primitive instruction </p>
+<blockquote class="doxtable">
+<p>execute a primitive opcode</p>
+</blockquote>
 
 </div>
 </div>
