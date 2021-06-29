@@ -1,20 +1,22 @@
-///
-/// \file nanoforth_vm.cpp
-/// \brief NanoForth Virtual Machine class implementation
-///
-///> Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)<br>
-///
-///>>    `                              SP0 (sp max to protect overwritten of vm object)`<br>
-///>>    ` mem[...dic_sz...[...stk_sz...]`<br>
-///>>    `    |            |            |`<br>
-///>>    `    dic-->       +->rp    sp<-+`<br>
-///>>    `                      TOS TOS1 (top of stack)`<br>
-///
+/**
+ * @file nanoforth_vm.cpp
+ * @brief nanoForth Virtual Machine class implementation
+ *
+ * #### Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)
+ *
+ * @code
+ *                                    SP0 (sp max to protect overwritten of vm object)
+ *        mem[...dic_sz...[...stk_sz...]
+ *           |            |            |
+ *           dic-->       +->rp    sp<-+
+ *                                 TOS TOS1 (top of stack)
+ * @endcode
+ */
 #include "nanoforth_asm.h"
 #include "nanoforth_vm.h"
-//
-// parameter, return stack ops
-//
+///
+///@name Data Stack and Return Stack Ops
+///@{
 #define SP0            ((S16*)(dic+msz))            /**< base of parameter stack             */
 #define TOS            (*sp)                        /**< pointer to top of current stack     */
 #define SS(i)          (*(sp+(i)))                  /**< pointer to the nth on stack         */
@@ -22,11 +24,12 @@
 #define POP()          (sp<SP0 ? *sp++ : 0)         /**< pop value off parameter stack       */
 #define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack      */
 #define RPOP()         (*(--rp))                    /**< pop address from return stack       */
-//
-// dictionary index <=> pointer translation macros
-//
+///@}
+///@name Dictionary Index <=> Pointer Converters
+///@{
 #define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
 #define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
+///@}
 ///
 ///> constructor and initializer
 ///
@@ -87,9 +90,9 @@ U8 N4VM::step()
     }
     return !tib_empty();                         // stack check and prompt OK
 }
-//
-// reset virtual machine
-//
+///
+///> reset virtual machine
+///
 void N4VM::_init() {
     //
     // reset stack pointers and tracing flags
@@ -104,9 +107,9 @@ void N4VM::_init() {
 
     flash("nanoForth v1.0 ");
 }
-//
-// console prompt with stack dump
-//
+///
+///> console prompt with stack dump
+///
 void N4VM::_ok()
 {
     S16 *s0 = (S16*)&dic[msz];          /// * fetch top of heap
@@ -119,9 +122,9 @@ void N4VM::_ok()
     }
     flash("ok ");                       /// * user input prompt
 }
-//
-// opcode execution unit
-//
+///
+///> opcode execution unit
+///
 void N4VM::_execute(U16 adr)
 {
 	RPUSH(0xffff);                                        // enter function call
@@ -165,9 +168,9 @@ void N4VM::_execute(U16 adr)
         NanoForth::yield();
     }
 }
-//
-// execute a primitive opcode
-//
+///
+///> execute a primitive opcode
+///
 void N4VM::_primitive(U8 op)
 {
     switch (op) {

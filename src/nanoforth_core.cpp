@@ -1,11 +1,12 @@
-///
-/// \file nanoforth_core.cpp
-/// \brief NanoForth Core Utility abstract class implementation
-///
+/**
+ * @file nanoforth_core.cpp
+ * @brief nanoForth Core Utility abstract class implementation
+ *
+ */
 #include "nanoforth_core.h"
-//
-// tracing instrumentation
-//
+///
+///@name Tracing Instrumentation
+///@{
 Stream *N4Core::_io{ &Serial };                ///< default to Arduino Serial Monitor
 U8      N4Core::_empty{ 1 };                   ///< empty flag for terminal input buffer
 U8      N4Core::_ucase{ 1 };                   ///< empty flag for terminal input buffer
@@ -16,11 +17,14 @@ void N4Core::set_trace(U8 f)    { _trc   = f;  }
 void N4Core::set_ucase(U8 uc)   { _ucase = uc; }
 char N4Core::uc(char c)         { return (_ucase && (c>='A')) ? c&0x5f : c; }
 U8   N4Core::is_tracing()       { return _trc; }
-
+///@}
+///
+///@name Console IO Functions with Cooperative Threading support
+///@{
 #if ARDUINO
 #include <avr/pgmspace.h>
 ///
-///> console input/output functions with cooperative threading
+///> char input from console
 ///
 char N4Core::key()
 {
@@ -50,9 +54,7 @@ void N4Core::d_num(S16 n)      { printf("%d", n);   }
 #endif //ARDUINO
 void N4Core::d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
 void N4Core::d_u8(U8 c)        { d_nib(c>>4); d_nib(c&0xf); }
-//
-// IO and Search Functions =================================================
-///
+///@}
 ///
 ///> dump byte-stream between pointers with delimiter option
 ///
@@ -138,7 +140,7 @@ U8 *N4Core::token(U8 clr)
     return p;                                /// * return pointer to token
 }
 ///
-///> search keyword in a NanoForth name field list
+///> search keyword in a nanoForth name field list
 ///  * one blank byte padded at the end of input string
 ///
 U8 N4Core::find(U8 *tkn, const char *lst, U16 *id)

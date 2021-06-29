@@ -1,28 +1,32 @@
-///
-/// \file nanoforth_asm.cpp
-/// \brief NanoForth Assmebler implementation
-///
-///> assembler memory organization:
-///>>    `mem[...dic_sz...[...stk_sz...]`<br>
-///>>    `   |                         |`<br>
-///>>    `  dic-->                 rp<-+`<br>
-///
+/**
+ * @file nanoforth_asm.cpp
+ * @brief nanoForth Assmebler implementation
+ *
+ * ####Assembler Memory Map:
+ * 
+ * @code
+ *    mem[...dic_sz...[...stk_sz...]
+ *       |                         |
+ *       +-dic-->            <--rp-+
+ * @endcode
+ */
 #include "nanoforth_asm.h"
 #if ARDUINO
 #include <EEPROM.h>
 #endif //ARDUINO
 ///
-/// NanoForth built-in vocabularies
+///@name nanoForth built-in vocabularies
 ///
-/// \var CMD
-/// \brief words for interpret mode.
-/// \var JMP (note: ; is hardcoded at position 0, do not change it)
-/// \brief words for branching op in compile mode.
-/// \var PRM
-/// \brief primitive words (45 allocated, 64 max).
-/// \var PMX
-/// \brief loop control opcodes
+/// @var CMD
+/// @brief words for interpret mode.
+/// @var JMP (note: ; is hardcoded at position 0, do not change it)
+/// @brief words for branching op in compile mode.
+/// @var PRM
+/// @brief primitive words (45 allocated, 64 max).
+/// @var PMX
+/// @brief loop control opcodes
 ///
+///@{
 PROGMEM const char CMD[] = "\x06" \
     ":  " "VAR" "CST" "FGT" "DMP" "BYE";
 PROGMEM const char JMP[] = "\x0b" \
@@ -37,9 +41,10 @@ PROGMEM const char PRM[] = "\x31" \
 PROGMEM const char PMX[] = "\x4" \
     "FOR" "NXT" "BRK" "I  ";
 constexpr U16 OP_SEMI = 0;                           /**< semi-colon, end of function definition */
+///@}
 ///
-///> macros for branching instruction
-///
+///@name Branching
+///@{
 #define JMP000(p,j)     SET16(p, (j)<<8)
 #define JMPSET(idx, p1) do {               \
     U8  *p = PTR(idx);                     \
@@ -48,19 +53,22 @@ constexpr U16 OP_SEMI = 0;                           /**< semi-colon, end of fun
     SET16(p, (a | (U16)f8<<8));            \
     } while(0)
 #define JMPBCK(idx, f) SET16(here, (idx) | ((f)<<8))
-//
-// Forth assembler stack opcode macros (note: rp grows downward)
-//
+///@}
+///
+///@name Stack Ops (note: rp grows downward)
+///@{
 #define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack */
 #define RPOP()         (*(--rp))                    /**< pop address from return stack  */
-//
-// dictionary index <=> pointer translation macros
-//
+///@}
+///
+///@name Dictionary Index <=> Pointer Converter
+///@{
 #define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
 #define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
-//
-// Assembler initializer
-//
+///@}
+///
+///> Assembler Object initializer
+///
 N4Asm::N4Asm(U8 *mem) : dic(mem)
 {
     reset();
@@ -298,12 +306,12 @@ void N4Asm::load()
     ///
     last = PTR(last_i);
     here = PTR(here_i);
-#endif //ARDUINO
-    
+
     if (trc) {
         d_num(here_i);
         flash(" bytes loaded\n");
     }
+#endif //ARDUINO
 }
 ///
 ///> execution tracer (debugger, can be modified into single-stepper)
