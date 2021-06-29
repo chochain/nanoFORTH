@@ -1,7 +1,6 @@
 var NAVTREE =
 [
   [ "nanoFORTH", "index.html", [
-    [ "Journey of an Arduino Maker", "index.html", null ],
     [ "Why", "page1.html", null ],
     [ "How", "page2.html", null ],
     [ "What", "page3.html", null ],
@@ -19,7 +18,6 @@ var NAVTREE =
       [ "File List", "files.html", "files" ],
       [ "Globals", "globals.html", [
         [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ],
         [ "Variables", "globals_vars.html", null ],
         [ "Typedefs", "globals_type.html", null ],
         [ "Enumerations", "globals_enum.html", null ],

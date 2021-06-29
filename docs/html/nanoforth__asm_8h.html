@@ -82,14 +82,13 @@ $(document).ready(function(){initNavTree('nanoforth__asm_8h.html','');});
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Data Structures</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">nanoforth_asm.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="classNanoForth.html">NanoForth</a> Assembler class.  
+<p>nanoForth Assembler class  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="nanoforth__core_8h_source.html">nanoforth_core.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -97,8 +96,8 @@ Include dependency graph for nanoforth_asm.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="nanoforth__asm_8h__incl.png" border="0" usemap="#src_2nanoforth__asm_8h" alt=""/></div>
 <map name="src_2nanoforth__asm_8h" id="src_2nanoforth__asm_8h">
-<area shape="rect" id="node2" href="nanoforth__core_8h.html" title="NanoForth Core Utility abstract class. " alt="" coords="102,80,221,107"/>
-<area shape="rect" id="node3" href="nanoforth_8h.html" title="NanoForth main controller. " alt="" coords="118,155,205,181"/>
+<area shape="rect" id="node2" href="nanoforth__core_8h.html" title="nanoForth Core Utility abstract class " alt="" coords="17,80,135,107"/>
+<area shape="rect" id="node3" href="nanoforth_8h.html" title="nanoForth main controller " alt="" coords="33,155,119,181"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -106,8 +105,8 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="nanoforth__asm_8h__dep__incl.png" border="0" usemap="#src_2nanoforth__asm_8hdep" alt=""/></div>
 <map name="src_2nanoforth__asm_8hdep" id="src_2nanoforth__asm_8hdep">
-<area shape="rect" id="node2" href="nanoforth__asm_8cpp.html" title="NanoForth Assmebler implementation. " alt="" coords="5,80,160,107"/>
-<area shape="rect" id="node3" href="nanoforth__vm_8cpp.html" title="NanoForth Virtual Machine class implementation. " alt="" coords="185,80,333,107"/>
+<area shape="rect" id="node2" href="nanoforth__asm_8cpp.html" title="nanoForth Assmebler implementation " alt="" coords="5,80,160,107"/>
+<area shape="rect" id="node3" href="nanoforth__vm_8cpp.html" title="nanoForth Virtual Machine class implementation " alt="" coords="185,80,333,107"/>
 </map>
 </div>
 </div>
@@ -145,6 +144,7 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Opcode Masks</div></td></tr>
 <tr class="memitem:a0b2400848a0f21e8dcd935a8d3c98933"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a0b2400848a0f21e8dcd935a8d3c98933">CTL_BITS</a> = 0xc0</td></tr>
 <tr class="memdesc:a0b2400848a0f21e8dcd935a8d3c98933"><td class="mdescLeft">&#160;</td><td class="mdescRight">1100 0000, 11xx: JMP, 10xx: PRM, 0xxx: NUM  <a href="#a0b2400848a0f21e8dcd935a8d3c98933">More...</a><br /></td></tr>
 <tr class="separator:a0b2400848a0f21e8dcd935a8d3c98933"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,6 +157,10 @@ Variables</h2></td></tr>
 <tr class="memitem:a9783e35109050005b254d0d7aa1dfa40"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a9783e35109050005b254d0d7aa1dfa40">JMP_MASK</a> = 0xf0</td></tr>
 <tr class="memdesc:a9783e35109050005b254d0d7aa1dfa40"><td class="mdescLeft">&#160;</td><td class="mdescRight">1111 0000  <a href="#a9783e35109050005b254d0d7aa1dfa40">More...</a><br /></td></tr>
 <tr class="separator:a9783e35109050005b254d0d7aa1dfa40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a174dd17d5b642c707938e42a79a09fc4"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a174dd17d5b642c707938e42a79a09fc4">ADR_MASK</a> = 0x0fff</td></tr>
+<tr class="memdesc:a174dd17d5b642c707938e42a79a09fc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions  <a href="#a174dd17d5b642c707938e42a79a09fc4">More...</a><br /></td></tr>
+<tr class="separator:a174dd17d5b642c707938e42a79a09fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Opcode Prefixies</div></td></tr>
 <tr class="memitem:af9b16f3b1dd173f6b0437269174c90f9"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#af9b16f3b1dd173f6b0437269174c90f9">PFX_CALL</a> = 0xc0</td></tr>
 <tr class="memdesc:af9b16f3b1dd173f6b0437269174c90f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">1100 0000  <a href="#af9b16f3b1dd173f6b0437269174c90f9">More...</a><br /></td></tr>
 <tr class="separator:af9b16f3b1dd173f6b0437269174c90f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,23 +173,11 @@ Variables</h2></td></tr>
 <tr class="memitem:ae072facef66883ae2dfc1c8cc0f2bedd"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#ae072facef66883ae2dfc1c8cc0f2bedd">PFX_UDJ</a> = 0xf0</td></tr>
 <tr class="memdesc:ae072facef66883ae2dfc1c8cc0f2bedd"><td class="mdescLeft">&#160;</td><td class="mdescRight">1110 0000  <a href="#ae072facef66883ae2dfc1c8cc0f2bedd">More...</a><br /></td></tr>
 <tr class="separator:ae072facef66883ae2dfc1c8cc0f2bedd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a174dd17d5b642c707938e42a79a09fc4"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a174dd17d5b642c707938e42a79a09fc4">ADR_MASK</a> = 0x0fff</td></tr>
-<tr class="separator:a174dd17d5b642c707938e42a79a09fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="classNanoForth.html">NanoForth</a> Assembler class. </p>
-<blockquote class="doxtable">
-<p><a class="el" href="classNanoForth.html">NanoForth</a> Opcode formats<br />
- </p><blockquote class="doxtable">
-<p><code>branching : 11BB oooo oooo oooo (12-bit absolute address)</code><br />
- <code>primitive : 10cc cccc (64 primitives)</code><br />
- <code>3-byte lit: 1011 1111 nnnn nnnn nnnn nnnn bf xxxx xxxx (16-bit signed integer)</code><br />
- <code>1-byte lit: 0nnn nnnn (0..127)</code><br />
- <code>n-byte str: len, byte, byte, ... (used in print str i.e. .")</code><br />
-</p>
-</blockquote>
-</blockquote>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+<div class="textblock"><p>nanoForth Assembler class </p>
+<h4>nanoForth Opcode formats</h4>
+<div class="fragment"><div class="line">branching : 11BB oooo oooo oooo            (12-bit absolute address)</div><div class="line">primitive : 10cc cccc                      (64 primitives)</div><div class="line">3-byte lit: 1011 1111 nnnn nnnn nnnn nnnn  bf xxxx xxxx (16-bit <span class="keywordtype">signed</span> integer)</div><div class="line">1-byte lit: 0nnn nnnn                      (0..127)</div><div class="line">n-byte str: len, byte, byte, ...           (used in print str i.e. .&quot;)</div></div><!-- fragment --> </div><h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a0af31b1478147525dc0774389c9ba4d4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0af31b1478147525dc0774389c9ba4d4">&#9670;&nbsp;</a></span>N4OP</h2>
 
@@ -259,7 +251,6 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>1100 0000, 11xx: JMP, 10xx: PRM, 0xxx: NUM </p>
-<p>opcode masks and prefixes </p>
 
 </div>
 </div>
@@ -308,6 +299,22 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>1111 0000 </p>
+
+</div>
+</div>
+<a id="a174dd17d5b642c707938e42a79a09fc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a174dd17d5b642c707938e42a79a09fc4">&#9670;&nbsp;</a></span>ADR_MASK</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> ADR_MASK = 0x0fff</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions </p>
 
 </div>
 </div>
@@ -372,21 +379,6 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p>1110 0000 </p>
-
-</div>
-</div>
-<a id="a174dd17d5b642c707938e42a79a09fc4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a174dd17d5b642c707938e42a79a09fc4">&#9670;&nbsp;</a></span>ADR_MASK</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> ADR_MASK = 0x0fff</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions </p>
 
 </div>
 </div>

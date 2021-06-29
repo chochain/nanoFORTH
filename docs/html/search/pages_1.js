@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['journey_20of_20an_20arduino_20maker',['Journey of an Arduino Maker',['../index.html',1,'']]]
+  ['why',['Why',['../page1.html',1,'']]],
+  ['what',['What',['../page3.html',1,'']]]
 ];

@@ -89,7 +89,7 @@ $(document).ready(function(){initNavTree('nanoforth__core_8h.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="classNanoForth.html">NanoForth</a> Core Utility abstract class.  
+<p>nanoForth Core Utility abstract class  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="nanoforth_8h_source.html">nanoforth.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -97,7 +97,7 @@ Include dependency graph for nanoforth_core.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="nanoforth__core_8h__incl.png" border="0" usemap="#src_2nanoforth__core_8h" alt=""/></div>
 <map name="src_2nanoforth__core_8h" id="src_2nanoforth__core_8h">
-<area shape="rect" id="node2" href="nanoforth_8h.html" title="NanoForth main controller. " alt="" coords="118,80,205,107"/>
+<area shape="rect" id="node2" href="nanoforth_8h.html" title="nanoForth main controller " alt="" coords="33,80,119,107"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -105,12 +105,12 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="nanoforth__core_8h__dep__incl.png" border="0" usemap="#src_2nanoforth__core_8hdep" alt=""/></div>
 <map name="src_2nanoforth__core_8hdep" id="src_2nanoforth__core_8hdep">
-<area shape="rect" id="node2" href="nanoforth__vm_8h.html" title="NanoForth Virtual Machine class. " alt="" coords="79,80,214,107"/>
-<area shape="rect" id="node5" href="nanoforth__asm_8h.html" title="NanoForth Assembler class. " alt="" coords="239,80,380,107"/>
-<area shape="rect" id="node7" href="nanoforth__core_8cpp.html" title="NanoForth Core Utility abstract class implementation. " alt="" coords="404,80,559,107"/>
-<area shape="rect" id="node3" href="nanoforth_8cpp.html" title="NanoForth main controller class implementation. " alt="" coords="5,155,128,181"/>
-<area shape="rect" id="node4" href="nanoforth__vm_8cpp.html" title="NanoForth Virtual Machine class implementation. " alt="" coords="153,155,301,181"/>
-<area shape="rect" id="node6" href="nanoforth__asm_8cpp.html" title="NanoForth Assmebler implementation. " alt="" coords="325,155,480,181"/>
+<area shape="rect" id="node2" href="nanoforth__vm_8h.html" title="nanoForth Virtual Machine class " alt="" coords="79,80,214,107"/>
+<area shape="rect" id="node5" href="nanoforth__asm_8h.html" title="nanoForth Assembler class " alt="" coords="239,80,380,107"/>
+<area shape="rect" id="node7" href="nanoforth__core_8cpp.html" title="nanoForth Core Utility abstract class implementation " alt="" coords="404,80,559,107"/>
+<area shape="rect" id="node3" href="nanoforth_8cpp.html" title="nanoForth main controller class implementation " alt="" coords="5,155,128,181"/>
+<area shape="rect" id="node4" href="nanoforth__vm_8cpp.html" title="nanoForth Virtual Machine class implementation " alt="" coords="153,155,301,181"/>
+<area shape="rect" id="node6" href="nanoforth__asm_8cpp.html" title="nanoForth Assmebler implementation " alt="" coords="325,155,480,181"/>
 </map>
 </div>
 </div>
@@ -123,8 +123,9 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a10fb5781e8b62f6c790d077d0f69ea86"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__core_8h.html#a10fb5781e8b62f6c790d077d0f69ea86">flash</a>(s)&#160;&#160;&#160;<a class="el" href="nanoforth_8h.html#a642fd9241bc9e4219ea15503ca87fefb">log</a>(s)</td></tr>
+<tr class="memitem:a10fb5781e8b62f6c790d077d0f69ea86"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__core_8h.html#a10fb5781e8b62f6c790d077d0f69ea86">flash</a>(s)&#160;&#160;&#160;{ <a class="el" href="nanoforth_8h.html#a642fd9241bc9e4219ea15503ca87fefb">log</a>(s); _io-&gt;print(F(s)); _io-&gt;flush(); }</td></tr>
 <tr class="separator:a10fb5781e8b62f6c790d077d0f69ea86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Memory Access Ops</div></td></tr>
 <tr class="memitem:a5fbe8c099d455dc8049978119712ed97"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__core_8h.html#a5fbe8c099d455dc8049978119712ed97">SET8</a>(p,  c)&#160;&#160;&#160;(*(<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>*)(p)++=(<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td></tr>
 <tr class="memdesc:a5fbe8c099d455dc8049978119712ed97"><td class="mdescLeft">&#160;</td><td class="mdescRight">1-byte write  <a href="#a5fbe8c099d455dc8049978119712ed97">More...</a><br /></td></tr>
 <tr class="separator:a5fbe8c099d455dc8049978119712ed97"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,7 +144,7 @@ Variables</h2></td></tr>
 <tr class="separator:af458e91b53116caa289b4a0c3c45d8c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="classNanoForth.html">NanoForth</a> Core Utility abstract class. </p>
+<div class="textblock"><p>nanoForth Core Utility abstract class </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a10fb5781e8b62f6c790d077d0f69ea86"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a10fb5781e8b62f6c790d077d0f69ea86">&#9670;&nbsp;</a></span>flash</h2>
@@ -156,7 +157,7 @@ Variables</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">s</td><td>)</td>
-          <td>&#160;&#160;&#160;<a class="el" href="nanoforth_8h.html#a642fd9241bc9e4219ea15503ca87fefb">log</a>(s)</td>
+          <td>&#160;&#160;&#160;{ <a class="el" href="nanoforth_8h.html#a642fd9241bc9e4219ea15503ca87fefb">log</a>(s); _io-&gt;print(F(s)); _io-&gt;flush(); }</td>
         </tr>
       </table>
 </div><div class="memdoc">
