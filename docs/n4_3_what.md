@@ -71,6 +71,10 @@ BYE DMP TRC
 >    `1-byte lit: 0nnn nnnn                      (0..127)`<br>
 >    `n-byte str: len, byte, byte, ...           (used in print str)`<br>
 
+</br>
+<a href="html/page1.html">Review nanoFORTH command examples</a><br/>
+<a href="html/page2.html">Ready to get nanoFORTH for a trial?</a><br>
+
 
 
 
