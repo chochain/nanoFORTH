@@ -32,7 +32,6 @@ char N4Core::key()
     return _io->read();
 }
 void N4Core::d_chr(char c)     {
-    Serial.print(c);
     _io->print(c);
     if (c=='\n') {
         _io->flush();
@@ -40,9 +39,9 @@ void N4Core::d_chr(char c)     {
     }
 }
 void N4Core::d_adr(U16 a)      { d_nib(a>>8); d_nib((a>>4)&0xf); d_nib(a&0xf); }
-void N4Core::d_str(U8 *p)      { _io->print((char*)p); Serial.print((char*)p); }
+void N4Core::d_str(U8 *p)      { _io->print((char*)p); }
 void N4Core::d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
-void N4Core::d_num(S16 n)      { _io->print(n);        Serial.print(n); }
+void N4Core::d_num(S16 n)      { _io->print(n); }
 #else
 int  Serial;                   // fake serial interface
 char N4Core::key()             { return getchar();  }

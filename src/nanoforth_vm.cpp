@@ -105,7 +105,7 @@ void N4VM::_init() {
     set_trace(1);                        /// * enable debugging for unit tests
 #endif //ARDUINO
 
-    flash("nanoForth v1.0 ");
+    flash("nanoForth v1.2 ");
 }
 ///
 ///> console prompt with stack dump
