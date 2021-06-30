@@ -27,7 +27,7 @@ void setup()
 
 void loop()
 {
-    n4.step();                   // execute one nanoForth VM cycle
+    n4.exec();                   // execute one nanoForth VM cycle
 }
 
 
