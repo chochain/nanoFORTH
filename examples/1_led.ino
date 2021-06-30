@@ -2,7 +2,11 @@
  *  @file examples/1_led.ino
  *  @brief nanoFORTH example - LED blinker
  *
- *  add a second user tasks on top of our blinker
+ *  Assuming you have the borad hooked up with 2 LEDs on PIN 5 and PIN 6 
+ *  + make sure the right resisters are in place
+ *  + google Arduino+LED+project
+ *
+ *  This Sketch add a second user tasks on top of our blinker
  *  + the new user task toggles between pin 5 and 6
  *
  */

@@ -2,10 +2,18 @@
  *  @file examples/0_blink.ino
  *  @brief nanoFORTH example - Blink pin 13
  *
- *  first example - nanoFORTH that multi-task
+ *  Our first Sketch - demostrates nanoFORTH support multi-tasking
  *  + a user task that blinks built-in pin 13
- *  + nanoFORTH runs in parallel
+ *  + nanoFORTH itself runs in parallel
  *
+ *  open Serial Monitor as the console input to nanoFORTH
+ *  + baud rate set to 115200
+ *  + line ending set to Both NL & CR
+ *
+ *  Once compiled/uploaded, you should see
+ *  + some nanoFORTH init system info
+ *  + ok prompt
+ *  + try type WRD and hit return on the input above
  */
 #include "nanoforth.h"
 
