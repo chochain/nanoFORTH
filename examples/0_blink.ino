@@ -1,7 +1,13 @@
-//
-// nanoFORTH example - Blink pin 13
-//
-#include "src/nanoforth.h"
+/**
+ *  @file examples/0_blink.ino
+ *  @brief nanoFORTH example - Blink pin 13
+ *
+ *  first example - nanoFORTH that multi-task
+ *  + a user task that blinks built-in pin 13
+ *  + nanoFORTH runs in parallel
+ *
+ */
+#include "nanoforth.h"
 
 N4_TASK(blink)                    ///< create blinking task (i.e. built-in LED on pin 13)
 {

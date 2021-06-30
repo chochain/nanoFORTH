@@ -1,7 +1,12 @@
-//
-// nanoFORTH example - LED blinker
-//
-#include "src/nanoforth.h"
+/**
+ *  @file examples/1_led.ino
+ *  @brief nanoFORTH example - LED blinker
+ *
+ *  add a second user tasks on top of our blinker
+ *  + the new user task toggles between pin 5 and 6
+ *
+ */
+#include "nanoforth.h"
 
 N4_TASK(blink)                    ///< create blinking task (i.e. built-in LED on pin 13)
 {
