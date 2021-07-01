@@ -7,7 +7,7 @@ Since FORTH is **different** if your exposure has been with C, Java, or even Pyt
 * Interactive tutorial for FORTH primer. It teaches you how FORTH fundamentally works such as the numbers, the stack, and the dictionary.
 > <a href="https://skilldrick.github.io/easyforth/#introduction" target="_blank">Easy Forth Tutorial by Nick Morgan</a>
 
-You can skip to Installation Section and start getting your hands dirty. Jump right ahead to next section. However, if you prefer gethering all the sticks before starting a fire or enjoy imensing yourself in the philosophical wonder of FORTH, excellent online e-books are here free for you.
+You can skip to next section and start getting your hands dirty right away. However, if you prefer gethering all the sticks before starting a fire or enjoy imensing yourself in the philosophical wonder of FORTH, excellent online e-books are here free for you.
 * Timeless classic for the history, paths, and thoughts behind FORTH language.
 > <a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">Starting Forth by Leo Brodie</a><br/>
 > <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a>
@@ -15,7 +15,7 @@ You can skip to Installation Section and start getting your hands dirty. Jump ri
 ### Install nanoFORTH - to be simple and useful
 
 * From GitHub directly
-><br/>
+> <br/>
 > \> git clone https://github.com/chochain/nanoFORTH onto your local Sketch directory
 >
 > \> copy examples/0_blink.ino from sub-directory, rename it as nanoFORTH.ino<br/>
@@ -29,7 +29,7 @@ You can skip to Installation Section and start getting your hands dirty. Jump ri
 > \> in Serial Monitor input bar atop, type WRD and hit return. See what nanoFORTH says.<br/><br/>
 
 * From Arduino Library Manager
-><br/>
+> <br/>
 > \> from Arduino IDE->Tools->Manage Libraries, enter FORTH in search box
 >
 > \> find nanoFORTH in the short list, select latest version, click Install button
@@ -44,17 +44,47 @@ You can skip to Installation Section and start getting your hands dirty. Jump ri
 >
 > \> in Serial Monitor input bar atop, type WRD and hit return. See what nanoFORTH says.<br/><br/>
 
+### Init Screen Details
+
+Here's a sample init screen if you've got it going
+> |screen shot|
+> |:--|
+> |@image html nanoforth_init_screen.png|
+<br/>
+It shows the memory map of nanoFORTH once loaded correctly, with
+* `0x000 to 0x0ff -` Arduino registers/interrupt vectors
+* `0x100 to 0x216 -` Arduino libraries, i.e. Serial, pt, ...
+* `0x217 to 0x616 -` nanoFORTH 1K user dictionary, growing upward
+* `0x617 to 0x... -` nanoFORTH return stack, growing upward until hitting data stack
+* `0x696 to 0x... -` nanoFORTH data stack top, growing downward until hitting return stack
+* `0x697 to 0x8f4 -` 606 bytes free space left if you need dynamic allocation or other function calls
+* `0x8f5 to 0x8ff -` global/static variables
+
+Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.
 
 ### Exercise
 
-Review previous page <a href="page1.html" target="_blank">here</a> for same instructions we've gone through earlier.
-
-Compared to any FORTH language tutorial, you probably will notice that length of a word of nanoFORTH, unlike most are 31-character, is 3 characters or less. This departs from standard FORTHs and begs the question of whether nanoFORTH is truly a FORTH. Well, our target platform is a very small MCU and our application has probably a dozen of functions. Aside from easier to type, it has benefit in simplifying some internal handling. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable. To qualify it as a FORTH or not, probably doesn't matter that much so long as it behaves well, runs fast enough, and useful for our needs.
+We have gone through a lot of 'paper work', time for hands-on again. If needed, review previous page <a href="page1.html" target="_blank">here</a> for some instructions we've gone through earlier.
 
 Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 * turn the tracing flag on, you can and try everything we did in privious page
 > 1 TRC ⏎<br/>
 > **lit** **?Z**
+
+* too much info, you can turn the tracing off
+> 0 TRC ⏎<br/>
+
+* get Arduino clock/millis, a double precision (i.e. 32-bit) value
+> CLK ⏎<br/>
+> -26395_188_ok (for example only, your clock is different)<br/>
+>> \> we need two 16-bit cells on data stack to represent the double
+
+* to benchmark something, let's defined an empty loop and time it
+> : **zz** 10000 0 FOR NXT ;⏎<br/>
+> CLK DNG **zz** CLK D+ ⏎<br/>
+> 338_0_ok (our ten-thousand cycles are completed in 338ms, i.e. 34us/cycle, not bad!)<br/>
+>> \> DNG negate the first clock ticks<br/>
+>> \> D+ add two clock counts (i.e. (-t0) + t1) to deduce the time difference
 
 * find out how many bytes of memory we have used
 > HRE ⏎<br/>
@@ -70,9 +100,13 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 > BYE ⏎<br/>
 > nanoFORTH v1.0 ok
 
-* after restart your Arduino, words can be restored from EEPROM which you saved earlier
+* after restart your Arduino, words can be restored from EEPROM which you saved earlier.
 > LD ⏎<br/>
 > 0 HRE DMP ⏎
+
+Alright! That pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can give our future Nano running in the field the ability to withstand power failures or reboots. Yes, indeed if we setup an init address properly.
+
+It's real-time, and it multi-tasks. It can be reprogrammed on-the-fly or even over-the-air. It is extensible. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.
 
 <br/>
 <a href="page1.html">Review nanoFORTH command examples</a><br/>
