@@ -1,7 +1,16 @@
-//
-// nanoFORTH example - LED blinker
-//
-#include "src/nanoforth.h"
+/**
+ *  @file examples/1_led.ino
+ *  @brief nanoFORTH example - LED blinker
+ *
+ *  Assuming you have the borad hooked up with 2 LEDs on PIN 5 and PIN 6 
+ *  + make sure the right resisters are in place
+ *  + google Arduino+LED+project
+ *
+ *  This Sketch add a second user tasks on top of our blinker
+ *  + the new user task toggles between pin 5 and 6
+ *
+ */
+#include "nanoforth.h"
 
 N4_TASK(blink)                    ///< create blinking task (i.e. built-in LED on pin 13)
 {
@@ -42,7 +51,7 @@ void setup()
 
 void loop()
 {
-    n4.step();                   // execute one nanoForth VM cycle
+    n4.exec();                   // execute one nanoForth VM cycle
 }
 
 
