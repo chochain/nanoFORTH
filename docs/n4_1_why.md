@@ -39,7 +39,7 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 > : **red** 1 5 OUT 0 6 OUT ; ⏎
 
 * define a word **blu** to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only)
-> : **blu** 1 6 OUT 1 5 OUT ; ⏎
+> : **blu** 0 5 OUT 1 6 OUT ; ⏎
 
 * execute **blu**, i.e. to turn red LED off, and blue LED on 
 > **blu** ⏎
