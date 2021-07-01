@@ -2,11 +2,12 @@
 
 ## nanoFORTH Operations
 ### Internal
-At its core, nanoFORTH is a traditional parse-dispatch virtual machine interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has dual personallities which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is faster and **portable**. The later ability enables future units to send source as well as compiled code to each other. This can bring a big grin but we might need to deal with the red flag raised by security guys later.
+At its core, nanoFORTH is a traditional **parse-dispatch virtual machine** interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has dual personallities which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is faster and **portable**. The later ability enables future units to send data packets as well as instruction code segments to each other. This can bring a big grin but, of course, we later might need to deal with the red flag raised by security concerning parties.
 
 ### Arduino Nano Memory Map
 TODO
 
+## Built-in Words (TODO more)
 ### Arithmatics Ops
 \+ - * / MOD NEG
 > 17 5 + ⏎
@@ -64,7 +65,7 @@ D+ D- DNG
 ### System, Debug/Tracing
 BYE DMP TRC
 
-## Opcode formats
+## Opcode Formats
 >    `branching : 11BB aaaa aaaa aaaa            (12-bit absolute address)`<br>
 >    `primitive : 10oo oooo                      (6-bit, i.e. 64 primitives)`<br>
 >    `3-byte lit: 1011 1111 snnn nnnn nnnn nnnn  bf xxxx xxxx (16-bit signed integer)`<br>

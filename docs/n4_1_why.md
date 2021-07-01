@@ -25,10 +25,10 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 * optionally show execution tracing to help debugging, also provision for single-stepping.
 
 ### Use Cases - Interaction Examples
-* turn on LED(red) on digital pin 5, 1 is HIGH
+* turn on LED(red) on digital pin 5, imagine you have that, (1 is HIGH)
 > 1 5 OUT ⏎
 
-* turn off LED(blue) on digital pin 6, 0 is LOW
+* turn off LED(blue) on digital pin 6, also imagine, too (0 is LOW)
 > 0 6 OUT ⏎
 
 * define a function, or a 'word' in FORTH, **red** to turn red LED on, and blue LED off
@@ -53,7 +53,7 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 * now try 20 cycles of **xy** this time
 > 20 **xy** ⏎
 
-* let's read analog pin 1 (photoresister value 0~1023)
+* let's read analog pin 1 (photoresister value 0~1023), imagine again
 > 1 AIN ⏎<br>
 > 258_ok
 
