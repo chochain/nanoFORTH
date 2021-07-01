@@ -123,16 +123,16 @@ $(document).ready(function(){initNavTree('page1.html','');});
  </p>
 </blockquote>
 </li>
-<li>turn off LED(blue) on digital pin 6, also imagine, too <blockquote class="doxtable">
-<p>1 6 OUT ⏎ </p>
+<li>turn off LED(blue) on digital pin 6, also imagine, too (0 is LOW) <blockquote class="doxtable">
+<p>0 6 OUT ⏎ </p>
 </blockquote>
 </li>
-<li>define a function, or a 'word' in FORTH, <b>red</b> to turn red LED on, and blue LED off, (0 is LOW) <blockquote class="doxtable">
+<li>define a function, or a 'word' in FORTH, <b>red</b> to turn red LED on, and blue LED off <blockquote class="doxtable">
 <p>: <b>red</b> 1 5 OUT 0 6 OUT ; ⏎ </p>
 </blockquote>
 </li>
 <li>define a word <b>blu</b> to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only) <blockquote class="doxtable">
-<p>: <b>blu</b> 1 6 OUT 1 5 OUT ; ⏎ </p>
+<p>: <b>blu</b> 0 5 OUT 1 6 OUT ; ⏎ </p>
 </blockquote>
 </li>
 <li>execute <b>blu</b>, i.e. to turn red LED off, and blue LED on <blockquote class="doxtable">
