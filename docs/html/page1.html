@@ -110,18 +110,28 @@ $(document).ready(function(){initNavTree('page1.html','');});
 <h3>Use Cases - Interaction Examples</h3>
 <ul>
 <li>turn on LED(red) on digital pin 5, imagine you have that, (1 is HIGH) <blockquote class="doxtable">
-<p>1 5 OUT ⏎ </p>
+<p>1 5 OUT ⏎ </p><table class="doxtable">
+<tr>
+<th align="left"></th></tr>
+<tr>
+<td align="left"><div class="image">
+<img src="nanoforth_led_red.jpg" alt="nanoforth_led_red.jpg" width="200px"/>
+</div>
+ </td></tr>
+</table>
+<p><br />
+ </p>
 </blockquote>
 </li>
-<li>turn off LED(blue) on digital pin 6, also imagine, too (0 is LOW) <blockquote class="doxtable">
-<p>0 6 OUT ⏎ </p>
+<li>turn off LED(blue) on digital pin 6, also imagine, too <blockquote class="doxtable">
+<p>1 6 OUT ⏎ </p>
 </blockquote>
 </li>
-<li>define a function, or a 'word' in FORTH, <b>red</b> to turn red LED on, and blue LED off <blockquote class="doxtable">
+<li>define a function, or a 'word' in FORTH, <b>red</b> to turn red LED on, and blue LED off, (0 is LOW) <blockquote class="doxtable">
 <p>: <b>red</b> 1 5 OUT 0 6 OUT ; ⏎ </p>
 </blockquote>
 </li>
-<li>define a word <b>blu</b> to turn red LED off and turn blue LED on (sorry, nanoFORTH takes max 3 characters only) <blockquote class="doxtable">
+<li>define a word <b>blu</b> to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only) <blockquote class="doxtable">
 <p>: <b>blu</b> 1 6 OUT 1 5 OUT ; ⏎ </p>
 </blockquote>
 </li>
@@ -137,9 +147,13 @@ $(document).ready(function(){initNavTree('page1.html','');});
 <p>10 <b>xy</b> ⏎ </p>
 </blockquote>
 </li>
-<li>too slow! nanoFORTH lets you redefine <b>xy</b> by "forget" it first <blockquote class="doxtable">
+<li>a bit too slow! nanoFORTH lets you redefine <b>xy</b> by "forget" it first <blockquote class="doxtable">
 <p>FGT <b>xy</b> ⏎<br />
- : <b>xy</b> 0 FOR <b>red</b> 200 DLY <b>blu</b> 400 DLY I . NXT ; ⏎ </p>
+ : <b>xy</b> 0 FOR <b>red</b> 200 DLY <b>blu</b> 300 DLY I . NXT ; ⏎<br />
+ </p><blockquote class="doxtable">
+<p>&gt; so, you probably found out that <b>I</b> is the counter and . (dot) prints it,<br />
+ &gt; also, 10 0 FOR ... NXT is to loop 10 times, i.e. counter from 0, 1, 2, ..., 9 </p>
+</blockquote>
 </blockquote>
 </li>
 <li>now try 20 cycles of <b>xy</b> this time <blockquote class="doxtable">

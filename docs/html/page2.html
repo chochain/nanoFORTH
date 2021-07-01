@@ -92,7 +92,7 @@ $(document).ready(function(){initNavTree('page2.html','');});
 </blockquote>
 </li>
 </ul>
-<p>You can skip to Installation Section and start getting your hands dirty. Jump right ahead to next section. However, if you prefer gethering all the sticks before starting a fire or enjoy imensing yourself in the philosophical wonder of FORTH, excellent online e-books are here free for you.</p><ul>
+<p>You can skip to next section and start getting your hands dirty right away. However, if you prefer gethering all the sticks before starting a fire or enjoy imensing yourself in the philosophical wonder of FORTH, excellent online e-books are here free for you.</p><ul>
 <li>Timeless classic for the history, paths, and thoughts behind FORTH language. <blockquote class="doxtable">
 <p><a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">Starting Forth by Leo Brodie</a><br />
  <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a> </p>
@@ -101,9 +101,9 @@ $(document).ready(function(){initNavTree('page2.html','');});
 </ul>
 <h3>Install nanoFORTH - to be simple and useful</h3>
 <ul>
-<li>From GitHub directly &gt;<br />
- <blockquote class="doxtable">
-<p>&gt; git clone <a href="https://github.com/chochain/nanoFORTH">https://github.com/chochain/nanoFORTH</a> onto your local Sketch directory</p>
+<li>From GitHub directly <blockquote class="doxtable">
+<p><br />
+ &gt; git clone <a href="https://github.com/chochain/nanoFORTH">https://github.com/chochain/nanoFORTH</a> onto your local Sketch directory</p>
 <p>&gt; copy examples/0_blink.ino from sub-directory, rename it as nanoFORTH.ino<br />
 </p>
 <p>&gt; open nanoFORTH.ino with Arduino IDE, setup for your Nano/Uno development board</p>
@@ -114,9 +114,9 @@ $(document).ready(function(){initNavTree('page2.html','');});
  </p>
 </blockquote>
 </li>
-<li>From Arduino Library Manager &gt;<br />
- <blockquote class="doxtable">
-<p>&gt; from Arduino IDE-&gt;Tools-&gt;Manage Libraries, enter FORTH in search box</p>
+<li>From Arduino Library Manager <blockquote class="doxtable">
+<p><br />
+ &gt; from Arduino IDE-&gt;Tools-&gt;Manage Libraries, enter FORTH in search box</p>
 <p>&gt; find nanoFORTH in the short list, select latest version, click Install button</p>
 <p>&gt; click the <a href="http://github.com/chochain/nanoFORTH" target="_blank">More Info</a> link taking you to nanoFORTH Github site</p>
 <p>&gt; copy examples/0_blink.ino to your own Sketch directory, rename it accordingly</p>
@@ -128,13 +128,58 @@ $(document).ready(function(){initNavTree('page2.html','');});
 </blockquote>
 </li>
 </ul>
+<h3>Init Screen Details</h3>
+<p>Here's a sample init screen if you've got it going </p><blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">screen shot  </th></tr>
+<tr>
+<td align="left"><div class="image">
+<img src="nanoforth_init_screen.png" alt="nanoforth_init_screen.png"/>
+</div>
+ </td></tr>
+</table>
+</blockquote>
+<p><br />
+ It shows the memory map of nanoFORTH once loaded correctly, with</p><ul>
+<li><code>0x000 to 0x0ff -</code> Arduino registers/interrupt vectors</li>
+<li><code>0x100 to 0x216 -</code> Arduino libraries, i.e. Serial, pt, ...</li>
+<li><code>0x217 to 0x616 -</code> nanoFORTH 1K user dictionary, growing upward</li>
+<li><code>0x617 to 0x... -</code> nanoFORTH return stack, growing upward until hitting data stack</li>
+<li><code>0x696 to 0x... -</code> nanoFORTH data stack top, growing downward until hitting return stack</li>
+<li><code>0x697 to 0x8f4 -</code> 606 bytes free space left if you need dynamic allocation or other function calls</li>
+<li><code>0x8f5 to 0x8ff -</code> global/static variables</li>
+</ul>
+<p>Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.</p>
 <h3>Exercise</h3>
-<p>Review previous page <a href="page1.html" target="_blank">here</a> for same instructions we've gone through earlier.</p>
-<p>Compared to any FORTH language tutorial, you probably will notice that length of a word of nanoFORTH, unlike most are 31-character, is 3 characters or less. This departs from standard FORTHs and begs the question of whether nanoFORTH is truly a FORTH. Well, our target platform is a very small MCU and our application has probably a dozen of functions. Aside from easier to type, it has benefit in simplifying some internal handling. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable. To qualify it as a FORTH or not, probably doesn't matter that much so long as it behaves well, runs fast enough, and useful for our needs.</p>
+<p>We have gone through a lot of 'paper work', time for hands-on again. If needed, review previous page <a href="page1.html" target="_blank">here</a> for some instructions we've gone through earlier.</p>
 <p>Now let's try some fancy stuffs to see what nanoFORTH has to offer.</p><ul>
 <li>turn the tracing flag on, you can and try everything we did in privious page <blockquote class="doxtable">
 <p>1 TRC ⏎<br />
  <b>lit</b> <b>?Z</b> </p>
+</blockquote>
+</li>
+<li>too much info, you can turn the tracing off <blockquote class="doxtable">
+<p>0 TRC ⏎<br />
+ </p>
+</blockquote>
+</li>
+<li>get Arduino clock/millis, a double precision (i.e. 32-bit) value <blockquote class="doxtable">
+<p>CLK ⏎<br />
+ -26395_188_ok (for example only, your clock is different)<br />
+ </p><blockquote class="doxtable">
+<p>&gt; we need two 16-bit cells on data stack to represent the double </p>
+</blockquote>
+</blockquote>
+</li>
+<li>to benchmark something, let's defined an empty loop and time it <blockquote class="doxtable">
+<p>: <b>zz</b> 10000 0 FOR NXT ;⏎<br />
+ CLK DNG <b>zz</b> CLK D+ ⏎<br />
+ 338_0_ok (our ten-thousand cycles are completed in 338ms, i.e. 34us/cycle, not bad!)<br />
+ </p><blockquote class="doxtable">
+<p>&gt; DNG negate the first clock ticks<br />
+ &gt; D+ add two clock counts (i.e. (-t0) + t1) to deduce the time difference </p>
+</blockquote>
 </blockquote>
 </li>
 <li>find out how many bytes of memory we have used <blockquote class="doxtable">
@@ -155,12 +200,14 @@ $(document).ready(function(){initNavTree('page2.html','');});
  nanoFORTH v1.0 ok </p>
 </blockquote>
 </li>
-<li>after restart your Arduino, words can be restored from EEPROM which you saved earlier <blockquote class="doxtable">
+<li>after restart your Arduino, words can be restored from EEPROM which you saved earlier. <blockquote class="doxtable">
 <p>LD ⏎<br />
  0 HRE DMP ⏎ </p>
 </blockquote>
 </li>
 </ul>
+<p>Alright! That pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can give our future Nano running in the field the ability to withstand power failures or reboots. Yes, indeed if we setup an init address properly.</p>
+<p>It's real-time, and it multi-tasks. It can be reprogrammed on-the-fly or even over-the-air. It is extensible. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.</p>
 <p><br />
  <a href="page1.html">Review nanoFORTH command examples</a><br />
  <a href="page3.html">Learn nanoFORTH internal details</a> </p>
