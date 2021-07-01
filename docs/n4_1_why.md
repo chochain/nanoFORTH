@@ -32,10 +32,10 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 > |@image html nanoforth_led_red.jpg width=200px|
 > <br/>
 
-* turn off LED(blue) on digital pin 6, also imagine, too
-> 1 6 OUT ⏎
+* turn off LED(blue) on digital pin 6, also imagine, too (0 is LOW)
+> 0 6 OUT ⏎
 
-* define a function, or a 'word' in FORTH, **red** to turn red LED on, and blue LED off, (0 is LOW)
+* define a function, or a 'word' in FORTH, **red** to turn red LED on, and blue LED off
 > : **red** 1 5 OUT 0 6 OUT ; ⏎
 
 * define a word **blu** to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only)
