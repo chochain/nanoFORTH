@@ -27,14 +27,18 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 ### Use Cases - Interaction Examples
 * turn on LED(red) on digital pin 5, imagine you have that, (1 is HIGH)
 > 1 5 OUT ⏎
+> ||
+> |:--|
+> |@image html nanoforth_led_red.jpg width=200px|
+> <br/>
 
-* turn off LED(blue) on digital pin 6, also imagine, too (0 is LOW)
-> 0 6 OUT ⏎
+* turn off LED(blue) on digital pin 6, also imagine, too
+> 1 6 OUT ⏎
 
-* define a function, or a 'word' in FORTH, **red** to turn red LED on, and blue LED off
+* define a function, or a 'word' in FORTH, **red** to turn red LED on, and blue LED off, (0 is LOW)
 > : **red** 1 5 OUT 0 6 OUT ; ⏎
 
-* define a word **blu** to turn red LED off and turn blue LED on (sorry, nanoFORTH takes max 3 characters only)
+* define a word **blu** to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only)
 > : **blu** 1 6 OUT 1 5 OUT ; ⏎
 
 * execute **blu**, i.e. to turn red LED off, and blue LED on 
@@ -46,9 +50,11 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 * run 10 cycles of **xy**
 > 10 **xy** ⏎
 
-* too slow! nanoFORTH lets you redefine **xy** by "forget" it first
+* a bit too slow! nanoFORTH lets you redefine **xy** by "forget" it first
 > FGT **xy** ⏎<br>
-> : **xy** 0 FOR **red** 200 DLY **blu** 400 DLY I . NXT ; ⏎
+> : **xy** 0 FOR **red** 200 DLY **blu** 300 DLY I . NXT ; ⏎<br/>
+>> \> so, you probably found out that **I** is the counter and . (dot) prints it,<br/>
+>> \> also, 10 0 FOR ... NXT is to loop 10 times, i.e. counter from 0, 1, 2, ..., 9
 
 * now try 20 cycles of **xy** this time
 > 20 **xy** ⏎
