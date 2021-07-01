@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">nanoFORTH
-   &#160;<span id="projectnumber">v1.0</span>
+   &#160;<span id="projectnumber">v1.2</span>
    </div>
   </td>
  </tr>
@@ -86,9 +86,10 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <div class="contents">
 <div class="textblock"><h2>nanoFORTH Operations</h2>
 <h3>Internal</h3>
-<p>At its core, nanoFORTH is a traditional parse-dispatch virtual machine interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has dual personallities which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is faster and <b>portable</b>. The later ability enables future units to send source as well as compiled code to each other. This can bring a big grin but we might need to deal with the red flag raised by security guys later.</p>
+<p>At its core, nanoFORTH is a traditional <b>parse-dispatch virtual machine</b> interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has dual personallities which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is faster and <b>portable</b>. The later ability enables future units to send data packets as well as instruction code segments to each other. This can bring a big grin but, of course, we later might need to deal with the red flag raised by security concerning parties.</p>
 <h3>Arduino Nano Memory Map</h3>
 <p>TODO</p>
+<h2>Built-in Words (TODO more)</h2>
 <h3>Arithmatics Ops</h3>
 <p>+ - * / MOD NEG </p><blockquote class="doxtable">
 <p>17 5 + ⏎ </p><blockquote class="doxtable">
@@ -140,7 +141,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 </blockquote>
 <h3>System, Debug/Tracing</h3>
 <p>BYE DMP TRC</p>
-<h2>Opcode formats</h2>
+<h2>Opcode Formats</h2>
 <blockquote class="doxtable">
 <p><code>branching : 11BB aaaa aaaa aaaa (12-bit absolute address)</code><br />
  <code>primitive : 10oo oooo (6-bit, i.e. 64 primitives)</code><br />
