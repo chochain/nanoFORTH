@@ -94,27 +94,28 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <tr>
 <th align="right">address</th><th align="center">object</th><th align="center">growth</th><th align="center">forth  </th></tr>
 <tr>
-<td align="right">0x900</td><td align="center">Arduino RAM max</td><td align="center">⇩</td><td align="center">. </td></tr>
+<td align="right">0x900</td><td align="center">Arduino RAM max</td><td align="center">_</td><td align="center">. </td></tr>
 <tr>
 <td align="right">0x8f5</td><td align="center">global/static variables</td><td align="center">⇩</td><td align="center">. </td></tr>
 <tr>
 <td align="right">...</td><td align="center">free memory/heap</td><td align="center">_</td><td align="center">. </td></tr>
 <tr>
-<td align="right">0x759</td><td align="center"><b>return stack</b> </td><td align="center">⇩</td><td align="center">X </td></tr>
+<td align="right">0x696</td><td align="center"><b>return stack</b> </td><td align="center">⇩</td><td align="center">X </td></tr>
 <tr>
-<td align="right">0x6d9</td><td align="center"><b>data stack</b> </td><td align="center">⇧</td><td align="center">X </td></tr>
+<td align="right">0x617</td><td align="center"><b>data stack</b> </td><td align="center">⇧</td><td align="center">X </td></tr>
 <tr>
 <td align="right">...</td><td align="center">user defined words</td><td align="center">⇧</td><td align="center">X </td></tr>
 <tr>
-<td align="right">0x2d9</td><td align="center"><b>user dictionary</b> starts</td><td align="center">⇧</td><td align="center">X </td></tr>
+<td align="right">0x217</td><td align="center"><b>user dictionary</b> starts</td><td align="center">⇧</td><td align="center">X </td></tr>
 <tr>
-<td align="right">...</td><td align="center">Arduino libraries</td><td align="center">⇧</td><td align="center">. </td></tr>
+<td align="right">...</td><td align="center">Arduino libraries</td><td align="center">_</td><td align="center">. </td></tr>
 <tr>
-<td align="right">0x100</td><td align="center">Arduino RAM starts</td><td align="center">⇧</td><td align="center">. </td></tr>
+<td align="right">0x100</td><td align="center">Arduino RAM starts</td><td align="center">_</td><td align="center">. </td></tr>
 <tr>
-<td align="right">0x000</td><td align="center">Arduino registers</td><td align="center">⇧</td><td align="center">. </td></tr>
+<td align="right">0x000</td><td align="center">Arduino registers</td><td align="center">_</td><td align="center">. </td></tr>
 </table>
 </blockquote>
+<p>Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.</p>
 <h2>Nubmer Representation</h2>
 <p>nanoFORTH handles only integer numbers.</p><ul>
 <li>16-bit integer range -32727 to 32726</li>

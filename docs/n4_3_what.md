@@ -9,16 +9,18 @@ Compared to any FORTH language tutorial, you probably will notice that the lengt
 ### Arduino Nano Memory Map
 > |address|object|growth|forth|
 > |--:|:---:|:--:|:--:|
-> |0x900|Arduino RAM max|⇩|.|
+> |0x900|Arduino RAM max|_|.|
 > |0x8f5|global/static variables|⇩|.|
 > |...|free memory/heap|_|.|
-> |0x759| **return stack** |⇩|X|
-> |0x6d9| **data stack** |⇧|X|
+> |0x696| **return stack** |⇩|X|
+> |0x617| **data stack** |⇧|X|
 > |...|user defined words|⇧|X|
-> |0x2d9| **user dictionary** starts|⇧|X|
-> |...|Arduino libraries|⇧|.|
-> |0x100|Arduino RAM starts|⇧|.|
-> |0x000|Arduino registers|⇧|.|
+> |0x217| **user dictionary** starts|⇧|X|
+> |...|Arduino libraries|_|.|
+> |0x100|Arduino RAM starts|_|.|
+> |0x000|Arduino registers|_|.|
+
+Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.
 
 ## Nubmer Representation
 nanoFORTH handles only integer numbers.

@@ -127,10 +127,9 @@ $(document).ready(function(){initNavTree('page2.html','');});
  </p>
 </blockquote>
 </li>
-</ul>
-<h3>Init Screen Details</h3>
-<p>Here's a sample init screen if you've got it going </p><blockquote class="doxtable">
-<table class="doxtable">
+<li>Serial Monitor screenshot (sample) once nanoFORTH is successfully uploaded <blockquote class="doxtable">
+<p><br />
+ </p><table class="doxtable">
 <tr>
 <th align="left">screen shot  </th></tr>
 <tr>
@@ -140,17 +139,9 @@ $(document).ready(function(){initNavTree('page2.html','');});
  </td></tr>
 </table>
 </blockquote>
-<p><br />
- It shows the memory map of nanoFORTH once loaded correctly, with</p><ul>
-<li><code>0x000 to 0x0ff -</code> Arduino registers/interrupt vectors</li>
-<li><code>0x100 to 0x216 -</code> Arduino libraries, i.e. Serial, pt, ...</li>
-<li><code>0x217 to 0x616 -</code> nanoFORTH 1K user dictionary, growing upward</li>
-<li><code>0x617 to 0x... -</code> nanoFORTH return stack, growing upward until hitting data stack</li>
-<li><code>0x696 to 0x... -</code> nanoFORTH data stack top, growing downward until hitting return stack</li>
-<li><code>0x697 to 0x8f4 -</code> 606 bytes free space left if you need dynamic allocation or other function calls</li>
-<li><code>0x8f5 to 0x8ff -</code> global/static variables</li>
+<br />
+</li>
 </ul>
-<p>Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.</p>
 <h3>Exercise</h3>
 <p>We have gone through a lot of 'paper work', time for hands-on again. If needed, review previous page <a href="page1.html" target="_blank">here</a> for some instructions we've gone through earlier.</p>
 <p>Now let's try some fancy stuffs to see what nanoFORTH has to offer.</p><ul>
