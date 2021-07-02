@@ -30,7 +30,7 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 > ||
 > |:--|
 > |@image html nanoforth_led_red.jpg width=200px|
-> <br/>
+<br/>
 
 * turn off LED(blue) on digital pin 6, also imagine, too (0 is LOW)
 > 0 6 OUT ⏎
@@ -49,6 +49,10 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 
 * run 10 cycles of **xy**
 > 10 **xy** ⏎
+> ||
+> |:--|
+> |@htmlonly <iframe width="400" height="320" src="https://www.youtube.com/embed/trmDNh41-pQ?version=3&playlist=trmDNh41-pQ&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
+<br/>
 
 * a bit too slow! nanoFORTH lets you redefine **xy** by "forget" it first
 > FGT **xy** ⏎<br>
@@ -80,12 +84,20 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 * now we can turn on red or blue LED depends on lighting condition (try blocking the photoresister), **lit** leave 1 or 0 on stack, **?Z** takes the value and turns on red or blue
 > **lit** **?Z** ⏎
 
-* if you really want to, we can even make it into an infinite loop. But why? OK, running over-night or maybe something like a web-server.
-> : **xyz** BGN **lit** **?Z** RPT ; ⏎<br>
-> 100 **xyz**
+* define a loop, blocking the photoresister and see it toggles between blue and red LEDs. 
+> : **xyz** 0 FOR **lit** **?Z** 1000 DLY NXT ; ⏎<br>
+> 60 **xyz**
+>> \> Can this become a trigger i.e. mouse trap or something useful?<br/>
+>> \> Make it run in an infinite loop like a web-server? Sure, but we will leave that detail to future chapter.<br/>
+>> \> Have you notice the Pin 13 green LED is blinking at its own pace?
 
-* show all words available, including **?Z**, **xy**, **lit**, **blu**, **red** that we've just created
+* show all nanoFORTH words available, including **?Z**, **xy**, **lit**, **blu**, **red** that we've just created
 > WRD ⏎
+> ||
+> |:--|
+> |@image html nanoforth_wrd_list.png width=800px|
+>> \> Only a short list of 'words', thus it does not take much to master. 
+<br/>
 
 OK, if that captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Remember, we do these without any compilation but, instead, "talk" directly with Arduino once nanoFORTH uploaded via the USB cable. The interactive nature changes the way we are so used to. Further more, what if we can do it via WiFi or BLE? Look Mom! I can talk to the mailbox. No cable!
 

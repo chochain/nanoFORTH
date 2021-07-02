@@ -386,7 +386,7 @@ void N4Asm::_do_header()
 ///
 ///> create branching for instructions
 ///>> f IF...THN, f IF...ELS...THN
-///>> BGN...RPT, BGN...f UTL, BGN...f WHL...RPT, BGN...f WHL...f UTL
+///>> BGN...f UTL, BGN...f WHL...RPT, BGN...f WHL...f UTL
 ///>> n1 n0 FOR...NXT
 ///
 void N4Asm::_do_branch(U8 op)
