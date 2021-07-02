@@ -89,68 +89,211 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <p>At its core, nanoFORTH is a traditional <b>parse-dispatch virtual machine</b> interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has dual personallities which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is faster and <b>portable</b>. The later ability enables future units to send data packets as well as instruction code segments to each other. This can bring a big grin but, of course, we later might need to deal with the red flag raised by security concerning parties.</p>
 <p>Compared to any FORTH language tutorial, you probably will notice that the length of a word of nanoFORTH, unlike most are 31-character, is 3 characters or less. This departs from standard FORTHs and begs the question of whether nanoFORTH is truly a FORTH. Well, our target platform is a very small MCU and our application has probably a dozen of functions. Aside from easier to type, it has benefit in simplifying some internal handling. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable. To qualify it as a FORTH or not, probably doesn't matter that much so long as it behaves well, runs fast enough, and useful for our needs.</p>
 <h3>Arduino Nano Memory Map</h3>
-<p>TODO</p>
-<h2>Built-in Words (TODO more)</h2>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="right">address</th><th align="center">object</th><th align="center">growth</th><th align="center">forth  </th></tr>
+<tr>
+<td align="right">0x900</td><td align="center">Arduino RAM max</td><td align="center">⇩</td><td align="center">. </td></tr>
+<tr>
+<td align="right">0x8f5</td><td align="center">global/static variables</td><td align="center">⇩</td><td align="center">. </td></tr>
+<tr>
+<td align="right">...</td><td align="center">free memory/heap</td><td align="center">_</td><td align="center">. </td></tr>
+<tr>
+<td align="right">0x759</td><td align="center"><b>return stack</b> </td><td align="center">⇩</td><td align="center">X </td></tr>
+<tr>
+<td align="right">0x6d9</td><td align="center"><b>data stack</b> </td><td align="center">⇧</td><td align="center">X </td></tr>
+<tr>
+<td align="right">...</td><td align="center">user defined words</td><td align="center">⇧</td><td align="center">X </td></tr>
+<tr>
+<td align="right">0x2d9</td><td align="center"><b>user dictionary</b> starts</td><td align="center">⇧</td><td align="center">X </td></tr>
+<tr>
+<td align="right">...</td><td align="center">Arduino libraries</td><td align="center">⇧</td><td align="center">. </td></tr>
+<tr>
+<td align="right">0x100</td><td align="center">Arduino RAM starts</td><td align="center">⇧</td><td align="center">. </td></tr>
+<tr>
+<td align="right">0x000</td><td align="center">Arduino registers</td><td align="center">⇧</td><td align="center">. </td></tr>
+</table>
+</blockquote>
+<h2>Nubmer Representation</h2>
+<p>nanoFORTH handles only integer numbers.</p><ul>
+<li>16-bit integer range -32727 to 32726</li>
+<li>32-bit double can be presented as two 16-bit numbers on data stack</li>
+<li>hex number can be input with <b>$</b> prefix</li>
+</ul>
+<h4>examples</h4>
+<blockquote class="doxtable">
+<p>20 ⏎ </p><blockquote class="doxtable">
+<p>20_ok </p>
+</blockquote>
+<p>10 $10 ⏎ </p><blockquote class="doxtable">
+<p>20_10_16_ok </p>
+</blockquote>
+</blockquote>
+<h2>Built-in Words</h2>
+<h3>Stack Ops</h3>
+<ul>
+<li><code>DRP (w -- )</code></li>
+<li><code>DUP (w -- w w)</code></li>
+<li><code>SWP (a b -- b a)</code></li>
+<li><code>OVR (a b -- a b a)</code></li>
+<li><code>ROT (a b c -- b c a)</code></li>
+</ul>
+<h4>examples</h4>
+<blockquote class="doxtable">
+<p>20 10 ⏎ </p><blockquote class="doxtable">
+<p>20_10_ok </p>
+</blockquote>
+<p>OVR ⏎ </p><blockquote class="doxtable">
+<p>20_10_20_ok </p>
+</blockquote>
+<p>DRP ⏎ </p><blockquote class="doxtable">
+<p>20_10_ok </p>
+</blockquote>
+<p>SWP ⏎ </p><blockquote class="doxtable">
+<p>10_20_ok </p>
+</blockquote>
+<p>DUP ⏎ </p><blockquote class="doxtable">
+<p>10_20_20_ok </p>
+</blockquote>
+<p>ROT ⏎ </p><blockquote class="doxtable">
+<p>20_20_10_ok </p>
+</blockquote>
+</blockquote>
 <h3>Arithmatics Ops</h3>
-<p>+ - * / MOD NEG </p><blockquote class="doxtable">
+<ul>
+<li><code>+ (a b -- a+b)</code></li>
+<li><code>- (a b -- a-b)</code></li>
+<li><code>* (a b -- a*b)</code></li>
+<li><code>/ (a b -- a/b)</code></li>
+<li><code>MOD (a b -- a%b)</code></li>
+<li><code>NEG (a -- -a)</code></li>
+</ul>
+<h4>examples</h4>
+<blockquote class="doxtable">
 <p>17 5 + ⏎ </p><blockquote class="doxtable">
 <p>22_ok </p>
 </blockquote>
-</blockquote>
-<blockquote class="doxtable">
 <p>1 2 3 4 + + + + ⏎ </p><blockquote class="doxtable">
 <p>10_ok </p>
 </blockquote>
-</blockquote>
-<blockquote class="doxtable">
 <p>10 3 / ⏎ </p><blockquote class="doxtable">
 <p>3_ok </p>
 </blockquote>
 </blockquote>
-<h3>Stack Ops</h3>
-<p>DRP DUP SWP OVR ROT</p>
 <h3>Bit-wise Ops</h3>
-<p>AND OR XOR</p>
+<ul>
+<li><code>AND (a b -- a&amp;b)</code></li>
+<li><code>OR (a b -- a|b)</code></li>
+<li><code>XOR (a b -- a^b)</code></li>
+</ul>
 <h3>Logical Ops</h3>
-<p>NOT = &lt; &gt; &lt;= &gt;= &lt;&gt;</p>
-<h3>Flow Control (Compiler mode)</h3>
-<p>IF ELS THN BGN UTL WHL RPT FOR NXT I </p><blockquote class="doxtable">
-<p>f IF...THN<br />
- f IF...ELS...THN<br />
- BGN...RPT<br />
- BGN...f UTL<br />
- BGN...f WHL...RPT<br />
- n1 n2 FOR...NXT </p>
-</blockquote>
-<h3>Definding Words (Interactive mode)</h3>
-<p>: ; VAR CST FGT</p>
+<ul>
+<li><code>NOT (a -- ^a)</code></li>
+<li><code>= (a b -- a==b)</code></li>
+<li><code>&lt; (a b -- a&lt;b)</code></li>
+<li><code>&gt; (a b -- a&gt;b)</code></li>
+<li><code>&lt;= (a b -- a&lt;=b)</code></li>
+<li><code>&gt;= (a b -- a&gt;=b)</code></li>
+<li><code>&lt;&gt; (a b -- a!=b)</code></li>
+</ul>
+<h3>Flow Control (in Compiler mode only)</h3>
+<ul>
+<li><code>f IF...THN</code></li>
+<li><code>f IF...ELS...THN</code></li>
+<li><code>BGN...f UTL</code></li>
+<li><code>BGN...f WHL...RPT</code></li>
+<li><code>BGN...f WHL...f UTL</code></li>
+<li><code>n1 n2 FOR...NXT</code></li>
+</ul>
+<h3>Definding Words (in Interactive mode only)</h3>
+<ul>
+<li><code>: start defining a new word</code></li>
+<li><code>; end of word definition</code></li>
+<li><code>VAR define a 16-bit variable</code></li>
+<li><code>CST define a 16-bit constant</code></li>
+<li><code>FGT forget/remove functions</code></li>
+</ul>
 <h3>Memory Access</h3>
-<p>@ ! C@ C! &gt;R R&gt;</p>
+<ul>
+<li><code>@ (a -- w)</code> fetch a 16-bit value from memory address 'a'</li>
+<li><code>! (a w -- )</code> store a 16-bit value to memory address 'a'</li>
+<li><code>C@ (a -- w)</code> fetch a single byte from memory address 'a'</li>
+<li><code>C! (a w -- )</code> store a byte (or lower byte of the word) to memory address 'a'</li>
+</ul>
+<h3>Return Stack Ops</h3>
+<ul>
+<li><code>I ( -- w)</code> fetch word from top of return stack</li>
+<li><code>&gt;R (w -- )</code> push word on top of data stack onto return stack</li>
+<li><code>R&gt; ( -- w)</code> pop top of return stack value and push it onto data stack</li>
+</ul>
 <h3>Console I/O</h3>
-<p>KEY EMT CR . ."</p>
+<ul>
+<li><code>KEY ( -- c)</code> get a byte from input console</li>
+<li><code>EMT (w -- )</code> send a byte to output console</li>
+<li><code>CR ( -- )</code> send a &lt;return&gt; to console</li>
+<li><code>. (w -- )</code> print the value on data stack to output console</li>
+<li><code>." ( -- )</code> print a string onto output console</li>
+</ul>
 <h3>Dictionary</h3>
-<p>WRD HRE</p>
+<ul>
+<li><code>WRD ( -- )</code> list all words defined in nanoFORTH dictionaries</li>
+<li><code>HRE ( -- w)</code> get current user dictionary pointer</li>
+</ul>
 <h3>Array</h3>
-<p>CEL ALO</p>
+<ul>
+<li><code>ALO (w -- )</code> allocate space on user dictionary (for array allocation)</li>
+<li><code>CEL ( -- w)</code> get number of byte of a single cell (for allocation)</li>
+</ul>
+<h4>examples</h4>
+<blockquote class="doxtable">
+<p>VAR x 2 CEL ALO ⏎ </p><blockquote class="doxtable">
+<p>ok (total 3 16-bit value allocated on user dictionary) </p>
+</blockquote>
+</blockquote>
 <h3>EEPROM Access</h3>
-<p>SAV LD</p>
+<ul>
+<li><code>SAV ( -- )</code> save user dictionary into Arduino Flash Memory</li>
+<li><code>LD ( -- )</code> restore user dictionary from Arduino Flash Memory</li>
+</ul>
 <h3>Arduino</h3>
-<p>CLK DLY PIN IN OUT AIN PWM</p>
+<ul>
+<li><code>CLK ( -- d)</code> fetch Arduino millis() value onto data stack as a double number</li>
+<li><code>DLY (w -- )</code> wait milliseconds (yield to hardware tasks)</li>
+<li><code>PIN (w p -- )</code> call pinMode(p, w)</li>
+<li><code>IN (p -- w)</code> call digitalRead(p)</li>
+<li><code>OUT (w p -- ) call digitalWrite(p, w) *</code>AIN (p &ndash; w)<code>call analogRead(p) *</code>PWM (w p &ndash; )` call analogWrite(p, w)</li>
+</ul>
+<h4>examples</h4>
+<blockquote class="doxtable">
+<p>1 13 OUT ⏎ </p><blockquote class="doxtable">
+<p>ok i.e. digitalWrite(13, 1) called </p>
+</blockquote>
+</blockquote>
 <h3>32-bit Arithmatic (for Arduino Clock mostly)</h3>
-<p>D+ D- DNG </p><blockquote class="doxtable">
-<p>CLK 1000 DLY CLK D- DNG ⏎ </p>
+<ul>
+<li><code>D+ (d1 d0 -- d1+d0)</code> add two doubles</li>
+<li><code>D- (d1 d0 -- d1-d0)</code> subtract two doubles</li>
+<li><code>DNG (d0 -- -d0)</code> negate a double number</li>
+</ul>
+<h4>examples</h4>
+<blockquote class="doxtable">
+<p>CLK DNG 1000 DLY CLK D+ ⏎ </p>
 </blockquote>
 <h3>System, Debug/Tracing</h3>
-<p>BYE DMP TRC</p>
+<ul>
+<li><code>BYE ( -- )</code> reset nanoFORTH</li>
+<li><code>DMP (a w -- )</code> dump nanoFORTH user dictionary from address 'a' for w bytes</li>
+<li><code>TRC (1|0 -- )</code> enable/diable execution tracing</li>
+</ul>
 <h2>Opcode Formats</h2>
-<blockquote class="doxtable">
-<p><code>branching : 11BB aaaa aaaa aaaa (12-bit absolute address)</code><br />
- <code>primitive : 10oo oooo (6-bit, i.e. 64 primitives)</code><br />
- <code>3-byte lit: 1011 1111 snnn nnnn nnnn nnnn bf xxxx xxxx (16-bit signed integer)</code><br />
- <code>1-byte lit: 0nnn nnnn (0..127)</code><br />
- <code>n-byte str: len, byte, byte, ... (used in print str)</code><br />
- </p>
-</blockquote>
+<ul>
+<li><code>branching : 11BB aaaa aaaa aaaa (12-bit absolute address)</code></li>
+<li><code>primitive : 10oo oooo (6-bit, i.e. 64 primitives)</code></li>
+<li><code>3-byte lit: 1011 1111 snnn nnnn nnnn nnnn bf xxxx xxxx (16-bit signed integer)</code></li>
+<li><code>1-byte lit: 0nnn nnnn (0..127)</code></li>
+<li><code>n-byte str: len, byte, byte, ... (used in print str)</code></li>
+</ul>
 <p><br />
  <a href="page1.html">Review nanoFORTH command examples</a><br />
  <a href="page2.html">Install nanoFORTH</a><br />
