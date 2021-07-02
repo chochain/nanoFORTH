@@ -44,23 +44,12 @@ You can skip to next section and start getting your hands dirty right away. Howe
 >
 > \> in Serial Monitor input bar atop, type WRD and hit return. See what nanoFORTH says.<br/><br/>
 
-### Init Screen Details
-
-Here's a sample init screen if you've got it going
+* Serial Monitor screenshot (sample) once nanoFORTH is successfully uploaded
+> <br/>
 > |screen shot|
 > |:--|
 > |@image html nanoforth_init_screen.png|
 <br/>
-It shows the memory map of nanoFORTH once loaded correctly, with
-* `0x000 to 0x0ff -` Arduino registers/interrupt vectors
-* `0x100 to 0x216 -` Arduino libraries, i.e. Serial, pt, ...
-* `0x217 to 0x616 -` nanoFORTH 1K user dictionary, growing upward
-* `0x617 to 0x... -` nanoFORTH return stack, growing upward until hitting data stack
-* `0x696 to 0x... -` nanoFORTH data stack top, growing downward until hitting return stack
-* `0x697 to 0x8f4 -` 606 bytes free space left if you need dynamic allocation or other function calls
-* `0x8f5 to 0x8ff -` global/static variables
-
-Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.
 
 ### Exercise
 
