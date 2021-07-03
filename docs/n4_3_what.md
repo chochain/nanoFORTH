@@ -101,6 +101,18 @@ nanoFORTH handles only integer numbers.
 > |BGN xxx f WHL yyy RPT|@image html forth_bgn_whl_rpt.gif width=300px|
 > |n1 n2 FOR xxx NXT|for loop, aka. DO xxx LOOP in some other FORTH|
 
+### Memory Access Ops
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |\@ |`(a -- w)`|fetch a 16-bit value from memory address 'a'|
+> |!  |`(a w -- )`|store a 16-bit value to memory address 'a'|
+> |C\@|`(a -- w)`|fetch a single byte from memory address 'a'|
+> |C! |`(a w -- )`|store a byte (or lower byte of the word) to memory address 'a'|
+> * note: the above opcodes read/write nanoFORTH memory space directly. It provides the power to peek and poke random memory but also to shoot yourself on the foot. Use with caution.
+>
+> **Examples**
+> see next section
+
 ### Variable, Constant, and Array Ops
 > |opcode|stack|desc.|
 > |:--|:--|:--|
@@ -159,22 +171,13 @@ nanoFORTH handles only integer numbers.
 > |R>|`( -- w)`| pop top of return stack value and push it onto data stack|
 > * note: FORTH programmers often use return stack as temp storage. However do use >R and R> carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter.
 
-### Memory Access Ops
-> |opcode|stack|desc.|
-> |:--|:--|:--|
-> |\@ |`(a -- w)`|fetch a 16-bit value from memory address 'a'|
-> |!  |`(a w -- )`|store a 16-bit value to memory address 'a'|
-> |C\@|`(a -- w)`|fetch a single byte from memory address 'a'|
-> |C! |`(a w -- )`|store a byte (or lower byte of the word) to memory address 'a'|
-> * note: the above opcodes read/write nanoFORTH memory space directly. It provide the power for random memory access but also the rope to hang yourself. Use with caution.
-
 ### EEPROM Access
 > |opcode|stack|desc.|
 > |:--|:--|:--|
 > |SAV|`( -- )`|save user dictionary into Arduino Flash Memory|
 > |LD |`( -- )`|restore user dictionary from Arduino Flash Memory|
 
-### Arduino
+### Arduino Specific Ops
 > |opcode|stack|desc.|
 > |:--|:--|:--|
 > |CLK|`( -- d)`|fetch Arduino millis() value onto data stack as a double number|
@@ -205,10 +208,10 @@ nanoFORTH handles only integer numbers.
 ## Opcode Formats
 > |opcode|stack|desc.|
 > |:--|:--|:--|
-> |branching|`11BB aaaa aaaa aaaa`|(12-bit absolute address)|
+> |branching|`11BB aaaa aaaa aaaa`|(12-bit i.e. 4K address space)|
 > |primitive|`10oo oooo`|(6-bit, i.e. 64 primitives)|
-> |3-byte literal|`1011 1111 snnn nnnn nnnn nnnn  bf xxxx xxxx`|(16-bit signed integer)|
 > |1-byte literal|`0nnn nnnn`|0..127|
+> |3-byte literal|`1011 1111 snnn nnnn nnnn nnnn  bf xxxx xxxx`|(16-bit signed integer)|
 > |n-byte string|`len, byte, byte, ...`|used in print string|
 
 <br/>
