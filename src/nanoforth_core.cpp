@@ -110,8 +110,9 @@ U8 N4Core::tib_empty()
 ///
 U8 *N4Core::token(U8 clr)
 {
-    static U8 tib[TIB_SZ];
-    static U8 *tp = tib;
+    static U8 tib[TIB_SZ];                   ///> input buffer
+    static U8 *tp = tib;					 ///> token pointer to input buffer
+    static U8 dq  = 0;                       ///> dot_string token flag (handle differently)
     
 	if (clr) {                               /// * optionally clean input buffer
         _empty = 1;
@@ -120,21 +121,23 @@ U8 *N4Core::token(U8 clr)
     }
     if (tp==tib) _console_input((U8*)tib);   /// * buffer empty, read from console (with trailing blank)
 
-    U8 *p = (U8*)tp;                         /// * keep original tib pointer
     U8 sz = 0;
-    while (*tp++!=' ') sz++;                 /// * advance to next word
+    U8 *p = (U8*)tp;                         /// * keep original tib pointer
+    U8 tm = dq ? '"' : ' ';	                 /// * set word delimiter
+    while (*tp++!=tm)  sz++;				 /// * skip to next token
     while (*tp==' ')   tp++;                 /// * skip blanks
 
-    if (*tp=='\r' || *tp=='\n') { tp=tib; _empty=1; }   /// * end of input buffer
+    if (*tp=='\r' || *tp=='\n') { tp=tib; _empty=1; }   /// * end of input buffer, ready to take another one
     if (_trc) {                              /// * optionally print token for debugging
-        // debug info
         d_chr('\n');
         for (int i=0; i<5; i++) {
             d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
         }
     }
     else if (tp==tib) d_chr('\n');
-    
+
+    dq = (*p=='.' && *(p+1)=='"');			 /// * record whether token was dot_string
+
     return p;                                /// * return pointer to token
 }
 ///

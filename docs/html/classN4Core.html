@@ -715,14 +715,25 @@ Tracing Instrumentation</h2></td></tr>
 <blockquote class="doxtable">
 <p>capture a token from console input buffer</p>
 </blockquote>
+<blockquote class="doxtable">
+<p>input buffer </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>token pointer to input buffer </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>dot_string token flag (handle differently) </p>
+</blockquote>
 <ul>
 <li>optionally clean input buffer</li>
 <li>buffer empty, read from console (with trailing blank)</li>
 <li>keep original tib pointer</li>
-<li>advance to next word</li>
+<li>set word delimiter</li>
+<li>skip to next token</li>
 <li>skip blanks</li>
-<li>end of input buffer</li>
+<li>end of input buffer, ready to take another one</li>
 <li>optionally print token for debugging</li>
+<li>record whether token was dot_string</li>
 <li>return pointer to token </li>
 </ul>
 <dl class="params"><dt>Parameters</dt><dd>

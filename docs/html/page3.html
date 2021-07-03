@@ -249,6 +249,23 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <td align="left">n1 n2 FOR xxx NXT</td><td align="left">for loop, aka. DO xxx LOOP in some other FORTH </td></tr>
 </table>
 </blockquote>
+<h3>Memory Access Ops</h3>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">@ </td><td align="left"><code>(a -- w)</code></td><td align="left">fetch a 16-bit value from memory address 'a' </td></tr>
+<tr>
+<td align="left">! </td><td align="left"><code>(a w -- )</code></td><td align="left">store a 16-bit value to memory address 'a' </td></tr>
+<tr>
+<td align="left">C@</td><td align="left"><code>(a -- w)</code></td><td align="left">fetch a single byte from memory address 'a' </td></tr>
+<tr>
+<td align="left">C! </td><td align="left"><code>(a w -- )</code></td><td align="left">store a byte (or lower byte of the word) to memory address 'a' </td></tr>
+</table>
+<p>* note: the above opcodes read/write nanoFORTH memory space directly. It provides the power to peek and poke random memory but also to shoot yourself on the foot. Use with caution.</p>
+<p><b>Examples</b> see next section </p>
+</blockquote>
 <h3>Variable, Constant, and Array Ops</h3>
 <blockquote class="doxtable">
 <table class="doxtable">
@@ -264,16 +281,16 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <td align="left">CEL</td><td align="left"><code>( -- w)</code></td><td align="left">get number of byte of a single cell (for allocation) </td></tr>
 </table>
 <p><b>Examples</b></p>
-<p>VAR x ➤ <em>ok</em> (a variable x is created on user dictionary)<br />
- 3 x ! ➤ <em>ok</em> (store 3 into variable x)<br />
- x @ 5 + ➤ <em>8_ok</em> (fetch x value add 5 to it)<br />
+<p>VAR <b>x</b> ➤ <em>ok</em> (a variable <b>x</b> is created on user dictionary)<br />
+ 3 <b>x</b> ! ➤ <em>ok</em> (store 3 into variable <b>x</b>)<br />
+ <b>x</b> @ 5 + ➤ <em>8_ok</em> (fetch value of <b>x</b> add 5 to it)<br />
 </p>
-<p>32 CST N ⏎ ➤ <em>ok</em> (a const N is created on user dictionary)<br />
- N 1 + ⏎ ➤ <em>33_ok</em><br />
+<p>32 CST <b>N</b> ⏎ ➤ <em>ok</em> (a const <b>N</b> is created on user dictionary)<br />
+ <b>N</b> 1 + ⏎ ➤ <em>33_ok</em><br />
 </p>
-<p>VAR z 3 CEL ALO ⏎ ➤ <em>ok</em> (a variable z with 3 extra cells allocated, i.e. z[0..3])<br />
- 5 z 2 CEL + ! ⏎ ➤ <em>ok</em> (5 is stored into z[2])<br />
- z 2 CEL + @ ⏎ ➤ <em>5_ok</em> (retrieve z[2] onto data stack)<br />
+<p>VAR <b>z</b> 3 CEL ALO ⏎ ➤ <em>ok</em> (a variable <b>z</b> with 3 extra cells allocated, i.e. <b>z</b>[0..3])<br />
+ 5 <b>z</b> 2 CEL + ! ⏎ ➤ <em>ok</em> (5 is stored into <b>z</b>[2])<br />
+ <b>z</b> 2 CEL + @ ⏎ ➤ <em>5_ok</em> (retrieve <b>z</b>[2] onto data stack)<br />
  </p>
 </blockquote>
 <h3>Console I/O</h3>
@@ -290,11 +307,11 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <tr>
 <td align="left">. </td><td align="left"><code>(w -- )</code></td><td align="left">print the value on data stack to output console </td></tr>
 <tr>
-<td align="left">." </td><td align="left">( - - )</td><td align="left">send the following string (without any space) to output console </td></tr>
+<td align="left">." </td><td align="left">( - - )</td><td align="left">send the following string (terminated with a ") to output console </td></tr>
 </table>
 <p><b>Examples</b></p>
-<p>: hi 0 FOR ." hello" 33 EMT CR NXT ; ⏎ ➤ <em>ok</em> ('hi' is now created in user dictionary)<br />
- 3 hi ⏎<br />
+<p>: <b>hi</b> 0 FOR ." hello" 33 EMT CR NXT ; ⏎ ➤ <em>ok</em> (<b>hi</b> is now defined in user dictionary)<br />
+ 3 <b>hi</b> ⏎<br />
  ➤ <em>hello!</em><br />
  ➤ <em>hello!</em><br />
  ➤ <em>hello!ok</em> </p>
@@ -335,22 +352,6 @@ $(document).ready(function(){initNavTree('page3.html','');});
 </table>
 <p>* note: FORTH programmers often use return stack as temp storage. However do use &gt;R and R&gt; carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter. </p>
 </blockquote>
-<h3>Memory Access Ops</h3>
-<blockquote class="doxtable">
-<table class="doxtable">
-<tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
-<tr>
-<td align="left">@ </td><td align="left"><code>(a -- w)</code></td><td align="left">fetch a 16-bit value from memory address 'a' </td></tr>
-<tr>
-<td align="left">! </td><td align="left"><code>(a w -- )</code></td><td align="left">store a 16-bit value to memory address 'a' </td></tr>
-<tr>
-<td align="left">C@</td><td align="left"><code>(a -- w)</code></td><td align="left">fetch a single byte from memory address 'a' </td></tr>
-<tr>
-<td align="left">C! </td><td align="left"><code>(a w -- )</code></td><td align="left">store a byte (or lower byte of the word) to memory address 'a' </td></tr>
-</table>
-<p>* note: the above opcodes read/write nanoFORTH memory space directly. It provide the power for random memory access but also the rope to hang yourself. Use with caution. </p>
-</blockquote>
 <h3>EEPROM Access</h3>
 <blockquote class="doxtable">
 <table class="doxtable">
@@ -362,7 +363,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <td align="left">LD </td><td align="left"><code>( -- )</code></td><td align="left">restore user dictionary from Arduino Flash Memory </td></tr>
 </table>
 </blockquote>
-<h3>Arduino</h3>
+<h3>Arduino Specific Ops</h3>
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
@@ -399,26 +400,39 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <td align="left">DNG</td><td align="left"><code>(d0 -- -d0)</code></td><td align="left">negate a double number </td></tr>
 </table>
 <p><b>Eexamples</b></p>
-<p>CLK 1000 DLY CLK D- DNG ⏎ ➤ <em>1000_0_ok</em><br />
- </p>
+<p>CLK 1000 DLY CLK D- DNG ⏎ ➤ <em>1000_0_ok</em> </p>
 </blockquote>
 <p><br />
- <br />
- </p><h2>Opcode Formats</h2>
+ </p><h2>Function/Word Struct</h2>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">size</th><th align="left">field  </th></tr>
+<tr>
+<td align="left">fixed 16-bit</td><td align="left">address to previous word, 0xffff is terminator </td></tr>
+<tr>
+<td align="left">fixed 3-byte</td><td align="left">function name </td></tr>
+<tr>
+<td align="left">n-byte<br />
+depends on the length of the function</td><td align="left">* compiled opcodes (see next section), or<br />
+* address of a user defined word </td></tr>
+</table>
+</blockquote>
+<h2>Opcode Memory Formats</h2>
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
 <th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
 <tr>
-<td align="left">branching</td><td align="left"><code>11BB aaaa aaaa aaaa</code></td><td align="left">(12-bit absolute address) </td></tr>
+<td align="left">1-byte literal</td><td align="left"><code>0nnn nnnn</code></td><td align="left">0..127, often used, speeds up core </td></tr>
 <tr>
-<td align="left">primitive</td><td align="left"><code>10oo oooo</code></td><td align="left">(6-bit, i.e. 64 primitives) </td></tr>
+<td align="left">3-byte literal</td><td align="left"><code>1011 1111 snnn nnnn nnnn nnnn</code></td><td align="left">16-bit signed integer </td></tr>
 <tr>
-<td align="left">3-byte literal</td><td align="left"><code>1011 1111 snnn nnnn nnnn nnnn bf xxxx xxxx</code></td><td align="left">(16-bit signed integer) </td></tr>
+<td align="left">1-byte primitive</td><td align="left"><code>10oo oooo</code></td><td align="left">6-bit opcode i.e. 64 primitives </td></tr>
 <tr>
-<td align="left">1-byte literal</td><td align="left"><code>0nnn nnnn</code></td><td align="left">0..127 </td></tr>
+<td align="left">branching opcodes</td><td align="left"><code>11BB aaaa aaaa aaaa</code></td><td align="left">12-bit address i.e. 4K space </td></tr>
 <tr>
-<td align="left">n-byte string</td><td align="left"><code>len, byte, byte, ...</code></td><td align="left">used in print string </td></tr>
+<td align="left">n-byte string</td><td align="left"><code>len, byte, byte, ...</code></td><td align="left">256 bytes max, used in print string </td></tr>
 </table>
 </blockquote>
 <p><br />
