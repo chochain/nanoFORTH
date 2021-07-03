@@ -122,179 +122,305 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <li>32-bit double can be presented as two 16-bit numbers on data stack</li>
 <li>hex number can be input with <b>$</b> prefix</li>
 </ul>
-<h4>examples</h4>
 <blockquote class="doxtable">
-<p>20 ⏎ </p><blockquote class="doxtable">
-<p>20_ok </p>
-</blockquote>
-<p>10 $10 ⏎ </p><blockquote class="doxtable">
-<p>20_10_16_ok </p>
-</blockquote>
+<p></p>
+<p><b>Examples</b></p>
+<p>20 ⏎ ➤ <em>20_ok</em><br />
+ 10 $10 ⏎ ➤ <em>20_10_16_ok</em><br />
+ </p>
 </blockquote>
 <h2>Built-in Words</h2>
 <h3>Stack Ops</h3>
-<ul>
-<li><code>DRP (w -- )</code></li>
-<li><code>DUP (w -- w w)</code></li>
-<li><code>SWP (a b -- b a)</code></li>
-<li><code>OVR (a b -- a b a)</code></li>
-<li><code>ROT (a b c -- b c a)</code></li>
-</ul>
-<h4>examples</h4>
 <blockquote class="doxtable">
-<p>20 10 ⏎ </p><blockquote class="doxtable">
-<p>20_10_ok </p>
-</blockquote>
-<p>OVR ⏎ </p><blockquote class="doxtable">
-<p>20_10_20_ok </p>
-</blockquote>
-<p>DRP ⏎ </p><blockquote class="doxtable">
-<p>20_10_ok </p>
-</blockquote>
-<p>SWP ⏎ </p><blockquote class="doxtable">
-<p>10_20_ok </p>
-</blockquote>
-<p>DUP ⏎ </p><blockquote class="doxtable">
-<p>10_20_20_ok </p>
-</blockquote>
-<p>ROT ⏎ </p><blockquote class="doxtable">
-<p>20_20_10_ok </p>
-</blockquote>
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">DRP</td><td align="left"><code>(w -- )</code></td><td align="left">drop </td></tr>
+<tr>
+<td align="left">DUP</td><td align="left"><code>(w -- w w)</code></td><td align="left">duplicate </td></tr>
+<tr>
+<td align="left">SWP</td><td align="left"><code>(a b -- b a)</code></td><td align="left">swap </td></tr>
+<tr>
+<td align="left">OVR</td><td align="left"><code>(a b -- a b a)</code></td><td align="left">over </td></tr>
+<tr>
+<td align="left">ROT</td><td align="left"><code>(a b c -- b c a)</code></td><td align="left">rotate </td></tr>
+</table>
+<p><b>Examples</b></p>
+<p>20 10 ⏎ ➤ <em>20_10_ok</em><br />
+ OVR ⏎ ➤ <em>20_10_20_ok</em><br />
+ DRP ⏎ ➤ <em>20_10_ok</em><br />
+ SWP ⏎ ➤ <em>10_20_ok</em><br />
+ DUP ⏎ ➤ <em>10_20_20_ok</em><br />
+ ROT ⏎ ➤ <em>20_20_10_ok</em><br />
+ </p>
 </blockquote>
 <h3>Arithmatics Ops</h3>
-<ul>
-<li><code>+ (a b -- a+b)</code></li>
-<li><code>- (a b -- a-b)</code></li>
-<li><code>* (a b -- a*b)</code></li>
-<li><code>/ (a b -- a/b)</code></li>
-<li><code>MOD (a b -- a%b)</code></li>
-<li><code>NEG (a -- -a)</code></li>
-</ul>
-<h4>examples</h4>
 <blockquote class="doxtable">
-<p>17 5 + ⏎ </p><blockquote class="doxtable">
-<p>22_ok </p>
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">+ </td><td align="left"><code>(a b -- a+b)</code></td><td align="left">add </td></tr>
+<tr>
+<td align="left">- </td><td align="left"><code>(a b -- a-b)</code></td><td align="left">subtract </td></tr>
+<tr>
+<td align="left">* </td><td align="left"><code>(a b -- a*b)</code></td><td align="left">multiply </td></tr>
+<tr>
+<td align="left">/ </td><td align="left"><code>(a b -- a/b)</code></td><td align="left">divide </td></tr>
+<tr>
+<td align="left">MOD</td><td align="left"><code>(a b -- a%b</code>)</td><td align="left">modulo </td></tr>
+<tr>
+<td align="left">NEG</td><td align="left"><code>(a -- -a)</code></td><td align="left">negate </td></tr>
+</table>
+<p><b>Examples</b></p>
+<p>17 5 + ⏎ ➤ <em>22_ok</em><br />
+ 1 2 3 4 + + + + ⏎ ➤ <em>10_ok</em><br />
+ 10 3 / ⏎ ➤ <em>3_ok</em><br />
+ </p>
 </blockquote>
-<p>1 2 3 4 + + + + ⏎ </p><blockquote class="doxtable">
-<p>10_ok </p>
+<h3>Binary and Logical Ops</h3>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">AND</td><td align="left">(a b - - a&amp;b)</td><td align="left">binary and </td></tr>
+<tr>
+<td align="left">OR </td><td align="left">(a b - - a|b)</td><td align="left">binary or </td></tr>
+<tr>
+<td align="left">XOR</td><td align="left">(a b - - a^b)</td><td align="left">binary xor </td></tr>
+<tr>
+<td align="left">NOT</td><td align="left"><code>(a -- ^a)</code></td><td align="left">binary not </td></tr>
+<tr>
+<td align="left">= </td><td align="left"><code>(a b -- a==b)</code></td><td align="left">equal </td></tr>
+<tr>
+<td align="left">&lt; </td><td align="left"><code>(a b -- a&lt;b)</code></td><td align="left">less than </td></tr>
+<tr>
+<td align="left">&gt; </td><td align="left"><code>(a b -- a&gt;b)</code></td><td align="left">greater than </td></tr>
+<tr>
+<td align="left">&lt;=</td><td align="left"><code>(a b -- a&lt;=b)</code></td><td align="left">lesser equal </td></tr>
+<tr>
+<td align="left">&gt;=</td><td align="left"><code>(a b -- a&gt;=b)</code></td><td align="left">greater equal </td></tr>
+<tr>
+<td align="left">&lt;&gt;</td><td align="left"><code>(a b -- a!=b)</code></td><td align="left">not equal </td></tr>
+</table>
 </blockquote>
-<p>10 3 / ⏎ </p><blockquote class="doxtable">
-<p>3_ok </p>
+<h3>Word Definition and Dictionary Ops (in Interactive mode only)</h3>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">: </td><td align="left"><code>( -- )</code></td><td align="left">start defining a new word </td></tr>
+<tr>
+<td align="left">; </td><td align="left"><code>( -- )</code></td><td align="left">end of word definition </td></tr>
+<tr>
+<td align="left">WRD</td><td align="left"><code>( -- )</code></td><td align="left">list all words defined in nanoFORTH dictionaries </td></tr>
+<tr>
+<td align="left">HRE</td><td align="left"><code>( -- w)</code></td><td align="left">get current user dictionary pointer </td></tr>
+<tr>
+<td align="left">FGT</td><td align="left"><code>( -- )</code></td><td align="left">forget/remove functions </td></tr>
+</table>
 </blockquote>
-</blockquote>
-<h3>Bit-wise Ops</h3>
-<ul>
-<li><code>AND (a b -- a&amp;b)</code></li>
-<li><code>OR (a b -- a|b)</code></li>
-<li><code>XOR (a b -- a^b)</code></li>
-</ul>
-<h3>Logical Ops</h3>
-<ul>
-<li><code>NOT (a -- ^a)</code></li>
-<li><code>= (a b -- a==b)</code></li>
-<li><code>&lt; (a b -- a&lt;b)</code></li>
-<li><code>&gt; (a b -- a&gt;b)</code></li>
-<li><code>&lt;= (a b -- a&lt;=b)</code></li>
-<li><code>&gt;= (a b -- a&gt;=b)</code></li>
-<li><code>&lt;&gt; (a b -- a!=b)</code></li>
-</ul>
 <h3>Flow Control (in Compiler mode only)</h3>
-<ul>
-<li><code>f IF...THN</code></li>
-<li><code>f IF...ELS...THN</code></li>
-<li><code>BGN...f UTL</code></li>
-<li><code>BGN...f WHL...RPT</code></li>
-<li><code>BGN...f WHL...f UTL</code></li>
-<li><code>n1 n2 FOR...NXT</code></li>
-</ul>
-<h3>Definding Words (in Interactive mode only)</h3>
-<ul>
-<li><code>: start defining a new word</code></li>
-<li><code>; end of word definition</code></li>
-<li><code>VAR define a 16-bit variable</code></li>
-<li><code>CST define a 16-bit constant</code></li>
-<li><code>FGT forget/remove functions</code></li>
-</ul>
-<h3>Memory Access</h3>
-<ul>
-<li><code>@ (a -- w)</code> fetch a 16-bit value from memory address 'a'</li>
-<li><code>! (a w -- )</code> store a 16-bit value to memory address 'a'</li>
-<li><code>C@ (a -- w)</code> fetch a single byte from memory address 'a'</li>
-<li><code>C! (a w -- )</code> store a byte (or lower byte of the word) to memory address 'a'</li>
-</ul>
-<h3>Return Stack Ops</h3>
-<ul>
-<li><code>I ( -- w)</code> fetch word from top of return stack</li>
-<li><code>&gt;R (w -- )</code> push word on top of data stack onto return stack</li>
-<li><code>R&gt; ( -- w)</code> pop top of return stack value and push it onto data stack</li>
-</ul>
-<h3>Console I/O</h3>
-<ul>
-<li><code>KEY ( -- c)</code> get a byte from input console</li>
-<li><code>EMT (w -- )</code> send a byte to output console</li>
-<li><code>CR ( -- )</code> send a &lt;return&gt; to console</li>
-<li><code>. (w -- )</code> print the value on data stack to output console</li>
-<li><code>." ( -- )</code> print a string onto output console</li>
-</ul>
-<h3>Dictionary</h3>
-<ul>
-<li><code>WRD ( -- )</code> list all words defined in nanoFORTH dictionaries</li>
-<li><code>HRE ( -- w)</code> get current user dictionary pointer</li>
-</ul>
-<h3>Array</h3>
-<ul>
-<li><code>ALO (w -- )</code> allocate space on user dictionary (for array allocation)</li>
-<li><code>CEL ( -- w)</code> get number of byte of a single cell (for allocation)</li>
-</ul>
-<h4>examples</h4>
 <blockquote class="doxtable">
-<p>VAR x 2 CEL ALO ⏎ </p><blockquote class="doxtable">
-<p>ok (total 3 16-bit value allocated on user dictionary) </p>
+<table class="doxtable">
+<tr>
+<th align="left">branching ops</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">f IF xxx THN</td><td align="left">conditional branch </td></tr>
+<tr>
+<td align="left">f IF xxx ELS yyy THN</td><td align="left"><div class="image">
+<img src="forth_if_els_thn.gif" alt="forth_if_els_thn.gif" width="300px"/>
+</div>
+ </td></tr>
+<tr>
+<td align="left">BGN xxx f UTL</td><td align="left"><div class="image">
+<img src="forth_bgn_utl.gif" alt="forth_bgn_utl.gif" width="300px"/>
+</div>
+ </td></tr>
+<tr>
+<td align="left">BGN xxx f WHL yyy RPT</td><td align="left"><div class="image">
+<img src="forth_bgn_whl_rpt.gif" alt="forth_bgn_whl_rpt.gif" width="300px"/>
+</div>
+ </td></tr>
+<tr>
+<td align="left">n1 n2 FOR xxx NXT</td><td align="left">for loop, aka. DO xxx LOOP in some other FORTH </td></tr>
+</table>
 </blockquote>
+<h3>Variable, Constant, and Array Ops</h3>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">VAR</td><td align="left"><code>( -- )</code></td><td align="left">define a 16-bit variable </td></tr>
+<tr>
+<td align="left">CST</td><td align="left"><code>(w -- )</code></td><td align="left">define a 16-bit constant </td></tr>
+<tr>
+<td align="left">ALO</td><td align="left"><code>(w -- )</code></td><td align="left">allocate space on user dictionary (for array allocation) </td></tr>
+<tr>
+<td align="left">CEL</td><td align="left"><code>( -- w)</code></td><td align="left">get number of byte of a single cell (for allocation) </td></tr>
+</table>
+<p><b>Examples</b></p>
+<p>VAR x ➤ <em>ok</em> (a variable x is created on user dictionary)<br />
+ 3 x ! ➤ <em>ok</em> (store 3 into variable x)<br />
+ x @ 5 + ➤ <em>8_ok</em> (fetch x value add 5 to it)<br />
+</p>
+<p>32 CST N ⏎ ➤ <em>ok</em> (a const N is created on user dictionary)<br />
+ N 1 + ⏎ ➤ <em>33_ok</em><br />
+</p>
+<p>VAR z 3 CEL ALO ⏎ ➤ <em>ok</em> (a variable z with 3 extra cells allocated, i.e. z[0..3])<br />
+ 5 z 2 CEL + ! ⏎ ➤ <em>ok</em> (5 is stored into z[2])<br />
+ z 2 CEL + @ ⏎ ➤ <em>5_ok</em> (retrieve z[2] onto data stack)<br />
+ </p>
+</blockquote>
+<h3>Console I/O</h3>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">KEY </td><td align="left"><code>( -- c)</code></td><td align="left">get a byte from input console </td></tr>
+<tr>
+<td align="left">EMT </td><td align="left"><code>(c -- )</code></td><td align="left">write a byte to output console </td></tr>
+<tr>
+<td align="left">CR </td><td align="left"><code>( -- )</code> </td><td align="left">send a &lt;return&gt; to console </td></tr>
+<tr>
+<td align="left">. </td><td align="left"><code>(w -- )</code></td><td align="left">print the value on data stack to output console </td></tr>
+<tr>
+<td align="left">." </td><td align="left">( - - )</td><td align="left">send the following string (without any space) to output console </td></tr>
+</table>
+<p><b>Examples</b></p>
+<p>: hi 0 FOR ." hello" 33 EMT CR NXT ; ⏎ ➤ <em>ok</em> ('hi' is now created in user dictionary)<br />
+ 3 hi ⏎<br />
+ ➤ <em>hello!</em><br />
+ ➤ <em>hello!</em><br />
+ ➤ <em>hello!ok</em> </p>
+</blockquote>
+<h3>Reset, Debug, and Tracing</h3>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">BYE</td><td align="left"><code>( -- )</code></td><td align="left">reset nanoFORTH </td></tr>
+<tr>
+<td align="left">DMP</td><td align="left"><code>(a w -- )</code></td><td align="left">dump nanoFORTH user dictionary from address 'a' for w bytes </td></tr>
+<tr>
+<td align="left">TRC</td><td align="left"><code>(t -- )</code></td><td align="left">enable/diable execution tracing </td></tr>
+</table>
+<p><b>Examples</b> </p><table class="doxtable">
+<tr>
+<th align="left"></th></tr>
+<tr>
+<td align="left"><div class="image">
+<img src="nanoforth_bye_trc_dmp.png" alt="nanoforth_bye_trc_dmp.png" width="800px"/>
+</div>
+ </td></tr>
+</table>
+</blockquote>
+<h3>Return Stack Ops</h3>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">I </td><td align="left"><code>( -- w)</code></td><td align="left">fetch word from top of return stack, aka R@ in other FORTHs </td></tr>
+<tr>
+<td align="left">&gt;R</td><td align="left"><code>(w -- )</code></td><td align="left">push word on top of data stack onto return stack </td></tr>
+<tr>
+<td align="left">R&gt;</td><td align="left"><code>( -- w)</code></td><td align="left">pop top of return stack value and push it onto data stack </td></tr>
+</table>
+<p>* note: FORTH programmers often use return stack as temp storage. However do use &gt;R and R&gt; carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter. </p>
+</blockquote>
+<h3>Memory Access Ops</h3>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">@ </td><td align="left"><code>(a -- w)</code></td><td align="left">fetch a 16-bit value from memory address 'a' </td></tr>
+<tr>
+<td align="left">! </td><td align="left"><code>(a w -- )</code></td><td align="left">store a 16-bit value to memory address 'a' </td></tr>
+<tr>
+<td align="left">C@</td><td align="left"><code>(a -- w)</code></td><td align="left">fetch a single byte from memory address 'a' </td></tr>
+<tr>
+<td align="left">C! </td><td align="left"><code>(a w -- )</code></td><td align="left">store a byte (or lower byte of the word) to memory address 'a' </td></tr>
+</table>
+<p>* note: the above opcodes read/write nanoFORTH memory space directly. It provide the power for random memory access but also the rope to hang yourself. Use with caution. </p>
 </blockquote>
 <h3>EEPROM Access</h3>
-<ul>
-<li><code>SAV ( -- )</code> save user dictionary into Arduino Flash Memory</li>
-<li><code>LD ( -- )</code> restore user dictionary from Arduino Flash Memory</li>
-</ul>
-<h3>Arduino</h3>
-<ul>
-<li><code>CLK ( -- d)</code> fetch Arduino millis() value onto data stack as a double number</li>
-<li><code>DLY (w -- )</code> wait milliseconds (yield to hardware tasks)</li>
-<li><code>PIN (w p -- )</code> call pinMode(p, w)</li>
-<li><code>IN (p -- w)</code> call digitalRead(p)</li>
-<li><code>OUT (w p -- ) call digitalWrite(p, w) *</code>AIN (p &ndash; w)<code>call analogRead(p) *</code>PWM (w p &ndash; )` call analogWrite(p, w)</li>
-</ul>
-<h4>examples</h4>
 <blockquote class="doxtable">
-<p>1 13 OUT ⏎ </p><blockquote class="doxtable">
-<p>ok i.e. digitalWrite(13, 1) called </p>
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">SAV</td><td align="left"><code>( -- )</code></td><td align="left">save user dictionary into Arduino Flash Memory </td></tr>
+<tr>
+<td align="left">LD </td><td align="left"><code>( -- )</code></td><td align="left">restore user dictionary from Arduino Flash Memory </td></tr>
+</table>
 </blockquote>
+<h3>Arduino</h3>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">CLK</td><td align="left"><code>( -- d)</code></td><td align="left">fetch Arduino millis() value onto data stack as a double number </td></tr>
+<tr>
+<td align="left">DLY</td><td align="left"><code>(w -- )</code></td><td align="left">wait milliseconds (yield to hardware tasks) </td></tr>
+<tr>
+<td align="left">PIN</td><td align="left"><code>(w p -- )</code></td><td align="left">pinMode(p, w) </td></tr>
+<tr>
+<td align="left">IN </td><td align="left"><code>(p -- w)</code></td><td align="left">digitalRead(p) </td></tr>
+<tr>
+<td align="left">OUT</td><td align="left"><code>(w p -- )</code></td><td align="left">digitalWrite(p, w) </td></tr>
+<tr>
+<td align="left">AIN</td><td align="left"><code>(p -- w)</code></td><td align="left">analogRead(p) </td></tr>
+<tr>
+<td align="left">PWM</td><td align="left"><code>(w p -- )</code></td><td align="left">analogWrite(p, w) </td></tr>
+</table>
+<p><b>Examples</b></p>
+<p>1 13 OUT ⏎ ➤ <em>ok</em> (built-in LED is turn on, i.e. digitalWrite(13, 1) called)<br />
+ </p>
 </blockquote>
 <h3>32-bit Arithmatic (for Arduino Clock mostly)</h3>
-<ul>
-<li><code>D+ (d1 d0 -- d1+d0)</code> add two doubles</li>
-<li><code>D- (d1 d0 -- d1-d0)</code> subtract two doubles</li>
-<li><code>DNG (d0 -- -d0)</code> negate a double number</li>
-</ul>
-<h4>examples</h4>
 <blockquote class="doxtable">
-<p>CLK DNG 1000 DLY CLK D+ ⏎ </p>
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">D+ </td><td align="left"><code>(d1 d0 -- d1+d0)</code></td><td align="left">add two doubles </td></tr>
+<tr>
+<td align="left">D- </td><td align="left"><code>(d1 d0 -- d1-d0)</code></td><td align="left">subtract two doubles </td></tr>
+<tr>
+<td align="left">DNG</td><td align="left"><code>(d0 -- -d0)</code></td><td align="left">negate a double number </td></tr>
+</table>
+<p><b>Eexamples</b></p>
+<p>CLK 1000 DLY CLK D- DNG ⏎ ➤ <em>1000_0_ok</em><br />
+ </p>
 </blockquote>
-<h3>System, Debug/Tracing</h3>
-<ul>
-<li><code>BYE ( -- )</code> reset nanoFORTH</li>
-<li><code>DMP (a w -- )</code> dump nanoFORTH user dictionary from address 'a' for w bytes</li>
-<li><code>TRC (1|0 -- )</code> enable/diable execution tracing</li>
-</ul>
-<h2>Opcode Formats</h2>
-<ul>
-<li><code>branching : 11BB aaaa aaaa aaaa (12-bit absolute address)</code></li>
-<li><code>primitive : 10oo oooo (6-bit, i.e. 64 primitives)</code></li>
-<li><code>3-byte lit: 1011 1111 snnn nnnn nnnn nnnn bf xxxx xxxx (16-bit signed integer)</code></li>
-<li><code>1-byte lit: 0nnn nnnn (0..127)</code></li>
-<li><code>n-byte str: len, byte, byte, ... (used in print str)</code></li>
-</ul>
+<p><br />
+ <br />
+ </p><h2>Opcode Formats</h2>
+<blockquote class="doxtable">
+<table class="doxtable">
+<tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<tr>
+<td align="left">branching</td><td align="left"><code>11BB aaaa aaaa aaaa</code></td><td align="left">(12-bit absolute address) </td></tr>
+<tr>
+<td align="left">primitive</td><td align="left"><code>10oo oooo</code></td><td align="left">(6-bit, i.e. 64 primitives) </td></tr>
+<tr>
+<td align="left">3-byte literal</td><td align="left"><code>1011 1111 snnn nnnn nnnn nnnn bf xxxx xxxx</code></td><td align="left">(16-bit signed integer) </td></tr>
+<tr>
+<td align="left">1-byte literal</td><td align="left"><code>0nnn nnnn</code></td><td align="left">0..127 </td></tr>
+<tr>
+<td align="left">n-byte string</td><td align="left"><code>len, byte, byte, ...</code></td><td align="left">used in print string </td></tr>
+</table>
+</blockquote>
 <p><br />
  <a href="page1.html">Review nanoFORTH command examples</a><br />
  <a href="page2.html">Install nanoFORTH</a><br />
