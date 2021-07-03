@@ -123,16 +123,16 @@ nanoFORTH handles only integer numbers.
 >
 > **Examples**
 >
-> VAR x ➤ *ok* (a variable x is created on user dictionary)<br/>
-> 3 x ! ➤ *ok* (store 3 into variable x)<br/>
-> x @ 5 + ➤ *8_ok* (fetch x value add 5 to it)<br/>
+> VAR **x** ➤ *ok* (a variable **x** is created on user dictionary)<br/>
+> 3 **x** ! ➤ *ok* (store 3 into variable **x**)<br/>
+> **x** @ 5 + ➤ *8_ok* (fetch value of **x** add 5 to it)<br/>
 >
-> 32 CST N ⏎ ➤ *ok* (a const N is created on user dictionary)<br/>
-> N 1 + ⏎ ➤ *33_ok*<br/>
+> 32 CST **N** ⏎ ➤ *ok* (a const **N** is created on user dictionary)<br/>
+> **N** 1 + ⏎ ➤ *33_ok*<br/>
 >
-> VAR z 3 CEL ALO ⏎ ➤ *ok* (a variable z with 3 extra cells allocated, i.e. z[0..3])<br/>
-> 5 z 2 CEL + ! ⏎ ➤ *ok*  (5 is stored into z[2])<br/>
-> z 2 CEL + @ ⏎ ➤ *5_ok* (retrieve z[2] onto data stack)<br/>
+> VAR **z** 3 CEL ALO ⏎ ➤ *ok* (a variable **z** with 3 extra cells allocated, i.e. **z**[0..3])<br/>
+> 5 **z** 2 CEL + ! ⏎ ➤ *ok*  (5 is stored into **z**[2])<br/>
+> **z** 2 CEL + @ ⏎ ➤ *5_ok* (retrieve **z**[2] onto data stack)<br/>
 
 ### Console I/O
 > |opcode|stack|desc.|
@@ -141,12 +141,12 @@ nanoFORTH handles only integer numbers.
 > |EMT |`(c -- )`|write a byte to output console|
 > |CR  |`( -- )` |send a \<return\> to console|
 > |.   |`(w -- )`|print the value on data stack to output console|
-> |.\" |( \- \- )|send the following string (without any space) to output console|
+> |.\" |( \- \- )|send the following string (terminated with a \") to output console|
 >
 > **Examples**
 >
-> : hi 0 FOR ." hello" 33 EMT CR NXT ; ⏎ ➤ *ok* ('hi' is now created in user dictionary)<br/>
-> 3 hi ⏎<br/>
+> : **hi** 0 FOR ." hello" 33 EMT CR NXT ; ⏎ ➤ *ok* (**hi** is now defined in user dictionary)<br/>
+> 3 **hi** ⏎<br/>
 > ➤ *hello!*<br/>
 > ➤ *hello!*<br/>
 > ➤ *hello!ok*
@@ -201,18 +201,24 @@ nanoFORTH handles only integer numbers.
 >
 > **Eexamples**
 >
-> CLK 1000 DLY CLK D- DNG ⏎ ➤ *1000_0_ok*<br/>
+> CLK 1000 DLY CLK D- DNG ⏎ ➤ *1000_0_ok*
 
 <br/>
-<br/>
-## Opcode Formats
+## Function/Word Struct
+> |size|field|
+> |:--|:--|
+> |fixed 16-bit|address to previous word, 0xffff is terminator|
+> |fixed 3-byte|function name|
+> |n-byte<br/>depends on the length of the function| * compiled opcodes (see next section), or<br/>* address of a user defined word|
+
+## Opcode Memory Formats
 > |opcode|stack|desc.|
 > |:--|:--|:--|
-> |branching|`11BB aaaa aaaa aaaa`|(12-bit i.e. 4K address space)|
-> |primitive|`10oo oooo`|(6-bit, i.e. 64 primitives)|
-> |1-byte literal|`0nnn nnnn`|0..127|
-> |3-byte literal|`1011 1111 snnn nnnn nnnn nnnn  bf xxxx xxxx`|(16-bit signed integer)|
-> |n-byte string|`len, byte, byte, ...`|used in print string|
+> |1-byte literal|`0nnn nnnn`|0..127, often used, speeds up core|
+> |3-byte literal|`1011 1111  snnn nnnn  nnnn nnnn`|16-bit signed integer|
+> |1-byte primitive|`10oo oooo`|6-bit opcode i.e. 64 primitives|
+> |branching opcodes|`11BB aaaa  aaaa aaaa`|12-bit address i.e. 4K space|
+> |n-byte string|`len, byte, byte, ...`|256 bytes max, used in print string|
 
 <br/>
 <a href="page1.html">Review nanoFORTH command examples</a><br/>
