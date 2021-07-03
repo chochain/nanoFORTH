@@ -26,149 +26,190 @@ Of course, we still have the 1K Flash Memory sitting on the side which can save 
 nanoFORTH handles only integer numbers.
 * 16-bit integer range -32727 to 32726
 * 32-bit double  can be presented as two 16-bit numbers on data stack
-* hex number can be input with **$** prefix 
+* hex number can be input with **$** prefix
 
-#### examples
-> 20 ⏎
->> 20_ok
-> 10 $10 ⏎
->> 20_10_16_ok
+>
+> **Examples**
+>
+> 20 ⏎ ➤ *20_ok*<br/>
+> 10 $10 ⏎ ➤ *20_10_16_ok*<br/>
 
 ## Built-in Words
 ### Stack Ops
-* `DRP (w -- )`
-* `DUP (w -- w w)`
-* `SWP (a b -- b a)`
-* `OVR (a b -- a b a)`
-* `ROT (a b c -- b c a)`
-
-#### examples
-> 20 10 ⏎
->> 20_10_ok
-> OVR ⏎
->> 20_10_20_ok
-> DRP ⏎
->> 20_10_ok
-> SWP ⏎
->> 10_20_ok
-> DUP ⏎
->> 10_20_20_ok
-> ROT ⏎
->> 20_20_10_ok
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |DRP|`(w -- )`|drop|
+> |DUP|`(w -- w w)`|duplicate|
+> |SWP|`(a b -- b a)`|swap|
+> |OVR|`(a b -- a b a)`|over|
+> |ROT|`(a b c -- b c a)`|rotate|
+>
+> **Examples**
+>
+> 20 10 ⏎ ➤ *20_10_ok*<br/>
+> OVR ⏎ ➤ *20_10_20_ok*<br/>
+> DRP ⏎ ➤ *20_10_ok*<br/>
+> SWP ⏎ ➤ *10_20_ok*<br/>
+> DUP ⏎ ➤ *10_20_20_ok*<br/>
+> ROT ⏎ ➤ *20_20_10_ok*<br/>
 
 ### Arithmatics Ops
-* `+   (a b -- a+b)`
-* `-   (a b -- a-b)`
-* `*   (a b -- a*b)`
-* `/   (a b -- a/b)`
-* `MOD (a b -- a%%b)`
-* `NEG (a   -- -a)`
-
-#### examples
-> 17 5 + ⏎
->> 22_ok
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |+  |`(a b -- a+b)`|add|
+> |-  |`(a b -- a-b)`|subtract|
+> |*  |`(a b -- a*b)`|multiply|
+> |/  |`(a b -- a/b)`|divide|
+> |MOD|`(a b -- a%%b`)|modulo|
+> |NEG|`(a   -- -a)`|negate|
 >
-> 1 2 3 4 + + + + ⏎
->> 10_ok
+> **Examples**
 >
-> 10 3 / ⏎
->> 3_ok
+> 17 5 + ⏎ ➤ *22_ok*<br/>
+> 1 2 3 4 + + + + ⏎ ➤ *10_ok*<br/>
+> 10 3 / ⏎ ➤ *3_ok*<br/>
 
-### Bit-wise Ops
-* `AND (a b -- a&b)`
-* `OR  (a b -- a|b)`
-* `XOR (a b -- a^b)`
+### Binary and Logical Ops
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |AND|(a b \- \- a&b)|binary and|
+> |OR |(a b \- \- a\|b)|binary or|
+> |XOR|(a b \- \- a^b)|binary xor|
+> |NOT|`(a -- ^a)`|binary not|
+> |= |`(a b -- a==b)`|equal|
+> |< |`(a b -- a<b)`|less than|
+> |> |`(a b -- a>b)`|greater than|
+> |<=|`(a b -- a<=b)`|lesser equal|
+> |>=|`(a b -- a>=b)`|greater equal|
+> |<>|`(a b -- a!=b)`|not equal|
 
-### Logical Ops
-* `NOT (a -- ^a)`
-* `=   (a b -- a==b)`
-* `<   (a b -- a<b)`
-* `>   (a b -- a>b)`
-* `<=  (a b -- a<=b)`
-* `>=  (a b -- a>=b)`
-* `<>  (a b -- a!=b)`
+### Word Definition and Dictionary Ops (in Interactive mode only)
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |:  |`( -- )`|start defining a new word|
+> |;  |`( -- )`|end of word definition|
+> |WRD|`( -- )`|list all words defined in nanoFORTH dictionaries|
+> |HRE|`( -- w)`|get current user dictionary pointer|
+> |FGT|`( -- )`|forget/remove functions|
 
 ### Flow Control (in Compiler mode only)
-* `f IF...THN`
-* `f IF...ELS...THN`
-* `BGN...f UTL`
-* `BGN...f WHL...RPT`
-* `BGN...f WHL...f UTL`
-* `n1 n2 FOR...NXT`
+> |branching ops|desc.|
+> |:--|:--|
+> |f IF xxx THN|conditional branch|
+> |f IF xxx ELS yyy THN|@image html forth_if_els_thn.gif width=300px|
+> |BGN xxx f UTL|@image html forth_bgn_utl.gif width=300px|
+> |BGN xxx f WHL yyy RPT|@image html forth_bgn_whl_rpt.gif width=300px|
+> |n1 n2 FOR xxx NXT|for loop, aka. DO xxx LOOP in some other FORTH|
 
-### Definding Words (in Interactive mode only)
-* `:   start defining a new word`
-* `;   end of word definition`
-* `VAR define a 16-bit variable`
-* `CST define a 16-bit constant`
-* `FGT forget/remove functions`
-
-### Memory Access
-* `@    (a -- w)`   fetch a 16-bit value from memory address 'a'
-* `!    (a w -- )`  store a 16-bit value to memory address 'a'
-* `C@   (a -- w)`   fetch a single byte from memory address 'a'
-* `C!   (a w -- )`  store a byte (or lower byte of the word) to memory address 'a'
-
-### Return Stack Ops
-* `I    ( -- w)` fetch word from top of return stack
-* `>R   (w -- )` push word on top of data stack onto return stack
-* `R>   ( -- w)` pop top of return stack value and push it onto data stack
+### Variable, Constant, and Array Ops
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |VAR|`( -- )`|define a 16-bit variable|
+> |CST|`(w -- )`|define a 16-bit constant|
+> |ALO|`(w -- )`|allocate space on user dictionary (for array allocation)|
+> |CEL|`( -- w)`|get number of byte of a single cell (for allocation)|
+>
+> **Examples**
+>
+> VAR x ➤ *ok* (a variable x is created on user dictionary)<br/>
+> 3 x ! ➤ *ok* (store 3 into variable x)<br/>
+> x @ 5 + ➤ *8_ok* (fetch x value add 5 to it)<br/>
+>
+> 32 CST N ⏎ ➤ *ok* (a const N is created on user dictionary)<br/>
+> N 1 + ⏎ ➤ *33_ok*<br/>
+>
+> VAR z 3 CEL ALO ⏎ ➤ *ok* (a variable z with 3 extra cells allocated, i.e. z[0..3])<br/>
+> 5 z 2 CEL + ! ⏎ ➤ *ok*  (5 is stored into z[2])<br/>
+> z 2 CEL + @ ⏎ ➤ *5_ok* (retrieve z[2] onto data stack)<br/>
 
 ### Console I/O
-* `KEY  ( -- c)` get a byte from input console
-* `EMT  (w -- )` send a byte to output console
-* `CR   ( -- )`  send a \<return\> to console
-* `.    (w -- )` print the value on data stack to output console
-* `."   ( -- )` print a string onto output console
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |KEY |`( -- c)`|get a byte from input console|
+> |EMT |`(c -- )`|write a byte to output console|
+> |CR  |`( -- )` |send a \<return\> to console|
+> |.   |`(w -- )`|print the value on data stack to output console|
+> |.\" |( \- \- )|send the following string (without any space) to output console|
+>
+> **Examples**
+>
+> : hi 0 FOR ." hello" 33 EMT CR NXT ; ⏎ ➤ *ok* ('hi' is now created in user dictionary)<br/>
+> 3 hi ⏎<br/>
+> ➤ *hello!*<br/>
+> ➤ *hello!*<br/>
+> ➤ *hello!ok*
 
-### Dictionary
-* `WRD  ( -- )`  list all words defined in nanoFORTH dictionaries
-* `HRE  ( -- w)` get current user dictionary pointer
+### Reset, Debug, and Tracing
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |BYE|`( -- )`|reset nanoFORTH|
+> |DMP|`(a w -- )`|dump nanoFORTH user dictionary from address 'a' for w bytes|
+> |TRC|`(t -- )`|enable/diable execution tracing|
+>
+> **Examples**
+> ||
+> |:--|
+> |@image html nanoforth_bye_trc_dmp.png width=800px|
 
-### Array
-* `ALO  (w -- )` allocate space on user dictionary (for array allocation)
-* `CEL  ( -- w)` get number of byte of a single cell (for allocation)
+### Return Stack Ops
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |I |`( -- w)`|fetch word from top of return stack, aka R@ in other FORTHs|
+> |>R|`(w -- )`|push word on top of data stack onto return stack|
+> |R>|`( -- w)`| pop top of return stack value and push it onto data stack|
+> * note: FORTH programmers often use return stack as temp storage. However do use >R and R> carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter.
 
-#### examples
-> VAR x 2 CEL ALO ⏎
->> ok  (total 3 16-bit value allocated on user dictionary)
+### Memory Access Ops
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |\@ |`(a -- w)`|fetch a 16-bit value from memory address 'a'|
+> |!  |`(a w -- )`|store a 16-bit value to memory address 'a'|
+> |C\@|`(a -- w)`|fetch a single byte from memory address 'a'|
+> |C! |`(a w -- )`|store a byte (or lower byte of the word) to memory address 'a'|
+> * note: the above opcodes read/write nanoFORTH memory space directly. It provide the power for random memory access but also the rope to hang yourself. Use with caution.
 
 ### EEPROM Access
-* `SAV  ( -- )`  save user dictionary into Arduino Flash Memory
-* `LD   ( -- )`  restore user dictionary from Arduino Flash Memory
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |SAV|`( -- )`|save user dictionary into Arduino Flash Memory|
+> |LD |`( -- )`|restore user dictionary from Arduino Flash Memory|
 
 ### Arduino
-* `CLK  ( -- d)` fetch Arduino millis() value onto data stack as a double number
-* `DLY  (w -- )` wait milliseconds (yield to hardware tasks)
-* `PIN  (w p -- )` call pinMode(p, w)
-* `IN   (p -- w)`  call digitalRead(p)
-* `OUT  (w p -- )  call digitalWrite(p, w)
-* `AIN  (p -- w)`  call analogRead(p)
-* `PWM  (w p -- )` call analogWrite(p, w)
-
-#### examples
-> 1 13 OUT ⏎
->> ok  i.e. digitalWrite(13, 1) called
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |CLK|`( -- d)`|fetch Arduino millis() value onto data stack as a double number|
+> |DLY|`(w -- )`|wait milliseconds (yield to hardware tasks)|
+> |PIN|`(w p -- )`|pinMode(p, w)|
+> |IN |`(p -- w)`|digitalRead(p)|
+> |OUT|`(w p -- )`|digitalWrite(p, w)|
+> |AIN|`(p -- w)`|analogRead(p)|
+> |PWM|`(w p -- )`|analogWrite(p, w)|
+> 
+> **Examples**
+>
+> 1 13 OUT ⏎ ➤ *ok*  (built-in LED is turn on, i.e. digitalWrite(13, 1) called)<br/>
 
 ### 32-bit Arithmatic (for Arduino Clock mostly)
-* `D+   (d1 d0 -- d1+d0)` add two doubles
-* `D-   (d1 d0 -- d1-d0)` subtract two doubles
-* `DNG  (d0 -- -d0)` negate a double number
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |D+ |`(d1 d0 -- d1+d0)`|add two doubles|
+> |D- |`(d1 d0 -- d1-d0)`|subtract two doubles|
+> |DNG|`(d0 -- -d0)`|negate a double number|
+>
+> **Eexamples**
+>
+> CLK 1000 DLY CLK D- DNG ⏎ ➤ *1000_0_ok*<br/>
 
-#### examples
-> CLK DNG 1000 DLY CLK D+ ⏎
-
-### System, Debug/Tracing
-* `BYE  ( -- )` reset nanoFORTH
-* `DMP  (a w -- )` dump nanoFORTH user dictionary from address 'a' for w bytes
-* `TRC  (1|0 -- )` enable/diable execution tracing
-
+<br/>
+<br/>
 ## Opcode Formats
-* `branching : 11BB aaaa aaaa aaaa            (12-bit absolute address)`
-* `primitive : 10oo oooo                      (6-bit, i.e. 64 primitives)`
-* `3-byte lit: 1011 1111 snnn nnnn nnnn nnnn  bf xxxx xxxx (16-bit signed integer)`
-* `1-byte lit: 0nnn nnnn                      (0..127)`
-* `n-byte str: len, byte, byte, ...           (used in print str)`
+> |opcode|stack|desc.|
+> |:--|:--|:--|
+> |branching|`11BB aaaa aaaa aaaa`|(12-bit absolute address)|
+> |primitive|`10oo oooo`|(6-bit, i.e. 64 primitives)|
+> |3-byte literal|`1011 1111 snnn nnnn nnnn nnnn  bf xxxx xxxx`|(16-bit signed integer)|
+> |1-byte literal|`0nnn nnnn`|0..127|
+> |n-byte string|`len, byte, byte, ...`|used in print string|
 
 <br/>
 <a href="page1.html">Review nanoFORTH command examples</a><br/>
