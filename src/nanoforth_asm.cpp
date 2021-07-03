@@ -35,7 +35,7 @@ PROGMEM const char JMP[] = "\x0b" \
 PROGMEM const char PRM[] = "\x31" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
 	"NEG" "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " \
-	"<> " "@  " "!  " "C@ " "C! " "KEY" "WRT" "CR " ".  " ".\" "\
+	"<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" \
     "D+ " "D- " "DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
 PROGMEM const char PMX[] = "\x4" \
