@@ -7,7 +7,7 @@ Since FORTH is **different** if your exposure has been with C, Java, or even Pyt
 * Interactive tutorial for FORTH primer. It teaches you how FORTH fundamentally works such as the numbers, the stack, and the dictionary.
 > <a href="https://skilldrick.github.io/easyforth/#introduction" target="_blank">Easy Forth Tutorial by Nick Morgan</a>
 
-You can skip to next section and start getting your hands dirty right away. However, if you prefer gethering all the sticks before starting a fire or enjoy imensing yourself in the philosophical wonder of FORTH, excellent online e-books are here free for you.
+You can skip to next section and start getting your hands dirty right away. However, if you prefer gathering all the sticks before starting a fire or enjoy immersing yourself in the philosophical wonder of FORTH, excellent online e-books are here free for you.
 * Timeless classic for the history, paths, and thoughts behind FORTH language.
 > <a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">Starting Forth by Leo Brodie</a><br/>
 > <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a>
@@ -56,7 +56,7 @@ You can skip to next section and start getting your hands dirty right away. Howe
 We have gone through a lot of 'paper work', time for hands-on again. If needed, review previous page <a href="page1.html" target="_blank">here</a> for some instructions we've gone through earlier.
 
 Now let's try some fancy stuffs to see what nanoFORTH has to offer.
-* turn the tracing flag on, you can and try everything we did in privious page
+* turn the tracing flag on, you can and try everything we did in previous page
 > 1 TRC ⏎<br/>
 > **lit** **?Z**
 
@@ -93,7 +93,7 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 > LD ⏎<br/>
 > 0 HRE DMP ⏎
 
-Alright! That pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can give our future Nano running in the field the ability to withstand power failures or reboots. Yes, indeed if we setup an init address properly.
+Alright! That pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can give our future Nano running in the field the ability to withstand power failures or reboots. Yes, indeed if we setup an initial startup address properly.
 
 It's real-time, and it multi-tasks. It can be reprogrammed on-the-fly or even over-the-air. It is extensible. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.
 

@@ -1,6 +1,6 @@
 \page page1 Why
 
-The emerging microcontroller communities are being built no more around specific hardware form factor, but rather around higher level languages. Without introducing an interactive shell like Javascript or microPython supported by ESP or Raspberry, the once popular Arduino platform will gradually lose out the market. However, no matter how the hardware environment evolved, on the edge of IoT universe, a mimimalist system resemble the Aruino UNO will always have its value of existance provided that some of the form-factor might one-day shrunk down to micro or even nano-scale. Being chip argnostic, the Arduino IDE does serve as an excellent learning tool for future systems to come. Factor software develpment time into the mix, an interactive/interpreted language is not only cheaper but more fun than the good old static compiled C code in many cases. Check out <a href="https://www.forth.com/resources/space-applications" target="_blank">NASA</a> and contemplate why FORTH is still running on a number of space probes today.
+The emerging micro-controller communities are being built no more around specific hardware form factor, but rather around higher level languages. Without introducing an interactive shell like Javascript or microPython supported by ESP or Raspberry, the once popular Arduino platform will gradually lose out the market. However, no matter how the hardware environment evolved, on the edge of IoT universe, a minimalist system resemble the Aruino UNO will always have its value of existence provided that some of the form-factor might one-day shrunk down to micro or even nano-scale. Being chip agnostic, the Arduino IDE does serve as an excellent learning tool for future systems to come. Factor software development time into the mix, an interactive/interpreted language is not only cheaper but more fun than the good old static compiled C code in many cases. Check out <a href="https://www.forth.com/resources/space-applications" target="_blank">NASA</a> and contemplate why FORTH is still running on a number of space probes today.
 
 Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tforth.html" target="_blank">Nakagawa</a> and <a href="https://circuit4us.medium.com/tiny-forth-with-arduino-hardware-support-255f408b745a" target="_blank">circuit4u@medium.com's</a> **TinyForth**, a light-weight protothreaded FORTH with 3-character keywords for Arduino, I got an idea!
 
@@ -8,7 +8,7 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 ### Assumptions
 * more than 80% of Arduino makers are using UNO or Nano,
 * most of the makers do not need the full-blown FORTH vocabularies,
-* most of them are not familer with standard FORTH words, so abbriviation for words is OK,
+* most of them are not familiar with standard FORTH words, so abbreviation for words is OK,
 * the meta-compiler is unlikely needed either, i.e. not to create a new type of Forth from within nanoForth,
 * only a small set of, say 50+, core primitive words are needed for the most of Arduino projects,
   the rational being anything that requires more elaborated syntax, one might need the power of ESPs.
@@ -19,9 +19,9 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 * provide core Arduino functions (i.g. pinMode, digitalRead,Write, analogRead,Write, millis, delay),
 * provide hardware thread(s) in addition to nanoFORTH thread so new components can be added (ig. Bluetooth),
 * provide an Arduino library that developers can include easily,
-* provide at least 1K RAM dictionary for resonablly size of work,
+* provide at least 1K RAM dictionary for reasonably size of work,
 * provide EEPROM persisted storage for new words which can be automatically reloaded on next start-up,
-* optionally show byte-code stream while assembled to help beginers understand FORTH internal,
+* optionally show byte-code stream while assembled to help beginners understand FORTH internal,
 * optionally show execution tracing to help debugging, also provision for single-stepping.
 
 ### Use Cases - Interaction Examples
