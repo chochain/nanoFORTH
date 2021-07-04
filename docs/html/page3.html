@@ -86,7 +86,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <div class="contents">
 <div class="textblock"><h2>nanoFORTH Operations</h2>
 <h3>Internal</h3>
-<p>At its core, nanoFORTH is a traditional <b>parse-dispatch virtual machine</b> interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has dual personallities which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is faster and <b>portable</b>. The later ability enables future units to send data packets as well as instruction code segments to each other. This can bring a big grin but, of course, we later might need to deal with the red flag raised by security concerning parties.</p>
+<p>At its core, nanoFORTH is a traditional <b>parse-dispatch virtual machine</b> interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has a dual-personality which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is faster and <b>portable</b>. The later ability enables future units to send data packets as well as instruction code segments to each other. This can bring a big grin but, of course, we later might need to deal with the red flag raised by security concerning parties.</p>
 <p>Compared to any FORTH language tutorial, you probably will notice that the length of a word of nanoFORTH, unlike most are 31-character, is 3 characters or less. This departs from standard FORTHs and begs the question of whether nanoFORTH is truly a FORTH. Well, our target platform is a very small MCU and our application has probably a dozen of functions. Aside from easier to type, it has benefit in simplifying some internal handling. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable. To qualify it as a FORTH or not, probably doesn't matter that much so long as it behaves well, runs fast enough, and useful for our needs.</p>
 <h3>Arduino Nano Memory Map</h3>
 <blockquote class="doxtable">
@@ -116,7 +116,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 </table>
 </blockquote>
 <p>Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.</p>
-<h2>Nubmer Representation</h2>
+<h2>Number Representation</h2>
 <p>nanoFORTH handles only integer numbers.</p><ul>
 <li>16-bit integer range -32727 to 32726</li>
 <li>32-bit double can be presented as two 16-bit numbers on data stack</li>
@@ -134,7 +134,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">DRP</td><td align="left"><code>(w -- )</code></td><td align="left">drop </td></tr>
 <tr>
@@ -159,7 +159,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">+ </td><td align="left"><code>(a b -- a+b)</code></td><td align="left">add </td></tr>
 <tr>
@@ -183,7 +183,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">AND</td><td align="left">(a b - - a&amp;b)</td><td align="left">binary and </td></tr>
 <tr>
@@ -210,7 +210,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">: </td><td align="left"><code>( -- )</code></td><td align="left">start defining a new word </td></tr>
 <tr>
@@ -227,7 +227,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">branching ops</th><th align="left">desc.  </th></tr>
+<th align="left">branching ops</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">f IF xxx THN</td><td align="left">conditional branch </td></tr>
 <tr>
@@ -253,7 +253,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">@ </td><td align="left"><code>(a -- w)</code></td><td align="left">fetch a 16-bit value from memory address 'a' </td></tr>
 <tr>
@@ -270,7 +270,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">VAR</td><td align="left"><code>( -- )</code></td><td align="left">define a 16-bit variable </td></tr>
 <tr>
@@ -297,7 +297,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">KEY </td><td align="left"><code>( -- c)</code></td><td align="left">get a byte from input console </td></tr>
 <tr>
@@ -320,7 +320,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">BYE</td><td align="left"><code>( -- )</code></td><td align="left">reset nanoFORTH </td></tr>
 <tr>
@@ -342,7 +342,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">I </td><td align="left"><code>( -- w)</code></td><td align="left">fetch word from top of return stack, aka R@ in other FORTHs </td></tr>
 <tr>
@@ -356,7 +356,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">SAV</td><td align="left"><code>( -- )</code></td><td align="left">save user dictionary into Arduino Flash Memory </td></tr>
 <tr>
@@ -367,7 +367,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">CLK</td><td align="left"><code>( -- d)</code></td><td align="left">fetch Arduino millis() value onto data stack as a double number </td></tr>
 <tr>
@@ -391,7 +391,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">D+ </td><td align="left"><code>(d1 d0 -- d1+d0)</code></td><td align="left">add two doubles </td></tr>
 <tr>
@@ -422,7 +422,7 @@ depends on the length of the function</td><td align="left">* compiled opcodes (s
 <blockquote class="doxtable">
 <table class="doxtable">
 <tr>
-<th align="left">opcode</th><th align="left">stack</th><th align="left">desc.  </th></tr>
+<th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
 <td align="left">1-byte literal</td><td align="left"><code>0nnn nnnn</code></td><td align="left">0..127, often used, speeds up core </td></tr>
 <tr>

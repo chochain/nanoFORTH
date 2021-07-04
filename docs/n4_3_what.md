@@ -2,7 +2,7 @@
 
 ## nanoFORTH Operations
 ### Internal
-At its core, nanoFORTH is a traditional **parse-dispatch virtual machine** interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has dual personallities which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is faster and **portable**. The later ability enables future units to send data packets as well as instruction code segments to each other. This can bring a big grin but, of course, we later might need to deal with the red flag raised by security concerning parties.
+At its core, nanoFORTH is a traditional **parse-dispatch virtual machine** interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has a dual-personality which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is faster and **portable**. The later ability enables future units to send data packets as well as instruction code segments to each other. This can bring a big grin but, of course, we later might need to deal with the red flag raised by security concerning parties.
 
 Compared to any FORTH language tutorial, you probably will notice that the length of a word of nanoFORTH, unlike most are 31-character, is 3 characters or less. This departs from standard FORTHs and begs the question of whether nanoFORTH is truly a FORTH. Well, our target platform is a very small MCU and our application has probably a dozen of functions. Aside from easier to type, it has benefit in simplifying some internal handling. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable. To qualify it as a FORTH or not, probably doesn't matter that much so long as it behaves well, runs fast enough, and useful for our needs.
 
@@ -22,7 +22,7 @@ Compared to any FORTH language tutorial, you probably will notice that the lengt
 
 Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.
 
-## Nubmer Representation
+## Number Representation
 nanoFORTH handles only integer numbers.
 * 16-bit integer range -32727 to 32726
 * 32-bit double  can be presented as two 16-bit numbers on data stack
@@ -36,7 +36,7 @@ nanoFORTH handles only integer numbers.
 
 ## Built-in Words
 ### Stack Ops
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |DRP|`(w -- )`|drop|
 > |DUP|`(w -- w w)`|duplicate|
@@ -54,7 +54,7 @@ nanoFORTH handles only integer numbers.
 > ROT ⏎ ➤ *20_20_10_ok*<br/>
 
 ### Arithmatics Ops
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |+  |`(a b -- a+b)`|add|
 > |-  |`(a b -- a-b)`|subtract|
@@ -70,7 +70,7 @@ nanoFORTH handles only integer numbers.
 > 10 3 / ⏎ ➤ *3_ok*<br/>
 
 ### Binary and Logical Ops
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |AND|(a b \- \- a&b)|binary and|
 > |OR |(a b \- \- a\|b)|binary or|
@@ -84,7 +84,7 @@ nanoFORTH handles only integer numbers.
 > |<>|`(a b -- a!=b)`|not equal|
 
 ### Word Definition and Dictionary Ops (in Interactive mode only)
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |:  |`( -- )`|start defining a new word|
 > |;  |`( -- )`|end of word definition|
@@ -93,7 +93,7 @@ nanoFORTH handles only integer numbers.
 > |FGT|`( -- )`|forget/remove functions|
 
 ### Flow Control (in Compiler mode only)
-> |branching ops|desc.|
+> |branching ops|description|
 > |:--|:--|
 > |f IF xxx THN|conditional branch|
 > |f IF xxx ELS yyy THN|@image html forth_if_els_thn.gif width=300px|
@@ -102,7 +102,7 @@ nanoFORTH handles only integer numbers.
 > |n1 n2 FOR xxx NXT|for loop, aka. DO xxx LOOP in some other FORTH|
 
 ### Memory Access Ops
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |\@ |`(a -- w)`|fetch a 16-bit value from memory address 'a'|
 > |!  |`(a w -- )`|store a 16-bit value to memory address 'a'|
@@ -114,7 +114,7 @@ nanoFORTH handles only integer numbers.
 > see next section
 
 ### Variable, Constant, and Array Ops
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |VAR|`( -- )`|define a 16-bit variable|
 > |CST|`(w -- )`|define a 16-bit constant|
@@ -135,7 +135,7 @@ nanoFORTH handles only integer numbers.
 > **z** 2 CEL + @ ⏎ ➤ *5_ok* (retrieve **z**[2] onto data stack)<br/>
 
 ### Console I/O
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |KEY |`( -- c)`|get a byte from input console|
 > |EMT |`(c -- )`|write a byte to output console|
@@ -152,7 +152,7 @@ nanoFORTH handles only integer numbers.
 > ➤ *hello!ok*
 
 ### Reset, Debug, and Tracing
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |BYE|`( -- )`|reset nanoFORTH|
 > |DMP|`(a w -- )`|dump nanoFORTH user dictionary from address 'a' for w bytes|
@@ -164,7 +164,7 @@ nanoFORTH handles only integer numbers.
 > |@image html nanoforth_bye_trc_dmp.png width=800px|
 
 ### Return Stack Ops
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |I |`( -- w)`|fetch word from top of return stack, aka R@ in other FORTHs|
 > |>R|`(w -- )`|push word on top of data stack onto return stack|
@@ -172,13 +172,13 @@ nanoFORTH handles only integer numbers.
 > * note: FORTH programmers often use return stack as temp storage. However do use >R and R> carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter.
 
 ### EEPROM Access
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |SAV|`( -- )`|save user dictionary into Arduino Flash Memory|
 > |LD |`( -- )`|restore user dictionary from Arduino Flash Memory|
 
 ### Arduino Specific Ops
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |CLK|`( -- d)`|fetch Arduino millis() value onto data stack as a double number|
 > |DLY|`(w -- )`|wait milliseconds (yield to hardware tasks)|
@@ -193,7 +193,7 @@ nanoFORTH handles only integer numbers.
 > 1 13 OUT ⏎ ➤ *ok*  (built-in LED is turn on, i.e. digitalWrite(13, 1) called)<br/>
 
 ### 32-bit Arithmatic (for Arduino Clock mostly)
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |D+ |`(d1 d0 -- d1+d0)`|add two doubles|
 > |D- |`(d1 d0 -- d1-d0)`|subtract two doubles|
@@ -212,7 +212,7 @@ nanoFORTH handles only integer numbers.
 > |n-byte<br/>depends on the length of the function| * compiled opcodes (see next section), or<br/>* address of a user defined word|
 
 ## Opcode Memory Formats
-> |opcode|stack|desc.|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |1-byte literal|`0nnn nnnn`|0..127, often used, speeds up core|
 > |3-byte literal|`1011 1111  snnn nnnn  nnnn nnnn`|16-bit signed integer|
