@@ -12,14 +12,14 @@
 
 One day, **ESP shows up** on you radar. It can do everything you've imagined thus far. Web serving, mesh-network, LoRa, even MySQL,... Programming-wise, there are C, microPython, even Ruby after some hard digging. Soon, the universe started to expand and what came into view is a Raspberry Pi. The final frontier suddenly became boundless. Your imagination was pushed far beyond the black holes and the vast void. **Life became meaningful** and sure got excited again. MotionEyes, OctaPi, robot buggy, and the plan to try some AI stuffs, ... Your heart were filled with joy and temptations. The limitation of CPU resource or storage is already a distant memory.
 
-**One night**, while you felt the new path is set and the final destination is in sight, you were driving home with the cresting moon hanging over the horizon, a thought came through your mine. **What happened to the Nanos?**
+**One night**, while you felt the new path is set and the final destination is in sight, you were driving home with the cresting moon hanging over the horizon, a thought came through your mind. **What happened to the Nanos?**
 <br/>
 <br/>
 <br/>
 ***
 ### Flash backs...
 
-Compiling code as Sketches in the IDE and Upload via the tethered USB cable has been the way of life in Arduino universe. Makers are used to getting feedback directly from Serial Monitor as well. This self-contained round-trip development cycle from the comfort of all inside one IDE is the major reason making this platform is so popular.
+Compiling code as Sketches in the IDE and Upload via the tethered USB cable has been the way of life in Arduino universe. Makers are used to getting feedback directly from Serial Monitor as well. This self-contained round-trip development cycle from the comfort of all inside one IDE is the major reason making this platform so popular.
 
 FORTH, a simple yet extensible interactive language, is the only programming language that runs and compiles on the ATmega328 so far. Arms embedded platforms with REPL coding/debugging process makes it a natural candidate for micro-controllers. Its interactive shell can eliminate the bulk of the repetitive compile/upload cycles.
 
