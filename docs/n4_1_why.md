@@ -1,8 +1,8 @@
 \page page1 Why
 
-The emerging micro-controller communities are being built no more around specific hardware form factor, but rather around higher level languages. Without introducing an interactive shell like Javascript or microPython supported by ESP or Raspberry, the once popular Arduino platform will gradually lose out the market. However, no matter how the hardware environment evolved, on the edge of IoT universe, a minimalist system resemble the Aruino UNO will always have its value of existence provided that some of the form-factor might one-day shrunk down to micro or even nano-scale. Being chip agnostic, the Arduino IDE does serve as an excellent learning tool for future systems to come. Factor software development time into the mix, an interactive/interpreted language is not only cheaper but more fun than the good old static compiled C code in many cases. Check out <a href="https://www.forth.com/resources/space-applications" target="_blank">NASA</a> and contemplate why FORTH is still running on a number of space probes today.
+The emerging micro-controller communities are being built no more around specific hardware form factor, but rather around higher level languages. Without introducing an interactive shell like Javascript or microPython supported by ESP or Raspberry, the once popular Arduino platform will gradually lose out the market. However, no matter how the hardware environment evolved, on the edge of IoT universe, a minimalist system resembles the Aruino UNO will always have its value of existence provided that some of the form-factor might one-day shrunk down to micro or even nano-scale. Being chip agnostic, the Arduino IDE does serve as an excellent learning tool for future systems to come. Factor software development time into the mix, an interactive/interpreted language is not only cheaper but more fun than the good old static compiled C code in many cases. Check out <a href="https://www.forth.com/resources/space-applications" target="_blank">NASA</a> and contemplate why FORTH is still running on a number of space probes today.
 
-Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tforth.html" target="_blank">Nakagawa</a> and <a href="https://circuit4us.medium.com/tiny-forth-with-arduino-hardware-support-255f408b745a" target="_blank">circuit4u@medium.com's</a> **TinyForth**, a light-weight protothreaded FORTH with 3-character keywords for Arduino, I got an idea!
+Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/tforth.html" target="_blank">Nakagawa</a> and <a href="https://circuit4us.medium.com/tiny-forth-with-arduino-hardware-support-255f408b745a" target="_blank">circuit4u@medium.com's</a> **TinyForth**, a light-weight protothreaded FORTH with 3-character keywords for Arduino, I got an idea!
 
 ## nanoFORTH - a simple and useful FORTH for Arduino Nano
 ### Assumptions
@@ -16,13 +16,13 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 ### Requirements
 * be as simple to use as any example Sketch that comes with the IDE (no bootloader burning),
 * provide a REPL development/operating environment for Arduino,
-* provide core Arduino functions (i.g. pinMode, digitalRead,Write, analogRead,Write, millis, delay),
-* provide hardware thread(s) in addition to nanoFORTH thread so new components can be added (ig. Bluetooth),
+* provide core Arduino functions (i.g. pinMode, digitalRead/Write, analogRead/Write, millis, delay),
+* provide hardware thread(s) in addition to the nanoFORTH thread so that new components can be added (ig. Bluetooth),
 * provide an Arduino library that developers can include easily,
 * provide at least 1K RAM dictionary for reasonably size of work,
-* provide EEPROM persisted storage for new words which can be automatically reloaded on next start-up,
-* optionally show byte-code stream while assembled to help beginners understand FORTH internal,
-* optionally show execution tracing to help debugging, also provision for single-stepping.
+* utilize EEPROM as the persistant storage for user defined words that can be reloaded after restart,
+* show assembly trace (i.e. byte-code stream) to help beginners to understand FORTH internal,
+* show execution trace to enable debugging, also provision for single-stepping.
 
 ### Use Cases - Interaction Examples
 * turn on LED(red) on digital pin 5, imagine you have that, (1 is HIGH)
@@ -32,14 +32,16 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 > |@image html nanoforth_led_red.jpg width=200px|
 <br/>
 
-* turn off LED(blue) on digital pin 6, also imagine, too (0 is LOW)
+* turn off LED(blue) on digital pin 6, (0 is LOW)
 > 0 6 OUT ⏎
 
 * define a function, or a 'word' in FORTH, **red** to turn red LED on, and blue LED off
 > : **red** 1 5 OUT 0 6 OUT ; ⏎
+>> \> the symbol : starts the definition, and ; ends the function (or word) definition
 
-* define a word **blu** to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only)
+* define another word **blu** to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only)
 > : **blu** 0 5 OUT 1 6 OUT ; ⏎
+>> \> To define word is called in 'Compile Mode'
 
 * execute **blu**, i.e. to turn red LED off, and blue LED on 
 > **blu** ⏎
@@ -54,52 +56,60 @@ Following the footstep of <a href="http://middleriver.chagasi.com/electronics/tf
 > |@htmlonly <iframe width="400" height="320" src="https://www.youtube.com/embed/trmDNh41-pQ?version=3&playlist=trmDNh41-pQ&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
 <br/>
 
-* a bit too slow! nanoFORTH lets you redefine **xy** by "forget" it first
+* a bit too slow! nanoFORTH allows you redefine **xy** by "forget" it first
 > FGT **xy** ⏎<br>
 > : **xy** 0 FOR **red** 200 DLY **blu** 300 DLY I . NXT ; ⏎<br/>
->> \> so, you probably found out that **I** is the counter and . (dot) prints it,<br/>
->> \> also, 10 0 FOR ... NXT is to loop 10 times, i.e. counter from 0, 1, 2, ..., 9
+>> \> so, you've probably found out that **I** is the counter and . (dot) prints it,<br/>
+>> \> also, 10 0 FOR ... NXT is to loop through 10 times, i.e. counter from 0, 1, 2, ..., 9
 
 * now try 20 cycles of **xy** this time
 > 20 **xy** ⏎
 
-* let's read analog pin 1 (photoresister value 0~1023), imagine again
+* let's read analog pin 1 (photoresister value 0~1023), assuming you have one installed
 > 1 AIN ⏎<br>
-> 258_ok
+> ⇨ 258_ok
+>> \> 258 is the value nanoFORTH read from photoresister, then place it on top of data stack
+
+* we don't need the value 258, let's drop it from data stack to keep it clean
+> DRP ⏎<br>
+> ⇨ ok
+>> \> 258 is gone now
 
 * define **lit** to read from photoresister and determine whether its value is > 200
 > : **lit** 1 AIN 200 > ; ⏎
 
-* execute **lit**, return value 1 on stack (FORTH's memory) if it's bright enough, 0 if not
+* execute **lit**, put value 1 on data stack (FORTH's memory) if your room is bright enough, a value 0 otherwise
 > **lit** ⏎<br>
-> 1_ok
+> ⇨ 1_ok
 
-* define **?Z** that turns on red or blue depends on input value on stack. unlike other languages, you can create really strange function names
+* define **?Z** that turns on red or blue depends on value on top of data stack. 
 > : **?Z** IF **red** ELS **blu** THN ; ⏎
+>> \> **?Z** is our newly defined function. Unlike most of the other languages, you can create some really strange function names in FORTH.
 
-* run **?Z** which take input from stack, 1 turns on red or 0 turn on blue
+* run **?Z** which read from top of data stack, if it's 1 then turns on red LED or 0 turns on blue
 > 1 **?Z** ⏎<br>
 > 0 **?Z** ⏎
 
-* now we can turn on red or blue LED depends on lighting condition (try blocking the photoresister), **lit** leave 1 or 0 on stack, **?Z** takes the value and turns on red or blue
+* now we may turn on red or blue LED depending on lighting condition (try blocking the photoresister), **lit** leaves 1 or 0 on data stack, **?Z** takes the value and turns on the red or blue LED
 > **lit** **?Z** ⏎
 
-* define a loop, blocking the photoresister and see it toggles between blue and red LEDs. 
+* define a word **xyz** to check photoresister in a loop every 1 second, turn the blue or red LED on depending on the photoresister value read
 > : **xyz** 0 FOR **lit** **?Z** 1000 DLY NXT ; ⏎<br>
-> 60 **xyz**
+> 60 **xyz** ⏎
+>> \> This runs **xyz** for a minute. Try blocking the photoresister to see the LED toggles.
 >> \> Can this become a trigger i.e. mouse trap or something useful?<br/>
 >> \> Make it run in an infinite loop like a web-server? Sure, but we will leave that detail to future chapter.<br/>
->> \> Have you notice the Pin 13 green LED is blinking at its own pace?
+>> \> Have you noticed the Pin 13 green LED is blinking at its own pace?
 
 * show all nanoFORTH words available, including **?Z**, **xy**, **lit**, **blu**, **red** that we've just created
 > WRD ⏎
 > ||
 > |:--|
 > |@image html nanoforth_wrd_list.png width=800px|
->> \> Only a short list of 'words', thus it does not take much to master. 
+>> \> Behold! This is nanoFORTH in its entirety. It's a short list of 'words', also called vocabulary in FORTH, and should not take much to master. 
 <br/>
 
-OK, if that captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Remember, we do these without any compilation but, instead, "talk" directly with Arduino once nanoFORTH uploaded via the USB cable. The interactive nature changes the way we are so used to. Further more, what if we can do it via WiFi or BLE? Look Mom! I can talk to the mailbox. No cable!
+OK, if that have captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Remember that we do these without any compilation, instead, "talk" directly with Arduino once nanoFORTH uploaded via the USB cable. The interactive nature changes the way we are very used to on this platform. Imagine, what if we can do it via WiFi or BLE using our Nano? Look Mom! I can talk to the mailbox. No cable!
 
 <br/>
 <a href="page2.html">Ready to get nanoFORTH for a trial?</a><br/>
