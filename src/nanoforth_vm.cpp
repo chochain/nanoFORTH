@@ -250,12 +250,12 @@ void N4VM::_primitive(U8 op)
         TOS    = (S16)(v>>16);
     }                                     break;
 #if ARDUINO
-    case 43: NanoForth::wait((U32)POP());              break; // DLY
-    case 44: U16 p=POP(), v=POP(); pinMode(p, v);      break; // PIN
-    case 45: PUSH(digitalRead(POP()));                 break; // IN
-    case 46: U16 p=POP(), v=POP(); digitalWrite(p, v); break; // OUT
-    case 47: PUSH(analogRead(POP()));                  break; // AIN
-    case 48: U16 p=POP(), v=POP(); analogWrite(p, v);  break; // PWM
+    case 43: NanoForth::wait((U32)POP());                  break; // DLY
+    case 44: { U16 p=POP(), v=POP(); pinMode(p, v);      } break; // PIN
+    case 45: PUSH(digitalRead(POP()));                     break; // IN
+    case 46: { U16 p=POP(), v=POP(); digitalWrite(p, v); } break; // OUT
+    case 47: PUSH(analogRead(POP()));                      break; // AIN
+    case 48: { U16 p=POP(), v=POP(); analogWrite(p, v);  } break; // PWM
 #endif //ARDUINO
     case 49: /* available ... */          break;
     case 58: /* ... available */          break;
