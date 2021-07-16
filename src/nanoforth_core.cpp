@@ -58,11 +58,11 @@ void N4Core::d_u8(U8 c)        { d_nib(c>>4); d_nib(c&0xf); }
 ///
 void N4Core::d_mem(U8* base, U8 *p0, U16 sz, U8 delim)
 {
-	d_adr((U16)(p0 - base)); d_chr(':');
-	for (int n=0; n<sz; n++) {
-		if (delim && (n&0x3)==0) d_chr(delim);
-		d_u8(*p0++);
-	}
+    d_adr((U16)(p0 - base)); d_chr(':');
+    for (int n=0; n<sz; n++) {
+        if (delim && (n&0x3)==0) d_chr(delim);
+        d_u8(*p0++);
+    }
     d_chr(delim);
 }
 ///
@@ -111,10 +111,10 @@ U8 N4Core::tib_empty()
 U8 *N4Core::token(U8 clr)
 {
     static U8 tib[TIB_SZ];                   ///> input buffer
-    static U8 *tp = tib;					 ///> token pointer to input buffer
+    static U8 *tp = tib;                     ///> token pointer to input buffer
     static U8 dq  = 0;                       ///> dot_string token flag (handle differently)
     
-	if (clr) {                               /// * optionally clean input buffer
+    if (clr) {                               /// * optionally clean input buffer
         _empty = 1;
         tp=tib;
         return 0;
@@ -123,8 +123,8 @@ U8 *N4Core::token(U8 clr)
 
     U8 sz = 0;
     U8 *p = (U8*)tp;                         /// * keep original tib pointer
-    U8 tm = dq ? '"' : ' ';	                 /// * set word delimiter
-    while (*tp++!=tm)  sz++;				 /// * skip to next token
+    U8 tm = dq ? '"' : ' ';                  /// * set word delimiter
+    while (*tp++!=tm)  sz++;                 /// * skip to next token
     while (*tp==' ')   tp++;                 /// * skip blanks
 
     if (*tp=='\r' || *tp=='\n') { tp=tib; _empty=1; }   /// * end of input buffer, ready to take another one
@@ -136,7 +136,7 @@ U8 *N4Core::token(U8 clr)
     }
     else if (tp==tib) d_chr('\n');
 
-    dq = (*p=='.' && *(p+1)=='"');			 /// * record whether token was dot_string
+    dq = (*p=='.' && *(p+1)=='"');           /// * record whether token was dot_string
 
     return p;                                /// * return pointer to token
 }

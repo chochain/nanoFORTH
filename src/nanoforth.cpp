@@ -91,9 +91,9 @@ void NanoForth::add(void (*ufunc)(n4_tptr))
 ///
 void NanoForth::exec()
 {
-	while (_n4vm->step()) {                    /// * step through commands from input buffer
-		yield();
-	}
+    while (_n4vm->step()) {                    /// * step through commands from input buffer
+        yield();
+    }
 }
 ///
 ///> n4 yield, execute one round of hardware tasks
@@ -118,14 +118,14 @@ void NanoForth::wait(U32 ms)
 #if !ARDUINO
 int main(int argc, char **argv)
 {
-	setvbuf(stdout, NULL, _IONBF, 0);		// autoflush (turn STDOUT buffering off)
+    setvbuf(stdout, NULL, _IONBF, 0);       // autoflush (turn STDOUT buffering off)
     
-	NanoForth n4;
-	n4.begin();
+    NanoForth n4;
+    n4.begin();
     while (1) {
         n4.exec();
     }
-	return 0;
+    return 0;
 }
 #endif // !ARDUINO
 

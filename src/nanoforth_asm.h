@@ -46,7 +46,7 @@ constexpr U8  PFX_UDJ  = 0xf0;   ///< 1110 0000
 /// opcodes for loop control (in compiler mode)
 ///
 enum N4_EXT_OP {                 ///< extended opcode (used by for...nxt loop)
-	I_DQ   = 0x1d,               ///< ." handler (adjust, if field name list changed)
+    I_DQ   = 0x1d,               ///< ." handler (adjust, if field name list changed)
     I_FOR  = 0x3b,               ///< 0x3b
     I_NXT,                       ///< 0x3c
     I_BRK,                       ///< 0x3d
