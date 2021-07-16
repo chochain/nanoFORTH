@@ -37,7 +37,7 @@ PROGMEM const char PRM[] = "\x31" \
     "NEG" "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" \
-    "D+ " "D- " "DNG" "DLY" "PIN" "IN " "OUT" "AIN" "PWM";
+    "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN";
 PROGMEM const char PMX[] = "\x4" \
     "FOR" "NXT" "BRK" "I  ";
 constexpr U16 OP_SEMI = 0;                           /**< semi-colon, end of function definition */

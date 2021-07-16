@@ -41,10 +41,10 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 
 * define another word **blu** to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only)
 > : **blu** 0 5 OUT 1 6 OUT ; ⏎
->> \> To define word is called in 'Compile Mode'
 
 * execute **blu**, i.e. to turn red LED off, and blue LED on 
 > **blu** ⏎
+>> \> a function is defines in the 'Compile Mode', and executed in 'Interpreter Mode'. The differece is at the leading ':' (colon) sign.
 
 * define a word **xy** to blink red/blue every 500 ms alternatively
 > : **xy** 0 FOR **red** 500 DLY **blu** 500 DLY NXT ; ⏎
@@ -54,18 +54,21 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 > ||
 > |:--|
 > |@htmlonly <iframe width="400" height="320" src="https://www.youtube.com/embed/trmDNh41-pQ?version=3&playlist=trmDNh41-pQ&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
-<br/>
+>> \> so, 10 0 FOR ... NXT is to loop through 10 times, i.e. counter from 0, 1, 2, ..., 9
 
-* a bit too slow! nanoFORTH allows you redefine **xy** by "forget" it first
-> FGT **xy** ⏎<br>
-> : **xy** 0 FOR **red** 200 DLY **blu** 300 DLY I . NXT ; ⏎<br/>
->> \> so, you've probably found out that **I** is the counter and . (dot) prints it,<br/>
->> \> also, 10 0 FOR ... NXT is to loop through 10 times, i.e. counter from 0, 1, 2, ..., 9
+* if that's a bit too slow! nanoFORTH allows you redefine **xy** by "forget" it first
+> FGT **xy** ⏎<br/>
+>> \> that erased **xy** from memory, we can redefine it now<br/>
+>> \> actually, multiple definition of the same function is allowed, the latest one takes precedence.
+>
+> : **xy** 0 FOR **red** 200 DLY **blu** 300 DLY **I .** NXT ; ⏎<br/>
 
 * now try 20 cycles of **xy** this time
 > 20 **xy** ⏎
+> ⇨ 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 ok
+>> \> so, you've probably noticed that **I** is the loop counter and . (dot) prints it<br/>
 
-* let's read analog pin 1 (photoresister value 0~1023), assuming you have one installed
+* let's try analog, say read a value from analog pin 1 (photoresister value 0~1023), assuming you have one installed
 > 1 AIN ⏎<br>
 > ⇨ 258_ok
 >> \> 258 is the value nanoFORTH read from photoresister, then place it on top of data stack
@@ -78,7 +81,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 * define **lit** to read from photoresister and determine whether its value is > 200
 > : **lit** 1 AIN 200 > ; ⏎
 
-* execute **lit**, put value 1 on data stack (FORTH's memory) if your room is bright enough, a value 0 otherwise
+* execute **lit**, it puts value 1 on data stack (FORTH's memory) if your room is bright enough, a value 0 otherwise
 > **lit** ⏎<br>
 > ⇨ 1_ok
 
@@ -96,17 +99,17 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 * define a word **xyz** to check photoresister in a loop every 1 second, turn the blue or red LED on depending on the photoresister value read
 > : **xyz** 0 FOR **lit** **?Z** 1000 DLY NXT ; ⏎<br>
 > 60 **xyz** ⏎
->> \> This runs **xyz** for a minute. Try blocking the photoresister to see the LED toggles.
+>> \> This runs **xyz** for a minute. Try blocking the photoresister to see the LED toggles.<br/>
 >> \> Can this become a trigger i.e. mouse trap or something useful?<br/>
 >> \> Make it run in an infinite loop like a web-server? Sure, but we will leave that detail to future chapter.<br/>
 >> \> Have you noticed the Pin 13 green LED is blinking at its own pace?
 
-* show all nanoFORTH words available, including **?Z**, **xy**, **lit**, **blu**, **red** that we've just created
+* show all nanoFORTH words available, including **xyz**, **?Z**, **xy**, **lit**, **blu**, **red** that we've just created
 > WRD ⏎
 > ||
 > |:--|
 > |@image html nanoforth_wrd_list.png width=800px|
->> \> Behold! This is nanoFORTH in its entirety. It's a short list of 'words', also called vocabulary in FORTH, and should not take much to master. 
+>> \> Behold! This is nanoFORTH in its entirety. It's a short list of 'words' which should be rather easy to master.
 <br/>
 
 OK, if that have captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Remember that we do these without any compilation, instead, "talk" directly with Arduino once nanoFORTH uploaded via the USB cable. The interactive nature changes the way we are very used to on this platform. Imagine, what if we can do it via WiFi or BLE using our Nano? Look Mom! I can talk to the mailbox. No cable!
