@@ -133,13 +133,13 @@ $(document).ready(function(){initNavTree('page1.html','');});
 </blockquote>
 </li>
 <li>define another word <b>blu</b> to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only) <blockquote class="doxtable">
-<p>: <b>blu</b> 0 5 OUT 1 6 OUT ; ⏎ </p><blockquote class="doxtable">
-<p>&gt; To define word is called in 'Compile Mode' </p>
-</blockquote>
+<p>: <b>blu</b> 0 5 OUT 1 6 OUT ; ⏎ </p>
 </blockquote>
 </li>
 <li>execute <b>blu</b>, i.e. to turn red LED off, and blue LED on <blockquote class="doxtable">
-<p><b>blu</b> ⏎ </p>
+<p><b>blu</b> ⏎ </p><blockquote class="doxtable">
+<p>&gt; a function is defines in the 'Compile Mode', and executed in 'Interpreter Mode'. The differece is at the leading ':' (colon) sign. </p>
+</blockquote>
 </blockquote>
 </li>
 <li>define a word <b>xy</b> to blink red/blue every 500 ms alternatively <blockquote class="doxtable">
@@ -153,23 +153,29 @@ $(document).ready(function(){initNavTree('page1.html','');});
 <tr>
 <td align="left"> <iframe width="400" height="320" src="https://www.youtube.com/embed/trmDNh41-pQ?version=3&playlist=trmDNh41-pQ&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe>  </td></tr>
 </table>
+<blockquote class="doxtable">
+<p>&gt; so, 10 0 FOR ... NXT is to loop through 10 times, i.e. counter from 0, 1, 2, ..., 9 </p>
 </blockquote>
-<br />
+</blockquote>
 </li>
-<li>a bit too slow! nanoFORTH allows you redefine <b>xy</b> by "forget" it first <blockquote class="doxtable">
+<li>if that's a bit too slow! nanoFORTH allows you redefine <b>xy</b> by "forget" it first <blockquote class="doxtable">
 <p>FGT <b>xy</b> ⏎<br />
- : <b>xy</b> 0 FOR <b>red</b> 200 DLY <b>blu</b> 300 DLY I . NXT ; ⏎<br />
  </p><blockquote class="doxtable">
-<p>&gt; so, you've probably found out that <b>I</b> is the counter and . (dot) prints it,<br />
- &gt; also, 10 0 FOR ... NXT is to loop through 10 times, i.e. counter from 0, 1, 2, ..., 9 </p>
+<p>&gt; that erased <b>xy</b> from memory, we can redefine it now<br />
+ &gt; actually, multiple definition of the same function is allowed, the latest one takes precedence. </p>
 </blockquote>
+<p>: <b>xy</b> 0 FOR <b>red</b> 200 DLY <b>blu</b> 300 DLY <b>I .</b> NXT ; ⏎<br />
+ </p>
 </blockquote>
 </li>
 <li>now try 20 cycles of <b>xy</b> this time <blockquote class="doxtable">
-<p>20 <b>xy</b> ⏎ </p>
+<p>20 <b>xy</b> ⏎ ⇨ 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 ok </p><blockquote class="doxtable">
+<p>&gt; so, you've probably noticed that <b>I</b> is the loop counter and . (dot) prints it<br />
+ </p>
+</blockquote>
 </blockquote>
 </li>
-<li>let's read analog pin 1 (photoresister value 0~1023), assuming you have one installed <blockquote class="doxtable">
+<li>let's try analog, say read a value from analog pin 1 (photoresister value 0~1023), assuming you have one installed <blockquote class="doxtable">
 <p>1 AIN ⏎<br />
  ⇨ 258_ok </p><blockquote class="doxtable">
 <p>&gt; 258 is the value nanoFORTH read from photoresister, then place it on top of data stack </p>
@@ -187,7 +193,7 @@ $(document).ready(function(){initNavTree('page1.html','');});
 <p>: <b>lit</b> 1 AIN 200 &gt; ; ⏎ </p>
 </blockquote>
 </li>
-<li>execute <b>lit</b>, put value 1 on data stack (FORTH's memory) if your room is bright enough, a value 0 otherwise <blockquote class="doxtable">
+<li>execute <b>lit</b>, it puts value 1 on data stack (FORTH's memory) if your room is bright enough, a value 0 otherwise <blockquote class="doxtable">
 <p><b>lit</b> ⏎<br />
  ⇨ 1_ok </p>
 </blockquote>
@@ -210,13 +216,14 @@ $(document).ready(function(){initNavTree('page1.html','');});
 <li>define a word <b>xyz</b> to check photoresister in a loop every 1 second, turn the blue or red LED on depending on the photoresister value read <blockquote class="doxtable">
 <p>: <b>xyz</b> 0 FOR <b>lit</b> <b>?Z</b> 1000 DLY NXT ; ⏎<br />
  60 <b>xyz</b> ⏎ </p><blockquote class="doxtable">
-<p>&gt; This runs <b>xyz</b> for a minute. Try blocking the photoresister to see the LED toggles. &gt; Can this become a trigger i.e. mouse trap or something useful?<br />
+<p>&gt; This runs <b>xyz</b> for a minute. Try blocking the photoresister to see the LED toggles.<br />
+ &gt; Can this become a trigger i.e. mouse trap or something useful?<br />
  &gt; Make it run in an infinite loop like a web-server? Sure, but we will leave that detail to future chapter.<br />
  &gt; Have you noticed the Pin 13 green LED is blinking at its own pace? </p>
 </blockquote>
 </blockquote>
 </li>
-<li>show all nanoFORTH words available, including <b>?Z</b>, <b>xy</b>, <b>lit</b>, <b>blu</b>, <b>red</b> that we've just created <blockquote class="doxtable">
+<li>show all nanoFORTH words available, including <b>xyz</b>, <b>?Z</b>, <b>xy</b>, <b>lit</b>, <b>blu</b>, <b>red</b> that we've just created <blockquote class="doxtable">
 <p>WRD ⏎ </p><table class="doxtable">
 <tr>
 <th align="left"></th></tr>
@@ -227,7 +234,7 @@ $(document).ready(function(){initNavTree('page1.html','');});
  </td></tr>
 </table>
 <blockquote class="doxtable">
-<p>&gt; Behold! This is nanoFORTH in its entirety. It's a short list of 'words', also called vocabulary in FORTH, and should not take much to master. </p>
+<p>&gt; Behold! This is nanoFORTH in its entirety. It's a short list of 'words' which should be rather easy to master. </p>
 </blockquote>
 </blockquote>
 <br />
