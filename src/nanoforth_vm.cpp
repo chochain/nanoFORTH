@@ -37,7 +37,7 @@ N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
     n4asm(new N4Asm(mem)), dic(mem), msz(mem_sz), ssz(stk_sz)
 {
     set_io(&io);             /// * set io stream pointer (static member, shared with N4ASM)
-    set_ucase(ucase);		 /// * set case sensitiveness
+    set_ucase(ucase);        /// * set case sensitiveness
     
     if (n4asm) _init();      /// * bail if creation failed
 }
@@ -46,7 +46,7 @@ N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
 ///
 void N4VM::meminfo()
 {
-	S16 free = IDX(&free) - IDX(sp);               // in bytes
+    S16 free = IDX(&free) - IDX(sp);               // in bytes
 #if ARDUINO && MEM_DEBUG
     flash("[dic=");    d_ptr(dic);
     flash(", rp=");    d_ptr((U8*)rp);
@@ -64,17 +64,17 @@ void N4VM::meminfo()
 ///
 U8 N4VM::step()
 {
-	if (tib_empty()) _ok();                      ///> console ok prompt
+    if (tib_empty()) _ok();                      ///> console ok prompt
 
     U8  *tkn = token();                          ///> get a token from console
     U16 tmp;
     switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
     case TKN_IMM:                                ///>> immediate words,
         switch (tmp) {
-        case 0:	n4asm->compile(rp);     break; /// * : (COLON), switch into compile mode (for new word)
-        case 1:	n4asm->variable();      break; /// * VAR, create new variable
+        case 0: n4asm->compile(rp);     break; /// * : (COLON), switch into compile mode (for new word)
+        case 1: n4asm->variable();      break; /// * VAR, create new variable
         case 2: n4asm->constant(POP()); break; /// * CST, create new constant
-        case 3:	n4asm->forget();        break; /// * FGT, rollback word created
+        case 3: n4asm->forget();        break; /// * FGT, rollback word created
         case 4: _dump(POP(), POP());    break; /// * DMP, memory dump
 #if ARDUINO
         case 5: _init();                break; /// * BYE, restart the virtual machine
@@ -127,18 +127,18 @@ void N4VM::_ok()
 ///
 void N4VM::_execute(U16 adr)
 {
-	RPUSH(0xffff);                                        // enter function call
+    RPUSH(0xffff);                                        // enter function call
     for (U8 *pc=PTR(adr); pc!=PTR(0xffff); ) {            ///> walk through instruction sequences
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
-        n4asm->trace(a, ir);                              // executioU8n tracing when enabled
+        n4asm->trace(a, ir);                              // execution tracing when enabled
 
         U8  op = ir & CTL_BITS;                           ///> determine control bits
         switch (op) {
         case 0xc0:                                        ///> handle branching instruction
             a = GET16(pc-1) & ADR_MASK;                   // target address
-            switch (ir & JMP_MASK) {					  // get branch opcode
+            switch (ir & JMP_MASK) {                      // get branch opcode
             case PFX_CALL:                                // 0xc0 subroutine call
                 RPUSH(IDX(pc+1));                         // keep next instruction on return stack
                 pc = PTR(a);                              // jump to subroutine till I_RET
@@ -156,7 +156,7 @@ void N4VM::_execute(U16 adr)
             }
             break;
         case 0x80:                                        ///> handle primitive word
-        	op = ir & PRM_MASK;                           // capture opcode
+            op = ir & PRM_MASK;                           // capture opcode
             switch(op) {
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
             case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
@@ -165,7 +165,7 @@ void N4VM::_execute(U16 adr)
             break;
         default: PUSH(ir);                                ///> handle number (1-byte literal)
         }                
-        NanoForth::yield();
+        NanoForth::yield();                               ///> give user task some cycles
     }
 }
 ///
@@ -182,16 +182,16 @@ void N4VM::_primitive(U8 op)
         TOS   = x;
     } break;
     case 3:  PUSH(SS(1));                 break; // OVR
-	case 4:  {                                   // ROT
-		U16 x = SS(2);
-		SS(2) = SS(1);
-		SS(1) = TOS;
-		TOS   = x;
-	} break;
-    case 5:	 TOS += POP();                break; // +
-    case 6:	 TOS -= POP();                break; // -
-    case 7:	 TOS *= POP();                break; // *
-    case 8:	 TOS /= POP();                break; // /
+    case 4:  {                                   // ROT
+        U16 x = SS(2);
+        SS(2) = SS(1);
+        SS(1) = TOS;
+        TOS   = x;
+    } break;
+    case 5:  TOS += POP();                break; // +
+    case 6:  TOS -= POP();                break; // -
+    case 7:  TOS *= POP();                break; // *
+    case 8:  TOS /= POP();                break; // /
     case 9:  TOS %= POP();                break; // MOD
     case 10: TOS = -TOS;                  break; // NEG
     case 11: TOS &= POP();                break; // AND
@@ -209,10 +209,10 @@ void N4VM::_primitive(U8 op)
     case 23: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
     case 24: { U8 *p = PTR(POP()); *p = (U8)POP();  } break; // C!
     case 25: PUSH((U16)key());            break; // KEY
-	case 26: d_chr((U8)POP());            break; // EMT
+    case 26: d_chr((U8)POP());            break; // EMT
     case 27: d_chr('\n');                 break; // CR
     case 28: d_num(POP()); d_chr(' ');    break; // .
-    case 29: /* handle one level up */    break; // ."
+    case 29: /* handled one level up */   break; // ."
     case 30: RPUSH(POP());                break; // >R
     case 31: PUSH(RPOP());                break; // R>
     case 32: n4asm->words();              break; // WRD
@@ -250,20 +250,20 @@ void N4VM::_primitive(U8 op)
         TOS    = (S16)(v>>16);
     }                                     break;
 #if ARDUINO
-    case 43: NanoForth::wait((U32)POP()); break; // DLY
-    case 44: pinMode(TOS, SS(1));      POP(); POP(); break; // PIN
-    case 45: PUSH(digitalRead(POP()));               break; // IN
-    case 46: digitalWrite(TOS, SS(1)); POP(); POP(); break; // OUT
-    case 47: PUSH(analogRead(POP()));                break; // AIN
-    case 48: analogWrite(TOS, SS(1));  POP(), POP(); break; // PWM
+    case 43: NanoForth::wait((U32)POP());             break; // DLY
+    case 44: PUSH(digitalRead(POP()));                break; // IN
+    case 45: PUSH(analogRead(POP()));                 break; // AIN
+    case 46: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
+    case 47: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
+    case 48: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
 #endif //ARDUINO
     case 49: /* available ... */          break;
     case 58: /* ... available */          break;
         /* case 48-58 available for future expansion */
     case 59: RPUSH(POP()); RPUSH(POP());  break; // FOR
-    case 60: {	                                 // NXT
+    case 60: {                                   // NXT
         (*(rp-2))++;               // counter+1
-        PUSH(*(rp-2) >= *(rp-1));  // range checkU8
+        PUSH(*(rp-2) >= *(rp-1));  // range check
     } break;
     case 61: RPOP(); RPOP();              break; // BRK
     case 62: PUSH(*(rp-2));               break; // I

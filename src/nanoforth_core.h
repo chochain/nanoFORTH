@@ -34,7 +34,7 @@ constexpr U8  TIB_CLR  = 0x1;
 class N4Core
 {
     static U8   _empty;                    ///< token ininput buffer empty flag
-    static U8   _ucase;					   ///< case insensitive
+    static U8   _ucase;                    ///< case insensitive
     static U8   _trc;                      ///< tracing flags
     
 protected:

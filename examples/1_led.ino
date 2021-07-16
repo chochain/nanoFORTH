@@ -7,7 +7,7 @@
  *  + google Arduino+LED+project
  *
  *  This Sketch add a second user tasks on top of our blinker
- *  + the new user task toggles between pin 5 and 6
+ *  + the new user task toggles LEDs between pin 5 and 6
  *
  */
 #include "nanoforth.h"
