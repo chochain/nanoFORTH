@@ -75,7 +75,7 @@ int NanoForth::begin(Stream &io, U8 ucase, U16 mem_sz, U16 stk_sz)
     return 0;
 }
 ///
-///> single step for Arduino loop
+///> add new (user defined) hardware task to linked-list
 ///
 void NanoForth::add(void (*ufunc)(n4_tptr))
 {
@@ -96,7 +96,7 @@ void NanoForth::exec()
     }
 }
 ///
-///> n4 yield, execute one round of hardware tasks
+///> n4 yield, execute one round of user hardware tasks
 ///
 void NanoForth::yield()
 {
