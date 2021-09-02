@@ -67,7 +67,7 @@ void N4Core::d_mem(U8* base, U8 *p0, U16 sz, U8 delim)
 }
 ///
 ///> display the opcode name
-/// 
+///
 void N4Core::d_name(U8 op, const char *lst, U8 space)
 {
 #if ARDUINO
@@ -95,7 +95,7 @@ U8 N4Core::number(U8 *str, S16 *num)
         n += (*str<='9') ? *str-'0' : (*str&0x5f)-'A'+10;
     }
     *num = neg ? -n : n;
-    
+
     return 1;
 }
 ///
@@ -113,7 +113,7 @@ U8 *N4Core::token(U8 clr)
     static U8 tib[TIB_SZ];                   ///> input buffer
     static U8 *tp = tib;                     ///> token pointer to input buffer
     static U8 dq  = 0;                       ///> dot_string token flag (handle differently)
-    
+
     if (clr) {                               /// * optionally clean input buffer
         _empty = 1;
         tp=tib;
@@ -134,8 +134,6 @@ U8 *N4Core::token(U8 clr)
             d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
         }
     }
-    else if (tp==tib) d_chr('\n');
-
     dq = (*p=='.' && *(p+1)=='"');           /// * record whether token was dot_string
 
     return p;                                /// * return pointer to token
@@ -162,6 +160,7 @@ U8 N4Core::find(U8 *tkn, const char *lst, U16 *id)
 void N4Core::_console_input(U8 *tib)
 {
     U8 *p = tib;
+    d_chr('\n');
     for (;;) {
         char c = key();                      // get one char from input stream
         if (c=='\r' || c=='\n') {            // split on RETURN
@@ -184,4 +183,4 @@ void N4Core::_console_input(U8 *tib)
         else *p++ = c;
     }
     _empty = (p==tib);
-}    
+}

@@ -3,7 +3,7 @@
  * @brief nanoForth Assmebler implementation
  *
  * ####Assembler Memory Map:
- * 
+ *
  * @code
  *    mem[...dic_sz...[...stk_sz...]
  *       |                         |
@@ -81,7 +81,7 @@ void N4Asm::reset()
     here = dic;                       // rewind to dictionary base
     last = PTR(0xffff);               // -1
     tab  = 0;
-    
+
     set_trace(0);
 }
 ///
@@ -211,10 +211,10 @@ void N4Asm::words()
 {
     U8 trc = is_tracing();
     U8 n   = 0, wpr = WORDS_PER_ROW >> (trc ? 1 : 0);
-    for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p)), n++) {  /// **from last, loop through dictionary**
-        if ((n%wpr)==0) d_chr('\n');                          ///>> linefeed for every WORDS_PER_ROW
+    for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {       /// **from last, loop through dictionary**
         if (trc) { d_adr(IDX(p)); d_chr(':'); }               ///>> optionally show address
         d_chr(p[2]); d_chr(p[3]); d_chr(p[4]); d_chr(' ');    ///>> 3-char name + space
+        if ((++n%wpr)==0) d_chr('\n');                        ///>> linefeed for every WORDS_PER_ROW
     }
     _list_voc();                                              ///> list built-in vocabularies
 }
@@ -245,7 +245,7 @@ void N4Asm::save()
     U8  trc    = is_tracing();
     U16 last_i = IDX(last);
     U16 here_i = IDX(here);
-    
+
     if (trc) flash("dic>>ROM ");
 #if ARDUINO
     ///
@@ -269,7 +269,7 @@ void N4Asm::save()
         EEPROM.update(ROM_HDR+i, *p++);
     }
 #endif //ARDUINO
-    
+
     if (trc) {
         d_num(here_i);
         flash(" bytes saved\n");
@@ -281,7 +281,7 @@ void N4Asm::save()
 void N4Asm::load()
 {
     U8 trc = is_tracing();
-    
+
     if (trc) flash("dic<<ROM ");
 #if ARDUINO
     ///
@@ -319,7 +319,7 @@ void N4Asm::load()
 void N4Asm::trace(U16 a, U8 ir)
 {
     if (!is_tracing()) return;                        ///> check tracing flag
-    
+
     d_adr(a);                                         // opcode address
 
     U8 *p, op = ir & CTL_BITS;
@@ -376,7 +376,7 @@ void N4Asm::_do_header()
 {
     U8  *tkn = token();             ///#### fetch one token from console
     U16 tmp  = IDX(last);           // link to previous word
-    
+
     last = here;                    ///#### create 3-byte name field
     SET16(here, tmp);               // pointer to previous word
     SET8(here, tkn[0]);             // store token into 3-byte name field
@@ -396,7 +396,7 @@ void N4Asm::_do_branch(U8 op)
         RPUSH(IDX(here));               // save current here A1
         JMP000(here, PFX_CDJ);          // alloc addr with jmp_flag
         break;
-    case 2: /* ELS */            
+    case 2: /* ELS */
         JMPSET(RPOP(), here+2);         // update A1 with next addr
         RPUSH(IDX(here));               // save current here A2
         JMP000(here, PFX_UDJ);          // alloc space with jmp_flag
@@ -434,7 +434,7 @@ void N4Asm::_do_branch(U8 op)
 }
 ///
 ///> display the opcode name
-/// 
+///
 void N4Asm::_do_str()
 {
     U8 *p0 = token();                  // get string from input buffer

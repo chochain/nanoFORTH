@@ -38,7 +38,7 @@ N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
 {
     set_io(&io);             /// * set io stream pointer (static member, shared with N4ASM)
     set_ucase(ucase);        /// * set case sensitiveness
-    
+
     if (n4asm) _init();      /// * bail if creation failed
 }
 ///
@@ -71,15 +71,15 @@ U8 N4VM::step()
     switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
     case TKN_IMM:                                ///>> immediate words,
         switch (tmp) {
-        case 0: n4asm->compile(rp);     break; /// * : (COLON), switch into compile mode (for new word)
-        case 1: n4asm->variable();      break; /// * VAR, create new variable
-        case 2: n4asm->constant(POP()); break; /// * CST, create new constant
-        case 3: n4asm->forget();        break; /// * FGT, rollback word created
-        case 4: _dump(POP(), POP());    break; /// * DMP, memory dump
+        case 0: n4asm->compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
+        case 1: n4asm->variable();      break;   /// * VAR, create new variable
+        case 2: n4asm->constant(POP()); break;   /// * CST, create new constant
+        case 3: n4asm->forget();        break;   /// * FGT, rollback word created
+        case 4: _dump(POP(), POP());    break;   /// * DMP, memory dump
 #if ARDUINO
-        case 5: _init();                break; /// * BYE, restart the virtual machine
+        case 5: _init();                break;   /// * BYE, restart the virtual machine
 #else
-        case 5: exit(0);                break; /// * BYE, bail!
+        case 5: exit(0);                break;   /// * BYE, bail!
 #endif //ARDUINO
         }                                 break;
     case TKN_DIC: _execute(tmp + 2 + 3);  break; ///>> execute word from dictionary (user defined),
@@ -112,15 +112,15 @@ void N4VM::_init() {
 ///
 void N4VM::_ok()
 {
-    S16 *s0 = (S16*)&dic[msz];          /// * fetch top of heap
-    if (sp > s0) {                      /// * check stack overflow
+    S16 *s0 = (S16*)&dic[msz];           /// * fetch top of heap
+    if (sp > s0) {                       /// * check stack overflow
         flash("OVF!\n");
-        sp = s0;                        // reset to top of stack block
+        sp = s0;                         // reset to top of stack block
     }
-    for (S16 *p=s0-1; p >= sp; p--) {   /// * dump stack content
+    for (S16 *p=s0-1; p >= sp; p--) {    /// * dump stack content
         d_num(*p); d_chr('_');
     }
-    flash("ok ");                       /// * user input prompt
+    flash("ok");                         /// * user input prompt
 }
 ///
 ///> opcode execution unit
@@ -164,7 +164,7 @@ void N4VM::_execute(U16 adr)
             }
             break;
         default: PUSH(ir);                                ///> handle number (1-byte literal)
-        }                
+        }
         NanoForth::yield();                               ///> give user task some cycles
     }
 }
@@ -278,7 +278,6 @@ void N4VM::_dump(U16 p0, U16 sz0)
 #if MEM_DEBUG
     U8  *p = PTR((p0&0xffe0));
     U16 sz = (sz0+0x1f)&0xffe0;
-    d_chr('\n');
     for (U16 i=0; i<sz; i+=0x20) {
         d_mem(dic, p, 0x20, ' ');
         d_chr(' ');
