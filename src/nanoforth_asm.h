@@ -59,13 +59,13 @@ enum N4_EXT_OP {                 ///< extended opcode (used by for...nxt loop)
 class N4Asm : N4Core                // (10-byte header)
 {
     U8  *dic;                       ///< dictionary base
-    U8  *last;                      ///< pointer to last word
     U16 *rp;                        ///< return stack pointer
     
     U8  tab;                        ///< tracing indentation counter
     U8  xxx;                        ///< reserved
     
 public:
+    U8  *last;                      ///< pointer to last word, for debugging
     U8  *here;                      ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
     
     /// Assembler constructor

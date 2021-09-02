@@ -1,10 +1,10 @@
 ///
 /// Unit Test - NanoForth Core Helper
 /// 
-///> g++ -std=c++14 -Wall -L/home/gnii/devel/catch2/ -lcatch test_core.cpp
+///> g++ -std=c++14 -Wall -L/home/gnii/devel/catch2/ -lcatch ../src/nanoforth_core.cpp test_core.cpp && a.out
 ///
 #define  CATCH_CONFIG_MAIN
-#include "../../catch2/catch.hpp"
+#include "../../../catch2/catch.hpp"
 #include "../src/nanoforth_core.h"
 
 N4Core n4;

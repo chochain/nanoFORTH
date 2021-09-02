@@ -243,11 +243,11 @@ constexpr U16 ROM_HDR = 6;                         ///< EEPROM header size
 void N4Asm::save()
 {
     U8  trc    = is_tracing();
-    U16 last_i = IDX(last);
     U16 here_i = IDX(here);
 
     if (trc) flash("dic>>ROM ");
 #if ARDUINO
+    U16 last_i = IDX(last);
     ///
     /// verify EEPROM capacity to hold user dictionary
     ///
