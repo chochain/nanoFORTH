@@ -48,25 +48,25 @@ void N4VM::meminfo()
 {
     S16 free = IDX(&free) - IDX(sp);               // in bytes
 #if ARDUINO && MEM_DEBUG
-    flash("[dic=");    d_ptr(dic);
-    flash(", rp=");    d_ptr((U8*)rp);
-    flash(", sp=");    d_ptr((U8*)sp);
-    flash(", max=");   d_ptr((U8*)&free);
-    flash("] ");
+    show("[dic=");    d_ptr(dic);
+    show(", rp=");    d_ptr((U8*)rp);
+    show(", sp=");    d_ptr((U8*)sp);
+    show(", max=");   d_ptr((U8*)&free);
+    show("] ");
 #endif // MEM_DEBUG
-    d_num(free); flash(" bytes free\n");
+    d_num(free); show(" bytes free\n");
 }
 ///
-///> virtual machine execute single step
+///> virtual machine execute single step (outer interpreter)
 /// @return
 ///  1: more token(s) in input buffer<br/>
 ///  0: buffer empty (yield control back to hardware)
 ///
 U8 N4VM::step()
 {
-    if (tib_empty()) _ok();                      ///> console ok prompt
+    if (is_tib_empty()) _ok();                   ///> console ok prompt
 
-    U8  *tkn = token();                          ///> get a token from console
+    U8  *tkn = get_token();                      ///> get a token from console
     U16 tmp;
     switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
     case TKN_IMM:                                ///>> immediate words,
@@ -86,9 +86,9 @@ U8 N4VM::step()
     case TKN_PRM: _primitive((U8)tmp);    break; ///>> execute primitive built-in word,
     case TKN_NUM: PUSH(tmp);              break; ///>> push a number (literal) to stack top,
     default:                                     ///>> or, error (unknow action)
-        flash("?\n");
+        show("?\n");
     }
-    return !tib_empty();                         // stack check and prompt OK
+    return !is_tib_empty();                      // stack check and prompt OK
 }
 ///
 ///> reset virtual machine
@@ -105,7 +105,7 @@ void N4VM::_init() {
     set_trace(1);                        /// * enable debugging for unit tests
 #endif //ARDUINO
 
-    flash("nanoForth v1.2 ");
+    show("nanoForth v1.2 ");
 }
 ///
 ///> console prompt with stack dump
@@ -114,13 +114,13 @@ void N4VM::_ok()
 {
     S16 *s0 = (S16*)&dic[msz];           /// * fetch top of heap
     if (sp > s0) {                       /// * check stack overflow
-        flash("OVF!\n");
+        show("OVF!\n");
         sp = s0;                         // reset to top of stack block
     }
     for (S16 *p=s0-1; p >= sp; p--) {    /// * dump stack content
         d_num(*p); d_chr('_');
     }
-    flash("ok");                         /// * user input prompt
+    show("ok");                         /// * user input prompt
 }
 ///
 ///> opcode execution unit
