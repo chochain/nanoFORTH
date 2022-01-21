@@ -10,9 +10,9 @@ constexpr U16 TIB_SZ   = 0x40;             /**< console(terminal) input buffer s
 constexpr U8  TIB_CLR  = 0x1;
 
 #if ARDUINO
-#define flash(s)      { _io->print(F(s)); _io->flush(); }
+#define show(s)      { _io->print(F(s)); _io->flush(); }
 #else
-#define flash(s)      log(s)
+#define show(s)      log(s)
 #endif // ARDUINO
 
 ///@name Memory Access Ops
@@ -72,11 +72,9 @@ public:
     ///
     ///@name Search Functions
     ///@{
-    static U8   tib_empty();               ///< check input buffer
-    static U8   *token(                    ///< get a token from console input
-        U8 clr=0                           ///< clear token buffer
-        );        
-    static U8   number(                    ///< process a literal from string given
+    static U8 is_tib_empty();              ///< check input buffer
+    static U8 *get_token(bool rst=false);  ///< get a token from console input
+    static U8 number(                      ///< process a literal from string given
         U8 *tkn,                           ///< token string of a number
         S16 *num                           ///< number pointer for return value
         ); 
