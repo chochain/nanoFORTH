@@ -38,9 +38,9 @@ constexpr U16 ADR_MASK = 0x0fff; ///< 0000 aaaa aaaa aaaa 12-bit address in 16-b
 ///@name Opcode Prefixies
 ///@{
 constexpr U8  PFX_CALL = 0xc0;   ///< 1100 0000
-constexpr U8  PFX_RET  = 0xd0;   ///< 1111 0000
-constexpr U8  PFX_CDJ  = 0xe0;   ///< 1101 0000
-constexpr U8  PFX_UDJ  = 0xf0;   ///< 1110 0000
+constexpr U8  PFX_CDJ  = 0xd0;   ///< 1101 0000
+constexpr U8  PFX_UDJ  = 0xe0;   ///< 1110 0000
+constexpr U8  PFX_RET  = 0xf0;   ///< 1111 0000
 ///@}
 ///
 /// opcodes for loop control (in compiler mode)
@@ -81,7 +81,7 @@ public:
         U8 run                      ///< run mode flag (1: run mode, 0: compile mode)
         ); 
 
-    /// proxy to Assembler
+    /// Forth compiler
     void compile(
         U16 *rp0                    ///< memory address to be used as assembler return stack
         );             
@@ -109,9 +109,9 @@ public:
         );           
     
 private:
-    void _do_header();              ///< create name field and link to previous word
-    void _do_branch(U8 op);         ///< manage branching opcodes
-    void _do_str();                 ///< add string for ."
+    void _add_word();               ///< create name field and link to previous word
+    void _add_branch(U8 op);        ///< manage branching opcodes
+    void _add_str();                ///< add string for ."
     void _list_voc();               ///< list words from all vocabularies
 };    
 #endif //__SRC_NANOFORTH_ASM_H
