@@ -96,7 +96,7 @@ N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
     return TKN_ERR;                                      /// * ERR - unknown token
 }
 ///
-///> create word onto dictionary
+///> Forth assembler (creates word onto dictionary)
 ///
 void N4Asm::compile(U16 *rp0)
 {
@@ -105,13 +105,13 @@ void N4Asm::compile(U16 *rp0)
     U8 *p0 = here;
     U8 trc = is_tracing();
 
-    _do_header();                   /// **fetch token, create name field linked to previous word**
+    _add_word();                    /// **fetch token, create name field linked to previous word**
 
     for (U8 *tkn=p0; tkn;) {        ///> loop til token exausted (tkn==NULL)
         U16 tmp;
         if (trc) d_mem(dic, p0, (U16)(here-p0), 0);  ///>> trace assember progress if enabled
 
-        tkn = token();
+        tkn = get_token();
         p0  = here;                         // keep current top of dictionary (for memdump)
         switch(parse_token(tkn, &tmp, 0)) { ///>> **determinie type of operation, and keep opcode in tmp**
         case TKN_IMM:                       ///>> an immediate command?
@@ -119,14 +119,14 @@ void N4Asm::compile(U16 *rp0)
                 SET8(here, PFX_RET);        //  terminate COLON definitions, or
                 tkn = NULL;                 //  clear token to exit compile mode
             }
-            else _do_branch(tmp);           /// * add branching opcode
+            else _add_branch(tmp);          /// * add branching opcode
             break;
         case TKN_DIC:                       ///>> a dictionary word? [addr + adr(2) + name(3)]
             JMPBCK(tmp+2+3, PFX_CALL);      /// * call subroutine
             break;
         case TKN_PRM:                       ///>> a built-in primitives?
             SET8(here, PFX_PRM | (U8)tmp);  /// * add found primitive opcode
-            if (tmp==I_DQ) _do_str();       /// * do extra, if it's a ." (dot_string) command
+            if (tmp==I_DQ) _add_str();      /// * do extra, if it's a ." (dot_string) command
             break;
         case TKN_NUM:                       ///>> a literal (number)?
             if (tmp < 128) {
@@ -138,10 +138,10 @@ void N4Asm::compile(U16 *rp0)
             }
             break;
         default:                            ///>> then, token type not found
-            flash("??  ");
+            show("??  ");
             last = l0;                      /// * restore last, here pointers
             here = h0;
-            token(TIB_CLR);
+            get_token(true);                /// * reset tib and token parser
             tkn  = NULL;                    /// * bail, terminate loop!
         }
     }
@@ -154,7 +154,7 @@ void N4Asm::compile(U16 *rp0)
 ///
 void N4Asm::variable()
 {
-    _do_header();                           /// **fetch token, create name field linked to previous word**
+    _add_word();                            /// **fetch token, create name field linked to previous word**
 
     U8 tmp = IDX(here+2);                   // address to variable storage
     if (tmp < 128) {                        ///> handle 1-byte address + RET(1)
@@ -174,7 +174,7 @@ void N4Asm::variable()
 ///
 void N4Asm::constant(S16 v)
 {
-    _do_header();                           /// **fetch token, create name field linked to previous word**
+    _add_word();                            /// **fetch token, create name field linked to previous word**
 
     if (v < 128) {                          ///> handle 1-byte constant
         SET8(here, (U8)v);
@@ -224,8 +224,8 @@ void N4Asm::words()
 void N4Asm::forget()
 {
     U16 adr;
-    if (!query(token(), &adr)) {            /// check if token is in dictionary
-        flash("?!  ");                      /// * not found, bail
+    if (!query(get_token(), &adr)) {        /// check if token is in dictionary
+        show("?!  ");                       /// * not found, bail
         return;
     }
     ///
@@ -245,14 +245,14 @@ void N4Asm::save()
     U8  trc    = is_tracing();
     U16 here_i = IDX(here);
 
-    if (trc) flash("dic>>ROM ");
+    if (trc) show("dic>>ROM ");
 #if ARDUINO
     U16 last_i = IDX(last);
     ///
     /// verify EEPROM capacity to hold user dictionary
     ///
     if ((ROM_HDR + here_i) > EEPROM.length()) {
-        flash("ERROR: dictionary larger than EEPROM");
+        show("ERROR: dictionary larger than EEPROM");
         return;
     }
     ///
@@ -272,7 +272,7 @@ void N4Asm::save()
 
     if (trc) {
         d_num(here_i);
-        flash(" bytes saved\n");
+        show(" bytes saved\n");
     }
 }
 ///
@@ -282,7 +282,7 @@ void N4Asm::load()
 {
     U8 trc = is_tracing();
 
-    if (trc) flash("dic<<ROM ");
+    if (trc) show("dic<<ROM ");
 #if ARDUINO
     ///
     /// validate EEPROM contains user dictionary (from previous run)
@@ -309,7 +309,7 @@ void N4Asm::load()
 
     if (trc) {
         d_num(here_i);
-        flash(" bytes loaded\n");
+        show(" bytes loaded\n");
     }
 #endif //ARDUINO
 }
@@ -331,9 +331,9 @@ void N4Asm::trace(U16 a, U8 ir)
             d_chr(':');
             p = PTR(a)-3;                             // backtrack 3-byte (name field)
             d_chr(*p++); d_chr(*p++); d_chr(*p);
-            flash("\n....");
+            show("\n....");
             for (int i=0, n=++tab; i<n; i++) {        // indentation per call-depth
-                flash("  ");
+                show("  ");
             }
             break;
         case PFX_RET:                                 // 0xd0 RET return
@@ -372,14 +372,14 @@ void N4Asm::trace(U16 a, U8 ir)
 ///
 ///> create name field with link back to previous word
 ///
-void N4Asm::_do_header()
+void N4Asm::_add_word()
 {
-    U8  *tkn = token();             ///#### fetch one token from console
+    U8  *tkn = get_token();         ///#### fetch one token from console
     U16 tmp  = IDX(last);           // link to previous word
 
     last = here;                    ///#### create 3-byte name field
-    SET16(here, tmp);               // pointer to previous word
-    SET8(here, tkn[0]);             // store token into 3-byte name field
+    SET16(here, tmp);               // lfa: pointer to previous word
+    SET8(here, tkn[0]);             // nfa: store token into 3-byte name field
     SET8(here, tkn[1]);
     SET8(here, tkn[1]!=' ' ? tkn[2] : ' ');
 }
@@ -389,7 +389,7 @@ void N4Asm::_do_header()
 ///>> BGN...f UTL, BGN...f WHL...RPT, BGN...f WHL...f UTL
 ///>> n1 n0 FOR...NXT
 ///
-void N4Asm::_do_branch(U8 op)
+void N4Asm::_add_branch(U8 op)
 {
     switch (op) {
     case 1: /* IF */
@@ -435,9 +435,9 @@ void N4Asm::_do_branch(U8 op)
 ///
 ///> display the opcode name
 ///
-void N4Asm::_do_str()
+void N4Asm::_add_str()
 {
-    U8 *p0 = token();                  // get string from input buffer
+    U8 *p0 = get_token();               // get string from input buffer
     U8 sz  = 0;
     for (U8 *p=p0; *p!='"'; p++, sz++);
     SET8(here, sz);
