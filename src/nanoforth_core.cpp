@@ -101,40 +101,42 @@ U8 N4Core::number(U8 *str, S16 *num)
 ///
 ///> check whether token available in input buffer
 ///
-U8 N4Core::tib_empty()
+U8 N4Core::is_tib_empty()
 {
     return _empty;
 }
 ///
 ///> capture a token from console input buffer
 ///
-U8 *N4Core::token(U8 clr)
+U8 *N4Core::get_token(bool rst)
 {
     static U8 tib[TIB_SZ];                   ///> input buffer
     static U8 *tp = tib;                     ///> token pointer to input buffer
-    static U8 dq  = 0;                       ///> dot_string token flag (handle differently)
+    static U8 dq  = 0;                       ///> dot_string flag
 
-    if (clr) {                               /// * optionally clean input buffer
-        _empty = 1;
-        tp=tib;
-        return 0;
-    }
+    if (rst) { tp = tib; _empty = 1; return 0; }
     if (tp==tib) _console_input((U8*)tib);   /// * buffer empty, read from console (with trailing blank)
 
-    U8 sz = 0;
     U8 *p = (U8*)tp;                         /// * keep original tib pointer
-    U8 tm = dq ? '"' : ' ';                  /// * set word delimiter
-    while (*tp++!=tm)  sz++;                 /// * skip to next token
-    while (*tp==' ')   tp++;                 /// * skip blanks
+    U8 cx = dq ? '"' : ' ';                  /// * set delimiter
+    U8 sz = 0;
 
-    if (*tp=='\r' || *tp=='\n') { tp=tib; _empty=1; }   /// * end of input buffer, ready to take another one
+    while (*tp && *tp++!=cx) sz++;           /// * advance pointer to next token
+    if (*tp && dq) tp++;                     /// * skip extra space
     if (_trc) {                              /// * optionally print token for debugging
         d_chr('\n');
         for (int i=0; i<5; i++) {
             d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
         }
     }
-    dq = (*p=='.' && *(p+1)=='"');           /// * record whether token was dot_string
+    if (*tp=='(' && *(tp+1)==' ') {          /// * handle ( ...) comment, TODO: multi-line
+    	while (*tp && *tp++!=')');           ///> find end of comment
+    	if (*tp) tp++;                       ///> skip extra space
+    }
+    cx = *tp;                                /// * fetch char at the pointer
+    if (cx==0 || cx=='\\' || cx=='\r' || cx=='\n') { tp = tib; _empty = 1; }
+
+    dq  = (*p=='.' && *(p+1)=='"');          /// * flag token was dot_string
 
     return p;                                /// * return pointer to token
 }
@@ -176,7 +178,7 @@ void N4Core::_console_input(U8 *tib)
             d_chr('\b');
         }
         else if ((p - tib) >= (TIB_SZ-1)) {
-            flash("TIB!\n");
+            show("TIB!\n");
             *p = '\n';
             break;
         }
