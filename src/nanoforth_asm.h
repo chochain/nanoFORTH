@@ -53,6 +53,7 @@ enum N4_EXT_OP {                 ///< extended opcode (used by for...nxt loop)
     I_I,                         ///< 0x3e loop counter
     I_LIT                        ///< 0x3f 3-byte literal
 };
+constexpr U16 LFA_X    = 0xffff;     ///< end of link field
 ///
 /// Assembler class
 ///
@@ -62,7 +63,7 @@ class N4Asm : N4Core                // (10-byte header)
     U16 *rp;                        ///< return stack pointer
     
     U8  tab;                        ///< tracing indentation counter
-    U8  xxx;                        ///< auto load and run from EEPROM
+    U8  xxx;                        ///< reserved
     
 public:
     U8  *last;                      ///< pointer to last word, for debugging
