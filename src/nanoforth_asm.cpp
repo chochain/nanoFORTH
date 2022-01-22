@@ -13,6 +13,8 @@
 #include "nanoforth_asm.h"
 #if ARDUINO
 #include <EEPROM.h>
+#else
+#include "mockrom.h"
 #endif //ARDUINO
 ///
 ///@name nanoForth built-in vocabularies
@@ -66,6 +68,9 @@ constexpr U16 OP_SEMI = 0;                           /**< semi-colon, end of fun
 #define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
 #define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
 ///@}
+constexpr U16 N4_SIG  = (((U16)'N'<<8)+(U16)'4');  ///< EEPROM signature
+constexpr U16 N4_AUTO = N4_SIG | 0x8080;           ///< EEPROM auto-run signature
+constexpr U16 ROM_HDR = 6;                         ///< EEPROM header size
 ///
 ///> Assembler Object initializer
 ///
@@ -78,11 +83,16 @@ N4Asm::N4Asm(U8 *mem) : dic(mem)
 ///
 void N4Asm::reset()
 {
-    here = dic;                       // rewind to dictionary base
-    last = PTR(0xffff);               // -1
-    tab  = 0;
+    here    = dic;                       // rewind to dictionary base
+    last    = PTR(0xffff);               // -1
+    tab     = 0;
 
-    set_trace(0);
+    U16 n4  = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
+    if (n4 == N4_AUTO) {
+    	set_trace(0);
+    	autorun = 1;
+    }
+    else set_trace(1);
 }
 ///
 ///> parse given token into actionable item
@@ -238,15 +248,13 @@ void N4Asm::forget()
 ///
 ///> persist dictionary from RAM into EEPROM
 ///
-constexpr U16 N4_SIG  = (((U16)'N'<<8)+(U16)'4');  ///< EEPROM signature
-constexpr U16 ROM_HDR = 6;                         ///< EEPROM header size
 void N4Asm::save()
 {
     U8  trc    = is_tracing();
     U16 here_i = IDX(here);
 
     if (trc) show("dic>>ROM ");
-#if ARDUINO
+
     U16 last_i = IDX(last);
     ///
     /// verify EEPROM capacity to hold user dictionary
@@ -258,7 +266,8 @@ void N4Asm::save()
     ///
     /// create EEPROM dictionary header
     ///
-    EEPROM.update(0, N4_SIG>>8); EEPROM.update(1, N4_SIG&0xff);
+    U16 sig = autorun ? N4_AUTO : N4_SIG;
+    EEPROM.update(0, sig>>8);    EEPROM.update(1, sig   &0xff);
     EEPROM.update(2, last_i>>8); EEPROM.update(3, last_i&0xff);
     EEPROM.update(4, here_i>>8); EEPROM.update(5, here_i&0xff);
     ///
@@ -268,8 +277,6 @@ void N4Asm::save()
     for (int i=0; i<here_i; i++) {
         EEPROM.update(ROM_HDR+i, *p++);
     }
-#endif //ARDUINO
-
     if (trc) {
         d_num(here_i);
         show(" bytes saved\n");
@@ -283,12 +290,11 @@ void N4Asm::load()
     U8 trc = is_tracing();
 
     if (trc) show("dic<<ROM ");
-#if ARDUINO
     ///
     /// validate EEPROM contains user dictionary (from previous run)
     ///
     U16 n4     = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
-    if (n4 != N4_SIG) return;       // not intialized yet
+    if (n4 != N4_SIG || n4 != N4_AUTO) return;       // EEPROM not intialized yet
     ///
     /// retrieve metadata (sizes) of user dicationary
     ///
@@ -311,7 +317,6 @@ void N4Asm::load()
         d_num(here_i);
         show(" bytes loaded\n");
     }
-#endif //ARDUINO
 }
 ///
 ///> execution tracer (debugger, can be modified into single-stepper)

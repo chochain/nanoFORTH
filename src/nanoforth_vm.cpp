@@ -36,7 +36,7 @@
 N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
     n4asm(new N4Asm(mem)), dic(mem), msz(mem_sz), ssz(stk_sz)
 {
-    set_io(&io);             /// * set io stream pointer (static member, shared with N4ASM)
+    set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
     set_ucase(ucase);        /// * set case sensitiveness
 
     if (n4asm) _init();      /// * bail if creation failed
@@ -85,7 +85,7 @@ U8 N4VM::step()
     case TKN_DIC: _execute(tmp + 2 + 3);  break; ///>> execute word from dictionary (user defined),
     case TKN_PRM: _primitive((U8)tmp);    break; ///>> execute primitive built-in word,
     case TKN_NUM: PUSH(tmp);              break; ///>> push a number (literal) to stack top,
-    default:                                     ///>> or, error (unknow action)
+    default:                                     ///>> or, error (unknown action)
         show("?\n");
     }
     return !is_tib_empty();                      // stack check and prompt OK
@@ -99,11 +99,7 @@ void N4VM::_init() {
     //
     rp  = (U16*)&dic[msz - ssz];         /// * return stack pointer, grow upward
     sp  = (S16*)&dic[msz];               /// * parameter stack pointer, grows downward
-    n4asm->reset();                      /// * reset assember
-
-#if !ARDUINO
-    set_trace(1);                        /// * enable debugging for unit tests
-#endif //ARDUINO
+    n4asm->reset();                      /// * reset assembler
 
     show("nanoForth v1.2 ");
 }

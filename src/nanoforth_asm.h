@@ -61,8 +61,8 @@ class N4Asm : N4Core                // (10-byte header)
     U8  *dic;                       ///< dictionary base
     U16 *rp;                        ///< return stack pointer
     
+    U8  autorun;                    ///< auto load and run from EEPROM
     U8  tab;                        ///< tracing indentation counter
-    U8  xxx;                        ///< reserved
     
 public:
     U8  *last;                      ///< pointer to last word, for debugging
