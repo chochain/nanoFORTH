@@ -25,7 +25,7 @@ class N4VM : N4Core
 public:
     // nanoForth Virtual Machine constructor    
     N4VM(
-        Stream &io,           ///< io stream
+        Stream &io,           ///< IO stream
         U8 ucase,             ///< case sensitiveness
         U8 *mem,              ///< memory base pointer
         U16 mem_sz,           ///< memory block size

@@ -21,16 +21,16 @@
 ///
 /// @var CMD
 /// @brief words for interpret mode.
-/// @var JMP (note: ; is hardcoded at position 0, do not change it)
-/// @brief words for branching op in compile mode.
+/// @var JMP (note: ; is hard-coded at position 0, do not change it)
+/// @brief words for branching ops in compile mode.
 /// @var PRM
 /// @brief primitive words (45 allocated, 64 max).
 /// @var PMX
 /// @brief loop control opcodes
 ///
 ///@{
-PROGMEM const char CMD[] = "\x06" \
-    ":  " "VAR" "CST" "FGT" "DMP" "BYE";
+PROGMEM const char CMD[] = "\x07" \
+    ":  " "VAR" "CST" "FGT" "DMP" "RST" "BYE";
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "FOR" "NXT" \
     "I  ";
@@ -39,7 +39,7 @@ PROGMEM const char PRM[] = "\x31" \
     "NEG" "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" \
-    "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN";
+    "SEX" "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN";
 PROGMEM const char PMX[] = "\x4" \
     "FOR" "NXT" "BRK" "I  ";
 constexpr U16 OP_SEMI = 0;                           /**< semi-colon, end of function definition */
@@ -57,7 +57,7 @@ constexpr U16 OP_SEMI = 0;                           /**< semi-colon, end of fun
 #define JMPBCK(idx, f) SET16(here, (idx) | ((f)<<8))
 ///@}
 ///
-///@name Stack Ops (note: rp grows downward)
+///@name Stack Ops (note: return stack grows downward)
 ///@{
 #define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack */
 #define RPOP()         (*(--rp))                    /**< pop address from return stack  */
@@ -74,25 +74,22 @@ constexpr U16 ROM_HDR = 6;                         ///< EEPROM header size
 ///
 ///> Assembler Object initializer
 ///
-N4Asm::N4Asm(U8 *mem) : dic(mem)
-{
-    reset();
-}
+N4Asm::N4Asm(U8 *mem) : dic(mem) {}
 ///
 ///> reset internal pointers (called by VM::reset)
+/// @return
+///  1: autorun last word from EEPROM
+///  0: clean start
 ///
-void N4Asm::reset()
+U16 N4Asm::reset()
 {
     here    = dic;                       // rewind to dictionary base
     last    = PTR(0xffff);               // -1
     tab     = 0;
 
-    U16 n4  = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
-    if (n4 == N4_AUTO) {
-    	set_trace(0);
-    	autorun = 1;
-    }
-    else set_trace(1);
+    set_trace(1);
+
+    return load(true);
 }
 ///
 ///> parse given token into actionable item
@@ -117,13 +114,13 @@ void N4Asm::compile(U16 *rp0)
 
     _add_word();                    /// **fetch token, create name field linked to previous word**
 
-    for (U8 *tkn=p0; tkn;) {        ///> loop til token exausted (tkn==NULL)
+    for (U8 *tkn=p0; tkn;) {        ///> loop til exhaust all tokens (tkn==NULL)
         U16 tmp;
-        if (trc) d_mem(dic, p0, (U16)(here-p0), 0);  ///>> trace assember progress if enabled
+        if (trc) d_mem(dic, p0, (U16)(here-p0), 0);  ///>> trace assembler progress if enabled
 
         tkn = get_token();
         p0  = here;                         // keep current top of dictionary (for memdump)
-        switch(parse_token(tkn, &tmp, 0)) { ///>> **determinie type of operation, and keep opcode in tmp**
+        switch(parse_token(tkn, &tmp, 0)) { ///>> **determine type of operation, and keep opcode in tmp**
         case TKN_IMM:                       ///>> an immediate command?
             if (tmp==OP_SEMI) {             /// * handle return i.e. ; (semi-colon)
                 SET8(here, PFX_RET);        //  terminate COLON definitions, or
@@ -224,7 +221,7 @@ void N4Asm::words()
     for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {       /// **from last, loop through dictionary**
         if (trc) { d_adr(IDX(p)); d_chr(':'); }               ///>> optionally show address
         d_chr(p[2]); d_chr(p[3]); d_chr(p[4]); d_chr(' ');    ///>> 3-char name + space
-        if ((++n%wpr)==0) d_chr('\n');                        ///>> linefeed for every WORDS_PER_ROW
+        if ((++n%wpr)==0) d_chr('\n');                        ///>> line-feed for every WORDS_PER_ROW
     }
     _list_voc();                                              ///> list built-in vocabularies
 }
@@ -248,7 +245,7 @@ void N4Asm::forget()
 ///
 ///> persist dictionary from RAM into EEPROM
 ///
-void N4Asm::save()
+void N4Asm::save(bool autorun)
 {
     U8  trc    = is_tracing();
     U16 here_i = IDX(here);
@@ -284,8 +281,11 @@ void N4Asm::save()
 }
 ///
 ///> restore dictionary from EEPROM into RAM
+/// @return
+///  adr: autorun address (of last word from EEPROM)
+///  0  : clean start
 ///
-void N4Asm::load()
+U16 N4Asm::load(bool autorun)
 {
     U8 trc = is_tracing();
 
@@ -293,10 +293,13 @@ void N4Asm::load()
     ///
     /// validate EEPROM contains user dictionary (from previous run)
     ///
-    U16 n4     = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
-    if (n4 != N4_SIG || n4 != N4_AUTO) return;       // EEPROM not intialized yet
+    U16 n4 = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
+    if (autorun) {
+    	if (n4 != N4_AUTO) return 0;               // EEPROM is not set to autorun
+    }
+    else if (n4 != N4_SIG) return 0;               // EEPROM has no saved words
     ///
-    /// retrieve metadata (sizes) of user dicationary
+    /// retrieve metadata (sizes) of user dictionary
     ///
     U16 last_i = ((U16)EEPROM.read(2)<<8) + EEPROM.read(3);
     U16 here_i = ((U16)EEPROM.read(4)<<8) + EEPROM.read(5);
@@ -317,6 +320,7 @@ void N4Asm::load()
         d_num(here_i);
         show(" bytes loaded\n");
     }
+    return last_i;
 }
 ///
 ///> execution tracer (debugger, can be modified into single-stepper)
