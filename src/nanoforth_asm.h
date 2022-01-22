@@ -35,7 +35,7 @@ constexpr U8  PRM_MASK = 0x3f;   ///< 0011 1111, 6-bit primitive opcodes
 constexpr U8  JMP_MASK = 0xf0;   ///< 1111 0000
 constexpr U16 ADR_MASK = 0x0fff; ///< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions
 ///@}
-///@name Opcode Prefixies
+///@name Opcode Prefixes
 ///@{
 constexpr U8  PFX_CALL = 0xc0;   ///< 1100 0000
 constexpr U8  PFX_CDJ  = 0xd0;   ///< 1101 0000
@@ -61,8 +61,8 @@ class N4Asm : N4Core                // (10-byte header)
     U8  *dic;                       ///< dictionary base
     U16 *rp;                        ///< return stack pointer
     
-    U8  autorun;                    ///< auto load and run from EEPROM
     U8  tab;                        ///< tracing indentation counter
+    U8  xxx;                        ///< auto load and run from EEPROM
     
 public:
     U8  *last;                      ///< pointer to last word, for debugging
@@ -72,7 +72,7 @@ public:
     N4Asm(                          
         U8 *mem                     ///< pointer of memory block for dictionary
         );                 
-    void reset();                   ///< reset internal pointers (for BYE)
+    U16 reset();                    ///< reset internal pointers (for BYE)
     
     /// Instruction Decoder
     N4OP parse_token(
@@ -92,14 +92,14 @@ public:
     /// query(token) in dictionary for existing word
     U8   query(                         
         U8 *tkn,                    ///< token to be searched
-        U16 *adr                    ///< function addreess of the found word
+        U16 *adr                    ///< function address of the found word
         );      
     void words();                   ///< display words in dictionary
     void forget();                  ///< forgets word in the dictionary
 
     // EEPROM persistence I/O
-    void save();                    ///< persist user dictionary to EEPROM
-    void load();                    ///< restore user dictionary from EEPROM
+    void save(bool autorun=false);  ///< persist user dictionary to EEPROM
+    U16  load(bool autorun=false);  ///< restore user dictionary from EEPROM
 
     // execution tracing
     /// print execution tracing info
