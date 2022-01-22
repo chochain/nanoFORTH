@@ -76,8 +76,7 @@ U8 N4VM::step()
         case 2: n4asm->constant(POP()); break;   /// * CST, create new constant
         case 3: n4asm->forget();        break;   /// * FGT, rollback word created
         case 4: _dump(POP(), POP());    break;   /// * DMP, memory dump
-        case 5: show("system reset\n");          /// * RST, restart the virtual machine
-                _init();                break;
+        case 5: _init();                break;   /// * RST, restart the virtual machine (for debugging)
 #if ARDUINO
         case 6: _init();                break;   /// * BYE, restart
 #else
@@ -102,10 +101,13 @@ void N4VM::_init() {
     rp  = (U16*)&dic[msz - ssz];         /// * return stack pointer, grow upward
     sp  = (S16*)&dic[msz];               /// * parameter stack pointer, grows downward
 
-    U16 last = n4asm->reset();           /// * reload EEPROM for autorun or reset assembler
+    show("nanoForth v1.2 ");             /// * show init prompt
 
-    if (last) _execute(last + 2 + 3);    /// * run last word on dictionary if given
-    else show("nanoForth v1.2 ");        /// * show init prompt
+    U16 adr = n4asm->reset();            /// * reload EEPROM and reset assembler
+    if (adr != LFA_X) {                  /// * check autorun addr has been setup? (see SEX)
+        show("reset\n");
+        _execute(adr + 2 + 3);           /// * execute last saved word in EEPROM
+    }
 }
 ///
 ///> console prompt with stack dump
@@ -127,8 +129,8 @@ void N4VM::_ok()
 ///
 void N4VM::_execute(U16 adr)
 {
-    RPUSH(0xffff);                                        // enter function call
-    for (U8 *pc=PTR(adr); pc!=PTR(0xffff); ) {            ///> walk through instruction sequences
+    RPUSH(LFA_X);                                         // enter function call
+    for (U8 *pc=PTR(adr); pc!=PTR(LFA_X); ) {             ///> walk through instruction sequences
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
