@@ -84,7 +84,7 @@ N4Asm::N4Asm(U8 *mem) : dic(mem) {}
 U16 N4Asm::reset()
 {
     here    = dic;                       // rewind to dictionary base
-    last    = PTR(0xffff);               // -1
+    last    = PTR(LFA_X);                // root of linked field
     tab     = 0;
 
     set_trace(1);
@@ -200,7 +200,7 @@ void N4Asm::constant(S16 v)
 ///
 U8 N4Asm::query(U8 *tkn, U16 *adr)
 {
-    for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {
+    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {
         if (uc(p[2])==uc(tkn[0]) &&
             uc(p[3])==uc(tkn[1]) &&
             (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
@@ -218,7 +218,7 @@ void N4Asm::words()
 {
     U8 trc = is_tracing();
     U8 n   = 0, wpr = WORDS_PER_ROW >> (trc ? 1 : 0);
-    for (U8 *p=last; p!=PTR(0xffff); p=PTR(GET16(p))) {       /// **from last, loop through dictionary**
+    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {        /// **from last, loop through dictionary**
         if (trc) { d_adr(IDX(p)); d_chr(':'); }               ///>> optionally show address
         d_chr(p[2]); d_chr(p[3]); d_chr(p[4]); d_chr(' ');    ///>> 3-char name + space
         if ((++n%wpr)==0) d_chr('\n');                        ///>> line-feed for every WORDS_PER_ROW
@@ -282,22 +282,22 @@ void N4Asm::save(bool autorun)
 ///
 ///> restore dictionary from EEPROM into RAM
 /// @return
-///  adr: autorun address (of last word from EEPROM)
-///  0  : clean start
+///    adr:   autorun address (of last word from EEPROM)
+///    LFA_X: no autorun or EEPROM not been setup yet
 ///
 U16 N4Asm::load(bool autorun)
 {
     U8 trc = is_tracing();
 
-    if (trc) show("dic<<ROM ");
+    if (trc && !autorun) show("dic<<ROM ");
     ///
     /// validate EEPROM contains user dictionary (from previous run)
     ///
     U16 n4 = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
     if (autorun) {
-    	if (n4 != N4_AUTO) return 0;               // EEPROM is not set to autorun
+        if (n4 != N4_AUTO) return LFA_X;          // EEPROM is not set to autorun
     }
-    else if (n4 != N4_SIG) return 0;               // EEPROM has no saved words
+    else if (n4 != N4_SIG) return LFA_X;          // EEPROM has no saved words
     ///
     /// retrieve metadata (sizes) of user dictionary
     ///
@@ -316,7 +316,7 @@ U16 N4Asm::load(bool autorun)
     last = PTR(last_i);
     here = PTR(here_i);
 
-    if (trc) {
+    if (trc && !autorun) {
         d_num(here_i);
         show(" bytes loaded\n");
     }
