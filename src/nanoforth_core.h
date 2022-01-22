@@ -20,9 +20,9 @@ constexpr U8  TIB_CLR  = 0x1;
 /// @def SET8
 /// @brief 1-byte write
 /// @def SET16
-/// @brief 2-byte write, prevent alignment issue (on 32-bit CPU) and preseve Big-Endian encoding
+/// @brief 2-byte write, prevent alignment issue (on 32-bit CPU) and preserve Big-Endian encoding
 /// @def GET16
-/// @brief 2-byte read, prevent aligntment issue (on 32-bit CPU) and preseve Big-Endian encoding
+/// @brief 2-byte read, prevent alignment issue (on 32-bit CPU) and preserve Big-Endian encoding
 ///@{
 #define SET8(p, c)     (*(U8*)(p)++=(U8)(c))
 #define SET16(p, n)    do { U16 x=(U16)(n); SET8(p,(x)>>8); SET8(p,(x)&0xff); } while(0)
@@ -33,15 +33,15 @@ constexpr U8  TIB_CLR  = 0x1;
 ///
 class N4Core
 {
-    static U8   _empty;                    ///< token ininput buffer empty flag
+    static U8   _empty;                    ///< token input buffer empty flag
     static U8   _ucase;                    ///< case insensitive
     static U8   _trc;                      ///< tracing flags
     
 protected:
-    static Stream *_io;                    ///< io stream (static member)
+    static Stream *_io;                    ///< IO stream (static member)
     
 public:
-    static void set_io(Stream *io);        ///< initialize or redirect io stream
+    static void set_io(Stream *io);        ///< initialize or redirect IO stream
     static void set_trace(U8 f);           ///< enable/disable execution tracing
     static void set_ucase(U8 uc);          ///< set case sensitiveness
     static char uc(char c);                ///< upper case for case-insensitive matching
