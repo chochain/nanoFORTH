@@ -67,7 +67,7 @@ U8 N4VM::step()
     if (is_tib_empty()) _ok();                   ///> console ok prompt
 
     U8  *tkn = get_token();                      ///> get a token from console
-    U16 tmp;
+    U16 tmp;                                     /// * word address or numeric value
     switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
     case TKN_IMM:                                ///>> immediate words,
         switch (tmp) {
@@ -76,11 +76,13 @@ U8 N4VM::step()
         case 2: n4asm->constant(POP()); break;   /// * CST, create new constant
         case 3: n4asm->forget();        break;   /// * FGT, rollback word created
         case 4: _dump(POP(), POP());    break;   /// * DMP, memory dump
+        case 5: show("system reset\n");          /// * RST, restart the virtual machine
+                _init();                break;
 #if ARDUINO
-        case 5: _init();                break;   /// * BYE, restart the virtual machine
+        case 6: _init();                break;   /// * BYE, restart
 #else
-        case 5: exit(0);                break;   /// * BYE, bail!
-#endif //ARDUINO
+        case 6: exit(0);                break;   /// * BYE, bail to OS
+#endif // ARDUINO
         }                                 break;
     case TKN_DIC: _execute(tmp + 2 + 3);  break; ///>> execute word from dictionary (user defined),
     case TKN_PRM: _primitive((U8)tmp);    break; ///>> execute primitive built-in word,
@@ -99,9 +101,11 @@ void N4VM::_init() {
     //
     rp  = (U16*)&dic[msz - ssz];         /// * return stack pointer, grow upward
     sp  = (S16*)&dic[msz];               /// * parameter stack pointer, grows downward
-    n4asm->reset();                      /// * reset assembler
 
-    show("nanoForth v1.2 ");
+    U16 last = n4asm->reset();           /// * reload EEPROM for autorun or reset assembler
+
+    if (last) _execute(last + 2 + 3);    /// * run last word on dictionary if given
+    else show("nanoForth v1.2 ");        /// * show init prompt
 }
 ///
 ///> console prompt with stack dump
@@ -219,11 +223,12 @@ void N4VM::_primitive(U8 op)
     case 37: n4asm->load();               break; // LD
     case 38: set_trace(POP());            break; // TRC
     case 39: {                                   // CLK
-        U32 u = millis();       // Arduino clock
+        U32 u = millis();       // millisecond
         PUSH((U16)(u&0xffff));
         PUSH((U16)(u>>16));
     }                                     break;
-    case 40: {                                   // D+
+    case 40: n4asm->save(true);           break; // SEX - save for execute (autorun)
+    case 41: {                                   // D+
         S32 d0 = ((S32)TOS<<16)   | (SS(1)&0xffff);
         S32 d1 = ((S32)SS(2)<<16) | (SS(3)&0xffff);
         S32 v  = d1 + d0;
@@ -231,7 +236,7 @@ void N4VM::_primitive(U8 op)
         SS(1)  = (S16)(v&0xffff);
         TOS    = (S16)(v>>16);
     }                                     break;
-    case 41: {                                   // D-
+    case 42: {                                   // D-
         S32 d0 = ((S32)TOS<<16)   | (SS(1)&0xffff);
         S32 d1 = ((S32)SS(2)<<16) | (SS(3)&0xffff);
         S32 v  = d1 - d0;
@@ -239,21 +244,21 @@ void N4VM::_primitive(U8 op)
         SS(1)  = (S16)(v&0xffff);
         TOS    = (S16)(v>>16);
     }                                     break;
-    case 42: {                                   // DNG
+    case 43: {                                   // DNG
         S32 d0 = ((S32)TOS<<16)   | (SS(1)&0xffff);
         S32 v  = -d0;
         SS(1)  = (S16)(v&0xffff);
         TOS    = (S16)(v>>16);
     }                                     break;
 #if ARDUINO
-    case 43: NanoForth::wait((U32)POP());             break; // DLY
-    case 44: PUSH(digitalRead(POP()));                break; // IN
-    case 45: PUSH(analogRead(POP()));                 break; // AIN
-    case 46: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
-    case 47: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
-    case 48: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
+    case 44: NanoForth::wait((U32)POP());             break; // DLY
+    case 45: PUSH(digitalRead(POP()));                break; // IN
+    case 46: PUSH(analogRead(POP()));                 break; // AIN
+    case 47: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
+    case 48: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
+    case 49: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
 #endif //ARDUINO
-    case 49: /* available ... */          break;
+    case 50: /* available ... */          break;
     case 58: /* ... available */          break;
         /* case 48-58 available for future expansion */
     case 59: RPUSH(POP()); RPUSH(POP());  break; // FOR
