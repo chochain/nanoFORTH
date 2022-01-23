@@ -98,12 +98,13 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 
 Alright! That has pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can provide the ability to withstand power failures or reboots for our future Nanos running in the field. Well, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.
 * here's how you do it
-> : **fun** CLK DNG **zz** CLK D+ ; ⏎<br/>
+> : **fun** ( - - ) CLK DNG **zz** CLK D+ ; ⏎<br/>
 > SEX ⏎<br/>
 > BYE ⏎<br/>
 > ⇨ nanoFORTH v1.4 reset<br/>
 > ⇨ 338_0_ok<br/>
->> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun** the benchmarker.
+>> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun** the benchmarker.<br/>
+>> \> Note that the ( - - ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comments to end of your input line.
 
 OK, makers often run service routine with their microcontrollers in the field. However, before you get creative and save your servicing word into EEPROM and run it in an endless loop, I have to confess that I actually do not know how to get out of a loop yet. Any recommendation is welcome.
 

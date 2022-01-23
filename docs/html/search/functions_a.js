@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['meminfo',['meminfo',['../classN4VM.html#a224b81d2df781a4fa8c6a37bc47551ff',1,'N4VM']]]
+  ['load',['load',['../classN4Asm.html#afeb6b8ea1af0cb3d35635c1bd94c7bfd',1,'N4Asm']]]
 ];

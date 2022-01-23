@@ -7,5 +7,6 @@ var searchData=
   ['i_5flit',['I_LIT',['../nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032af9db9448bc03b218c32b4ff370dab892',1,'nanoforth_asm.h']]],
   ['i_5fnxt',['I_NXT',['../nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032aab50a9637a298670cb02d49e02f79339',1,'nanoforth_asm.h']]],
   ['idx',['IDX',['../nanoforth__asm_8cpp.html#a5736213940db38c8e215a3bb8688522c',1,'IDX():&#160;nanoforth_asm.cpp'],['../nanoforth__vm_8cpp.html#a5736213940db38c8e215a3bb8688522c',1,'IDX():&#160;nanoforth_vm.cpp']]],
+  ['is_5ftib_5fempty',['is_tib_empty',['../classN4Core.html#a5518038a71555f1f54263a57f0d905e5',1,'N4Core']]],
   ['is_5ftracing',['is_tracing',['../classN4Core.html#aa182b81755365216fa61c7c562f9c7c9',1,'N4Core']]]
 ];

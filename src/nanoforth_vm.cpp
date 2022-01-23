@@ -36,9 +36,9 @@
 N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
     n4asm(new N4Asm(mem)), dic(mem), msz(mem_sz), ssz(stk_sz)
 {
-    set_io(&io);             /// * set io stream pointer (static member, shared with N4ASM)
+    set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
     set_ucase(ucase);        /// * set case sensitiveness
-    
+
     if (n4asm) _init();      /// * bail if creation failed
 }
 ///
@@ -48,47 +48,48 @@ void N4VM::meminfo()
 {
     S16 free = IDX(&free) - IDX(sp);               // in bytes
 #if ARDUINO && MEM_DEBUG
-    flash("[dic=");    d_ptr(dic);
-    flash(", rp=");    d_ptr((U8*)rp);
-    flash(", sp=");    d_ptr((U8*)sp);
-    flash(", max=");   d_ptr((U8*)&free);
-    flash("] ");
+    show("[dic=");    d_ptr(dic);
+    show(", rp=");    d_ptr((U8*)rp);
+    show(", sp=");    d_ptr((U8*)sp);
+    show(", max=");   d_ptr((U8*)&free);
+    show("] ");
 #endif // MEM_DEBUG
-    d_num(free); flash(" bytes free\n");
+    d_num(free); show(" bytes free\n");
 }
 ///
-///> virtual machine execute single step
+///> virtual machine execute single step (outer interpreter)
 /// @return
 ///  1: more token(s) in input buffer<br/>
 ///  0: buffer empty (yield control back to hardware)
 ///
 U8 N4VM::step()
 {
-    if (tib_empty()) _ok();                      ///> console ok prompt
+    if (is_tib_empty()) _ok();                   ///> console ok prompt
 
-    U8  *tkn = token();                          ///> get a token from console
-    U16 tmp;
+    U8  *tkn = get_token();                      ///> get a token from console
+    U16 tmp;                                     /// * word address or numeric value
     switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
     case TKN_IMM:                                ///>> immediate words,
         switch (tmp) {
-        case 0: n4asm->compile(rp);     break; /// * : (COLON), switch into compile mode (for new word)
-        case 1: n4asm->variable();      break; /// * VAR, create new variable
-        case 2: n4asm->constant(POP()); break; /// * CST, create new constant
-        case 3: n4asm->forget();        break; /// * FGT, rollback word created
-        case 4: _dump(POP(), POP());    break; /// * DMP, memory dump
+        case 0: n4asm->compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
+        case 1: n4asm->variable();      break;   /// * VAR, create new variable
+        case 2: n4asm->constant(POP()); break;   /// * CST, create new constant
+        case 3: n4asm->forget();        break;   /// * FGT, rollback word created
+        case 4: _dump(POP(), POP());    break;   /// * DMP, memory dump
+        case 5: _init();                break;   /// * RST, restart the virtual machine (for debugging)
 #if ARDUINO
-        case 5: _init();                break; /// * BYE, restart the virtual machine
+        case 6: _init();                break;   /// * BYE, restart
 #else
-        case 5: exit(0);                break; /// * BYE, bail!
-#endif //ARDUINO
+        case 6: exit(0);                break;   /// * BYE, bail to OS
+#endif // ARDUINO
         }                                 break;
     case TKN_DIC: _execute(tmp + 2 + 3);  break; ///>> execute word from dictionary (user defined),
     case TKN_PRM: _primitive((U8)tmp);    break; ///>> execute primitive built-in word,
     case TKN_NUM: PUSH(tmp);              break; ///>> push a number (literal) to stack top,
-    default:                                     ///>> or, error (unknow action)
-        flash("?\n");
+    default:                                     ///>> or, error (unknown action)
+        show("?\n");
     }
-    return !tib_empty();                         // stack check and prompt OK
+    return !is_tib_empty();                      // stack check and prompt OK
 }
 ///
 ///> reset virtual machine
@@ -99,36 +100,37 @@ void N4VM::_init() {
     //
     rp  = (U16*)&dic[msz - ssz];         /// * return stack pointer, grow upward
     sp  = (S16*)&dic[msz];               /// * parameter stack pointer, grows downward
-    n4asm->reset();                      /// * reset assember
 
-#if !ARDUINO
-    set_trace(1);                        /// * enable debugging for unit tests
-#endif //ARDUINO
+    show("nanoForth v1.2 ");             /// * show init prompt
 
-    flash("nanoForth v1.2 ");
+    U16 adr = n4asm->reset();            /// * reload EEPROM and reset assembler
+    if (adr != LFA_X) {                  /// * check autorun addr has been setup? (see SEX)
+        show("reset\n");
+        _execute(adr + 2 + 3);           /// * execute last saved word in EEPROM
+    }
 }
 ///
 ///> console prompt with stack dump
 ///
 void N4VM::_ok()
 {
-    S16 *s0 = (S16*)&dic[msz];          /// * fetch top of heap
-    if (sp > s0) {                      /// * check stack overflow
-        flash("OVF!\n");
-        sp = s0;                        // reset to top of stack block
+    S16 *s0 = (S16*)&dic[msz];           /// * fetch top of heap
+    if (sp > s0) {                       /// * check stack overflow
+        show("OVF!\n");
+        sp = s0;                         // reset to top of stack block
     }
-    for (S16 *p=s0-1; p >= sp; p--) {   /// * dump stack content
+    for (S16 *p=s0-1; p >= sp; p--) {    /// * dump stack content
         d_num(*p); d_chr('_');
     }
-    flash("ok ");                       /// * user input prompt
+    show("ok");                         /// * user input prompt
 }
 ///
 ///> opcode execution unit
 ///
 void N4VM::_execute(U16 adr)
 {
-    RPUSH(0xffff);                                        // enter function call
-    for (U8 *pc=PTR(adr); pc!=PTR(0xffff); ) {            ///> walk through instruction sequences
+    RPUSH(LFA_X);                                         // enter function call
+    for (U8 *pc=PTR(adr); pc!=PTR(LFA_X); ) {             ///> walk through instruction sequences
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
@@ -164,7 +166,7 @@ void N4VM::_execute(U16 adr)
             }
             break;
         default: PUSH(ir);                                ///> handle number (1-byte literal)
-        }                
+        }
         NanoForth::yield();                               ///> give user task some cycles
     }
 }
@@ -223,11 +225,12 @@ void N4VM::_primitive(U8 op)
     case 37: n4asm->load();               break; // LD
     case 38: set_trace(POP());            break; // TRC
     case 39: {                                   // CLK
-        U32 u = millis();       // Arduino clock
+        U32 u = millis();       // millisecond
         PUSH((U16)(u&0xffff));
         PUSH((U16)(u>>16));
     }                                     break;
-    case 40: {                                   // D+
+    case 40: n4asm->save(true);           break; // SEX - save for execute (autorun)
+    case 41: {                                   // D+
         S32 d0 = ((S32)TOS<<16)   | (SS(1)&0xffff);
         S32 d1 = ((S32)SS(2)<<16) | (SS(3)&0xffff);
         S32 v  = d1 + d0;
@@ -235,7 +238,7 @@ void N4VM::_primitive(U8 op)
         SS(1)  = (S16)(v&0xffff);
         TOS    = (S16)(v>>16);
     }                                     break;
-    case 41: {                                   // D-
+    case 42: {                                   // D-
         S32 d0 = ((S32)TOS<<16)   | (SS(1)&0xffff);
         S32 d1 = ((S32)SS(2)<<16) | (SS(3)&0xffff);
         S32 v  = d1 - d0;
@@ -243,21 +246,21 @@ void N4VM::_primitive(U8 op)
         SS(1)  = (S16)(v&0xffff);
         TOS    = (S16)(v>>16);
     }                                     break;
-    case 42: {                                   // DNG
+    case 43: {                                   // DNG
         S32 d0 = ((S32)TOS<<16)   | (SS(1)&0xffff);
         S32 v  = -d0;
         SS(1)  = (S16)(v&0xffff);
         TOS    = (S16)(v>>16);
     }                                     break;
 #if ARDUINO
-    case 43: NanoForth::wait((U32)POP());             break; // DLY
-    case 44: PUSH(digitalRead(POP()));                break; // IN
-    case 45: PUSH(analogRead(POP()));                 break; // AIN
-    case 46: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
-    case 47: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
-    case 48: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
+    case 44: NanoForth::wait((U32)POP());             break; // DLY
+    case 45: PUSH(digitalRead(POP()));                break; // IN
+    case 46: PUSH(analogRead(POP()));                 break; // AIN
+    case 47: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
+    case 48: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
+    case 49: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
 #endif //ARDUINO
-    case 49: /* available ... */          break;
+    case 50: /* available ... */          break;
     case 58: /* ... available */          break;
         /* case 48-58 available for future expansion */
     case 59: RPUSH(POP()); RPUSH(POP());  break; // FOR
@@ -278,7 +281,6 @@ void N4VM::_dump(U16 p0, U16 sz0)
 #if MEM_DEBUG
     U8  *p = PTR((p0&0xffe0));
     U16 sz = (sz0+0x1f)&0xffe0;
-    d_chr('\n');
     for (U16 i=0; i<sz; i+=0x20) {
         d_mem(dic, p, 0x20, ' ');
         d_chr(' ');

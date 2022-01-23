@@ -12,7 +12,8 @@ var nanoforth__asm_8cpp =
     [ "PRM", "nanoforth__asm_8cpp.html#a45e9d53ec6444e11dde94863dbcad68e", null ],
     [ "PMX", "nanoforth__asm_8cpp.html#a1b304aa3f1d9625342f28364803c681e", null ],
     [ "OP_SEMI", "nanoforth__asm_8cpp.html#af073e01d1ee3e411af10b5c1fbce934a", null ],
-    [ "WORDS_PER_ROW", "nanoforth__asm_8cpp.html#a9f68b18c96e87c0f9f1dd95e2919b926", null ],
     [ "N4_SIG", "nanoforth__asm_8cpp.html#a6fed7cc230e401002916e4c487df5a9a", null ],
-    [ "ROM_HDR", "nanoforth__asm_8cpp.html#a84d15522174a05d17c37fac69a28c6d6", null ]
+    [ "N4_AUTO", "nanoforth__asm_8cpp.html#a7e2aa4b74ce58d3d6871d5e1577e3083", null ],
+    [ "ROM_HDR", "nanoforth__asm_8cpp.html#a84d15522174a05d17c37fac69a28c6d6", null ],
+    [ "WORDS_PER_ROW", "nanoforth__asm_8cpp.html#a9f68b18c96e87c0f9f1dd95e2919b926", null ]
 ];

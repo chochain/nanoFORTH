@@ -23,7 +23,8 @@ var nanoforth__asm_8h =
     [ "JMP_MASK", "nanoforth__asm_8h.html#a9783e35109050005b254d0d7aa1dfa40", null ],
     [ "ADR_MASK", "nanoforth__asm_8h.html#a174dd17d5b642c707938e42a79a09fc4", null ],
     [ "PFX_CALL", "nanoforth__asm_8h.html#af9b16f3b1dd173f6b0437269174c90f9", null ],
-    [ "PFX_RET", "nanoforth__asm_8h.html#a0404ce117eb19938b3d21c376604a0c6", null ],
     [ "PFX_CDJ", "nanoforth__asm_8h.html#a02abb1529742323ec714602ace9d6877", null ],
-    [ "PFX_UDJ", "nanoforth__asm_8h.html#ae072facef66883ae2dfc1c8cc0f2bedd", null ]
+    [ "PFX_UDJ", "nanoforth__asm_8h.html#ae072facef66883ae2dfc1c8cc0f2bedd", null ],
+    [ "PFX_RET", "nanoforth__asm_8h.html#a0404ce117eb19938b3d21c376604a0c6", null ],
+    [ "LFA_X", "nanoforth__asm_8h.html#ab5323cac9355ea333e8a426c25cc70f3", null ]
 ];

@@ -111,7 +111,7 @@ Macros</h2></td></tr>
 <tr class="separator:a2167c97965233bc0198413dddbf0dd28"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92cc7957e8d8f21d50b2abb068cf7ee8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a92cc7957e8d8f21d50b2abb068cf7ee8">JMPBCK</a>(idx,  f)&#160;&#160;&#160;<a class="el" href="nanoforth__core_8h.html#a7e7ed6ececb483febb8dbc47a9ca26e2">SET16</a>(here, (idx) | ((f)&lt;&lt;8))</td></tr>
 <tr class="separator:a92cc7957e8d8f21d50b2abb068cf7ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr><td colspan="2"><div class="groupHeader">Stack Ops (note: rp grows downward)</div></td></tr>
+<tr><td colspan="2"><div class="groupHeader">Stack Ops (note: return stack grows downward)</div></td></tr>
 <tr class="memitem:a82363ba7a7cd1a9826fa73d03805e641"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a82363ba7a7cd1a9826fa73d03805e641">RPUSH</a>(a)&#160;&#160;&#160;(*(rp++)=(<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)(a))</td></tr>
 <tr class="separator:a82363ba7a7cd1a9826fa73d03805e641"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55b5173e6face979deb7372dcbb643df"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a55b5173e6face979deb7372dcbb643df">RPOP</a>()&#160;&#160;&#160;(*(--rp))</td></tr>
@@ -124,21 +124,23 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a9f68b18c96e87c0f9f1dd95e2919b926"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a9f68b18c96e87c0f9f1dd95e2919b926">WORDS_PER_ROW</a> = 20</td></tr>
-<tr class="memdesc:a9f68b18c96e87c0f9f1dd95e2919b926"><td class="mdescLeft">&#160;</td><td class="mdescRight">words per row when showing dictionary  <a href="#a9f68b18c96e87c0f9f1dd95e2919b926">More...</a><br /></td></tr>
-<tr class="separator:a9f68b18c96e87c0f9f1dd95e2919b926"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fed7cc230e401002916e4c487df5a9a"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a6fed7cc230e401002916e4c487df5a9a">N4_SIG</a> = (((<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)'N'&lt;&lt;8)+(<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)'4')</td></tr>
 <tr class="memdesc:a6fed7cc230e401002916e4c487df5a9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">EEPROM signature.  <a href="#a6fed7cc230e401002916e4c487df5a9a">More...</a><br /></td></tr>
 <tr class="separator:a6fed7cc230e401002916e4c487df5a9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e2aa4b74ce58d3d6871d5e1577e3083"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a7e2aa4b74ce58d3d6871d5e1577e3083">N4_AUTO</a> = <a class="el" href="nanoforth__asm_8cpp.html#a6fed7cc230e401002916e4c487df5a9a">N4_SIG</a> | 0x8080</td></tr>
+<tr class="memdesc:a7e2aa4b74ce58d3d6871d5e1577e3083"><td class="mdescLeft">&#160;</td><td class="mdescRight">EEPROM auto-run signature.  <a href="#a7e2aa4b74ce58d3d6871d5e1577e3083">More...</a><br /></td></tr>
+<tr class="separator:a7e2aa4b74ce58d3d6871d5e1577e3083"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a84d15522174a05d17c37fac69a28c6d6"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a84d15522174a05d17c37fac69a28c6d6">ROM_HDR</a> = 6</td></tr>
-<tr class="memdesc:a84d15522174a05d17c37fac69a28c6d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">EEPROM header size.  <a href="#a84d15522174a05d17c37fac69a28c6d6">More...</a><br /></td></tr>
 <tr class="separator:a84d15522174a05d17c37fac69a28c6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f68b18c96e87c0f9f1dd95e2919b926"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a9f68b18c96e87c0f9f1dd95e2919b926">WORDS_PER_ROW</a> = 20</td></tr>
+<tr class="memdesc:a9f68b18c96e87c0f9f1dd95e2919b926"><td class="mdescLeft">&#160;</td><td class="mdescRight">words per row when showing dictionary  <a href="#a9f68b18c96e87c0f9f1dd95e2919b926">More...</a><br /></td></tr>
+<tr class="separator:a9f68b18c96e87c0f9f1dd95e2919b926"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">nanoForth built-in vocabularies</div></td></tr>
 <tr class="memitem:a9e2ebb9c3229c435ee2e71725323ea6e"><td class="memItemLeft" align="right" valign="top">PROGMEM const char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a9e2ebb9c3229c435ee2e71725323ea6e">CMD</a> []</td></tr>
 <tr class="memdesc:a9e2ebb9c3229c435ee2e71725323ea6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">words for interpret mode.  <a href="#a9e2ebb9c3229c435ee2e71725323ea6e">More...</a><br /></td></tr>
 <tr class="separator:a9e2ebb9c3229c435ee2e71725323ea6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a42bfe95413e9933bed0e815b6dfec4"><td class="memItemLeft" align="right" valign="top">PROGMEM const char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a9a42bfe95413e9933bed0e815b6dfec4">JMP</a> []</td></tr>
-<tr class="memdesc:a9a42bfe95413e9933bed0e815b6dfec4"><td class="mdescLeft">&#160;</td><td class="mdescRight">words for branching op in compile mode.  <a href="#a9a42bfe95413e9933bed0e815b6dfec4">More...</a><br /></td></tr>
+<tr class="memdesc:a9a42bfe95413e9933bed0e815b6dfec4"><td class="mdescLeft">&#160;</td><td class="mdescRight">words for branching ops in compile mode.  <a href="#a9a42bfe95413e9933bed0e815b6dfec4">More...</a><br /></td></tr>
 <tr class="separator:a9a42bfe95413e9933bed0e815b6dfec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45e9d53ec6444e11dde94863dbcad68e"><td class="memItemLeft" align="right" valign="top">PROGMEM const char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8cpp.html#a45e9d53ec6444e11dde94863dbcad68e">PRM</a> []</td></tr>
 <tr class="memdesc:a45e9d53ec6444e11dde94863dbcad68e"><td class="mdescLeft">&#160;</td><td class="mdescRight">primitive words (45 allocated, 64 max).  <a href="#a45e9d53ec6444e11dde94863dbcad68e">More...</a><br /></td></tr>
@@ -206,8 +208,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> {               \</div><div class="line">    U8  *p = <a class="code" href="nanoforth__asm_8cpp.html#ac62a7e198c1051fe2878cf3da32ee163">PTR</a>(idx);                     \</div><div class="line">    U8  f8 = *(p);                         \</div><div class="line">    U16 a  = <a class="code" href="nanoforth__asm_8cpp.html#a5736213940db38c8e215a3bb8688522c">IDX</a>(p1);                      \</div><div class="line">    SET16(p, (a | (<a class="code" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)f8&lt;&lt;8));            \</div><div class="line">    } <span class="keywordflow">while</span>(0)</div><div class="ttc" id="nanoforth__asm_8cpp_html_a5736213940db38c8e215a3bb8688522c"><div class="ttname"><a href="nanoforth__asm_8cpp.html#a5736213940db38c8e215a3bb8688522c">IDX</a></div><div class="ttdeci">#define IDX(p)</div><div class="ttdef"><b>Definition:</b> nanoforth_asm.cpp:67</div></div>
-<div class="ttc" id="nanoforth__asm_8cpp_html_ac62a7e198c1051fe2878cf3da32ee163"><div class="ttname"><a href="nanoforth__asm_8cpp.html#ac62a7e198c1051fe2878cf3da32ee163">PTR</a></div><div class="ttdeci">#define PTR(n)</div><div class="ttdef"><b>Definition:</b> nanoforth_asm.cpp:66</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keywordflow">do</span> {               \</div><div class="line">    U8  *p = <a class="code" href="nanoforth__asm_8cpp.html#ac62a7e198c1051fe2878cf3da32ee163">PTR</a>(idx);                     \</div><div class="line">    U8  f8 = *(p);                         \</div><div class="line">    U16 a  = <a class="code" href="nanoforth__asm_8cpp.html#a5736213940db38c8e215a3bb8688522c">IDX</a>(p1);                      \</div><div class="line">    SET16(p, (a | (<a class="code" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)f8&lt;&lt;8));            \</div><div class="line">    } <span class="keywordflow">while</span>(0)</div><div class="ttc" id="nanoforth__asm_8cpp_html_a5736213940db38c8e215a3bb8688522c"><div class="ttname"><a href="nanoforth__asm_8cpp.html#a5736213940db38c8e215a3bb8688522c">IDX</a></div><div class="ttdeci">#define IDX(p)</div><div class="ttdef"><b>Definition:</b> nanoforth_asm.cpp:69</div></div>
+<div class="ttc" id="nanoforth__asm_8cpp_html_ac62a7e198c1051fe2878cf3da32ee163"><div class="ttname"><a href="nanoforth__asm_8cpp.html#ac62a7e198c1051fe2878cf3da32ee163">PTR</a></div><div class="ttdeci">#define PTR(n)</div><div class="ttdef"><b>Definition:</b> nanoforth_asm.cpp:68</div></div>
 <div class="ttc" id="nanoforth_8h_html_a0a0a322d5fa4a546d293a77ba8b4a71f"><div class="ttname"><a href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a></div><div class="ttdeci">uint16_t U16</div><div class="ttdoc">16-bit unsigned integer, for return stack, and pointers </div><div class="ttdef"><b>Definition:</b> nanoforth.h:51</div></div>
 </div><!-- fragment -->
 </div>
@@ -327,7 +329,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= <span class="stringliteral">&quot;\x06&quot;</span> </div><div class="line">    <span class="stringliteral">&quot;:  &quot;</span> <span class="stringliteral">&quot;VAR&quot;</span> <span class="stringliteral">&quot;CST&quot;</span> <span class="stringliteral">&quot;FGT&quot;</span> <span class="stringliteral">&quot;DMP&quot;</span> <span class="stringliteral">&quot;BYE&quot;</span></div></div><!-- fragment -->
+<b>Initial value:</b><div class="fragment"><div class="line">= <span class="stringliteral">&quot;\x07&quot;</span> </div><div class="line">    <span class="stringliteral">&quot;:  &quot;</span> <span class="stringliteral">&quot;VAR&quot;</span> <span class="stringliteral">&quot;CST&quot;</span> <span class="stringliteral">&quot;FGT&quot;</span> <span class="stringliteral">&quot;DMP&quot;</span> <span class="stringliteral">&quot;RST&quot;</span> <span class="stringliteral">&quot;BYE&quot;</span></div></div><!-- fragment -->
 <p>words for interpret mode. </p>
 
 </div>
@@ -344,7 +346,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= <span class="stringliteral">&quot;\x0b&quot;</span> </div><div class="line">    <span class="stringliteral">&quot;;  &quot;</span> <span class="stringliteral">&quot;IF &quot;</span> <span class="stringliteral">&quot;ELS&quot;</span> <span class="stringliteral">&quot;THN&quot;</span> <span class="stringliteral">&quot;BGN&quot;</span> <span class="stringliteral">&quot;UTL&quot;</span> <span class="stringliteral">&quot;WHL&quot;</span> <span class="stringliteral">&quot;RPT&quot;</span> <span class="stringliteral">&quot;FOR&quot;</span> <span class="stringliteral">&quot;NXT&quot;</span> </div><div class="line">    <span class="stringliteral">&quot;I  &quot;</span></div></div><!-- fragment -->
-<p>words for branching op in compile mode. </p>
+<p>words for branching ops in compile mode. </p>
 
 </div>
 </div>
@@ -359,7 +361,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= <span class="stringliteral">&quot;\x31&quot;</span> </div><div class="line">    <span class="stringliteral">&quot;DRP&quot;</span> <span class="stringliteral">&quot;DUP&quot;</span> <span class="stringliteral">&quot;SWP&quot;</span> <span class="stringliteral">&quot;OVR&quot;</span> <span class="stringliteral">&quot;ROT&quot;</span> <span class="stringliteral">&quot;+  &quot;</span> <span class="stringliteral">&quot;-  &quot;</span> <span class="stringliteral">&quot;*  &quot;</span> <span class="stringliteral">&quot;/  &quot;</span> <span class="stringliteral">&quot;MOD&quot;</span> </div><div class="line">    <span class="stringliteral">&quot;NEG&quot;</span> <span class="stringliteral">&quot;AND&quot;</span> <span class="stringliteral">&quot;OR &quot;</span> <span class="stringliteral">&quot;XOR&quot;</span> <span class="stringliteral">&quot;NOT&quot;</span> <span class="stringliteral">&quot;=  &quot;</span> <span class="stringliteral">&quot;&lt;  &quot;</span> <span class="stringliteral">&quot;&gt;  &quot;</span> <span class="stringliteral">&quot;&lt;= &quot;</span> <span class="stringliteral">&quot;&gt;= &quot;</span> </div><div class="line">    <span class="stringliteral">&quot;&lt;&gt; &quot;</span> <span class="stringliteral">&quot;@  &quot;</span> <span class="stringliteral">&quot;!  &quot;</span> <span class="stringliteral">&quot;C@ &quot;</span> <span class="stringliteral">&quot;C! &quot;</span> <span class="stringliteral">&quot;KEY&quot;</span> <span class="stringliteral">&quot;EMT&quot;</span> <span class="stringliteral">&quot;CR &quot;</span> <span class="stringliteral">&quot;.  &quot;</span> <span class="stringliteral">&quot;.\&quot; &quot;</span></div><div class="line">    <span class="stringliteral">&quot;&gt;R &quot;</span> <span class="stringliteral">&quot;R&gt; &quot;</span> <span class="stringliteral">&quot;WRD&quot;</span> <span class="stringliteral">&quot;HRE&quot;</span> <span class="stringliteral">&quot;CEL&quot;</span> <span class="stringliteral">&quot;ALO&quot;</span> <span class="stringliteral">&quot;SAV&quot;</span> <span class="stringliteral">&quot;LD &quot;</span> <span class="stringliteral">&quot;TRC&quot;</span> <span class="stringliteral">&quot;CLK&quot;</span> </div><div class="line">    <span class="stringliteral">&quot;D+ &quot;</span> <span class="stringliteral">&quot;D- &quot;</span> <span class="stringliteral">&quot;DNG&quot;</span> <span class="stringliteral">&quot;DLY&quot;</span> <span class="stringliteral">&quot;IN &quot;</span> <span class="stringliteral">&quot;AIN&quot;</span> <span class="stringliteral">&quot;OUT&quot;</span> <span class="stringliteral">&quot;PWM&quot;</span> <span class="stringliteral">&quot;PIN&quot;</span></div></div><!-- fragment -->
+<b>Initial value:</b><div class="fragment"><div class="line">= <span class="stringliteral">&quot;\x31&quot;</span> </div><div class="line">    <span class="stringliteral">&quot;DRP&quot;</span> <span class="stringliteral">&quot;DUP&quot;</span> <span class="stringliteral">&quot;SWP&quot;</span> <span class="stringliteral">&quot;OVR&quot;</span> <span class="stringliteral">&quot;ROT&quot;</span> <span class="stringliteral">&quot;+  &quot;</span> <span class="stringliteral">&quot;-  &quot;</span> <span class="stringliteral">&quot;*  &quot;</span> <span class="stringliteral">&quot;/  &quot;</span> <span class="stringliteral">&quot;MOD&quot;</span> </div><div class="line">    <span class="stringliteral">&quot;NEG&quot;</span> <span class="stringliteral">&quot;AND&quot;</span> <span class="stringliteral">&quot;OR &quot;</span> <span class="stringliteral">&quot;XOR&quot;</span> <span class="stringliteral">&quot;NOT&quot;</span> <span class="stringliteral">&quot;=  &quot;</span> <span class="stringliteral">&quot;&lt;  &quot;</span> <span class="stringliteral">&quot;&gt;  &quot;</span> <span class="stringliteral">&quot;&lt;= &quot;</span> <span class="stringliteral">&quot;&gt;= &quot;</span> </div><div class="line">    <span class="stringliteral">&quot;&lt;&gt; &quot;</span> <span class="stringliteral">&quot;@  &quot;</span> <span class="stringliteral">&quot;!  &quot;</span> <span class="stringliteral">&quot;C@ &quot;</span> <span class="stringliteral">&quot;C! &quot;</span> <span class="stringliteral">&quot;KEY&quot;</span> <span class="stringliteral">&quot;EMT&quot;</span> <span class="stringliteral">&quot;CR &quot;</span> <span class="stringliteral">&quot;.  &quot;</span> <span class="stringliteral">&quot;.\&quot; &quot;</span></div><div class="line">    <span class="stringliteral">&quot;&gt;R &quot;</span> <span class="stringliteral">&quot;R&gt; &quot;</span> <span class="stringliteral">&quot;WRD&quot;</span> <span class="stringliteral">&quot;HRE&quot;</span> <span class="stringliteral">&quot;CEL&quot;</span> <span class="stringliteral">&quot;ALO&quot;</span> <span class="stringliteral">&quot;SAV&quot;</span> <span class="stringliteral">&quot;LD &quot;</span> <span class="stringliteral">&quot;TRC&quot;</span> <span class="stringliteral">&quot;CLK&quot;</span> </div><div class="line">    <span class="stringliteral">&quot;SEX&quot;</span> <span class="stringliteral">&quot;D+ &quot;</span> <span class="stringliteral">&quot;D- &quot;</span> <span class="stringliteral">&quot;DNG&quot;</span> <span class="stringliteral">&quot;DLY&quot;</span> <span class="stringliteral">&quot;IN &quot;</span> <span class="stringliteral">&quot;AIN&quot;</span> <span class="stringliteral">&quot;OUT&quot;</span> <span class="stringliteral">&quot;PWM&quot;</span> <span class="stringliteral">&quot;PIN&quot;</span></div></div><!-- fragment -->
 <p>primitive words (45 allocated, 64 max). </p>
 
 </div>
@@ -395,6 +397,53 @@ Variables</h2></td></tr>
 
 </div>
 </div>
+<a id="a6fed7cc230e401002916e4c487df5a9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fed7cc230e401002916e4c487df5a9a">&#9670;&nbsp;</a></span>N4_SIG</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> N4_SIG = (((<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)'N'&lt;&lt;8)+(<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)'4')</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>EEPROM signature. </p>
+
+</div>
+</div>
+<a id="a7e2aa4b74ce58d3d6871d5e1577e3083"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e2aa4b74ce58d3d6871d5e1577e3083">&#9670;&nbsp;</a></span>N4_AUTO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> N4_AUTO = <a class="el" href="nanoforth__asm_8cpp.html#a6fed7cc230e401002916e4c487df5a9a">N4_SIG</a> | 0x8080</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>EEPROM auto-run signature. </p>
+
+</div>
+</div>
+<a id="a84d15522174a05d17c37fac69a28c6d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84d15522174a05d17c37fac69a28c6d6">&#9670;&nbsp;</a></span>ROM_HDR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> ROM_HDR = 6</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>EEPROM header size </p>
+
+</div>
+</div>
 <a id="a9f68b18c96e87c0f9f1dd95e2919b926"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9f68b18c96e87c0f9f1dd95e2919b926">&#9670;&nbsp;</a></span>WORDS_PER_ROW</h2>
 
@@ -411,41 +460,6 @@ Variables</h2></td></tr>
 <blockquote class="doxtable">
 <p>display words in dictionary</p>
 </blockquote>
-
-</div>
-</div>
-<a id="a6fed7cc230e401002916e4c487df5a9a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6fed7cc230e401002916e4c487df5a9a">&#9670;&nbsp;</a></span>N4_SIG</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> N4_SIG = (((<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)'N'&lt;&lt;8)+(<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)'4')</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>EEPROM signature. </p>
-<blockquote class="doxtable">
-<p>persist dictionary from RAM into EEPROM</p>
-</blockquote>
-
-</div>
-</div>
-<a id="a84d15522174a05d17c37fac69a28c6d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84d15522174a05d17c37fac69a28c6d6">&#9670;&nbsp;</a></span>ROM_HDR</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> ROM_HDR = 6</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>EEPROM header size. </p>
 
 </div>
 </div>

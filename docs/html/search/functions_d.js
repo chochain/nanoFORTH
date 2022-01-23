@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['query',['query',['../classN4Asm.html#ae7f8fc16a084fdaed7c3986f4ec77eaa',1,'N4Asm']]]
+  ['parse_5ftoken',['parse_token',['../classN4Asm.html#ad51748c320d7e2d27425d4f29f42c3b4',1,'N4Asm']]]
 ];

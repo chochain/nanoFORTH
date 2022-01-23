@@ -1,6 +1,8 @@
 var searchData=
 [
-  ['tib_5fempty',['tib_empty',['../classN4Core.html#a1567e220ac045f6f1e4fc6707f7ce49d',1,'N4Core']]],
-  ['token',['token',['../classN4Core.html#a185dd93448d07ca9c7099e84c9f243ea',1,'N4Core']]],
-  ['trace',['trace',['../classN4Asm.html#a9d1e9aaa4bf1feb4dcabfa17088d612d',1,'N4Asm']]]
+  ['save',['save',['../classN4Asm.html#afcb99e6d1f5944d1a329a905b5c8f04c',1,'N4Asm']]],
+  ['set_5fio',['set_io',['../classN4Core.html#ae4f776189195ee5d6440b6ba81316476',1,'N4Core']]],
+  ['set_5ftrace',['set_trace',['../classN4Core.html#ab163edb0e543098d6fdefea19e8e3b48',1,'N4Core']]],
+  ['set_5fucase',['set_ucase',['../classN4Core.html#a370606874b2b14eca3ef32481c0fe16e',1,'N4Core']]],
+  ['step',['step',['../classN4VM.html#a13a1a26f29fc8c956112a7d322021975',1,'N4VM']]]
 ];

@@ -1,9 +1,9 @@
 var searchData=
 [
+  ['_5fadd_5fbranch',['_add_branch',['../classN4Asm.html#aaa191a5136c5c57a45b6a7d100ebf3a5',1,'N4Asm']]],
+  ['_5fadd_5fstr',['_add_str',['../classN4Asm.html#ab8abb6fea446cd95df011da722071b38',1,'N4Asm']]],
+  ['_5fadd_5fword',['_add_word',['../classN4Asm.html#a5ccb902e1f4bc0040e322bc7d4f19b34',1,'N4Asm']]],
   ['_5fconsole_5finput',['_console_input',['../classN4Core.html#a4a1b7f36f770b6ca38a83383bcca44d5',1,'N4Core']]],
-  ['_5fdo_5fbranch',['_do_branch',['../classN4Asm.html#ac8b09f4275c3de92cc729134fe41b57d',1,'N4Asm']]],
-  ['_5fdo_5fheader',['_do_header',['../classN4Asm.html#a80019677ef8e622d6e0392ce83573805',1,'N4Asm']]],
-  ['_5fdo_5fstr',['_do_str',['../classN4Asm.html#a46d0a5758dae2a84dab0ad22d61d3a6a',1,'N4Asm']]],
   ['_5fdump',['_dump',['../classN4VM.html#a91ade7758e883568be3c28ea7e0d41bf',1,'N4VM']]],
   ['_5fempty',['_empty',['../classN4Core.html#a576fdfd58a5d48965099bf43ba17098e',1,'N4Core']]],
   ['_5fexecute',['_execute',['../classN4VM.html#a1ac91101a9e2ec66e6b131908276a604',1,'N4VM']]],

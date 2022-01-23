@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['variable',['variable',['../classN4Asm.html#a3f87b8f17e103c19afc2544bbb42a146',1,'N4Asm']]]
+  ['uc',['uc',['../classN4Core.html#a0d5cc20491c3146786349fde57c13f5b',1,'N4Core']]]
 ];

@@ -123,17 +123,17 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a10fb5781e8b62f6c790d077d0f69ea86"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__core_8h.html#a10fb5781e8b62f6c790d077d0f69ea86">flash</a>(s)&#160;&#160;&#160;{ _io-&gt;print(F(s)); _io-&gt;flush(); }</td></tr>
-<tr class="separator:a10fb5781e8b62f6c790d077d0f69ea86"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b6f4e8567ad08a015fca3e83b3dc584"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__core_8h.html#a1b6f4e8567ad08a015fca3e83b3dc584">show</a>(s)&#160;&#160;&#160;{ _io-&gt;print(F(s)); _io-&gt;flush(); }</td></tr>
+<tr class="separator:a1b6f4e8567ad08a015fca3e83b3dc584"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Memory Access Ops</div></td></tr>
 <tr class="memitem:a5fbe8c099d455dc8049978119712ed97"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__core_8h.html#a5fbe8c099d455dc8049978119712ed97">SET8</a>(p,  c)&#160;&#160;&#160;(*(<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>*)(p)++=(<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>)(c))</td></tr>
 <tr class="memdesc:a5fbe8c099d455dc8049978119712ed97"><td class="mdescLeft">&#160;</td><td class="mdescRight">1-byte write  <a href="#a5fbe8c099d455dc8049978119712ed97">More...</a><br /></td></tr>
 <tr class="separator:a5fbe8c099d455dc8049978119712ed97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e7ed6ececb483febb8dbc47a9ca26e2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__core_8h.html#a7e7ed6ececb483febb8dbc47a9ca26e2">SET16</a>(p,  n)&#160;&#160;&#160;do { <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> x=(<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)(n); <a class="el" href="nanoforth__core_8h.html#a5fbe8c099d455dc8049978119712ed97">SET8</a>(p,(x)&gt;&gt;8); <a class="el" href="nanoforth__core_8h.html#a5fbe8c099d455dc8049978119712ed97">SET8</a>(p,(x)&amp;0xff); } while(0)</td></tr>
-<tr class="memdesc:a7e7ed6ececb483febb8dbc47a9ca26e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">2-byte write, prevent alignment issue (on 32-bit CPU) and preseve Big-Endian encoding  <a href="#a7e7ed6ececb483febb8dbc47a9ca26e2">More...</a><br /></td></tr>
+<tr class="memdesc:a7e7ed6ececb483febb8dbc47a9ca26e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">2-byte write, prevent alignment issue (on 32-bit CPU) and preserve Big-Endian encoding  <a href="#a7e7ed6ececb483febb8dbc47a9ca26e2">More...</a><br /></td></tr>
 <tr class="separator:a7e7ed6ececb483febb8dbc47a9ca26e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0347fc520bda2a3f684f7e344b180065"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__core_8h.html#a0347fc520bda2a3f684f7e344b180065">GET16</a>(p)&#160;&#160;&#160;(((<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)(*(<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>*)(p))&lt;&lt;8) + *((<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>*)(p)+1))</td></tr>
-<tr class="memdesc:a0347fc520bda2a3f684f7e344b180065"><td class="mdescLeft">&#160;</td><td class="mdescRight">2-byte read, prevent aligntment issue (on 32-bit CPU) and preseve Big-Endian encoding  <a href="#a0347fc520bda2a3f684f7e344b180065">More...</a><br /></td></tr>
+<tr class="memdesc:a0347fc520bda2a3f684f7e344b180065"><td class="mdescLeft">&#160;</td><td class="mdescRight">2-byte read, prevent alignment issue (on 32-bit CPU) and preserve Big-Endian encoding  <a href="#a0347fc520bda2a3f684f7e344b180065">More...</a><br /></td></tr>
 <tr class="separator:a0347fc520bda2a3f684f7e344b180065"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -146,14 +146,14 @@ Variables</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>nanoForth Core Utility abstract class </p>
 </div><h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="a10fb5781e8b62f6c790d077d0f69ea86"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a10fb5781e8b62f6c790d077d0f69ea86">&#9670;&nbsp;</a></span>flash</h2>
+<a id="a1b6f4e8567ad08a015fca3e83b3dc584"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b6f4e8567ad08a015fca3e83b3dc584">&#9670;&nbsp;</a></span>show</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define flash</td>
+          <td class="memname">#define show</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">s</td><td>)</td>
@@ -220,7 +220,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>2-byte write, prevent alignment issue (on 32-bit CPU) and preseve Big-Endian encoding </p>
+<p>2-byte write, prevent alignment issue (on 32-bit CPU) and preserve Big-Endian encoding </p>
 
 </div>
 </div>
@@ -240,7 +240,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>2-byte read, prevent aligntment issue (on 32-bit CPU) and preseve Big-Endian encoding </p>
+<p>2-byte read, prevent alignment issue (on 32-bit CPU) and preserve Big-Endian encoding </p>
 
 </div>
 </div>

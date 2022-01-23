@@ -201,13 +201,14 @@ $(document).ready(function(){initNavTree('page2.html','');});
 </ul>
 <p>Alright! That has pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can provide the ability to withstand power failures or reboots for our future Nanos running in the field. Well, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.</p><ul>
 <li>here's how you do it <blockquote class="doxtable">
-<p>: <b>fun</b> CLK DNG <b>zz</b> CLK D+ ; ⏎<br />
+<p>: <b>fun</b> ( - - ) CLK DNG <b>zz</b> CLK D+ ; ⏎<br />
  SEX ⏎<br />
  BYE ⏎<br />
  ⇨ nanoFORTH v1.4 reset<br />
  ⇨ 338_0_ok<br />
  </p><blockquote class="doxtable">
-<p>&gt; When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is <b>fun</b> the benchmarker. </p>
+<p>&gt; When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is <b>fun</b> the benchmarker.<br />
+ &gt; Note that the ( - - ) is a Forth-style comment that you can use. A \ (back slash) can also be used to ignore comments to end of your input line. </p>
 </blockquote>
 </blockquote>
 </li>

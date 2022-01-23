@@ -35,12 +35,12 @@ constexpr U8  PRM_MASK = 0x3f;   ///< 0011 1111, 6-bit primitive opcodes
 constexpr U8  JMP_MASK = 0xf0;   ///< 1111 0000
 constexpr U16 ADR_MASK = 0x0fff; ///< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions
 ///@}
-///@name Opcode Prefixies
+///@name Opcode Prefixes
 ///@{
 constexpr U8  PFX_CALL = 0xc0;   ///< 1100 0000
-constexpr U8  PFX_RET  = 0xd0;   ///< 1111 0000
-constexpr U8  PFX_CDJ  = 0xe0;   ///< 1101 0000
-constexpr U8  PFX_UDJ  = 0xf0;   ///< 1110 0000
+constexpr U8  PFX_CDJ  = 0xd0;   ///< 1101 0000
+constexpr U8  PFX_UDJ  = 0xe0;   ///< 1110 0000
+constexpr U8  PFX_RET  = 0xf0;   ///< 1111 0000
 ///@}
 ///
 /// opcodes for loop control (in compiler mode)
@@ -53,26 +53,27 @@ enum N4_EXT_OP {                 ///< extended opcode (used by for...nxt loop)
     I_I,                         ///< 0x3e loop counter
     I_LIT                        ///< 0x3f 3-byte literal
 };
+constexpr U16 LFA_X    = 0xffff;     ///< end of link field
 ///
 /// Assembler class
 ///
 class N4Asm : N4Core                // (10-byte header)
 {
     U8  *dic;                       ///< dictionary base
-    U8  *last;                      ///< pointer to last word
     U16 *rp;                        ///< return stack pointer
     
     U8  tab;                        ///< tracing indentation counter
     U8  xxx;                        ///< reserved
     
 public:
+    U8  *last;                      ///< pointer to last word, for debugging
     U8  *here;                      ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
     
     /// Assembler constructor
     N4Asm(                          
         U8 *mem                     ///< pointer of memory block for dictionary
         );                 
-    void reset();                   ///< reset internal pointers (for BYE)
+    U16 reset();                    ///< reset internal pointers (for BYE)
     
     /// Instruction Decoder
     N4OP parse_token(
@@ -81,7 +82,7 @@ public:
         U8 run                      ///< run mode flag (1: run mode, 0: compile mode)
         ); 
 
-    /// proxy to Assembler
+    /// Forth compiler
     void compile(
         U16 *rp0                    ///< memory address to be used as assembler return stack
         );             
@@ -92,14 +93,14 @@ public:
     /// query(token) in dictionary for existing word
     U8   query(                         
         U8 *tkn,                    ///< token to be searched
-        U16 *adr                    ///< function addreess of the found word
+        U16 *adr                    ///< function address of the found word
         );      
     void words();                   ///< display words in dictionary
     void forget();                  ///< forgets word in the dictionary
 
     // EEPROM persistence I/O
-    void save();                    ///< persist user dictionary to EEPROM
-    void load();                    ///< restore user dictionary from EEPROM
+    void save(bool autorun=false);  ///< persist user dictionary to EEPROM
+    U16  load(bool autorun=false);  ///< restore user dictionary from EEPROM
 
     // execution tracing
     /// print execution tracing info
@@ -109,9 +110,9 @@ public:
         );           
     
 private:
-    void _do_header();              ///< create name field and link to previous word
-    void _do_branch(U8 op);         ///< manage branching opcodes
-    void _do_str();                 ///< add string for ."
+    void _add_word();               ///< create name field and link to previous word
+    void _add_branch(U8 op);        ///< manage branching opcodes
+    void _add_str();                ///< add string for ."
     void _list_voc();               ///< list words from all vocabularies
 };    
 #endif //__SRC_NANOFORTH_ASM_H

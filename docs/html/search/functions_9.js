@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['load',['load',['../classN4Asm.html#a26e5c1d2fd00d792dc05f92bcd8d29ac',1,'N4Asm']]]
+  ['key',['key',['../classN4Core.html#ad93f809a92778f2f4fcdabc9350a3ea8',1,'N4Core']]]
 ];
