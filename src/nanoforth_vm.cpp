@@ -101,7 +101,7 @@ void N4VM::_init() {
     rp  = (U16*)&dic[msz - ssz];         /// * return stack pointer, grow upward
     sp  = (S16*)&dic[msz];               /// * parameter stack pointer, grows downward
 
-    show("nanoForth v1.2 ");             /// * show init prompt
+    show("nanoForth v1.4 ");             /// * show init prompt
 
     U16 adr = n4asm->reset();            /// * reload EEPROM and reset assembler
     if (adr != LFA_X) {                  /// * check autorun addr has been setup? (see SEX)
@@ -223,13 +223,13 @@ void N4VM::_primitive(U8 op)
     case 35: n4asm->here += POP();        break; // ALO
     case 36: n4asm->save();               break; // SAV
     case 37: n4asm->load();               break; // LD
-    case 38: set_trace(POP());            break; // TRC
-    case 39: {                                   // CLK
+    case 38: n4asm->save(true);           break; // SEX - save/execute (autorun)
+    case 39: set_trace(POP());            break; // TRC
+    case 40: {                                   // CLK
         U32 u = millis();       // millisecond
         PUSH((U16)(u&0xffff));
         PUSH((U16)(u>>16));
     }                                     break;
-    case 40: n4asm->save(true);           break; // SEX - save for execute (autorun)
     case 41: {                                   // D+
         S32 d0 = ((S32)TOS<<16)   | (SS(1)&0xffff);
         S32 d1 = ((S32)SS(2)<<16) | (SS(3)&0xffff);

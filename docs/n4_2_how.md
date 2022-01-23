@@ -66,14 +66,14 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 * get Arduino clock/millis, a double precision (i.e. 32-bit) value
 > CLK ⏎<br/>
 > ⇨ -26395_188_ok
->> \> the number about are for example only, your clock is different<br/>
->> \> we need two 16-bit cells on data stack to represent the double
+>> \> nanoFORTH uses two 16-bit cells on data stack to represent the double number<br/>
+>> \> note the numbers above are for example only, your clock read will be different
 
 * to benchmark something, let's defined a function **zz** that runs in empty loops and time it
 > : **zz** 10000 0 FOR NXT ;⏎<br/>
 > CLK DNG **zz** CLK D+ ⏎<br/>
 > ⇨ 338_0_ok
->> \> Uur ten-thousand cycles are completed in 338ms, i.e. 34us/cycle, not bad!<br/>
+>> \> Our ten-thousand cycles are completed in 338ms, i.e. 34us/cycle, not too shabby!<br/>
 >> \> DNG negate the first clock ticks<br/>
 >> \> D+ add two clock counts (i.e. (-t0) + t1) to deduce the time difference
 
@@ -83,6 +83,7 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 
 * dump the memory to see how all these words are encoded in the dictionary
 > 0 HRE DMP ⏎
+>> \> There! You can see the hex dump of our **red** ... **blu** ... in their gory detail all the way up to the latest word **zz**
 
 * at the end of the day, or in case of a power outage, let's save what's been done so far into EEPROM
 > SAV ⏎
@@ -98,17 +99,22 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 
 Alright! That has pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can provide the ability to withstand power failures or reboots for our future Nanos running in the field. Well, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.
 * here's how you do it
-> : **fun** ( - - ) CLK DNG **zz** CLK D+ ; ⏎<br/>
+> : **fun** ( - - ) 1000 DLY ." I'm alive! blink " 20 **xy** ; ⏎<br/>
 > SEX ⏎<br/>
 > BYE ⏎<br/>
 > ⇨ nanoFORTH v1.4 reset<br/>
 > ⇨ 338_0_ok<br/>
->> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun** the benchmarker.<br/>
->> \> Note that the ( - - ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comments to end of your input line.
+>> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun** our blinker.<br/>
+>> \> Note that the ( - - ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comments to the end of your input line.
 
-OK, makers often run service routine with their microcontrollers in the field. However, before you get creative and save your servicing word into EEPROM and run it in an endless loop, I have to confess that I actually do not know how to get out of a loop yet. Any recommendation is welcome.
+* to disable the autorun, a normal SAV again will clear the flag but will keep your dictionary intact in EEPROM
+> SAV ⏎<br/>
+> BYE ⏎<br/>
+> ⇨ nanoFORTH v1.4 ok
 
-So, nanoFORTH is real-time, and can multi-task. It can be reprogrammed on-the-fly or even over-the-air. It is interactive and extensible. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.
+OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, any suggestion is welcome before you hit that button.
+
+So, nanoFORTH is **real-time**, and can **multi-task**. It is **interactive** and **extensible**. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.**
 
 <br/>
 <a href="page1.html">1. Why - Review nanoFORTH command examples</a><br/>

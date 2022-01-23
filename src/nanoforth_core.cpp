@@ -167,8 +167,8 @@ void N4Core::_console_input(U8 *tib)
         char c = key();                      // get one char from input stream
         if (c=='\r' || c=='\n') {            // split on RETURN
             if (p > tib) {
-                *p     = ' ';                // terminate input string
-                *(p+1) = '\n';
+                *p     = ' ';                // pad extra space
+                *(p+1) = 0;                  // terminate input string
                 break;                       // skip empty token
             }
         }
@@ -179,7 +179,7 @@ void N4Core::_console_input(U8 *tib)
         }
         else if ((p - tib) >= (TIB_SZ-1)) {
             show("TIB!\n");
-            *p = '\n';
+            *p = 0;
             break;
         }
         else *p++ = c;

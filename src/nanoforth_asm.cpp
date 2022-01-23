@@ -38,8 +38,8 @@ PROGMEM const char PRM[] = "\x31" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
     "NEG" "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
-    ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "TRC" "CLK" \
-    "SEX" "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN";
+    ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "SEX" "TRC" \
+    "CLK" "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN";
 PROGMEM const char PMX[] = "\x4" \
     "FOR" "NXT" "BRK" "I  ";
 constexpr U16 OP_SEMI = 0;                           /**< semi-colon, end of function definition */
@@ -87,7 +87,11 @@ U16 N4Asm::reset()
     last    = PTR(LFA_X);                // root of linked field
     tab     = 0;
 
-    set_trace(1);
+#if ARDUINO
+    set_trace(0);
+#else
+    set_trace(1);                        // debugging on PC
+#endif // ARDUINO
 
     return load(true);
 }
