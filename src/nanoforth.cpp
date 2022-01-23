@@ -45,6 +45,10 @@
  *
  *> 2021-05-16: chochain@yahoo.com
  *  * [12360,272] move static variables into NanoForth class
+ *  * [15180,472] add EEPROM; BLE<=>stream IO;
+ *
+ *> 2022-01-20: chochain@yahoo.com
+ *  * [15634,472] autorun; handles Forth comments
  */
 #include "nanoforth_vm.h"
 //
