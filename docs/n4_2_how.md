@@ -1,4 +1,4 @@
-\page page2 How
+\page page2 .2 How
 
 Start wiring up your breadboard and ready to have some fun? Well, since FORTH is such a different language, a better preparation is always recommended...
 
@@ -89,20 +89,30 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 
 * when needed, we can clean up the sandbox i.e. reset the nanoFORTH system pointers for a fresh start
 > BYE ⏎<br/>
-> ⇨ nanoFORTH v1.0 ok
+> ⇨ nanoFORTH v1.4 ok
 >> \> The data stack, return stack, and instruction pointers will all be set to 0
 
 * after restart your Arduino, words can be restored from EEPROM where you saved earlier.
 > LD ⏎<br/>
 > 0 HRE DMP ⏎
 
-Alright! That has pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can provide the ability to withstand power failures or reboots for our future Nanos running in the field. Yes, indeed. Of course, we need to setup an initial startup address properly.
+Alright! That has pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can provide the ability to withstand power failures or reboots for our future Nanos running in the field. Well, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.
+* here's how you do it
+> : **fun** ( -- ) CLK DNG **zz** CLK D+ ; ⏎<br/>
+> SEX ⏎<br/>
+> BYE ⏎<br/>
+> ⇨ nanoFORTH v1.4 reset<br/>
+> ⇨ 338_0_ok<br/>
+>> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun** the benchmarker.
+>> \> Note that the ( -- ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comment to end of input line.
 
-It's real-time, and multi-tasks. It can be reprogrammed on-the-fly or even over-the-air. It is interactive and extensible. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.
+OK, makers often run service routine with their microcontrollers in the field. However, before you get creative and save your servicing word into EEPROM and run it in an endless loop, I have to confess that I actually do not know how to get out of a loop yet. Any recommendation is welcome.
+
+So, nanoFORTH is real-time, and can multi-task. It can be reprogrammed on-the-fly or even over-the-air. It is interactive and extensible. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.
 
 <br/>
-<a href="page1.html">Review nanoFORTH command examples</a><br/>
-<a href="page3.html">Learn nanoFORTH internal details</a>
+<a href="page1.html">1. Why - Review nanoFORTH command examples</a><br/>
+<a href="page3.html">3. What - Learn nanoFORTH internal details</a>
 
 
 
