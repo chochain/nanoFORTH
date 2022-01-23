@@ -2,9 +2,9 @@ var NAVTREE =
 [
   [ "nanoFORTH", "index.html", [
     [ "Journey of an Arduino Maker", "index.html", null ],
-    [ "Why", "page1.html", null ],
-    [ "How", "page2.html", null ],
-    [ "What", "page3.html", null ],
+    [ ".1 Why", "page1.html", null ],
+    [ ".2 How", "page2.html", null ],
+    [ ".3 What", "page3.html", null ],
     [ "Data Structures", "annotated.html", [
       [ "Data Structures", "annotated.html", "annotated_dup" ],
       [ "Data Structure Index", "classes.html", null ],

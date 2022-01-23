@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>nanoFORTH: What</title>
+<title>nanoFORTH: .3 What</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">nanoFORTH
-   &#160;<span id="projectnumber">v1.2</span>
+   &#160;<span id="projectnumber">v1.4</span>
    </div>
   </td>
  </tr>
@@ -81,7 +81,7 @@ $(document).ready(function(){initNavTree('page3.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">What </div>  </div>
+<div class="title">.3 What </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h2>nanoFORTH Operations</h2>
@@ -322,7 +322,9 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <tr>
 <th align="left">opcode</th><th align="left">stack</th><th align="left">description  </th></tr>
 <tr>
-<td align="left">BYE</td><td align="left"><code>( -- )</code></td><td align="left">reset nanoFORTH </td></tr>
+<td align="left">RST</td><td align="left"><code>( -- )</code></td><td align="left">reset nanoFORTH for debugging on PC </td></tr>
+<tr>
+<td align="left">BYE</td><td align="left"><code>( -- )</code></td><td align="left">reset nanoFORTH on Arduino, exit to OS on other platform </td></tr>
 <tr>
 <td align="left">DMP</td><td align="left"><code>(a w -- )</code></td><td align="left">dump nanoFORTH user dictionary from address 'a' for w bytes </td></tr>
 <tr>
@@ -361,6 +363,8 @@ $(document).ready(function(){initNavTree('page3.html','');});
 <td align="left">SAV</td><td align="left"><code>( -- )</code></td><td align="left">save user dictionary into Arduino Flash Memory </td></tr>
 <tr>
 <td align="left">LD </td><td align="left"><code>( -- )</code></td><td align="left">restore user dictionary from Arduino Flash Memory </td></tr>
+<tr>
+<td align="left">SEX</td><td align="left"><code>( -- )</code></td><td align="left">SAV with autorun flag set in EEPROM for reboot/execution </td></tr>
 </table>
 </blockquote>
 <h3>Arduino Specific Ops</h3>
@@ -436,9 +440,8 @@ depends on the length of the function</td><td align="left">* compiled opcodes (s
 </table>
 </blockquote>
 <p><br />
- <a href="page1.html">Review nanoFORTH command examples</a><br />
- <a href="page2.html">Install nanoFORTH</a><br />
- </p>
+ <a href="page1.html">1. Why - Review nanoFORTH command examples</a><br />
+ <a href="page2.html">2. How - Intall nanoFORTH</a> </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

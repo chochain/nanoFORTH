@@ -1,4 +1,4 @@
-\page page1 Why
+\page page1 .1 Why
 
 The emerging micro-controller communities are being built no more around specific hardware form factor, but rather around higher level languages. Without introducing an interactive shell like Javascript or microPython supported by ESP or Raspberry, the once popular Arduino platform will gradually lose out the market. However, no matter how the hardware environment evolved, on the edge of IoT universe, a minimalist system resembles the Aruino UNO will always have its value of existence provided that some of the form-factor might one-day shrunk down to micro or even nano-scale. Being chip agnostic, the Arduino IDE does serve as an excellent learning tool for future systems to come. Factor software development time into the mix, an interactive/interpreted language is not only cheaper but more fun than the good old static compiled C code in many cases. Check out <a href="https://www.forth.com/resources/space-applications" target="_blank">NASA</a> and contemplate why FORTH is still running on a number of space probes today.
 
@@ -23,6 +23,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 * utilize EEPROM as the persistant storage for user defined words that can be reloaded after restart,
 * show assembly trace (i.e. byte-code stream) to help beginners to understand FORTH internal,
 * show execution trace to enable debugging, also provision for single-stepping.
+* capable of autorun after reboot (from saved EEPROM image).
 
 ### Use Cases - Interaction Examples
 * turn on LED(red) on digital pin 5, imagine you have that, (1 is HIGH)
@@ -115,5 +116,5 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 OK, if that have captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Remember that we do these without any compilation, instead, "talk" directly with Arduino once nanoFORTH uploaded via the USB cable. The interactive nature changes the way we are very used to on this platform. Imagine, what if we can do it via WiFi or BLE using our Nano? Look Mom! I can talk to the mailbox. No cable!
 
 <br/>
-<a href="page2.html">Ready to get nanoFORTH for a trial?</a><br/>
-<a href="page3.html">References and all the details...</a>
+<a href="page2.html">2. How - Ready to get nanoFORTH for a trial?</a><br/>
+<a href="page3.html">3. What - References and all the details...</a>

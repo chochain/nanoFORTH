@@ -1,4 +1,4 @@
-\page page3 What
+\page page3 .3 What
 
 ## nanoFORTH Operations
 ### Internal
@@ -154,7 +154,8 @@ nanoFORTH handles only integer numbers.
 ### Reset, Debug, and Tracing
 > |opcode|stack|description|
 > |:--|:--|:--|
-> |BYE|`( -- )`|reset nanoFORTH|
+> |RST|`( -- )`|reset nanoFORTH for debugging on PC|
+> |BYE|`( -- )`|reset nanoFORTH on Arduino, exit to OS on other platform|
 > |DMP|`(a w -- )`|dump nanoFORTH user dictionary from address 'a' for w bytes|
 > |TRC|`(t -- )`|enable/diable execution tracing|
 >
@@ -176,6 +177,7 @@ nanoFORTH handles only integer numbers.
 > |:--|:--|:--|
 > |SAV|`( -- )`|save user dictionary into Arduino Flash Memory|
 > |LD |`( -- )`|restore user dictionary from Arduino Flash Memory|
+> |SEX|`( -- )`|SAV with autorun flag set in EEPROM for reboot/execution|
 
 ### Arduino Specific Ops
 > |opcode|stack|description|
@@ -221,8 +223,8 @@ nanoFORTH handles only integer numbers.
 > |n-byte string|`len, byte, byte, ...`|256 bytes max, used in print string|
 
 <br/>
-<a href="page1.html">Review nanoFORTH command examples</a><br/>
-<a href="page2.html">Install nanoFORTH</a><br>
+<a href="page1.html">1. Why - Review nanoFORTH command examples</a><br/>
+<a href="page2.html">2. How - Intall nanoFORTH</a>
 
 
 

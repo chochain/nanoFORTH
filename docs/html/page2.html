@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>nanoFORTH: How</title>
+<title>nanoFORTH: .2 How</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">nanoFORTH
-   &#160;<span id="projectnumber">v1.2</span>
+   &#160;<span id="projectnumber">v1.4</span>
    </div>
   </td>
  </tr>
@@ -81,7 +81,7 @@ $(document).ready(function(){initNavTree('page2.html','');});
 
 <div class="header">
   <div class="headertitle">
-<div class="title">How </div>  </div>
+<div class="title">.2 How </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p>Start wiring up your breadboard and ready to have some fun? Well, since FORTH is such a different language, a better preparation is always recommended...</p>
@@ -188,7 +188,7 @@ $(document).ready(function(){initNavTree('page2.html','');});
 </li>
 <li>when needed, we can clean up the sandbox i.e. reset the nanoFORTH system pointers for a fresh start <blockquote class="doxtable">
 <p>BYE ⏎<br />
- ⇨ nanoFORTH v1.0 ok </p><blockquote class="doxtable">
+ ⇨ nanoFORTH v1.4 ok </p><blockquote class="doxtable">
 <p>&gt; The data stack, return stack, and instruction pointers will all be set to 0 </p>
 </blockquote>
 </blockquote>
@@ -199,11 +199,24 @@ $(document).ready(function(){initNavTree('page2.html','');});
 </blockquote>
 </li>
 </ul>
-<p>Alright! That has pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can provide the ability to withstand power failures or reboots for our future Nanos running in the field. Yes, indeed. Of course, we need to setup an initial startup address properly.</p>
-<p>It's real-time, and multi-tasks. It can be reprogrammed on-the-fly or even over-the-air. It is interactive and extensible. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.</p>
+<p>Alright! That has pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can provide the ability to withstand power failures or reboots for our future Nanos running in the field. Well, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.</p><ul>
+<li>here's how you do it <blockquote class="doxtable">
+<p>: <b>fun</b> CLK DNG <b>zz</b> CLK D+ ; ⏎<br />
+ SEX ⏎<br />
+ BYE ⏎<br />
+ ⇨ nanoFORTH v1.4 reset<br />
+ ⇨ 338_0_ok<br />
+ </p><blockquote class="doxtable">
+<p>&gt; When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is <b>fun</b> the benchmarker. </p>
+</blockquote>
+</blockquote>
+</li>
+</ul>
+<p>OK, makers often run service routine with their microcontrollers in the field. However, before you get creative and save your servicing word into EEPROM and run it in an endless loop, I have to confess that I actually do not know how to get out of a loop yet. Any recommendation is welcome.</p>
+<p>So, nanoFORTH is real-time, and can multi-task. It can be reprogrammed on-the-fly or even over-the-air. It is interactive and extensible. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.</p>
 <p><br />
- <a href="page1.html">Review nanoFORTH command examples</a><br />
- <a href="page3.html">Learn nanoFORTH internal details</a> </p>
+ <a href="page1.html">1. Why - Review nanoFORTH command examples</a><br />
+ <a href="page3.html">3. What - Learn nanoFORTH internal details</a> </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

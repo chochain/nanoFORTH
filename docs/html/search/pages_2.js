@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['why',['Why',['../page1.html',1,'']]],
-  ['what',['What',['../page3.html',1,'']]]
+  ['3_2e_2e_20what',['3.. What',['../page3.html',1,'']]]
 ];
