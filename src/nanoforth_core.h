@@ -72,9 +72,10 @@ public:
     ///
     ///@name Search Functions
     ///@{
-    static U8 is_tib_empty();              ///< check input buffer
-    static U8 *get_token(bool rst=false);  ///< get a token from console input
-    static U8 number(                      ///< process a literal from string given
+    static U8   is_tib_empty();            ///< check whether input buffer is empty
+    static void clear_tib();               ///< reset input buffer
+    static U8   *get_token(bool rst=false);///< get a token from console input
+    static U8   number(                    ///< process a literal from string given
         U8 *tkn,                           ///< token string of a number
         S16 *num                           ///< number pointer for return value
         ); 
