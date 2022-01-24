@@ -109,7 +109,7 @@ U8 N4Core::is_tib_empty()
 ///> clear terminal input buffer
 ///
 void N4Core::clear_tib() {
-	get_token(true);                         ///> empty the static tib inside #get_token
+    get_token(true);                         ///> empty the static tib inside #get_token
 }
 ///
 ///> capture a token from console input buffer
@@ -122,13 +122,13 @@ U8 *N4Core::get_token(bool rst)
 
     if (rst) { tp = tib; _empty = 1; return 0; }  /// * reset TIB for new input
     while (_empty || *tp==0 || *tp=='\\') {
-    	_console_input(tib);                 ///>  read from console (with trailing blank)
-    	while (*tp==' ') tp++;               ///>  skip leading spaces
+        _console_input(tib);                 ///>  read from console (with trailing blank)
+        while (*tp==' ') tp++;               ///>  skip leading spaces
     }
     if (!dq) {
-    	while (*tp=='(' && *(tp+1)==' ') {   /// * handle ( ...) comment, TODO: multi-line
-    		while (*tp && *tp++!=')');   	 ///> find the end of comment
-    		while (*tp==' ') tp++;           ///> skip trailing spaces
+        while (*tp=='(' && *(tp+1)==' ') {   /// * handle ( ...) comment, TODO: multi-line
+            while (*tp && *tp++!=')');       ///> find the end of comment
+            while (*tp==' ') tp++;           ///> skip trailing spaces
         }
     }
     U8 *p = (U8*)tp;
@@ -175,7 +175,7 @@ void N4Core::_console_input(U8 *tib)
         char c = key();                      // get one char from input stream
         if (c=='\r' || c=='\n') {            // split on RETURN
             if (p > tib) {
-            	*p     = ' ';                // pad extra space (in case word is 1-char)
+                *p     = ' ';                // pad extra space (in case word is 1-char)
                 *(p+1) = 0;                  // terminate input string
                 break;                       // skip empty token
             }
@@ -194,3 +194,4 @@ void N4Core::_console_input(U8 *tib)
     }
     _empty = (p==tib);
 }
+

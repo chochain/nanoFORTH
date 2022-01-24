@@ -36,10 +36,10 @@ class N4Core
     static U8   _empty;                    ///< token input buffer empty flag
     static U8   _ucase;                    ///< case insensitive
     static U8   _trc;                      ///< tracing flags
-    
+
 protected:
     static Stream *_io;                    ///< IO stream (static member)
-    
+
 public:
     static void set_io(Stream *io);        ///< initialize or redirect IO stream
     static void set_trace(U8 f);           ///< enable/disable execution tracing
@@ -78,7 +78,7 @@ public:
     static U8   number(                    ///< process a literal from string given
         U8 *tkn,                           ///< token string of a number
         S16 *num                           ///< number pointer for return value
-        ); 
+        );
     ///
     /// find token in string list
     ///
@@ -88,9 +88,8 @@ public:
         U16 *id                            ///< resultant index if found
         );
     ///@}
-    
+
 private:
     static void _console_input(U8 *tib);   ///< retrieve input stream from console
 };
 #endif //__SRC_NANOFORTH_CORE_H
-

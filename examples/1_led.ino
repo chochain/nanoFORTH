@@ -26,7 +26,7 @@ N4_TASK(led_toggle)               ///< create a LED toggle task
     digitalWrite(5, HIGH);
     digitalWrite(6, LOW);
     N4_DELAY(250);
-    
+
     digitalWrite(5, LOW);
     digitalWrite(6, HIGH);
     N4_DELAY(250);
@@ -37,7 +37,7 @@ NanoForth n4;                     ///< create NanoForth instance
 void setup()
 {
     Serial.begin(115200);         ///< init Serial IO, make sure it is set to 'Both BL & CR' to capture input
-    
+
     if (n4.begin()) {             /// default: (Serial,0x480,0x80), try reducing if memory is constrained
         Serial.print(F("ERROR: memory allocation failed!"));
     }
@@ -53,5 +53,3 @@ void loop()
 {
     n4.exec();                   // execute one nanoForth VM cycle
 }
-
-

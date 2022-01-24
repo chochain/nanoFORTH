@@ -63,7 +63,7 @@ constexpr U16 N4_MEM_SZ = (N4_DIC_SZ+N4_STK_SZ); /**< total memory block allocat
 ///
 /// nanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
 ///
-typedef struct n4_task {    
+typedef struct n4_task {
     void (*func)(n4_task*);       ///< function pointer
     n4_task *next;                ///< next item in linked-list (root=0)
     U32  t;                       ///< delay timer
@@ -92,7 +92,7 @@ class N4VM;
 class NanoForth
 {
     static n4_tptr _n4tsk;        ///< user function linked-list
-    
+
     U8     *_mem;                 ///< pointer to nanoForth memory block
     N4VM   *_n4vm;                ///< virtual machine object pointer
 
@@ -112,7 +112,7 @@ public:
     //
     static void add(              ///< add the user function to NanoForth task manager
         void (*ufunc)(n4_tptr)    ///< user task pointer to be added
-        );  
+        );
     static void yield();          ///< nanoForth yield to user tasks
     static void wait(U32 ms);     ///< pause NanoForth thread for ms microseconds, yield to user tasks
 };
