@@ -34,7 +34,7 @@ PROGMEM const char CMD[] = "\x07" \
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "FOR" "NXT" \
     "I  ";
-PROGMEM const char PRM[] = "\x31" \
+PROGMEM const char PRM[] = "\x32" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
     "NEG" "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
@@ -152,7 +152,7 @@ void N4Asm::compile(U16 *rp0)
             show("??  ");
             last = l0;                      /// * restore last, here pointers
             here = h0;
-            get_token(true);                /// * reset tib and token parser
+            clear_tib();                    /// * reset tib and token parser
             tkn  = NULL;                    /// * bail, terminate loop!
         }
     }
