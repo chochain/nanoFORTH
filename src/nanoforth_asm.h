@@ -17,7 +17,7 @@
 #include "nanoforth_core.h"
 ///
 /// parser actions enum used by execution and assembler units
-/// 
+///
 enum N4OP {
     TKN_IMM = 1,     ///< immediate word
     TKN_DIC,         ///< dictionary (user defined) word
@@ -61,40 +61,40 @@ class N4Asm : N4Core                // (10-byte header)
 {
     U8  *dic;                       ///< dictionary base
     U16 *rp;                        ///< return stack pointer
-    
+
     U8  tab;                        ///< tracing indentation counter
     U8  xxx;                        ///< reserved
-    
+
 public:
     U8  *last;                      ///< pointer to last word, for debugging
     U8  *here;                      ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
-    
+
     /// Assembler constructor
-    N4Asm(                          
+    N4Asm(
         U8 *mem                     ///< pointer of memory block for dictionary
-        );                 
+        );
     U16 reset();                    ///< reset internal pointers (for BYE)
-    
+
     /// Instruction Decoder
     N4OP parse_token(
         U8 *tkn,                    ///< token to be parsed
-        U16 *rst,                   ///< parsed result 
+        U16 *rst,                   ///< parsed result
         U8 run                      ///< run mode flag (1: run mode, 0: compile mode)
-        ); 
+        );
 
     /// Forth compiler
     void compile(
         U16 *rp0                    ///< memory address to be used as assembler return stack
-        );             
+        );
     void variable();                ///< create a variable on dictionary
     void constant(S16 v);           ///< create a constant on dictionary
 
     // dictionary, string list scanners
     /// query(token) in dictionary for existing word
-    U8   query(                         
+    U8   query(
         U8 *tkn,                    ///< token to be searched
         U16 *adr                    ///< function address of the found word
-        );      
+        );
     void words();                   ///< display words in dictionary
     void forget();                  ///< forgets word in the dictionary
 
@@ -104,15 +104,15 @@ public:
 
     // execution tracing
     /// print execution tracing info
-    void trace(                         
+    void trace(
         U16 adr,                    ///< address to word to be executed
         U8 ir                       ///< instruction register value
-        );           
-    
+        );
+
 private:
     void _add_word();               ///< create name field and link to previous word
     void _add_branch(U8 op);        ///< manage branching opcodes
     void _add_str();                ///< add string for ."
     void _list_voc();               ///< list words from all vocabularies
-};    
+};
 #endif //__SRC_NANOFORTH_ASM_H

@@ -18,12 +18,12 @@ class N4VM : N4Core
     U8     *dic;              ///< dictionary base
     U16    msz;               ///< memory size        mem[dic->...<-stk]
     U16    ssz;               ///< stack size
-        
+
     U16    *rp;               ///< return stack pointer
     S16    *sp;               ///< parameter stack pinter
-    
+
 public:
-    // nanoForth Virtual Machine constructor    
+    // nanoForth Virtual Machine constructor
     N4VM(
         Stream &io,           ///< IO stream
         U8 ucase,             ///< case sensitiveness
@@ -31,10 +31,10 @@ public:
         U16 mem_sz,           ///< memory block size
         U16 stk_sz            ///< stack block size
         );
-    
+
     void meminfo();           ///< display VM system info
     U8   step();              ///< execute one-cycle of virtual machine
-     
+
 private:
     void _init();             ///< restart virtual machine (reseting internals)
     void _ok();               ///< console prompt (with stack dump)

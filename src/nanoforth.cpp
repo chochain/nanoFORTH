@@ -64,12 +64,12 @@ int NanoForth::begin(Stream &io, U8 ucase, U16 mem_sz, U16 stk_sz)
 {
     _mem  = (U8*)malloc(mem_sz);                         /// * allocate Forth memory block
     _n4vm = new N4VM(io, ucase, _mem, mem_sz, stk_sz);   /// * create Virtual Machine
-    
+
     if (!_mem || !_n4vm) return -1;
-    
+
 #if ARDUINO
     _n4vm->meminfo();                                    // display detailed pointers
-#else     
+#else
     log("MEM=$");   logx(mem_sz);                        // forth memory block
     log("[DIC=$");  logx(mem_sz - stk_sz);               // dictionary size
     log(",STK=$");  logx(stk_sz);                        // stack size
@@ -86,7 +86,7 @@ void NanoForth::add(void (*ufunc)(n4_tptr))
     n4_tptr tp = (n4_tptr)malloc(sizeof(n4_task));
 
     tp->func = ufunc;   /// * assign user function
-    tp->ci   = 0;       /// * reset case index 
+    tp->ci   = 0;       /// * reset case index
     tp->next = _n4tsk;  /// * push into linked-list
     _n4tsk   = tp;      /// * reset head
 }
@@ -123,7 +123,7 @@ void NanoForth::wait(U32 ms)
 int main(int argc, char **argv)
 {
     setvbuf(stdout, NULL, _IONBF, 0);       // autoflush (turn STDOUT buffering off)
-    
+
     NanoForth n4;
     n4.begin();
     while (1) {
@@ -132,5 +132,3 @@ int main(int argc, char **argv)
     return 0;
 }
 #endif // !ARDUINO
-
-

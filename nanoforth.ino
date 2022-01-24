@@ -6,9 +6,9 @@
  *  + a user task that blinks built-in pin 13
  *  + nanoFORTH itself runs in parallel
  *
- *  open Serial Monitor as the console input to nanoFORTH
+ *  open Serial Monitor (or your favorate terminal emulator) as the console input to nanoFORTH
  *  + baud rate set to 115200
- *  + line ending set to Both NL & CR
+ *  + line ending set to Both NL & CR (if using emulator, set Add CR on, ECHO on)
  *
  *  Once compiled/uploaded, you should see
  *  + some nanoFORTH init system info
@@ -30,7 +30,7 @@ NanoForth n4;                     ///< create NanoForth instance
 void setup()
 {
     Serial.begin(115200);         ///< init Serial IO, make sure it is set to 'Both BL & CR' to capture input
-    
+
     if (n4.begin()) {             /// default: (Serial,0x480,0x80), try reducing if memory is constrained
         Serial.print(F("ERROR: memory allocation failed!"));
     }
@@ -43,5 +43,3 @@ void loop()
 {
     n4.exec();                   // execute one nanoForth VM cycle
 }
-
-
