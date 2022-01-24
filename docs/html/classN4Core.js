@@ -16,6 +16,7 @@ var classN4Core =
     [ "d_mem", "classN4Core.html#a812d012a57ba1a74c8028cca118cb17d", null ],
     [ "d_name", "classN4Core.html#a286ee4feeeb87bfd3a44d3d353b2713c", null ],
     [ "is_tib_empty", "classN4Core.html#a5518038a71555f1f54263a57f0d905e5", null ],
+    [ "clear_tib", "classN4Core.html#a3d456e769c6b769d0ff9a121ef67bbfe", null ],
     [ "get_token", "classN4Core.html#a1ee955bfab23663c77ae10b4a26a6f6d", null ],
     [ "number", "classN4Core.html#aa72ada2d7a962375dea0c77d20a803e5", null ],
     [ "find", "classN4Core.html#a126f05b26c3997c6bab07200aa0ba587", null ],

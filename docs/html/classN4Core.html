@@ -131,8 +131,11 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a286ee4feeeb87bfd3a44d3d353b2713c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Search Functions</div></td></tr>
 <tr class="memitem:a5518038a71555f1f54263a57f0d905e5"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a5518038a71555f1f54263a57f0d905e5">is_tib_empty</a> ()</td></tr>
-<tr class="memdesc:a5518038a71555f1f54263a57f0d905e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">check input buffer  <a href="#a5518038a71555f1f54263a57f0d905e5">More...</a><br /></td></tr>
+<tr class="memdesc:a5518038a71555f1f54263a57f0d905e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">check whether input buffer is empty  <a href="#a5518038a71555f1f54263a57f0d905e5">More...</a><br /></td></tr>
 <tr class="separator:a5518038a71555f1f54263a57f0d905e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d456e769c6b769d0ff9a121ef67bbfe"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a3d456e769c6b769d0ff9a121ef67bbfe">clear_tib</a> ()</td></tr>
+<tr class="memdesc:a3d456e769c6b769d0ff9a121ef67bbfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">reset input buffer  <a href="#a3d456e769c6b769d0ff9a121ef67bbfe">More...</a><br /></td></tr>
+<tr class="separator:a3d456e769c6b769d0ff9a121ef67bbfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ee955bfab23663c77ae10b4a26a6f6d"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Core.html#a1ee955bfab23663c77ae10b4a26a6f6d">get_token</a> (bool rst=false)</td></tr>
 <tr class="memdesc:a1ee955bfab23663c77ae10b4a26a6f6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">get a token from console input  <a href="#a1ee955bfab23663c77ae10b4a26a6f6d">More...</a><br /></td></tr>
 <tr class="separator:a1ee955bfab23663c77ae10b4a26a6f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -683,9 +686,42 @@ Tracing Instrumentation</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>check input buffer </p>
+<p>check whether input buffer is empty </p>
 <blockquote class="doxtable">
 <p>check whether token available in input buffer</p>
+</blockquote>
+
+</div>
+</div>
+<a id="a3d456e769c6b769d0ff9a121ef67bbfe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d456e769c6b769d0ff9a121ef67bbfe">&#9670;&nbsp;</a></span>clear_tib()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void N4Core::clear_tib </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>reset input buffer </p>
+<blockquote class="doxtable">
+<p>clear terminal input buffer</p>
+</blockquote>
+<blockquote class="doxtable">
+<p>empty the static tib inside <a class="el" href="classN4Core.html#a1ee955bfab23663c77ae10b4a26a6f6d" title="get a token from console input ">get_token</a> </p>
 </blockquote>
 
 </div>
@@ -728,22 +764,28 @@ Tracing Instrumentation</h2></td></tr>
 <p>dot_string flag </p>
 </blockquote>
 <ul>
-<li>buffer empty, read from console (with trailing blank)</li>
-<li>keep original tib pointer</li>
-<li>set delimiter</li>
-<li>advance pointer to next token</li>
-<li>skip extra space</li>
-<li>optionally print token for debugging</li>
+<li>reset TIB for new input</li>
+</ul>
+<blockquote class="doxtable">
+<p>read from console (with trailing blank) </p>
+</blockquote>
+<blockquote class="doxtable">
+<p>skip leading spaces </p>
+</blockquote>
+<ul>
 <li>handle ( ...) comment, TODO: multi-line</li>
 </ul>
 <blockquote class="doxtable">
-<p>find end of comment </p>
+<p>find the end of comment </p>
 </blockquote>
 <blockquote class="doxtable">
-<p>skip extra space </p>
+<p>skip trailing spaces </p>
 </blockquote>
 <ul>
-<li>fetch char at the pointer</li>
+<li>set delimiter</li>
+<li>count token length</li>
+<li>optionally print token for debugging</li>
+<li>skip spaces, advance pointer to next token</li>
 <li>flag token was dot_string</li>
 <li>return pointer to token </li>
 </ul>
