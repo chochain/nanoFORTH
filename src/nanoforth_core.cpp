@@ -106,6 +106,12 @@ U8 N4Core::is_tib_empty()
     return _empty;
 }
 ///
+///> clear terminal input buffer
+///
+void N4Core::clear_tib() {
+	get_token(true);                         ///> empty the static tib inside #get_token
+}
+///
 ///> capture a token from console input buffer
 ///
 U8 *N4Core::get_token(bool rst)
@@ -114,27 +120,29 @@ U8 *N4Core::get_token(bool rst)
     static U8 *tp = tib;                     ///> token pointer to input buffer
     static U8 dq  = 0;                       ///> dot_string flag
 
-    if (rst) { tp = tib; _empty = 1; return 0; }
-    if (tp==tib) _console_input((U8*)tib);   /// * buffer empty, read from console (with trailing blank)
-
-    U8 *p = (U8*)tp;                         /// * keep original tib pointer
+    if (rst) { tp = tib; _empty = 1; return 0; }  /// * reset TIB for new input
+    while (_empty || *tp==0 || *tp=='\\') {
+    	_console_input(tib);                 ///>  read from console (with trailing blank)
+    	while (*tp==' ') tp++;               ///>  skip leading spaces
+    }
+    if (!dq) {
+    	while (*tp=='(' && *(tp+1)==' ') {   /// * handle ( ...) comment, TODO: multi-line
+    		while (*tp && *tp++!=')');   	 ///> find the end of comment
+    		while (*tp==' ') tp++;           ///> skip trailing spaces
+        }
+    }
+    U8 *p = (U8*)tp;
     U8 cx = dq ? '"' : ' ';                  /// * set delimiter
     U8 sz = 0;
-
-    while (*tp && *tp++!=cx) sz++;           /// * advance pointer to next token
-    if (*tp && dq) tp++;                     /// * skip extra space
+    while (*tp && *tp!='(' && *tp++!=cx) sz++;/// * count token length
     if (_trc) {                              /// * optionally print token for debugging
         d_chr('\n');
         for (int i=0; i<5; i++) {
             d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
         }
     }
-    if (*tp=='(' && *(tp+1)==' ') {          /// * handle ( ...) comment, TODO: multi-line
-    	while (*tp && *tp++!=')');           ///> find end of comment
-    	if (*tp) tp++;                       ///> skip extra space
-    }
-    cx = *tp;                                /// * fetch char at the pointer
-    if (cx==0 || cx=='\\' || cx=='\r' || cx=='\n') { tp = tib; _empty = 1; }
+    while (*tp==' ') tp++;                   /// * skip spaces, advance pointer to next token
+    if (*tp==0 || *tp=='\\') { tp = tib; _empty = 1; }
 
     dq  = (*p=='.' && *(p+1)=='"');          /// * flag token was dot_string
 
@@ -167,7 +175,7 @@ void N4Core::_console_input(U8 *tib)
         char c = key();                      // get one char from input stream
         if (c=='\r' || c=='\n') {            // split on RETURN
             if (p > tib) {
-                *p     = ' ';                // pad extra space
+            	*p     = ' ';                // pad extra space (in case word is 1-char)
                 *(p+1) = 0;                  // terminate input string
                 break;                       // skip empty token
             }
