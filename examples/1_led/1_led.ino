@@ -10,7 +10,7 @@
  *  + the new user task toggles LEDs between pin 5 and 6
  *
  */
-#include "nanoforth.h"
+#include <nanoforth.h>
 
 N4_TASK(blink)                    ///< create blinking task (i.e. built-in LED on pin 13)
 {

@@ -19,7 +19,7 @@
  *   + try type WRD and hit return
  */
 #include <AltSoftSerial.h>
-#include "nanoforth.h"
+#include <nanoforth.h>
 
 AltSoftSerial bt;                   ///< default: RX on pin 8, TX on pin 9
 NanoForth     n4;                   ///< create NanoForth instance
