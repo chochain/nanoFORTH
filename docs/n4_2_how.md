@@ -16,7 +16,7 @@ You can skip to next section and start getting your hands dirty right away. Howe
 
 * From Arduino Library Manager
 > <br/>
-> \> Make sure you have one of Arduino Nano/Uno (or one of Atmel megaAVR 328p) development board
+> \> Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328
 >
 > \> from Arduino IDE->Tools->Manage Libraries, enter FORTH in search box
 >
