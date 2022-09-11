@@ -1,3 +1,5 @@
 <map id="src/nanoforth_core.h" name="src/nanoforth_core.h">
-<area shape="rect" id="node2" href="$nanoforth_8h.html" title="nanoForth main controller " alt="" coords="33,80,119,107"/>
+<area shape="rect" id="node1" title="nanoForth Core Utility abstract class" alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node2" href="$nanoforth_8h.html" title="nanoForth main controller" alt="" coords="34,80,131,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="41,155,125,181"/>
 </map>
