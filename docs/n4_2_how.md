@@ -14,11 +14,29 @@ You can skip to next section and start getting your hands dirty right away. Howe
 
 ### Install nanoFORTH - to be simple and useful
 
-* From GitHub directly
+* From Arduino Library Manager
+> <br/>
+> \> Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328
+>
+> \> from Arduino IDE->Tools->Manage Libraries, enter FORTH in search box
+>
+> \> find nanoFORTH in the short list, select the latest version, and click the Install button
+>
+> \> from Files > Examples, find nanoForth in Examples from Custom Libraries at very buttom section
+>
+> \> load one of the nanoForth examples, such as 0_blink
+>
+> \> open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
+>
+> \> hit compile and upload. You should see the 'ok' prompt, and the built-in LED should be blinking
+>
+> \> in Serial Monitor input bar atop, type WRD and hit <return>. See what nanoFORTH says.<br/><br/>
+
+* or, from GitHub directly, if you prefer managing source codes manually
 > <br/>
 > \> git clone https://github.com/chochain/nanoFORTH onto your local Sketch directory
 >
-> \> copy examples/0_blink.ino from sub-directory, then rename it as nanoFORTH.ino<br/>
+> \> copy examples/0_blink/0_blink.ino from sub-directory, then rename it as nanoFORTH.ino<br/>
 >
 > \> open nanoFORTH.ino with Arduino IDE, and setup your Nano/Uno development board
 >
@@ -26,23 +44,7 @@ You can skip to next section and start getting your hands dirty right away. Howe
 >
 > \> compile and upload, you should see the 'ok' prompt, and the built-in LED is blinking
 >
-> \> in Serial Monitor input bar atop, type WRD and hit the return key. See what nanoFORTH says.<br/><br/>
-
-* From Arduino Library Manager
-> <br/>
-> \> from Arduino IDE->Tools->Manage Libraries, enter FORTH in search box
->
-> \> find nanoFORTH in the short list, select the latest version, and click the Install button
->
-> \> click the <a href="http://github.com/chochain/nanoFORTH" target="_blank">More Info</a> link taking you to nanoFORTH Github site
->
-> \> copy examples/0_blink.ino to your own Sketch directory, then rename it accordingly
->
-> \> open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
->
-> \> compile and upload, you should see the 'ok' prompt, and the built-in LED should be blinking
->
-> \> in Serial Monitor input bar atop, type WRD and hit then return key. See what nanoFORTH says.<br/><br/>
+> \> in Serial Monitor input bar atop, type WRD and hit <return>. See what nanoFORTH says.<br/><br/>
 
 * Serial Monitor screenshot (sample) once nanoFORTH is uploaded successfully 
 > <br/>

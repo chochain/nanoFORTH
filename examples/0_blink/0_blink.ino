@@ -15,7 +15,7 @@
  *  + ok prompt
  *  + try type WRD and hit return on the input above
  */
-#include "nanoforth.h"
+#include <nanoforth.h>
 
 N4_TASK(blink)                    ///< create blinking task (i.e. built-in LED on pin 13)
 {

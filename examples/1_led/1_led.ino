@@ -1,21 +1,16 @@
 /**
- *  @file examples/0_blink.ino
- *  @brief nanoFORTH example - Blink pin 13
+ *  @file examples/1_led.ino
+ *  @brief nanoFORTH example - LED blinker
  *
- *  Our first Sketch - demostrates nanoFORTH support multi-tasking
- *  + a user task that blinks built-in pin 13
- *  + nanoFORTH itself runs in parallel
+ *  Assuming you have the borad hooked up with 2 LEDs on PIN 5 and PIN 6 
+ *  + make sure the right resisters are in place
+ *  + google Arduino+LED+project
  *
- *  open Serial Monitor (or your favorate terminal emulator) as the console input to nanoFORTH
- *  + baud rate set to 115200
- *  + line ending set to Both NL & CR (if using emulator, set Add CR on, ECHO on)
+ *  This Sketch add a second user tasks on top of our blinker
+ *  + the new user task toggles LEDs between pin 5 and 6
  *
- *  Once compiled/uploaded, you should see
- *  + some nanoFORTH init system info
- *  + ok prompt
- *  + try type WRD and hit return on the input above
  */
-#include "nanoforth.h"
+#include <nanoforth.h>
 
 N4_TASK(blink)                    ///< create blinking task (i.e. built-in LED on pin 13)
 {
@@ -23,6 +18,18 @@ N4_TASK(blink)                    ///< create blinking task (i.e. built-in LED o
     N4_DELAY(500);
     digitalWrite(LED_BUILTIN, LOW);
     N4_DELAY(500);
+}
+N4_END;
+
+N4_TASK(led_toggle)               ///< create a LED toggle task
+{
+    digitalWrite(5, HIGH);
+    digitalWrite(6, LOW);
+    N4_DELAY(250);
+
+    digitalWrite(5, LOW);
+    digitalWrite(6, HIGH);
+    N4_DELAY(250);
 }
 N4_END;
 
@@ -35,8 +42,11 @@ void setup()
         Serial.print(F("ERROR: memory allocation failed!"));
     }
     n4.add(blink);                ///< add blink task to NanoForth task manager
+    n4.add(led_toggle);           ///< add led_toggle task
 
     pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(5, OUTPUT);
+    pinMode(6, OUTPUT);
 }
 
 void loop()
