@@ -103,10 +103,10 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </ul>
 <h3>Install nanoFORTH - to be simple and useful</h3>
 <ul>
-<li>From Arduino Library Manager <blockquote class="doxtable">
+<li>From Arduino IDE's Library Manager <blockquote class="doxtable">
 <p><br  />
  &gt; Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328</p>
-<p>&gt; from Arduino IDE-&gt;Tools-&gt;Manage Libraries, enter FORTH in search box</p>
+<p>&gt; from Arduino IDE &gt; Tools &gt; Manage Libraries, enter FORTH in search box</p>
 <p>&gt; find nanoFORTH in the short list, select the latest version, and click the Install button</p>
 <p>&gt; from Files &gt; Examples, find nanoForth in Examples from Custom Libraries at very buttom section</p>
 <p>&gt; load one of the nanoForth examples, such as 0_blink</p>
@@ -122,7 +122,8 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
  &gt; git clone <a href="https://github.com/chochain/nanoFORTH">https://github.com/chochain/nanoFORTH</a> onto your local Sketch directory</p>
 <p>&gt; copy examples/0_blink/0_blink.ino from sub-directory, then rename it as nanoFORTH.ino<br  />
 </p>
-<p>&gt; open nanoFORTH.ino with Arduino IDE, and setup your Nano/Uno development board</p>
+<p>&gt; open nanoFORTH.ino with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board</p>
+<p>&gt; in nanoFORTH.ino, change the #include &lt;<a class="el" href="nanoforth_8h.html" title="nanoForth main controller">nanoforth.h</a>&gt; to #include "./src/nanoforth.h"</p>
 <p>&gt; open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL &amp; CR'</p>
 <p>&gt; compile and upload, you should see the 'ok' prompt, and the built-in LED is blinking</p>
 <p>&gt; in Serial Monitor input bar atop, type WRD and hit &lt;return&gt;. See what nanoFORTH says.<br  />
@@ -130,7 +131,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
  </p>
 </blockquote>
 </li>
-<li>Serial Monitor screenshot (sample) once nanoFORTH is uploaded successfully <blockquote class="doxtable">
+<li>Hopefully, thing goes well and you get something like this if nanoFORTH is uploaded successfully <blockquote class="doxtable">
 <p><br  />
  </p><table class="markdownTable">
 <tr class="markdownTableHead">
@@ -153,7 +154,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
  <b>lit</b> <b>?Z</b> </p>
 </blockquote>
 </li>
-<li>if too much info for you, then turn the tracing off <blockquote class="doxtable">
+<li>if it's too much info for you, then turn the tracing off <blockquote class="doxtable">
 <p>0 TRC ⏎<br  />
  </p>
 </blockquote>
@@ -161,7 +162,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 <li>get Arduino clock/millis, a double precision (i.e. 32-bit) value <blockquote class="doxtable">
 <p>CLK ⏎<br  />
  ⇨ -26395_188_ok </p><blockquote class="doxtable">
-<p>&gt; nanoFORTH uses two 16-bit cells on data stack to represent the double number<br  />
+<p>&gt; nanoFORTH uses two 16-bit cells on data stack to represent the 32-bit number<br  />
  &gt; note the numbers above are for example only, your clock read will be different </p>
 </blockquote>
 </blockquote>
@@ -183,18 +184,19 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </li>
 <li>dump the memory to see how all these words are encoded in the dictionary <blockquote class="doxtable">
 <p>0 HRE DMP ⏎ </p><blockquote class="doxtable">
-<p>&gt; There! You can see the hex dump of our <b>red</b> ... <b>blu</b> ... in their gory detail all the way up to the latest word <b>zz</b> </p>
+<p>&gt; There! You can see the hex dump of our <b>red</b> ... <b>blu</b> ...<br  />
+ &gt; in their gory detail all the way up to the latest word <b>zz</b> </p>
 </blockquote>
 </blockquote>
 </li>
-<li>at the end of the day, or in case of a power outage, let's save what's been done so far into EEPROM <blockquote class="doxtable">
+<li>at the end of the day, or to prevent a power outage hit, we can save what's been done so far into EEPROM <blockquote class="doxtable">
 <p>SAV ⏎ </p>
 </blockquote>
 </li>
-<li>when needed, we can clean up the sandbox i.e. reset the nanoFORTH system pointers for a fresh start <blockquote class="doxtable">
+<li>when needed, we can zap the sandbox i.e. reset the nanoFORTH system pointers for a fresh start <blockquote class="doxtable">
 <p>BYE ⏎<br  />
  ⇨ nanoFORTH v1.4 ok </p><blockquote class="doxtable">
-<p>&gt; The data stack, return stack, and instruction pointers will all be set to 0 </p>
+<p>&gt; The data stack, return stack, and instruction pointers will be reinitialized </p>
 </blockquote>
 </blockquote>
 </li>
@@ -204,27 +206,27 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </blockquote>
 </li>
 </ul>
-<p>Alright! That has pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can provide the ability to withstand power failures or reboots for our future Nanos running in the field. Well, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.</p><ul>
-<li>here's how you do it <blockquote class="doxtable">
+<p>Alright! That has pretty much concluded our rounds of exercise. You probably have wondered that if the SAV/LD pair can provide the ability to withstand power failures, can it be rebooted in the field for our future apps on Nanos? Well, to do that, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.</p><ul>
+<li>here's one example <blockquote class="doxtable">
 <p>: <b>fun</b> ( - - ) 1000 DLY ." I'm alive! blink " 20 <b>xy</b> ; ⏎<br  />
  SEX ⏎<br  />
  BYE ⏎<br  />
  ⇨ nanoFORTH v1.4 reset<br  />
  ⇨ 338_0_ok<br  />
  </p><blockquote class="doxtable">
-<p>&gt; When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is <b>fun</b> our blinker.<br  />
+<p>&gt; When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is <b>fun</b>, our blinker.<br  />
  &gt; Note that the ( - - ) is a Forth-style comment that you can use. A \ (back slash) can also be used to ignore comments to the end of your input line. </p>
 </blockquote>
 </blockquote>
 </li>
-<li>to disable the autorun, a normal SAV again will clear the flag but will keep your dictionary intact in EEPROM <blockquote class="doxtable">
+<li>to disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place. <blockquote class="doxtable">
 <p>SAV ⏎<br  />
  BYE ⏎<br  />
  ⇨ nanoFORTH v1.4 ok </p>
 </blockquote>
 </li>
 </ul>
-<p>OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, any suggestion is welcome before you hit that button.</p>
+<p>OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, double check it. Any suggestion is welcome before people hitting that button and stuck forever.</p>
 <p>So, nanoFORTH is <b>real-time</b>, and can <b>multi-task</b>. It is <b>interactive</b> and <b>extensible</b>. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.**</p>
 <p><br  />
  <a href="page1.html">1. Why - Review nanoFORTH command examples</a><br  />

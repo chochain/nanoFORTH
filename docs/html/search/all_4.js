@@ -9,5 +9,6 @@ var searchData=
   ['d_5fptr_32',['d_ptr',['../classN4Core.html#aae3a814b552f13eb6f533f04e59793e6',1,'N4Core']]],
   ['d_5fstr_33',['d_str',['../classN4Core.html#a8ebd0caea89dd845a216290731901fa9',1,'N4Core']]],
   ['d_5fu8_34',['d_u8',['../classN4Core.html#a76fd10331f7f55db3f1a924fcdf7e1d5',1,'N4Core']]],
-  ['dic_35',['dic',['../classN4Asm.html#ae1a2803aa5f4d78cf02e67c6224aa846',1,'N4Asm::dic()'],['../classN4VM.html#a38d6523862c6315f9f93de1bcd29833c',1,'N4VM::dic()']]]
+  ['dic_35',['dic',['../classN4Asm.html#ae1a2803aa5f4d78cf02e67c6224aa846',1,'N4Asm::dic()'],['../classN4VM.html#a38d6523862c6315f9f93de1bcd29833c',1,'N4VM::dic()']]],
+  ['documentation_20pages_36',['Documentation Pages',['../index.html',1,'']]]
 ];

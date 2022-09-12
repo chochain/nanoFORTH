@@ -23,7 +23,7 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "nanoFORTH", "index.html", [
-    [ "Journey of an Arduino Maker", "index.html", null ],
+    [ "Documentation Pages", "index.html", null ],
     [ ".1 Why", "page1.html", null ],
     [ ".2 How", "page2.html", null ],
     [ ".3 What", "page3.html", null ],
