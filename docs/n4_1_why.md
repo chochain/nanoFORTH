@@ -11,7 +11,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 * most of them are not familiar with standard FORTH words, so abbreviation for words is OK,
 * the meta-compiler is unlikely needed either, i.e. not to create a new type of Forth from within nanoForth,
 * only a small set of, say 50+, core primitive words are needed for the most of Arduino projects,
-  the rational being anything that requires more elaborated syntax, one might need the power of ESPs.
+  the rationale being anything that requires more elaborated syntax, one might need the power of ESPs.
 
 ### Requirements
 * be as simple to use as any example Sketch that comes with the IDE (no bootloader burning),
@@ -26,7 +26,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 * capable of autorun after reboot (from saved EEPROM image).
 
 ### Use Cases - Interaction Examples
-* turn on LED(red) on digital pin 5, imagine you have that, (1 is HIGH)
+* turn on LED(red) on digital pin 5, or imagine you have a board hooked up like this, (1 is HIGH)
 > 1 5 OUT ⏎
 > ||
 > |:--|

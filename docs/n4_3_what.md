@@ -66,7 +66,7 @@ nanoFORTH handles only integer numbers.
 > **Examples**
 >
 > 17 5 + ⏎ ➤ *22_ok*<br/>
-> 1 2 3 4 + + + + ⏎ ➤ *10_ok*<br/>
+> 1 2 3 4 + + + ⏎ ➤ *10_ok*<br/>
 > 10 3 / ⏎ ➤ *3_ok*<br/>
 
 ### Binary and Logical Ops
