@@ -14,11 +14,11 @@ You can skip to next section and start getting your hands dirty right away. Howe
 
 ### Install nanoFORTH - to be simple and useful
 
-* From Arduino Library Manager
+* From Arduino IDE's Library Manager
 > <br/>
 > \> Make sure you've hooked up one of Arduino Nano/Uno, or a development board that hosts ATmega328
 >
-> \> from Arduino IDE->Tools->Manage Libraries, enter FORTH in search box
+> \> from Arduino IDE > Tools > Manage Libraries, enter FORTH in search box
 >
 > \> find nanoFORTH in the short list, select the latest version, and click the Install button
 >
@@ -38,7 +38,9 @@ You can skip to next section and start getting your hands dirty right away. Howe
 >
 > \> copy examples/0_blink/0_blink.ino from sub-directory, then rename it as nanoFORTH.ino<br/>
 >
-> \> open nanoFORTH.ino with Arduino IDE, and setup your Nano/Uno development board
+> \> open nanoFORTH.ino with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board
+>
+> \> in nanoFORTH.ino, change the #include <nanoforth.h> to #include "./src/nanoforth.h"
 >
 > \> open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
 >
@@ -46,7 +48,7 @@ You can skip to next section and start getting your hands dirty right away. Howe
 >
 > \> in Serial Monitor input bar atop, type WRD and hit <return>. See what nanoFORTH says.<br/><br/>
 
-* Serial Monitor screenshot (sample) once nanoFORTH is uploaded successfully 
+* Hopefully, thing goes well and you get something like this if nanoFORTH is uploaded successfully 
 > <br/>
 > |screen shot|
 > |:--|
@@ -62,13 +64,13 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 > 1 TRC ⏎<br/>
 > **lit** **?Z**
 
-* if too much info for you, then turn the tracing off
+* if it's too much info for you, then turn the tracing off
 > 0 TRC ⏎<br/>
 
 * get Arduino clock/millis, a double precision (i.e. 32-bit) value
 > CLK ⏎<br/>
 > ⇨ -26395_188_ok
->> \> nanoFORTH uses two 16-bit cells on data stack to represent the double number<br/>
+>> \> nanoFORTH uses two 16-bit cells on data stack to represent the 32-bit number<br/>
 >> \> note the numbers above are for example only, your clock read will be different
 
 * to benchmark something, let's defined a function **zz** that runs in empty loops and time it
@@ -85,36 +87,37 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 
 * dump the memory to see how all these words are encoded in the dictionary
 > 0 HRE DMP ⏎
->> \> There! You can see the hex dump of our **red** ... **blu** ... in their gory detail all the way up to the latest word **zz**
+>> \> There! You can see the hex dump of our **red** ... **blu** ...<br/>
+>> \> in their gory detail all the way up to the latest word **zz**
 
-* at the end of the day, or in case of a power outage, let's save what's been done so far into EEPROM
+* at the end of the day, or to prevent a power outage hit, we can save what's been done so far into EEPROM
 > SAV ⏎
 
-* when needed, we can clean up the sandbox i.e. reset the nanoFORTH system pointers for a fresh start
+* when needed, we can zap the sandbox i.e. reset the nanoFORTH system pointers for a fresh start
 > BYE ⏎<br/>
 > ⇨ nanoFORTH v1.4 ok
->> \> The data stack, return stack, and instruction pointers will all be set to 0
+>> \> The data stack, return stack, and instruction pointers will be reinitialized
 
 * after restart your Arduino, words can be restored from EEPROM where you saved earlier.
 > LD ⏎<br/>
 > 0 HRE DMP ⏎
 
-Alright! That has pretty much concluded our rounds of exercise. You probably have guessed that the SAV/LD pair can provide the ability to withstand power failures or reboots for our future Nanos running in the field. Well, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.
-* here's how you do it
+Alright! That has pretty much concluded our rounds of exercise. You probably have wondered that if the SAV/LD pair can provide the ability to withstand power failures, can it be rebooted in the field for our future apps on Nanos? Well, to do that, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.
+* here's one example
 > : **fun** ( - - ) 1000 DLY ." I'm alive! blink " 20 **xy** ; ⏎<br/>
 > SEX ⏎<br/>
 > BYE ⏎<br/>
 > ⇨ nanoFORTH v1.4 reset<br/>
 > ⇨ 338_0_ok<br/>
->> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun** our blinker.<br/>
+>> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun**, our blinker.<br/>
 >> \> Note that the ( - - ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comments to the end of your input line.
 
-* to disable the autorun, a normal SAV again will clear the flag but will keep your dictionary intact in EEPROM
+* to disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place.
 > SAV ⏎<br/>
 > BYE ⏎<br/>
 > ⇨ nanoFORTH v1.4 ok
 
-OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, any suggestion is welcome before you hit that button.
+OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, double check it. Any suggestion is welcome before people hitting that button and stuck forever.
 
 So, nanoFORTH is **real-time**, and can **multi-task**. It is **interactive** and **extensible**. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.**
 
