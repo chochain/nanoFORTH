@@ -5,7 +5,7 @@
  * Assume you have a HC-05 hooked-up on Pin 8 and 9
  * + google Arduino+HC-05 if not yet
  * + this example works with Android device only
- * + iPhone needs HM-10 instead because it's Bluetooth BLE, but same concept applies
+ * + iPhone needs HM-10 instead because it's Bluetooth 4.0 or BLE, but same concept applies
  *
  * This Sketch demonstrates how nanoFORTH can be controlled over Bluetooth wirelessly
  * From your laptop, PC, or Android, connect to HC-05 with a terminal app.
