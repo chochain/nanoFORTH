@@ -206,7 +206,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </blockquote>
 </li>
 </ul>
-<p>Alright! That has pretty much concluded our rounds of exercise. You probably have wondered that if the SAV/LD pair can provide the ability to withstand power failures, can it be rebooted in the field for our future apps on Nanos? Well, to do that, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.</p><ul>
+<p>Alright! That has pretty much concluded our rounds of exercise. You probably have wondered that if the SAV/LD pair can provide the ability to withstand power failures, can it be rebooted in the field for our future apps on Nanos? Well, yes! To do that, we have another word for you - <b>SEX</b> - it is! Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboots, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.</p><ul>
 <li>here's one example <blockquote class="doxtable">
 <p>: <b>fun</b> ( - - ) 1000 DLY ." I'm alive! blink " 20 <b>xy</b> ; ⏎<br  />
  SEX ⏎<br  />
@@ -214,7 +214,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
  ⇨ nanoFORTH v1.4 reset<br  />
  ⇨ I'm alive! blink 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 ok<br  />
  </p><blockquote class="doxtable">
-<p>&gt; When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is <b>fun</b>, our blinker.<br  />
+<p>&gt; When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is <b>fun</b>, the blinker.<br  />
  &gt; Note that the ( - - ) is a Forth-style comment that you can use. A \ (back slash) can also be used to ignore comments to the end of your input line.<br  />
  &gt; if you missed how <b>xy</b> worked, you might need to revisit the previous page <a href="page1.html" target="_blank">HERE</a> </p>
 </blockquote>

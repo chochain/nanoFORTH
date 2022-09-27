@@ -102,14 +102,14 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 > LD ⏎<br/>
 > 0 HRE DMP ⏎
 
-Alright! That has pretty much concluded our rounds of exercise. You probably have wondered that if the SAV/LD pair can provide the ability to withstand power failures, can it be rebooted in the field for our future apps on Nanos? Well, to do that, we have another word for you. SEX it is. Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboot, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.
+Alright! That has pretty much concluded our rounds of exercise. You probably have wondered that if the SAV/LD pair can provide the ability to withstand power failures, can it be rebooted in the field for our future apps on Nanos? Well, yes! To do that, we have another word for you - **SEX** - it is! Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboots, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.
 * here's one example
 > : **fun** ( - - ) 1000 DLY ." I'm alive! blink " 20 **xy** ; ⏎<br/>
 > SEX ⏎<br/>
 > BYE ⏎<br/>
 > ⇨ nanoFORTH v1.4 reset<br/>
 > ⇨ I'm alive! blink 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 ok<br/>
->> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun**, our blinker.<br/>
+>> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun**, the blinker.<br/>
 >> \> Note that the ( - - ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comments to the end of your input line.<br/>
 >> \> if you missed how **xy** worked, you might need to revisit the previous page <a href="page1.html" target="_blank">HERE</a> 
 
