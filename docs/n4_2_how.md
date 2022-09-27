@@ -57,7 +57,7 @@ You can skip to next section and start getting your hands dirty right away. Howe
 
 ### Exercise
 
-We have gone through a lot of 'paper work', time for some hands-on again. If needed, please review the previous page <a href="page1.html" target="_blank">here</a> for some instructions we've gone through earlier.
+We have gone through a lot of 'paper work', time for some hands-on again. If needed, or you've skipped through somehow, please do review the previous page <a href="page1.html" target="_blank">HERE (the Why page)</a> for some instructions we've gone through earlier.
 
 Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 * turn the tracing flag on, and try everything we did in the previous page
@@ -108,9 +108,10 @@ Alright! That has pretty much concluded our rounds of exercise. You probably hav
 > SEX ⏎<br/>
 > BYE ⏎<br/>
 > ⇨ nanoFORTH v1.4 reset<br/>
-> ⇨ 338_0_ok<br/>
+> ⇨ I'm alive! blink 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 ok<br/>
 >> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun**, our blinker.<br/>
->> \> Note that the ( - - ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comments to the end of your input line.
+>> \> Note that the ( - - ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comments to the end of your input line.<br/>
+>> \> if you missed how **xy** worked, you might need to revisit the previous page <a href="page1.html" target="_blank">HERE</a> 
 
 * to disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place.
 > SAV ⏎<br/>
@@ -119,7 +120,7 @@ Alright! That has pretty much concluded our rounds of exercise. You probably hav
 
 OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, double check it. Any suggestion is welcome before people hitting that button and stuck forever.
 
-So, nanoFORTH is **real-time**, and can **multi-task**. It is **interactive** and **extensible**. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.**
+So, nanoFORTH is **real-time**, and can **multi-task**. It is **interactive** and **extensible**. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.
 
 <br/>
 <a href="page1.html">1. Why - Review nanoFORTH command examples</a><br/>
