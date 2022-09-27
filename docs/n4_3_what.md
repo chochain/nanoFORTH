@@ -145,7 +145,7 @@ nanoFORTH handles only integer numbers.
 >
 > **Examples**
 >
-> : **hi** 0 FOR ." hello" 33 EMT CR NXT ; ⏎ ➤ *ok* (**hi** is now defined in user dictionary)<br/>
+> : **hi** 0 FOR ." hello!" 33 EMT CR NXT ; ⏎ ➤ *ok* (**hi** is now defined in user dictionary)<br/>
 > 3 **hi** ⏎<br/>
 > ➤ *hello!*<br/>
 > ➤ *hello!*<br/>
