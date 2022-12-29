@@ -41,8 +41,8 @@ private:
 
     ///@name VM execution units
     ///@{
-    void _execute(U16 adr);   ///< opcode execution unit
-    void _primitive(U8 op);   ///< execute a primitive instruction
+    void _nest(U16 adr);      ///< execute a colon word
+    void _invoke(U8 op);      ///< invoke a built-in opcode
     ///@}
     ///@name Memory Dumper
     ///@{
