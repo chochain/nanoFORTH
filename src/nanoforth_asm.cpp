@@ -31,6 +31,7 @@
 ///@{
 PROGMEM const char CMD[] = "\x07" \
     ":  " "VAR" "CST" "FGT" "DMP" "RST" "BYE";
+// "s\" " "(  " ".( " "\\  "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "FOR" "NXT" \
     "I  ";
@@ -100,7 +101,7 @@ U16 N4Asm::reset()
 ///
 N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 {
-    if (query(tkn, rst))                 return TKN_DIC; /// * DIC - is a word in dictionary? [adr(2),name(3)]
+    if (query(tkn, rst))                 return TKN_WRD; /// * WRD - is a colon word? [adr(2),name(3)]
     if (find(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM - is a immediate word?
     if (find(tkn, PRM, rst))             return TKN_PRM; /// * PRM - is a primitives?
     if (number(tkn, (S16*)rst))          return TKN_NUM; /// * NUM - is a number literal?
@@ -132,7 +133,7 @@ void N4Asm::compile(U16 *rp0)
             }
             else _add_branch(tmp);          /// * add branching opcode
             break;
-        case TKN_DIC:                       ///>> a dictionary word? [addr + adr(2) + name(3)]
+        case TKN_WRD:                       ///>> a colon word? [addr + adr(2) + name(3)]
             JMPBCK(tmp+2+3, PFX_CALL);      /// * call subroutine
             break;
         case TKN_PRM:                       ///>> a built-in primitives?

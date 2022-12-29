@@ -20,7 +20,7 @@
 ///
 enum N4OP {
     TKN_IMM = 1,     ///< immediate word
-    TKN_DIC,         ///< dictionary (user defined) word
+    TKN_WRD,         ///< colon (user defined) word
     TKN_EXT,         ///< extended built-in word
     TKN_PRM,         ///< primitive built-in word
     TKN_NUM,         ///< number (literal)
