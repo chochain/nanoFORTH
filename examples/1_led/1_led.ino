@@ -13,30 +13,7 @@
 #include <nanoforth.h>
 
 NanoForth n4;                     ///< our NanoForth instance
-
-N4_TASK(blink13)                  ///< the built-in LED blinking task
-{
-    digitalWrite(LED_BUILTIN, HIGH);
-    N4_DELAY(500);
-    digitalWrite(LED_BUILTIN, LOW);
-    N4_DELAY(500);
-}
-N4_END;
-
-N4_TASK(led_toggle)               ///< create a task that toggle LEDs
-{
-    digitalWrite(5, HIGH);
-    digitalWrite(6, LOW);
-    N4_DELAY(250);
-
-    digitalWrite(5, LOW);
-    digitalWrite(6, HIGH);
-    N4_DELAY(250);
-}
-N4_END;
-
-void setup()
-{
+void setup() {
     Serial.begin(115200);         ///< init Serial IO, make sure it is set to 'Both BL & CR' to capture input
 
     if (n4.begin()) {             /// initialize NanoForth and Serial Monitor as output
@@ -50,7 +27,28 @@ void setup()
     pinMode(6, OUTPUT);
 }
 
-void loop()
-{
+void loop() {
     n4.exec();                   /// execute VM of our NanoForth instance
 }
+///
+/// User defined task1 - blink built-in LED
+///
+N4_TASK(blink13) {               ///< the built-in LED blinking task
+    digitalWrite(LED_BUILTIN, HIGH);
+    N4_DELAY(500);
+    digitalWrite(LED_BUILTIN, LOW);
+    N4_DELAY(500);
+} N4_END;
+///
+/// User defined task2 - toggle LEDs on pin 5 and 6
+///
+N4_TASK(led_toggle) {            ///< create a task that toggle LEDs
+    digitalWrite(5, HIGH);
+    digitalWrite(6, LOW);
+    N4_DELAY(250);
+
+    digitalWrite(5, LOW);
+    digitalWrite(6, HIGH);
+    N4_DELAY(250);
+} N4_END;
+

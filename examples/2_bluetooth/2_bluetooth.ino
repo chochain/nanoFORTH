@@ -24,17 +24,7 @@
 AltSoftSerial bt;                   ///< default: RX on pin 8, TX on pin 9
 NanoForth     n4;                   ///< create NanoForth instance
 
-N4_TASK(blink13)                    ///< create blinking task (i.e. built-in LED on pin 13)
-{
-    digitalWrite(LED_BUILTIN, HIGH);
-    N4_DELAY(500);
-    digitalWrite(LED_BUILTIN, LOW);
-    N4_DELAY(500);
-}
-N4_END;
-
-void setup()
-{
+void setup() {
     while (!Serial);
     Serial.begin(115200);           ///< init Serial IO, make sure it is set to 'Both BL & CR' to capture input
 
@@ -49,7 +39,17 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
 }
 
-void loop()
-{
+void loop() {
     n4.exec();                      // execute command line from BT serial console
 }
+///
+/// User defined task - blinks built-in LED
+///
+N4_TASK(blink13) {                  ///< create blinking task (i.e. built-in LED on pin 13)
+    digitalWrite(LED_BUILTIN, HIGH);
+    N4_DELAY(500);
+    digitalWrite(LED_BUILTIN, LOW);
+    N4_DELAY(500);
+} N4_END;
+
+
