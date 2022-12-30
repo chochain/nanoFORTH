@@ -24,14 +24,14 @@
 /// @var JMP (note: ; is hard-coded at position 0, do not change it)
 /// @brief words for branching ops in compile mode.
 /// @var PRM
-/// @brief primitive words (45 allocated, 64 max).
+/// @brief primitive words (51 allocated, 64 max).
 /// @var PMX
 /// @brief loop control opcodes
 ///
 ///@{
 PROGMEM const char CMD[] = "\x07" \
     ":  " "VAR" "CST" "FGT" "DMP" "RST" "BYE";
-// "s\" " "(  " ".( " "\\  "
+    // TODO: "s\" " "(  " ".( " "\\  "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "FOR" "NXT" \
     "I  ";
@@ -41,9 +41,9 @@ PROGMEM const char PRM[] = "\x32" \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "SEX" "TRC" \
     "CLK" "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN";
-PROGMEM const char PMX[] = "\x4" \
-    "FOR" "NXT" "BRK" "I  ";
-constexpr U16 OP_EXIT = 0;                           /**< semi-colon, end of function definition */
+PROGMEM const char PMX[] = "\x2" \
+    "I  " "FOR" "NXT";
+constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
 ///@}
 ///
 ///@name Branching
@@ -374,8 +374,8 @@ void N4Asm::trace(U16 a, U8 ir)
             break;
         default:                                      // other opcodes
             d_chr('_');
-            U8 ci = op >= I_FOR;                      // loop controller flag
-            d_name(ci ? op-I_FOR : op, ci ? PMX : PRM, 0);
+            U8 ci = op >= I_I;                        // loop controller flag
+            d_name(ci ? op-I_I : op, ci ? PMX : PRM, 0);
         }
         break;
     default:                                          ///> and a number (i.e. 1-byte literal)
@@ -438,8 +438,7 @@ void N4Asm::_add_branch(U8 op)
         break;
     case 9: /* NXT */
         SET8(here, PRM_OPS | I_NXT);    // encode NXT opcode
-        JMPBCK(RPOP(), OP_CDJ);         // conditionally jump back to A1
-        SET8(here, PRM_OPS | I_BRK);    // encode BRK opcode
+        JMPBCK(RPOP(), OP_UDJ);         // unconditionally jump back to A1
         break;
     case 10: /* I */
         SET8(here, PRM_OPS | I_I);      // fetch loop counter
