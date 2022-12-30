@@ -337,8 +337,7 @@ void N4Asm::trace(U16 a, U8 ir)
     d_adr(a);                                         // opcode address
 
     U8 *p, op = ir & CTL_BITS;
-    switch (op) {
-    case JMP_OPS:                                     ///> is a jump instruction?
+    if (op==JMP_OPS) {                                ///> is a jump instruction?
         a = GET16(PTR(a)) & ADR_MASK;                 // target address
         switch (ir & JMP_MASK) {                      // get branching opcode
         case OP_CALL:                                 // 0xc0 CALL word call
@@ -357,8 +356,8 @@ void N4Asm::trace(U16 a, U8 ir)
             tab -= tab ? 1 : 0;
             break;
         }
-        break;
-    case PRM_OPS:                                     ///> is a primitive?
+    }
+    else if (op==PRM_OPS) {                           ///> is a primitive?
         op = ir & PRM_MASK;                           // capture primitive opcode
         switch (op) {
         case I_LIT:                                   // 3-byte literal (i.e. 16-bit signed integer)
@@ -377,8 +376,8 @@ void N4Asm::trace(U16 a, U8 ir)
             U8 ci = op >= I_I;                        // loop controller flag
             d_name(ci ? op-I_I : op, ci ? PMX : PRM, 0);
         }
-        break;
-    default:                                          ///> and a number (i.e. 1-byte literal)
+    }
+    else {                                            ///> and a number (i.e. 1-byte literal)
         d_chr('#'); d_u8(ir);
     }
     d_chr(' ');

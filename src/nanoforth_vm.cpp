@@ -137,8 +137,7 @@ void N4VM::_nest(U16 adr)
         n4asm->trace(a, ir);                              // execution tracing when enabled
 
         U8  op = ir & CTL_BITS;                           ///> determine control bits
-        switch (op) {
-        case JMP_OPS:                                     ///> handle branching instruction
+        if (op==JMP_OPS) {                                ///> handle branching instruction
             a = GET16(pc-1) & ADR_MASK;                   // target address
             switch (ir & JMP_MASK) {                      // get branch opcode
             case OP_CALL:                                 // 0xc0 subroutine call
@@ -156,8 +155,8 @@ void N4VM::_nest(U16 adr)
                 pc = PTR(a);                              // caller's next instruction (or break loop if 0xffff)
                 break;
             }
-            break;
-        case PRM_OPS:                                     ///> handle primitive word
+        }
+        else if (op==PRM_OPS) {                           ///> handle primitive word
             op = ir & PRM_MASK;                           // capture opcode
             switch(op) {
             case I_NXT:
@@ -170,9 +169,9 @@ void N4VM::_nest(U16 adr)
             case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
             default: _invoke(op);                         // handle other opcodes
             }
-            break;
-        default: PUSH(ir);                                ///> handle number (1-byte literal)
         }
+        else PUSH(ir);                                    ///> handle number (1-byte literal)
+
         NanoForth::yield();                               ///> give user task some cycles
     }
 }
