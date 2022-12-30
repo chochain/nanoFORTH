@@ -55,7 +55,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 > ||
 > |:--|
 > |@htmlonly <iframe width="400" height="320" src="https://www.youtube.com/embed/trmDNh41-pQ?version=3&playlist=trmDNh41-pQ&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
->> \> so, 10 FOR ... NXT is to loop 10 times, (counting down from 20, 19, 18, ..., 2, 1)
+>> \> so, 10 FOR ... NXT is to loop 10 times, (counting down from 10, 9, 8, ..., 2, 1)
 
 * if that's a bit too slow! nanoFORTH allows you redefine **xy** by "forget" it first
 > FGT **xy** ⏎<br/>
