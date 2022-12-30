@@ -138,26 +138,26 @@ void N4VM::_nest(U16 adr)
 
         U8  op = ir & CTL_BITS;                           ///> determine control bits
         switch (op) {
-        case 0xc0:                                        ///> handle branching instruction
+        case JMP_OPS:                                     ///> handle branching instruction
             a = GET16(pc-1) & ADR_MASK;                   // target address
             switch (ir & JMP_MASK) {                      // get branch opcode
-            case PFX_CALL:                                // 0xc0 subroutine call
+            case OP_CALL:                                 // 0xc0 subroutine call
                 RPUSH(IDX(pc+1));                         // keep next instruction on return stack
                 pc = PTR(a);                              // jump to subroutine till I_RET
                 break;
-            case PFX_RET:                                 // 0xd0 return from subroutine
+            case OP_CDJ:                                  // 0xd0 conditional jump
+                pc = POP() ? pc+1 : PTR(a);               // next or target
+                break;
+            case OP_UDJ:                                  // 0xe0 unconditional jump
+                pc = PTR(a);                              // set jump target
+                break;
+            case OP_RET:                                  // 0xf0 return from subroutine
                 a  = RPOP();                              // pop return address
                 pc = PTR(a);                              // caller's next instruction (or break loop if 0xffff)
                 break;
-            case PFX_CDJ:                                 // 0xe0 conditional jump
-                pc = POP() ? pc+1 : PTR(a);               // next or target
-                break;
-            case PFX_UDJ:                                 // 0xf0 unconditional jump
-                pc = PTR(a);                              // set jump target
-                break;
             }
             break;
-        case 0x80:                                        ///> handle primitive word
+        case PRM_OPS:                                     ///> handle primitive word
             op = ir & PRM_MASK;                           // capture opcode
             switch(op) {
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
