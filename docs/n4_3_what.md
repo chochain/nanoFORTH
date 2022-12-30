@@ -99,7 +99,7 @@ nanoFORTH handles only integer numbers.
 > |f IF xxx ELS yyy THN|@image html forth_if_els_thn.gif width=300px|
 > |BGN xxx f UTL|@image html forth_bgn_utl.gif width=300px|
 > |BGN xxx f WHL yyy RPT|@image html forth_bgn_whl_rpt.gif width=300px|
-> |n1 n2 FOR xxx NXT|for loop, aka. DO xxx LOOP in some other FORTH|
+> |n FOR xxx NXT|for loop, index value I count down from n to 1|
 
 ### Memory Access Ops
 > |opcode|stack|description|
@@ -145,7 +145,7 @@ nanoFORTH handles only integer numbers.
 >
 > **Examples**
 >
-> : **hi** 0 FOR ." hello!" 33 EMT CR NXT ; ⏎ ➤ *ok* (**hi** is now defined in user dictionary)<br/>
+> : **hi** FOR ." hello!" 33 EMT CR NXT ; ⏎ ➤ *ok* (**hi** is now defined in user dictionary)<br/>
 > 3 **hi** ⏎<br/>
 > ➤ *hello!*<br/>
 > ➤ *hello!*<br/>

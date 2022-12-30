@@ -74,10 +74,10 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 >> \> note the numbers above are for example only, your clock read will be different
 
 * to benchmark something, let's defined a function **zz** that runs in empty loops and time it
-> : **zz** 10000 0 FOR NXT ;⏎<br/>
+> : **zz** 10000 FOR NXT ;⏎<br/>
 > CLK DNG **zz** CLK D+ ⏎<br/>
-> ⇨ 338_0_ok
->> \> Our ten-thousand cycles are completed in 338ms, i.e. 34us/cycle, not too shabby!<br/>
+> ⇨ 227_0_ok
+>> \> Our ten-thousand cycles are completed in 227ms, i.e. 23us/cycle, not too shabby!<br/>
 >> \> DNG negate the first clock ticks<br/>
 >> \> D+ add two clock counts (i.e. (-t0) + t1) to deduce the time difference
 
@@ -95,7 +95,7 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 
 * when needed, we can zap the sandbox i.e. reset the nanoFORTH system pointers for a fresh start
 > BYE ⏎<br/>
-> ⇨ nanoFORTH v1.4 ok
+> ⇨ nanoFORTH v1.6 ok
 >> \> The data stack, return stack, and instruction pointers will be reinitialized
 
 * after restart your Arduino, words can be restored from EEPROM where you saved earlier.
@@ -107,8 +107,8 @@ Alright! That has pretty much concluded our rounds of exercise. You probably hav
 > : **fun** ( - - ) 1000 DLY ." I'm alive! blink " 20 **xy** ; ⏎<br/>
 > SEX ⏎<br/>
 > BYE ⏎<br/>
-> ⇨ nanoFORTH v1.4 reset<br/>
-> ⇨ I'm alive! blink 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 ok<br/>
+> ⇨ nanoFORTH v1.6 reset<br/>
+> ⇨ I'm alive! blink 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ok<br/>
 >> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun**, the blinker.<br/>
 >> \> Note that the ( - - ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comments to the end of your input line.<br/>
 >> \> if you missed how **xy** worked, you might need to revisit the previous page <a href="page1.html" target="_blank">HERE</a> 
@@ -116,7 +116,7 @@ Alright! That has pretty much concluded our rounds of exercise. You probably hav
 * to disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place.
 > SAV ⏎<br/>
 > BYE ⏎<br/>
-> ⇨ nanoFORTH v1.4 ok
+> ⇨ nanoFORTH v1.6 ok
 
 OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, double check it. Any suggestion is welcome before people hitting that button and stuck forever.
 

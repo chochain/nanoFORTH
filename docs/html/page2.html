@@ -168,10 +168,10 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </blockquote>
 </li>
 <li>to benchmark something, let's defined a function <b>zz</b> that runs in empty loops and time it <blockquote class="doxtable">
-<p>: <b>zz</b> 10000 0 FOR NXT ;⏎<br  />
+<p>: <b>zz</b> 10000 FOR NXT ;⏎<br  />
  CLK DNG <b>zz</b> CLK D+ ⏎<br  />
- ⇨ 338_0_ok </p><blockquote class="doxtable">
-<p>&gt; Our ten-thousand cycles are completed in 338ms, i.e. 34us/cycle, not too shabby!<br  />
+ ⇨ 227_0_ok </p><blockquote class="doxtable">
+<p>&gt; Our ten-thousand cycles are completed in 227ms, i.e. 23us/cycle, not too shabby!<br  />
  &gt; DNG negate the first clock ticks<br  />
  &gt; D+ add two clock counts (i.e. (-t0) + t1) to deduce the time difference </p>
 </blockquote>
@@ -195,7 +195,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </li>
 <li>when needed, we can zap the sandbox i.e. reset the nanoFORTH system pointers for a fresh start <blockquote class="doxtable">
 <p>BYE ⏎<br  />
- ⇨ nanoFORTH v1.4 ok </p><blockquote class="doxtable">
+ ⇨ nanoFORTH v1.6 ok </p><blockquote class="doxtable">
 <p>&gt; The data stack, return stack, and instruction pointers will be reinitialized </p>
 </blockquote>
 </blockquote>
@@ -211,8 +211,8 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 <p>: <b>fun</b> ( - - ) 1000 DLY ." I'm alive! blink " 20 <b>xy</b> ; ⏎<br  />
  SEX ⏎<br  />
  BYE ⏎<br  />
- ⇨ nanoFORTH v1.4 reset<br  />
- ⇨ I'm alive! blink 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 ok<br  />
+ ⇨ nanoFORTH v1.6 reset<br  />
+ ⇨ I'm alive! blink 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ok<br  />
  </p><blockquote class="doxtable">
 <p>&gt; When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is <b>fun</b>, the blinker.<br  />
  &gt; Note that the ( - - ) is a Forth-style comment that you can use. A \ (back slash) can also be used to ignore comments to the end of your input line.<br  />
@@ -223,7 +223,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 <li>to disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place. <blockquote class="doxtable">
 <p>SAV ⏎<br  />
  BYE ⏎<br  />
- ⇨ nanoFORTH v1.4 ok </p>
+ ⇨ nanoFORTH v1.6 ok </p>
 </blockquote>
 </li>
 </ul>

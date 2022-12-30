@@ -48,25 +48,25 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 >> \> a function is defines in the 'Compile Mode', and executed in 'Interpreter Mode'. The differece is at the leading ':' (colon) sign.
 
 * define a word **xy** to blink red/blue every 500 ms alternatively
-> : **xy** 0 FOR **red** 500 DLY **blu** 500 DLY NXT ; ⏎
+> : **xy** FOR **red** 500 DLY **blu** 500 DLY NXT ; ⏎
 
 * run 10 cycles of **xy**
 > 10 **xy** ⏎
 > ||
 > |:--|
 > |@htmlonly <iframe width="400" height="320" src="https://www.youtube.com/embed/trmDNh41-pQ?version=3&playlist=trmDNh41-pQ&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
->> \> so, 10 0 FOR ... NXT is to loop through 10 times, i.e. counter from 0, 1, 2, ..., 9
+>> \> so, 10 FOR ... NXT is to loop 10 times, (counting down from 20, 19, 18, ..., 2, 1)
 
 * if that's a bit too slow! nanoFORTH allows you redefine **xy** by "forget" it first
 > FGT **xy** ⏎<br/>
 >> \> that erased **xy** from memory, we can redefine it now<br/>
 >> \> actually, multiple definition of the same function is allowed, the latest one takes precedence.
 >
-> : **xy** 0 FOR **red** 200 DLY **blu** 300 DLY **I .** NXT ; ⏎<br/>
+> : **xy** FOR **red** 200 DLY **blu** 300 DLY **I .** NXT ; ⏎<br/>
 
 * now try 20 cycles of **xy** this time
 > 20 **xy** ⏎
-> ⇨ 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 ok
+> ⇨ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ok
 >> \> so, you've probably noticed that **I** is the loop counter and . (dot) prints it<br/>
 
 * let's try analog, say read a value from analog pin 1 (photoresister value 0~1023), assuming you have one installed
@@ -98,7 +98,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 > **lit** **?Z** ⏎
 
 * define a word **xyz** to check photoresister in a loop every 1 second, turn the blue or red LED on depending on the photoresister value read
-> : **xyz** 0 FOR **lit** **?Z** 1000 DLY NXT ; ⏎<br>
+> : **xyz** FOR **lit** **?Z** 1000 DLY NXT ; ⏎<br>
 > 60 **xyz** ⏎
 >> \> This runs **xyz** for a minute. Try blocking the photoresister to see the LED toggles.<br/>
 >> \> Can this become a trigger i.e. mouse trap or something useful?<br/>

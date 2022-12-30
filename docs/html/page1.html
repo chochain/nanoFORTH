@@ -146,7 +146,7 @@ $(document).ready(function(){initNavTree('page1.html',''); initResizable(); });
 </blockquote>
 </li>
 <li>define a word <b>xy</b> to blink red/blue every 500 ms alternatively <blockquote class="doxtable">
-<p>: <b>xy</b> 0 FOR <b>red</b> 500 DLY <b>blu</b> 500 DLY NXT ; ⏎ </p>
+<p>: <b>xy</b> FOR <b>red</b> 500 DLY <b>blu</b> 500 DLY NXT ; ⏎ </p>
 </blockquote>
 </li>
 <li>run 10 cycles of <b>xy</b> <blockquote class="doxtable">
@@ -157,7 +157,7 @@ $(document).ready(function(){initNavTree('page1.html',''); initResizable(); });
 <td class="markdownTableBodyLeft"> <iframe width="400" height="320" src="https://www.youtube.com/embed/trmDNh41-pQ?version=3&playlist=trmDNh41-pQ&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe>   </td></tr>
 </table>
 <blockquote class="doxtable">
-<p>&gt; so, 10 0 FOR ... NXT is to loop through 10 times, i.e. counter from 0, 1, 2, ..., 9 </p>
+<p>&gt; so, 10 FOR ... NXT is to loop 10 times, (counting down from 20, 19, 18, ..., 2, 1) </p>
 </blockquote>
 </blockquote>
 </li>
@@ -167,12 +167,12 @@ $(document).ready(function(){initNavTree('page1.html',''); initResizable(); });
 <p>&gt; that erased <b>xy</b> from memory, we can redefine it now<br  />
  &gt; actually, multiple definition of the same function is allowed, the latest one takes precedence. </p>
 </blockquote>
-<p>: <b>xy</b> 0 FOR <b>red</b> 200 DLY <b>blu</b> 300 DLY <b>I .</b> NXT ; ⏎<br  />
+<p>: <b>xy</b> FOR <b>red</b> 200 DLY <b>blu</b> 300 DLY <b>I .</b> NXT ; ⏎<br  />
  </p>
 </blockquote>
 </li>
 <li>now try 20 cycles of <b>xy</b> this time <blockquote class="doxtable">
-<p>20 <b>xy</b> ⏎ ⇨ 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 ok </p><blockquote class="doxtable">
+<p>20 <b>xy</b> ⏎ ⇨ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ok </p><blockquote class="doxtable">
 <p>&gt; so, you've probably noticed that <b>I</b> is the loop counter and . (dot) prints it<br  />
  </p>
 </blockquote>
@@ -217,7 +217,7 @@ $(document).ready(function(){initNavTree('page1.html',''); initResizable(); });
 </blockquote>
 </li>
 <li>define a word <b>xyz</b> to check photoresister in a loop every 1 second, turn the blue or red LED on depending on the photoresister value read <blockquote class="doxtable">
-<p>: <b>xyz</b> 0 FOR <b>lit</b> <b>?Z</b> 1000 DLY NXT ; ⏎<br  />
+<p>: <b>xyz</b> FOR <b>lit</b> <b>?Z</b> 1000 DLY NXT ; ⏎<br  />
  60 <b>xyz</b> ⏎ </p><blockquote class="doxtable">
 <p>&gt; This runs <b>xyz</b> for a minute. Try blocking the photoresister to see the LED toggles.<br  />
  &gt; Can this become a trigger i.e. mouse trap or something useful?<br  />

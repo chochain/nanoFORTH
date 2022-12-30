@@ -248,7 +248,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 </div>
  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">n1 n2 FOR xxx NXT </td><td class="markdownTableBodyLeft">for loop, aka. DO xxx LOOP in some other FORTH  </td></tr>
+<td class="markdownTableBodyLeft">n FOR xxx NXT </td><td class="markdownTableBodyLeft">for loop, index value I count down from n to 1  </td></tr>
 </table>
 </blockquote>
 <h3>Memory Access Ops</h3>
@@ -314,7 +314,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <td class="markdownTableBodyLeft">." </td><td class="markdownTableBodyLeft">( - - ) </td><td class="markdownTableBodyLeft">send the following string (terminated with a ") to output console  </td></tr>
 </table>
 <p><b>Examples</b></p>
-<p>: <b>hi</b> 0 FOR ." hello!" 33 EMT CR NXT ; ⏎ ➤ <em>ok</em> (<b>hi</b> is now defined in user dictionary)<br  />
+<p>: <b>hi</b> FOR ." hello!" 33 EMT CR NXT ; ⏎ ➤ <em>ok</em> (<b>hi</b> is now defined in user dictionary)<br  />
  3 <b>hi</b> ⏎<br  />
  ➤ <em>hello!</em><br  />
  ➤ <em>hello!</em><br  />
