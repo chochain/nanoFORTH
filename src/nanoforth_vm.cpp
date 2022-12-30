@@ -101,7 +101,7 @@ void N4VM::_init() {
     rp  = (U16*)&dic[msz - ssz];         /// * return stack pointer, grow upward
     sp  = (S16*)&dic[msz];               /// * parameter stack pointer, grows downward
 
-    show("nanoForth v1.4 ");             /// * show init prompt
+    show("nanoForth v1.6 ");             /// * show init prompt
 
     U16 adr = n4asm->reset();            /// * reload EEPROM and reset assembler
     if (adr != LFA_X) {                  /// * check autorun addr has been setup? (see SEX)
@@ -160,6 +160,12 @@ void N4VM::_nest(U16 adr)
         case PRM_OPS:                                     ///> handle primitive word
             op = ir & PRM_MASK;                           // capture opcode
             switch(op) {
+            case I_NXT: {
+            	if (!(*(rp-1))--) {                       // decrement counter *(rp-1)
+            		pc+=2;                                // if (i==0) break loop
+            		RPOP();                               // pop off index
+            	}
+            } break;
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
             case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
             default: _invoke(op);                         // handle other opcodes
@@ -259,15 +265,11 @@ void N4VM::_invoke(U8 op)
     case 49: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
 #endif //ARDUINO
     case 50: /* available ... */          break;
-    case 58: /* ... available */          break;
-        /* case 48-58 available for future expansion */
-    case 59: RPUSH(POP()); RPUSH(POP());  break; // FOR
-    case 60: {                                   // NXT
-        (*(rp-2))++;               // counter+1
-        PUSH(*(rp-2) >= *(rp-1));  // range check
-    } break;
-    case 61: RPOP(); RPOP();              break; // BRK
-    case 62: PUSH(*(rp-2));               break; // I
+    case 59: /* ... available */          break;
+        /* case 50-59 available for future expansion */
+    case 60: PUSH(*(rp-1));               break; // I
+    case 61: RPUSH(POP());                break; // FOR
+    case 62: /* handled one level up */   break; // NXT
     case 63: /* handled one level up */   break; // LIT
     }
 }
