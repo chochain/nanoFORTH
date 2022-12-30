@@ -1,6 +1,6 @@
 # Journey of an Arduino Maker
 
-**You unboxed the Arduino UNO** from Amazon with excitement, opened the awaited Arduino IDE, carefully followed one of the numerous available online tutorials, compiled the Blink sketch from the included examples, and hit the -> button. A few seconds later, the orange light started blinking! Success! You told yourself that "I think I can be pretty good at this"! <a href="https://chochain.github.io/nanoFORTH/html/page2.html" target="_blank">....TL;DR, click here to skip</a>
+**You unboxed the Arduino UNO** from Amazon with excitement, opened the awaited Arduino IDE, carefully followed one of the numerous available online tutorials, compiled the Blink sketch from the included examples, and hit the -> button. A few seconds later, the orange light started blinking! Success! You told yourself that "I think I can be pretty good at this"! ...<a href="https://chochain.github.io/nanoFORTH/html/page2.html" target="_blank">TL;DR, click here, skip to installation</a>
 
 **What comes next** is weeks of ego-boosting new component badges you collected. From the simple humidity-temperature (DHT), ultrasound (HC-SR04), to how-do-I-read-the-resistor-code LEDs, why NEC infrared remote (HX1838), flimsy SG90 servos, and finally the damn gyro (MPU6050). OK, that was a pretty good run, you thought. Kids were fascinated, and even my typically unconcerned wife seemed to be impressed.
 
