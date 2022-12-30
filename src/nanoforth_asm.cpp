@@ -43,7 +43,7 @@ PROGMEM const char PRM[] = "\x32" \
     "CLK" "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN";
 PROGMEM const char PMX[] = "\x4" \
     "FOR" "NXT" "BRK" "I  ";
-constexpr U16 OP_SEMI = 0;                           /**< semi-colon, end of function definition */
+constexpr U16 OP_EXIT = 0;                           /**< semi-colon, end of function definition */
 ///@}
 ///
 ///@name Branching
@@ -127,17 +127,17 @@ void N4Asm::compile(U16 *rp0)
         p0  = here;                         // keep current top of dictionary (for memdump)
         switch(parse_token(tkn, &tmp, 0)) { ///>> **determine type of operation, and keep opcode in tmp**
         case TKN_IMM:                       ///>> an immediate command?
-            if (tmp==OP_SEMI) {             /// * handle return i.e. ; (semi-colon)
-                SET8(here, PFX_RET);        //  terminate COLON definitions, or
+            if (tmp==OP_EXIT) {             /// * handle return i.e. ; (semi-colon)
+                SET8(here, OP_RET);         //  terminate COLON definitions, or
                 tkn = NULL;                 //  clear token to exit compile mode
             }
             else _add_branch(tmp);          /// * add branching opcode
             break;
         case TKN_WRD:                       ///>> a colon word? [addr + adr(2) + name(3)]
-            JMPBCK(tmp+2+3, PFX_CALL);      /// * call subroutine
+            JMPBCK(tmp+2+3, OP_CALL);       /// * call subroutine
             break;
         case TKN_PRM:                       ///>> a built-in primitives?
-            SET8(here, PFX_PRM | (U8)tmp);  /// * add found primitive opcode
+            SET8(here, PRM_OPS | (U8)tmp);  /// * add found primitive opcode
             if (tmp==I_DQ) _add_str();      /// * do extra, if it's a ." (dot_string) command
             break;
         case TKN_NUM:                       ///>> a literal (number)?
@@ -145,7 +145,7 @@ void N4Asm::compile(U16 *rp0)
                 SET8(here, (U8)tmp);        /// * 1-byte literal, or
             }
             else {
-                SET8(here, PFX_PRM | I_LIT);/// * 3-byte literal
+                SET8(here, PRM_OPS | I_LIT);/// * 3-byte literal
                 SET16(here, tmp);
             }
             break;
@@ -174,10 +174,10 @@ void N4Asm::variable()
     }
     else {
         tmp += 2;                           ///> or, extra bytes for 16-bit address
-        SET8(here, PFX_PRM | I_LIT);
+        SET8(here, PRM_OPS | I_LIT);
         SET16(here, tmp);
     }
-    SET8(here, PFX_RET);
+    SET8(here, OP_RET);
     SET16(here, 0);                         /// add actual literal storage area
 }
 ///
@@ -192,10 +192,10 @@ void N4Asm::constant(S16 v)
         SET8(here, (U8)v);
     }
     else {
-        SET8(here, PFX_PRM | I_LIT);        ///> or, constant stored as 3-byte literal 
+        SET8(here, PRM_OPS | I_LIT);        ///> or, constant stored as 3-byte literal 
         SET16(here, v);
     }
-    SET8(here, PFX_RET);
+    SET8(here, OP_RET);
 }
 ///
 ///> scan the keyword through dictionary linked-list
@@ -338,10 +338,10 @@ void N4Asm::trace(U16 a, U8 ir)
 
     U8 *p, op = ir & CTL_BITS;
     switch (op) {
-    case 0xc0:                                        ///> is a jump instruction?
+    case JMP_OPS:                                     ///> is a jump instruction?
         a = GET16(PTR(a)) & ADR_MASK;                 // target address
         switch (ir & JMP_MASK) {                      // get branching opcode
-        case PFX_CALL:                                // 0xc0 CALL word call
+        case OP_CALL:                                 // 0xc0 CALL word call
             d_chr(':');
             p = PTR(a)-3;                             // backtrack 3-byte (name field)
             d_chr(*p++); d_chr(*p++); d_chr(*p);
@@ -350,15 +350,15 @@ void N4Asm::trace(U16 a, U8 ir)
                 show("  ");
             }
             break;
-        case PFX_RET:                                 // 0xd0 RET return
+        case OP_CDJ: d_chr('?'); d_adr(a); break;     // 0xd0 CDJ  conditional jump
+        case OP_UDJ: d_chr('j'); d_adr(a); break;     // 0xe0 UDJ  unconditional jump
+        case OP_RET:                                  // 0xf0 RET return
             d_chr(';');
             tab -= tab ? 1 : 0;
             break;
-        case PFX_CDJ: d_chr('?'); d_adr(a); break;    // 0xe0 CDJ  conditional jump
-        case PFX_UDJ: d_chr('j'); d_adr(a); break;    // 0xf0 UDJ  unconditional jump
         }
         break;
-    case 0x80:                                        ///> is a primitive?
+    case PRM_OPS:                                     ///> is a primitive?
         op = ir & PRM_MASK;                           // capture primitive opcode
         switch (op) {
         case I_LIT:                                   // 3-byte literal (i.e. 16-bit signed integer)
@@ -408,12 +408,12 @@ void N4Asm::_add_branch(U8 op)
     switch (op) {
     case 1: /* IF */
         RPUSH(IDX(here));               // save current here A1
-        JMP000(here, PFX_CDJ);          // alloc addr with jmp_flag
+        JMP000(here, OP_CDJ);           // alloc addr with jmp_flag
         break;
     case 2: /* ELS */
         JMPSET(RPOP(), here+2);         // update A1 with next addr
         RPUSH(IDX(here));               // save current here A2
-        JMP000(here, PFX_UDJ);          // alloc space with jmp_flag
+        JMP000(here, OP_UDJ);           // alloc space with jmp_flag
         break;
     case 3: /* THN */
         JMPSET(RPOP(), here);           // update A2 with current addr
@@ -422,27 +422,27 @@ void N4Asm::_add_branch(U8 op)
         RPUSH(IDX(here));               // save current here A1
         break;
     case 5: /* UTL */
-        JMPBCK(RPOP(), PFX_CDJ);        // conditional jump back to A1
+        JMPBCK(RPOP(), OP_CDJ);         // conditional jump back to A1
         break;
     case 6: /* WHL */
         RPUSH(IDX(here));               // save WHILE addr A2
-        JMP000(here, PFX_CDJ);          // allocate branch addr A2 with jmp flag
+        JMP000(here, OP_CDJ);           // allocate branch addr A2 with jmp flag
         break;
     case 7: /* RPT */
         JMPSET(RPOP(), here+2);         // update A2 with next addr
-        JMPBCK(RPOP(), PFX_UDJ);        // unconditional jump back to A1
+        JMPBCK(RPOP(), OP_UDJ);         // unconditional jump back to A1
         break;
     case 8: /* FOR */
         RPUSH(IDX(here+1));             // save current addr A1
-        SET8(here, PFX_PRM | I_FOR);    // encode FOR opcode
+        SET8(here, PRM_OPS | I_FOR);    // encode FOR opcode
         break;
     case 9: /* NXT */
-        SET8(here, PFX_PRM | I_NXT);    // encode NXT opcode
-        JMPBCK(RPOP(), PFX_CDJ);        // conditionally jump back to A1
-        SET8(here, PFX_PRM | I_BRK);    // encode BRK opcode
+        SET8(here, PRM_OPS | I_NXT);    // encode NXT opcode
+        JMPBCK(RPOP(), OP_CDJ);         // conditionally jump back to A1
+        SET8(here, PRM_OPS | I_BRK);    // encode BRK opcode
         break;
     case 10: /* I */
-        SET8(here, PFX_PRM | I_I);      // fetch loop counter
+        SET8(here, PRM_OPS | I_I);      // fetch loop counter
         break;
     }
 }
