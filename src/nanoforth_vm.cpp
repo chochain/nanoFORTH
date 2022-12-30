@@ -160,12 +160,12 @@ void N4VM::_nest(U16 adr)
         case PRM_OPS:                                     ///> handle primitive word
             op = ir & PRM_MASK;                           // capture opcode
             switch(op) {
-            case I_NXT: {
-            	if (!(*(rp-1))--) {                       // decrement counter *(rp-1)
+            case I_NXT:
+            	if (!--(*(rp-1))) {                       // decrement counter *(rp-1)
             		pc+=2;                                // if (i==0) break loop
             		RPOP();                               // pop off index
             	}
-            } break;
+            	break;
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
             case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
             default: _invoke(op);                         // handle other opcodes
