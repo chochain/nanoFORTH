@@ -6,13 +6,12 @@
 #define __SRC_NANOFORTH_CORE_H
 #include "nanoforth.h"
 
-constexpr U16 TIB_SZ   = 0x40;             /**< console(terminal) input buffer size */
-constexpr U8  TIB_CLR  = 0x1;
-
 #if ARDUINO
 #define show(s)      { _io->print(F(s)); _io->flush(); }
+#define INLINE       __attribute__((always_inline))
 #else
 #define show(s)      log(s)
+#define INLINE       __attribute__((always_inline))
 #endif // ARDUINO
 
 ///@name Memory Access Ops
@@ -38,18 +37,30 @@ class N4Core
     static U8   _trc;                      ///< tracing flags
 
 protected:
+    static U8     *dic;                    ///< base of dictionary
+    static U16    *rp;					   ///< base of return stack
+    static S16    *sp;                     ///< top of data stack
+    static U8     *tib;                    ///< base of terminal input buffer
     static Stream *_io;                    ///< IO stream (static member)
 
 public:
-    static void set_io(Stream *io);        ///< initialize or redirect IO stream
-    static void set_trace(U8 f);           ///< enable/disable execution tracing
-    static void set_ucase(U8 uc);          ///< set case sensitiveness
-    static char uc(char c);                ///< upper case for case-insensitive matching
-    static U8   is_tracing();              ///< return tracing flag
-    static char key();                     ///< Arduino's Serial.getchar(), yield to user tasks when waiting
+    static void set_mem(U8 *mem, U16 msz, U16 ssz) {
+        dic = mem;                         /// * start of dictionary
+        rp  = (U16*)(mem+msz);             /// * grows toward sp
+        sp  = (S16*)(mem+msz+ssz);         /// * grows toward 0
+        tib = (U8*)sp;                     /// * grows toward max
+    }
+    static void set_io(Stream *io) { _io = io; }    ///< initialize or redirect IO stream
+    static void set_trace(U8 f)    { _trc = f; }    ///< enable/disable execution tracing
+    static U8   is_tracing()       { return _trc; } ///< return tracing flag
+    static void set_ucase(U8 uc)   { _ucase = uc; } ///< set case sensitiveness
+    static char uc(char c)         {                ///< upper case for case-insensitive matching
+        return (_ucase && (c>='A')) ? c&0x5f : c;
+    }
     ///
-    ///@name dot_* for Console Output Routines
+    ///@name dot_* for Console Input/Output Routines
     ///@{
+    static char key();                     ///< Arduino's Serial.getchar(), yield to user tasks when waiting
     static void d_chr(char c);             ///< print a char to console
     static void d_adr(U16 a);              ///< print a 12-bit address
     static void d_str(U8 *p);              ///< handle dot string (byte-stream leading with length)
@@ -90,6 +101,6 @@ public:
     ///@}
 
 private:
-    static void _console_input(U8 *tib);   ///< retrieve input stream from console
+    static void _console_input();          ///< retrieve input stream from console
 };
 #endif //__SRC_NANOFORTH_CORE_H

@@ -5,20 +5,20 @@
  */
 #include "nanoforth_core.h"
 ///
-///@name Tracing Instrumentation
+///@name VM static variables
 ///@{
-Stream *N4Core::_io{ &Serial };                ///< default to Arduino Serial Monitor
+U8     *N4Core::dic   { NULL };                ///< base of dictionary
+U16    *N4Core::rp    { NULL };                ///< base of return stack
+S16    *N4Core::sp    { NULL };                ///< top of data stack
+U8     *N4Core::tib   { NULL };                ///< base of terminal input buffer
+///@}
+///@name IO controls
+///@{
+Stream *N4Core::_io   { &Serial };             ///< default to Arduino Serial Monitor
 U8      N4Core::_empty{ 1 };                   ///< empty flag for terminal input buffer
 U8      N4Core::_ucase{ 1 };                   ///< empty flag for terminal input buffer
 U8      N4Core::_trc{ 0 };                     ///< tracing flag for debug output
-
-void N4Core::set_io(Stream *io) { _io    = io; }
-void N4Core::set_trace(U8 f)    { _trc   = f;  }
-void N4Core::set_ucase(U8 uc)   { _ucase = uc; }
-char N4Core::uc(char c)         { return (_ucase && (c>='A')) ? c&0x5f : c; }
-U8   N4Core::is_tracing()       { return _trc; }
 ///@}
-///
 ///@name Console IO Functions with Cooperative Threading support
 ///@{
 #if ARDUINO
@@ -116,13 +116,12 @@ void N4Core::clear_tib() {
 ///
 U8 *N4Core::get_token(bool rst)
 {
-    static U8 tib[TIB_SZ];                   ///> input buffer
     static U8 *tp = tib;                     ///> token pointer to input buffer
     static U8 dq  = 0;                       ///> dot_string flag
 
     if (rst) { tp = tib; _empty = 1; return 0; }  /// * reset TIB for new input
     while (_empty || *tp==0 || *tp=='\\') {
-        _console_input(tib);                 ///>  read from console (with trailing blank)
+        _console_input();                    ///>  read from console (with trailing blank)
         while (*tp==' ') tp++;               ///>  skip leading spaces
     }
     if (!dq) {
@@ -167,7 +166,7 @@ U8 N4Core::find(U8 *tkn, const char *lst, U16 *id)
 ///
 ///> fill input buffer from console char-by-char til CR or LF hit
 ///
-void N4Core::_console_input(U8 *tib)
+void N4Core::_console_input()
 {
     U8 *p = tib;
     d_chr('\n');
@@ -194,4 +193,3 @@ void N4Core::_console_input(U8 *tib)
     }
     _empty = (p==tib);
 }
-
