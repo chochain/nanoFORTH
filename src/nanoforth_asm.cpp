@@ -74,10 +74,6 @@ constexpr U16 N4_SIG  = (((U16)'N'<<8)+(U16)'4');  ///< EEPROM signature
 constexpr U16 N4_AUTO = N4_SIG | 0x8080;           ///< EEPROM auto-run signature
 constexpr U16 ROM_HDR = 6;                         ///< EEPROM header size
 ///
-///> Assembler Object initializer
-///
-N4Asm::N4Asm(U8 *mem) : dic(mem) {}
-///
 ///> reset internal pointers (called by VM::reset)
 /// @return
 ///  1: autorun last word from EEPROM

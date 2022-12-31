@@ -59,9 +59,6 @@ constexpr U16 LFA_X    = 0xffff;     ///< end of link field
 ///
 class N4Asm : N4Core                // (10-byte header)
 {
-    U8  *dic;                       ///< dictionary base
-    U16 *rp;                        ///< return stack pointer
-
     U8  tab;                        ///< tracing indentation counter
     U8  xxx;                        ///< reserved
 
@@ -69,10 +66,7 @@ public:
     U8  *last;                      ///< pointer to last word, for debugging
     U8  *here;                      ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
 
-    /// Assembler constructor
-    N4Asm(
-        U8 *mem                     ///< pointer of memory block for dictionary
-        );
+    N4Asm() { /* do nothing */ }    ///< Assembler constructor
     U16 reset();                    ///< reset internal pointers (for BYE)
 
     /// Instruction Decoder
