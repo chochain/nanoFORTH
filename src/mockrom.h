@@ -6,11 +6,11 @@
 #define __SRC_EEPROM_H
 
 #if !ARDUINO
-static U8 _eeprom[N4_MEM_SZ];          ///< mock EEPROM storage
+static U8 _eeprom[N4_DIC_SZ];          ///< mock EEPROM storage
 class MockRom                          ///< mock EEPROM access class
 {
 public:
-    U16  length() { return N4_MEM_SZ; }
+    U16  length() { return N4_DIC_SZ; }
     U8   read(U16 idx) { return _eeprom[idx]; }
     void update(U16 idx, U8 v) { _eeprom[idx] = v; }
 };
