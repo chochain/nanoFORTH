@@ -14,19 +14,21 @@ n4_tptr NanoForth::_n4tsk{ NULL };                       ///< initialize task li
 ///   0 - if all allocation are OK<br>
 ///   1 - any allocation failure
 ///
-int NanoForth::begin(Stream &io, U8 ucase, U16 mem_sz, U16 stk_sz)
+int NanoForth::begin(Stream &io, U8 ucase, U16 dic_sz, U16 stk_sz, U16 tib_sz)
 {
-    _mem  = (U8*)malloc(mem_sz);                         /// * allocate Forth memory block
-    _n4vm = new N4VM(io, ucase, _mem, mem_sz, stk_sz);   /// * create Virtual Machine
+	U16 msz = dic_sz + stk_sz + tib_sz;
+    _mem  = (U8*)malloc(msz);                            /// * allocate Forth memory block
+    _n4vm = new N4VM(io, ucase, _mem, dic_sz, stk_sz);   /// * create Virtual Machine
 
     if (!_mem || !_n4vm) return -1;
 
 #if ARDUINO
     _n4vm->meminfo();                                    // display detailed pointers
 #else
-    log("MEM=$");   logx(mem_sz);                        // forth memory block
-    log("[DIC=$");  logx(mem_sz - stk_sz);               // dictionary size
+    log("MEM=$");   logx(msz);                           // forth memory block
+    log("[DIC=$");  logx(dic_sz);                        // dictionary size
     log(",STK=$");  logx(stk_sz);                        // stack size
+    log(",TIB=$");  logx(tib_sz);                        // input buffer size
     log("]\n");
 #endif // ARDUINO
 
@@ -89,11 +91,12 @@ int main(int argc, char **argv)
 /*
  * Revision History
  * -----------------
- *> 2022-12-28: chochain@yahoo.com - v1.4
- *  * [15634,472] autorun; handles Forth comments
+ *> 2022-12-28: chochain@yahoo.com - v1.6
+ *  * [13920,678] with computed goto; (cut 1% not good enough)
+ *  * [13692,230] static dic,rp,sp; (speed up 2%)
  *
  *> 2022-01-20: chochain@yahoo.com - v1.4
- *  * [15634,472] autorun; handles Forth comments
+ *  * [14140,278] autorun; handles Forth comments
  *
  *> 2021-05-16: chochain@yahoo.com - v1.2
  *  * [12360,272] move static variables into NanoForth class
