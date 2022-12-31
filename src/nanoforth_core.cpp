@@ -184,7 +184,7 @@ void N4Core::_console_input()
             d_chr(' ');
             d_chr('\b');
         }
-        else if ((p - tib) >= (TIB_SZ-1)) {
+        else if (p > (U8*)(&p - 0x10)) {
             show("TIB!\n");
             *p = 0;
             break;
