@@ -33,14 +33,15 @@ PROGMEM const char CMD[] = "\x07" \
     ":  " "VAR" "CST" "FGT" "DMP" "RST" "BYE";
     // TODO: "s\" " "(  " ".( " "\\  "
 PROGMEM const char JMP[] = "\x0b" \
-    ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "FOR" "NXT" \
-    "I  ";
+    ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
+    "NXT";
 PROGMEM const char PRM[] = "\x32" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
-    "NEG" "AND" "OR " "XOR" "NOT" "=  " "<  " ">  " "<= " ">= " \
+    "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " ">  " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "SEX" "TRC" \
-    "CLK" "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN";
+    "CLK" "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN" \
+    "ABS";
 PROGMEM const char PMX[] = "\x2" \
     "I  " "FOR" "NXT";
 constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
@@ -221,14 +222,16 @@ U8 N4Asm::query(U8 *tkn, U16 *adr)
 constexpr U8 WORDS_PER_ROW = 20;        ///< words per row when showing dictionary
 void N4Asm::words()
 {
-    U8 trc = is_tracing();
-    U8 n   = 0, wpr = WORDS_PER_ROW >> (trc ? 1 : 0);
+    U8  trc = is_tracing();
+    U8  wrp = WORDS_PER_ROW >> (trc ? 1 : 0);                 ///> wraping width
+    U16 n   = 0;
     for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {        /// **from last, loop through dictionary**
-        if (trc) { d_adr(IDX(p)); d_chr(':'); }               ///>> optionally show address
-        d_chr(p[2]); d_chr(p[3]); d_chr(p[4]); d_chr(' ');    ///>> 3-char name + space
-        if ((++n%wpr)==0) d_chr('\n');                        ///>> line-feed for every WORDS_PER_ROW
+        d_chr(n++%wrp ? ' ' : '\n');
+        if (trc) { d_adr(IDX(p)); d_chr(':'); }  ///>> optionally show address
+        d_chr(p[2]); d_chr(p[3]); d_chr(p[4]);                ///>> 3-char name
     }
-    _list_voc();                                              ///> list built-in vocabularies
+    _list_voc(trc ? n<<1 : n);                                ///> list built-in vocabularies
+    d_chr(' ');
 }
 ///
 ///> drop words from the dictionary
@@ -431,16 +434,16 @@ void N4Asm::_add_branch(U8 op)
         JMPSET(RPOP(), here+2);         // update A2 with next addr
         JMPBCK(RPOP(), OP_UDJ);         // unconditional jump back to A1
         break;
-    case 8: /* FOR */
+    case 8: /* I */
+        SET8(here, PRM_OPS | I_I);      // fetch loop counter
+        break;
+    case 9: /* FOR */
         RPUSH(IDX(here+1));             // save current addr A1
         SET8(here, PRM_OPS | I_FOR);    // encode FOR opcode
         break;
-    case 9: /* NXT */
+    case 10: /* NXT */
         SET8(here, PRM_OPS | I_NXT);    // encode NXT opcode
         JMPBCK(RPOP(), OP_UDJ);         // unconditionally jump back to A1
-        break;
-    case 10: /* I */
-        SET8(here, PRM_OPS | I_I);      // fetch loop counter
         break;
     }
 }
@@ -458,10 +461,10 @@ void N4Asm::_add_str()
 ///
 ///> list words in built-in vocabularies
 ///
-void N4Asm::_list_voc()
+void N4Asm::_list_voc(U16 n)
 {
-    const char *lst[] PROGMEM = { PRM, JMP, CMD };      // list of built-in primitives
-    for (U8 i=0, n=0; i<3; i++) {
+    const char *lst[] PROGMEM = { CMD, JMP, PRM };      // list of built-in primitives
+    for (U8 i=0; i<3; i++) {
 #if ARDUINO
         U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
 #else
@@ -472,5 +475,4 @@ void N4Asm::_list_voc()
             d_name(sz, lst[i], 1);
         }
     }
-    d_chr('\n');
 }
