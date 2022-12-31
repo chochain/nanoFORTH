@@ -17,7 +17,7 @@
 ///
 ///@name Data Stack and Return Stack Ops
 ///@{
-#define SP0            ((S16*)(dic+msz))            /**< base of parameter stack             */
+#define SP0            ((S16*)tib)                  /**< top of parameter stack              */
 #define TOS            (*sp)                        /**< pointer to top of current stack     */
 #define SS(i)          (*(sp+(i)))                  /**< pointer to the nth on stack         */
 #define PUSH(v)        (*(--sp)=(S16)(v))           /**< push v onto parameter stack         */
@@ -33,9 +33,10 @@
 ///
 ///> constructor and initializer
 ///
-N4VM::N4VM(Stream &io, U8 ucase, U8 *mem, U16 mem_sz, U16 stk_sz) :
-    n4asm(new N4Asm(mem)), dic(mem), msz(mem_sz), ssz(stk_sz)
+N4VM::N4VM(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz) :
+    n4asm(new N4Asm()), dsz(dic_sz)
 {
+    set_mem(dic, dic_sz, stk_sz);
     set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
     set_ucase(ucase);        /// * set case sensitiveness
 
@@ -48,13 +49,13 @@ void N4VM::meminfo()
 {
     S16 free = IDX(&free) - IDX(sp);               // in bytes
 #if ARDUINO && MEM_DEBUG
-    show("[dic=");    d_ptr(dic);
-    show(", rp=");    d_ptr((U8*)rp);
-    show(", sp=");    d_ptr((U8*)sp);
-    show(", max=");   d_ptr((U8*)&free);
-    show("] ");
+    show("mem[");         d_ptr(dic);
+    show("=dic|0x");      d_adr((U16)((U8*)rp - dic));
+    show("|rp->0x");      d_adr((U16)((U8*)sp - (U8*)rp));
+    show("<-sp|tib=");    d_num(free);
+    show("..|max=");      d_ptr((U8*)&free);
 #endif // MEM_DEBUG
-    d_num(free); show(" bytes free\n");
+    show("]\n");
 }
 ///
 ///> virtual machine execute single step (outer interpreter)
@@ -95,13 +96,10 @@ U8 N4VM::step()
 ///> reset virtual machine
 ///
 void N4VM::_init() {
-    //
-    // reset stack pointers and tracing flags
-    //
-    rp  = (U16*)&dic[msz - ssz];         /// * return stack pointer, grow upward
-    sp  = (S16*)&dic[msz];               /// * parameter stack pointer, grows downward
-
     show("nanoForth v1.6 ");             /// * show init prompt
+
+    rp = (U16*)(dic + dsz);              /// * reset return stack pointer
+    sp = SP0;                            /// * reset data stack pointer
 
     U16 adr = n4asm->reset();            /// * reload EEPROM and reset assembler
     if (adr != LFA_X) {                  /// * check autorun addr has been setup? (see SEX)
@@ -114,7 +112,7 @@ void N4VM::_init() {
 ///
 void N4VM::_ok()
 {
-    S16 *s0 = (S16*)&dic[msz];           /// * fetch top of heap
+    S16 *s0 = SP0;                       /// * fetch top of heap
     if (sp > s0) {                       /// * check stack overflow
         show("OVF!\n");
         sp = s0;                         // reset to top of stack block
@@ -160,11 +158,11 @@ void N4VM::_nest(U16 adr)
             op = ir & PRM_MASK;                           // capture opcode
             switch(op) {
             case I_NXT:
-            	if (!--(*(rp-1))) {                       // decrement counter *(rp-1)
-            		pc+=2;                                // if (i==0) break loop
-            		RPOP();                               // pop off index
-            	}
-            	break;
+                if (!--(*(rp-1))) {                       // decrement counter *(rp-1)
+                    pc+=2;                                // if (i==0) break loop
+                    RPOP();                               // pop off index
+                }
+                break;
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
             case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
             default: _invoke(op);                         // handle other opcodes
@@ -207,12 +205,12 @@ void N4VM::_invoke(U8 op)
     case 11: TOS &= POP();                break; // AND
     case 12: TOS |= POP();                break; // OR
     case 13: TOS ^= POP();                break; // XOR
-    case 14: TOS = TOS ? 0 : 1;           break; // NOT
-    case 15: TOS = POP()==TOS;            break; // =
-    case 16: TOS = POP()> TOS;            break; // <
-    case 17: TOS = POP()< TOS;            break; // >
-    case 18: TOS = POP()>=TOS;            break; // <=
-    case 19: TOS = POP()<=TOS;            break; // >=
+    case 14: TOS ^= -1;                   break; // NOT
+    case 15: TOS <<= POP();               break; // LSH
+    case 16: TOS >>= POP();               break; // RSH
+    case 17: TOS = POP()==TOS;            break; // =
+    case 18: TOS = POP()> TOS;            break; // <
+    case 19: TOS = POP()< TOS;            break; // >
     case 20: TOS = POP()!=TOS;            break; // <>
     case 21: { U8 *p = PTR(POP()); PUSH(GET16(p));  } break; // @
     case 22: { U8 *p = PTR(POP()); SET16(p, POP()); } break; // !
@@ -263,9 +261,9 @@ void N4VM::_invoke(U8 op)
     case 48: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
     case 49: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
 #endif //ARDUINO
-    case 50: /* available ... */          break;
+    case 50: TOS = abs(TOS);                          break; // ABS
+    case 51: /* available ... */          break;
     case 59: /* ... available */          break;
-        /* case 50-59 available for future expansion */
     case 60: PUSH(*(rp-1));               break; // I
     case 61: RPUSH(POP());                break; // FOR
     case 62: /* handled one level up */   break; // NXT
