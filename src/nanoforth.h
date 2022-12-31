@@ -10,11 +10,10 @@
  *    |0x0100|      |Arduino libraries |   |
  *    |      |0x0000|Dictionary==>     |x  |
  *    |      |      |...1K-byte...     |x  |
- *    |      |0x0400|Data Stack==>     |   |
- *    |      |      |...64 entries...  |   |
- *    |      |      |<==Return Stack   |   |
- *    |      |0x0480|nanoForth VM      |   |
- *    |      |      |nanoForth Assember|   |
+ *    |      |0x0400|Return Stack==>   |   |
+ *    |      |      |...128 entries... |   |
+ *    |      |      |<==Data Stack     |   |
+ *    |      |0x0500|Input Buffer      |   |
  *    |      |      |...free memory... |   |
  *    |      |      |Arduino heap      |   |
  *    |0x0900|      |                  |   |
@@ -56,9 +55,9 @@ typedef int32_t      S32;         ///< 32-bit signed integer
 ///
 //@name Default Heap sizing
 ///@{
-constexpr U16 N4_STK_SZ = 0x80;                  /**< default parameter/return stack size       */
 constexpr U16 N4_DIC_SZ = 0x400;                 /**< default dictionary size                   */
-constexpr U16 N4_MEM_SZ = (N4_DIC_SZ+N4_STK_SZ); /**< total memory block allocate for nanoForth */
+constexpr U16 N4_STK_SZ = 0x100;                 /**< default parameter/return stack size       */
+constexpr U16 N4_TIB_SZ = 0x100;                 /**< default terminal input buffer size        */
 ///@}
 ///
 /// nanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
@@ -103,8 +102,9 @@ public:
     int  begin(
         Stream &io=Serial,        ///< iostream which can be redirected to SoftwareSerial
         U8  ucase=1,              ///< case sensitiveness (default: insensitive)
-        U16 mem_sz=N4_MEM_SZ,     ///< memory size (default: N4_MEM_SZ=0x480)
-        U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size (default: N4_STK_SZ=0x80)
+        U16 dic_sz=N4_DIC_SZ,     ///< dictionary size (default: N4_DIC_SZ=0x400)
+        U16 stk_sz=N4_STK_SZ,     ///< parameter+return stack size (default: N4_STK_SZ=0x80)
+		U16 tib_sz=N4_TIB_SZ
         );                        ///< placeholder for extra setup
     void exec();                  ///< nanoForth run one line of command input
     //
