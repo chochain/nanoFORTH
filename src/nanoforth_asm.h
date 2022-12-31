@@ -113,6 +113,6 @@ private:
     void _add_word();               ///< create name field and link to previous word
     void _add_branch(U8 op);        ///< manage branching opcodes
     void _add_str();                ///< add string for ."
-    void _list_voc();               ///< list words from all vocabularies
+    void _list_voc(U16 n);          ///< list words from all vocabularies
 };
 #endif //__SRC_NANOFORTH_ASM_H
