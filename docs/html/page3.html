@@ -98,22 +98,24 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyRight">0x900 </td><td class="markdownTableBodyCenter">Arduino RAM max </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyRight">0x8f5 </td><td class="markdownTableBodyCenter">global/static variables </td><td class="markdownTableBodyCenter">⇩ </td><td class="markdownTableBodyCenter">.  </td></tr>
+<td class="markdownTableBodyRight">0x8f6 </td><td class="markdownTableBodyCenter">global/static variables </td><td class="markdownTableBodyCenter">⇩ </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">free memory/heap </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">.  </td></tr>
+<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">Arduino heap </td><td class="markdownTableBodyCenter">⇩ </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyRight">0x696 </td><td class="markdownTableBodyCenter"><b>return stack</b> </td><td class="markdownTableBodyCenter">⇩ </td><td class="markdownTableBodyCenter">X  </td></tr>
+<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">Forth input buffer </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight">0x617 </td><td class="markdownTableBodyCenter"><b>data stack</b> </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X  </td></tr>
+<td class="markdownTableBodyRight">0x618 </td><td class="markdownTableBodyCenter"><b>return stack</b> </td><td class="markdownTableBodyCenter">⇩ </td><td class="markdownTableBodyCenter">X  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyRight">0x518 </td><td class="markdownTableBodyCenter"><b>data stack</b> </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">user defined words </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight">0x217 </td><td class="markdownTableBodyCenter"><b>user dictionary</b> starts </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyRight">0x1e8 </td><td class="markdownTableBodyCenter"><b>user dictionary</b> starts </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">Arduino libraries </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight">0x100 </td><td class="markdownTableBodyCenter">Arduino RAM starts </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyRight">0x100 </td><td class="markdownTableBodyCenter">Arduino RAM starts </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">.  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyRight">0x000 </td><td class="markdownTableBodyCenter">Arduino registers </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">.  </td></tr>
 </table>
 </blockquote>
@@ -175,6 +177,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">NEG </td><td class="markdownTableBodyLeft"><code>(a -- -a)</code> </td><td class="markdownTableBodyLeft">negate  </td></tr>
 </table>
+<p>|ABS|<code>(a -- |a|)</code>|absolute|</p>
 <p><b>Examples</b></p>
 <p>17 5 + ⏎ ➤ <em>22_ok</em><br  />
  1 2 3 4 + + + ⏎ ➤ <em>10_ok</em><br  />
@@ -195,15 +198,15 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">NOT </td><td class="markdownTableBodyLeft"><code>(a -- ^a)</code> </td><td class="markdownTableBodyLeft">binary not  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">LSH </td><td class="markdownTableBodyLeft"><code>(n i -- n&lt;&lt;=i)</code> </td><td class="markdownTableBodyLeft">left shift  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">RSH </td><td class="markdownTableBodyLeft"><code>(n i -- n&gt;&gt;=i)</code> </td><td class="markdownTableBodyLeft">right shift  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">= </td><td class="markdownTableBodyLeft"><code>(a b -- a==b)</code> </td><td class="markdownTableBodyLeft">equal  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">&lt; </td><td class="markdownTableBodyLeft"><code>(a b -- a&lt;b)</code> </td><td class="markdownTableBodyLeft">less than  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">&gt; </td><td class="markdownTableBodyLeft"><code>(a b -- a&gt;b)</code> </td><td class="markdownTableBodyLeft">greater than  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">&lt;= </td><td class="markdownTableBodyLeft"><code>(a b -- a&lt;=b)</code> </td><td class="markdownTableBodyLeft">lesser equal  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">&gt;= </td><td class="markdownTableBodyLeft"><code>(a b -- a&gt;=b)</code> </td><td class="markdownTableBodyLeft">greater equal  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">&lt;&gt; </td><td class="markdownTableBodyLeft"><code>(a b -- a!=b)</code> </td><td class="markdownTableBodyLeft">not equal  </td></tr>
 </table>

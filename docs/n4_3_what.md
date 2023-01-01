@@ -10,12 +10,13 @@ Compared to any FORTH language tutorial, you probably will notice that the lengt
 > |address|object|growth|forth|
 > |--:|:---:|:--:|:--:|
 > |0x900|Arduino RAM max|_|.|
-> |0x8f5|global/static variables|⇩|.|
-> |...|free memory/heap|_|.|
-> |0x696| **return stack** |⇩|X|
-> |0x617| **data stack** |⇧|X|
+> |0x8f6|global/static variables|⇩|.|
+> |...|Arduino heap|⇩|.|
+> |...|Forth input buffer|⇧|X|
+> |0x618| **return stack** |⇩|X|
+> |0x518| **data stack** |⇧|X|
 > |...|user defined words|⇧|X|
-> |0x217| **user dictionary** starts|⇧|X|
+> |0x1e8| **user dictionary** starts|⇧|X|
 > |...|Arduino libraries|_|.|
 > |0x100|Arduino RAM starts|_|.|
 > |0x000|Arduino registers|_|.|
@@ -62,6 +63,7 @@ nanoFORTH handles only integer numbers.
 > |/  |`(a b -- a/b)`|divide|
 > |MOD|`(a b -- a%%b`)|modulo|
 > |NEG|`(a   -- -a)`|negate|
+> |ABS|`(a   -- |a|)`|absolute|
 >
 > **Examples**
 >
@@ -76,11 +78,11 @@ nanoFORTH handles only integer numbers.
 > |OR |(a b \- \- a\|b)|binary or|
 > |XOR|(a b \- \- a^b)|binary xor|
 > |NOT|`(a -- ^a)`|binary not|
+> |LSH|`(n i -- n<<=i)`|left shift|
+> |RSH|`(n i -- n>>=i)`|right shift|
 > |= |`(a b -- a==b)`|equal|
 > |< |`(a b -- a<b)`|less than|
 > |> |`(a b -- a>b)`|greater than|
-> |<=|`(a b -- a<=b)`|lesser equal|
-> |>=|`(a b -- a>=b)`|greater equal|
 > |<>|`(a b -- a!=b)`|not equal|
 
 ### Word Definition and Dictionary Ops (in Interactive mode only)
