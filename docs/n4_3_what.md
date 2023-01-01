@@ -14,6 +14,7 @@ Compared to any FORTH language tutorial, you probably will notice that the lengt
 > |...|Arduino heap|⇩|.|
 > |...|Forth input buffer|⇧|X|
 > |0x618| **return stack** |⇩|X|
+> |...|0x100 shared space|_|X|
 > |0x518| **data stack** |⇧|X|
 > |...|user defined words|⇧|X|
 > |0x1e8| **user dictionary** starts|⇧|X|
