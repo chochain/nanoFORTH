@@ -265,7 +265,9 @@ void N4VM::_invoke(U8 op)
     case 50: TOS = abs(TOS);                          break; // ABS
     case 51: set_hex(1);                              break; // HEX
     case 52: set_hex(0);                              break; // DEC
-    case 53: /* available ... */          break;
+    case 53: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
+    case 54: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
+    case 55: /* available ... */          break;
     case 59: /* ... available */          break;
     case 60: PUSH(*(rp-1));               break; // I
     case 61: RPUSH(POP());                break; // FOR
