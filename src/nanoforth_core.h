@@ -34,6 +34,7 @@ class N4Core
 {
     static U8   _empty;                    ///< token input buffer empty flag
     static U8   _ucase;                    ///< case insensitive
+    static U8   _hex;                      ///< numeric radix for display
     static U8   _trc;                      ///< tracing flags
 
 protected:
@@ -51,6 +52,7 @@ public:
         tib = (U8*)sp;                     /// * grows toward max
     }
     static void set_io(Stream *io) { _io = io; }    ///< initialize or redirect IO stream
+    static void set_hex(U8 f)      { _hex = f; }    ///< enable/disable hex numeric radix
     static void set_trace(U8 f)    { _trc = f; }    ///< enable/disable execution tracing
     static U8   is_tracing()       { return _trc; } ///< return tracing flag
     static void set_ucase(U8 uc)   { _ucase = uc; } ///< set case sensitiveness
