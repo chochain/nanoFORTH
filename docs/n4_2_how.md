@@ -67,13 +67,22 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 * if it's too much info for you, then turn the tracing off
 > 0 TRC ⏎<br/>
 
+* to do some logic ops in hex, and back in decimal, we can do this
+> HEX ⏎<br/>
+> 40 38
+> ⇨ 40_38_ok
+> OR ⏎<br/>
+> 78_ok
+> DEC ⏎<br/>
+> ⇨ 120_ok
+
 * get Arduino clock/millis, a double precision (i.e. 32-bit) value
 > CLK ⏎<br/>
-> ⇨ -26395_188_ok
+> ⇨ 17786_9_ok
 >> \> nanoFORTH uses two 16-bit cells on data stack to represent the 32-bit number<br/>
 >> \> note the numbers above are for example only, your clock read will be different
 
-* to benchmark something, let's defined a function **zz** that runs in empty loops and time it
+* to benchmark something, let's define a function **zz** that runs in empty loops and time it
 > : **zz** 10000 FOR NXT ;⏎<br/>
 > CLK DNG **zz** CLK D+ ⏎<br/>
 > ⇨ 227_0_ok
@@ -81,11 +90,11 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 >> \> DNG negate the first clock ticks<br/>
 >> \> D+ add two clock counts (i.e. (-t0) + t1) to deduce the time difference
 
-* find out how many bytes of memory has been used
+* to find out how many bytes of memory has been used
 > HRE ⏎<br/>
 > ⇨ 76_ok
 
-* dump the memory to see how all these words are encoded in the dictionary
+* to dump the memory to see how all these words are encoded in the dictionary
 > 0 HRE DMP ⏎
 >> \> There! You can see the hex dump of our **red** ... **blu** ...<br/>
 >> \> in their gory detail all the way up to the latest word **zz**

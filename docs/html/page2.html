@@ -159,15 +159,22 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
  </p>
 </blockquote>
 </li>
+<li>to do some logic ops in hex, and back in decimal, we can do this <blockquote class="doxtable">
+<p>HEX ⏎<br  />
+ 40 38 ⇨ 40_38_ok OR ⏎<br  />
+ 78_ok DEC ⏎<br  />
+ ⇨ 120_ok </p>
+</blockquote>
+</li>
 <li>get Arduino clock/millis, a double precision (i.e. 32-bit) value <blockquote class="doxtable">
 <p>CLK ⏎<br  />
- ⇨ -26395_188_ok </p><blockquote class="doxtable">
+ ⇨ 17786_9_ok </p><blockquote class="doxtable">
 <p>&gt; nanoFORTH uses two 16-bit cells on data stack to represent the 32-bit number<br  />
  &gt; note the numbers above are for example only, your clock read will be different </p>
 </blockquote>
 </blockquote>
 </li>
-<li>to benchmark something, let's defined a function <b>zz</b> that runs in empty loops and time it <blockquote class="doxtable">
+<li>to benchmark something, let's define a function <b>zz</b> that runs in empty loops and time it <blockquote class="doxtable">
 <p>: <b>zz</b> 10000 FOR NXT ;⏎<br  />
  CLK DNG <b>zz</b> CLK D+ ⏎<br  />
  ⇨ 227_0_ok </p><blockquote class="doxtable">
@@ -177,12 +184,12 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </blockquote>
 </blockquote>
 </li>
-<li>find out how many bytes of memory has been used <blockquote class="doxtable">
+<li>to find out how many bytes of memory has been used <blockquote class="doxtable">
 <p>HRE ⏎<br  />
  ⇨ 76_ok </p>
 </blockquote>
 </li>
-<li>dump the memory to see how all these words are encoded in the dictionary <blockquote class="doxtable">
+<li>to dump the memory to see how all these words are encoded in the dictionary <blockquote class="doxtable">
 <p>0 HRE DMP ⏎ </p><blockquote class="doxtable">
 <p>&gt; There! You can see the hex dump of our <b>red</b> ... <b>blu</b> ...<br  />
  &gt; in their gory detail all the way up to the latest word <b>zz</b> </p>
