@@ -35,14 +35,14 @@ PROGMEM const char CMD[] = "\x07" \
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
     "NXT";
-PROGMEM const char PRM[] = "\x32" \
+PROGMEM const char PRM[] = "\x35" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
     "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " ">  " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "SEX" "TRC" \
     "CLK" "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN" \
-    "ABS";
-PROGMEM const char PMX[] = "\x2" \
+    "ABS" "HEX" "DEC";
+PROGMEM const char PMX[] = "\x3" \
     "I  " "FOR" "NXT";
 constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
 ///@}
@@ -84,7 +84,7 @@ U16 N4Asm::reset()
     here    = dic;                       // rewind to dictionary base
     last    = PTR(LFA_X);                // root of linked field
     tab     = 0;
-
+    
 #if ARDUINO
     set_trace(0);
 #else
