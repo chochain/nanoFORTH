@@ -39,6 +39,7 @@ N4VM::N4VM(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz) :
     set_mem(dic, dic_sz, stk_sz);
     set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
     set_ucase(ucase);        /// * set case sensitiveness
+    set_hex(0);              /// * set radix = 10
 
     if (n4asm) _init();      /// * bail if creation failed
 }
@@ -262,7 +263,9 @@ void N4VM::_invoke(U8 op)
     case 49: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
 #endif //ARDUINO
     case 50: TOS = abs(TOS);                          break; // ABS
-    case 51: /* available ... */          break;
+    case 51: set_hex(1);                              break; // HEX
+    case 52: set_hex(0);                              break; // DEC
+    case 53: /* available ... */          break;
     case 59: /* ... available */          break;
     case 60: PUSH(*(rp-1));               break; // I
     case 61: RPUSH(POP());                break; // FOR
@@ -279,13 +282,13 @@ void N4VM::_dump(U16 p0, U16 sz0)
     U8  *p = PTR((p0&0xffe0));
     U16 sz = (sz0+0x1f)&0xffe0;
     for (U16 i=0; i<sz; i+=0x20) {
+        d_chr('\n');
         d_mem(dic, p, 0x20, ' ');
         d_chr(' ');
         for (U8 j=0; j<0x20; j++, p++) {         // print and advance to next byte
             char c = *p & 0x7f;
             d_chr((c==0x7f||c<0x20) ? '_' : c);
         }
-        d_chr('\n');
     }
 #endif // MEM_DEBUG
 }
