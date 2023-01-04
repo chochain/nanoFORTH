@@ -4,15 +4,16 @@
  *
  * #### Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)
  *
- * @code
+ * @code memory space
  *                                    SP0 (sp max to protect overwritten of vm object)
- *        mem[...dic_sz...[...stk_sz...]
- *           |            |            |
- *           dic-->       +->rp    sp<-+
- *                                 TOS TOS1 (top of stack)
+ *        mem[...dic_sz...|...stk_sz...|......heap......]max
+ *           |            |            |                |
+ *           dic-->       +-->rp  sp<--+-->tib   auto<--+
+ *                                TOS TOS1 (top of stack)
  * @endcode
  */
 #include "nanoforth_asm.h"
+#include "nanoforth_intr.h"
 #include "nanoforth_vm.h"
 ///
 ///@name Data Stack and Return Stack Ops
@@ -34,7 +35,7 @@
 ///> constructor and initializer
 ///
 N4VM::N4VM(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz) :
-    n4asm(new N4Asm()), dsz(dic_sz)
+    n4asm(new N4Asm()), n4intr(new N4Intr()), dsz(dic_sz)
 {
     set_mem(dic, dic_sz, stk_sz);
     set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
@@ -66,6 +67,9 @@ void N4VM::meminfo()
 ///
 U8 N4VM::step()
 {
+	FPTR fn = static_cast<FPTR>(&this->_nest);
+	n4intr->service(fn);          ///> call interrupt service routines
+
     if (is_tib_empty()) _ok();                   ///> console ok prompt
 
     U8  *tkn = get_token();                      ///> get a token from console
@@ -76,13 +80,23 @@ U8 N4VM::step()
         case 0: n4asm->compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
         case 1: n4asm->variable();      break;   /// * VAR, create new variable
         case 2: n4asm->constant(POP()); break;   /// * CST, create new constant
-        case 3: n4asm->forget();        break;   /// * FGT, rollback word created
-        case 4: _dump(POP(), POP());    break;   /// * DMP, memory dump
-        case 5: _init();                break;   /// * RST, restart the virtual machine (for debugging)
+        case 3: {                                /// * PCI, create a pin change interrupt handler
+            U16 n   = POP();                     ///< pin number
+            U16 adr = n4asm->query();            ///< word address of next input token
+            if (adr) n4intr->add_pci(n, adr);
+        } break;
+        case 4: {                                /// * TMR, create a timer interrupt handler
+            U16 p   = POP();                     ///< period in 0.1 sec
+        	U16 adr = n4asm->query();            ///< find word address of next input token
+        	if (adr) n4intr->add_timer(p, adr);
+        } break;
+        case 5: n4asm->forget();        break;   /// * FGT, rollback word created
+        case 6: _dump(POP(), POP());    break;   /// * DMP, memory dump
+        case 7: _init();                break;   /// * RST, restart the virtual machine (for debugging)
 #if ARDUINO
-        case 6: _init();                break;   /// * BYE, restart
+        case 8: _init();                break;   /// * BYE, restart
 #else
-        case 6: exit(0);                break;   /// * BYE, bail to OS
+        case 8: exit(0);                break;   /// * BYE, bail to OS
 #endif // ARDUINO
         }                               break;
     case TKN_WRD: _nest(tmp + 2 + 3);   break;   ///>> execute colon word (user defined)
@@ -101,11 +115,12 @@ void N4VM::_init() {
 
     rp = (U16*)(dic + dsz);              /// * reset return stack pointer
     sp = SP0;                            /// * reset data stack pointer
+    n4intr->reset();
 
-    U16 adr = n4asm->reset();            /// * reload EEPROM and reset assembler
-    if (adr != LFA_X) {                  /// * check autorun addr has been setup? (see SEX)
+    U16 xt = n4asm->reset();             /// * reload EEPROM and reset assembler
+    if (xt != LFA_X) {                   /// * check autorun addr has been setup? (see SEX)
         show("reset\n");
-        _nest(adr + 2 + 3);              /// * execute last saved colon word in EEPROM
+        _nest(xt + 2 + 3);               /// * execute last saved colon word in EEPROM
     }
 }
 ///
@@ -126,10 +141,10 @@ void N4VM::_ok()
 ///
 ///> opcode execution unit
 ///
-void N4VM::_nest(U16 adr)
+void N4VM::_nest(U16 xt)
 {
     RPUSH(LFA_X);                                         // enter function call
-    for (U8 *pc=PTR(adr); pc!=PTR(LFA_X); ) {             ///> walk through instruction sequences
+    for (U8 *pc=PTR(xt); pc!=PTR(LFA_X); ) {              ///> walk through instruction sequences
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
@@ -254,21 +269,22 @@ void N4VM::_invoke(U8 op)
         SS(1) = (S16)LO16(v);
         TOS   = (S16)HI16(v);
     }                                     break;
+    case 44: set_hex(1);                              break; // HEX
+    case 45: set_hex(0);                              break; // DEC
+    case 46: TOS = abs(TOS);                          break; // ABS
+    case 47: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
+    case 48: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
 #if ARDUINO
-    case 44: NanoForth::wait((U32)POP());             break; // DLY
-    case 45: PUSH(digitalRead(POP()));                break; // IN
-    case 46: PUSH(analogRead(POP()));                 break; // AIN
-    case 47: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
-    case 48: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
-    case 49: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
+    case 49: NanoForth::wait((U32)POP());             break; // DLY
+    case 50: PUSH(digitalRead(POP()));                break; // IN
+    case 51: PUSH(analogRead(POP()));                 break; // AIN
+    case 52: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
+    case 53: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
+    case 54: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
+    case 55: n4intr->enable_timer(POP());             break; // TMI - enable, disable timer interrupt
+    case 56: n4intr->enable_pci(POP());               break; // PCI - enable/disable pin change interrupts
 #endif //ARDUINO
-    case 50: TOS = abs(TOS);                          break; // ABS
-    case 51: set_hex(1);                              break; // HEX
-    case 52: set_hex(0);                              break; // DEC
-    case 53: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
-    case 54: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
-    case 55: /* available ... */          break;
-    case 59: /* ... available */          break;
+    case 57: case 58: case 59: /* available */        break;
     case 60: PUSH(*(rp-1));               break; // I
     case 61: RPUSH(POP());                break; // FOR
     case 62: /* handled one level up */   break; // NXT
