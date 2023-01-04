@@ -6,8 +6,8 @@
  *
  * @code
  *    mem[...dic_sz...[...stk_sz...]
- *       |                         |
- *       +-dic-->            <--rp-+
+ *       |            |            |
+ *       +-dic-->     +-->sp  rp<--+
  * @endcode
  */
 #include "nanoforth_asm.h"
@@ -29,19 +29,20 @@
 /// @brief loop control opcodes
 ///
 ///@{
-PROGMEM const char CMD[] = "\x07" \
-    ":  " "VAR" "CST" "FGT" "DMP" "RST" "BYE";
-    // TODO: "s\" " "(  " ".( " "\\  "
+PROGMEM const char CMD[] = "\x09" \
+    ":  " "VAR" "CST" "PCI" "TMI" "FGT" "DMP" "RST" "BYE";
+    // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
     "NXT";
-PROGMEM const char PRM[] = "\x37" \
+PROGMEM const char PRM[] = "\x39" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
     "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " ">  " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "SEX" "TRC" \
-    "CLK" "D+ " "D- " "DNG" "DLY" "IN " "AIN" "OUT" "PWM" "PIN" \
-    "ABS" "HEX" "DEC" "MAX" "MIN";
+    "CLK" "D+ " "D- " "DNG" "ABS" "HEX" "DEC" "MAX" "MIN" "DLY" \
+	"IN " "AIN" "OUT" "PWM" "PIN" "TME" "PCE";
+
 PROGMEM const char PMX[] = "\x3" \
     "I  " "FOR" "NXT";
 constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
@@ -94,11 +95,22 @@ U16 N4Asm::reset()
     return load(true);
 }
 ///
+///> get address of next input token
+///
+U16 N4Asm::query() {
+    U16 adr;                                ///< address of word
+    if (!_tok2adr(get_token(), &adr)) {     /// check if token is in dictionary
+        show("?!  ");                       /// * not found, bail
+        return 0;
+    }
+    return adr;
+}
+///
 ///> parse given token into actionable item
 ///
 N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
 {
-    if (query(tkn, rst))                 return TKN_WRD; /// * WRD - is a colon word? [adr(2),name(3)]
+    if (_tok2adr(tkn, rst))              return TKN_WRD; /// * WRD - is a colon word? [lnk(2),name(3)]
     if (find(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM - is a immediate word?
     if (find(tkn, PRM, rst))             return TKN_PRM; /// * PRM - is a primitives?
     if (number(tkn, (S16*)rst))          return TKN_NUM; /// * NUM - is a number literal?
@@ -130,7 +142,7 @@ void N4Asm::compile(U16 *rp0)
             }
             else _add_branch(tmp);          /// * add branching opcode
             break;
-        case TKN_WRD:                       ///>> a colon word? [addr + adr(2) + name(3)]
+        case TKN_WRD:                       ///>> a colon word? [addr + lnk(2) + name(3)]
             JMPBCK(tmp+2+3, OP_CALL);       /// * call subroutine
             break;
         case TKN_PRM:                       ///>> a built-in primitives?
@@ -195,24 +207,6 @@ void N4Asm::constant(S16 v)
     SET8(here, OP_RET);
 }
 ///
-///> scan the keyword through dictionary linked-list
-/// @return
-///    1 - token found<br/>
-///    0 - token not found
-///
-U8 N4Asm::query(U8 *tkn, U16 *adr)
-{
-    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {
-        if (uc(p[2])==uc(tkn[0]) &&
-            uc(p[3])==uc(tkn[1]) &&
-            (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
-            *adr = IDX(p);
-            return 1;
-        }
-    }
-    return 0;
-}
-///
 ///> display words in dictionary
 ///
 constexpr U8 WORDS_PER_ROW = 20;        ///< words per row when showing dictionary
@@ -223,7 +217,7 @@ void N4Asm::words()
     U16 n   = 0;
     for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {        /// **from last, loop through dictionary**
         d_chr(n++%wrp ? ' ' : '\n');
-        if (trc) { d_adr(IDX(p)); d_chr(':'); }  ///>> optionally show address
+        if (trc) { d_adr(IDX(p)); d_chr(':'); }               ///>> optionally show address
         d_chr(p[2]); d_chr(p[3]); d_chr(p[4]);                ///>> 3-char name
     }
     _list_voc(trc ? n<<1 : n);                                ///> list built-in vocabularies
@@ -234,15 +228,12 @@ void N4Asm::words()
 ///
 void N4Asm::forget()
 {
-    U16 adr;
-    if (!query(get_token(), &adr)) {        /// check if token is in dictionary
-        show("?!  ");                       /// * not found, bail
-        return;
-    }
+    U16 adr = query();                      ///< address of word
+    if (!adr) return;                       /// * bail if word not found
     ///
     /// word found, rollback here
     ///
-    U8 *p = PTR(adr);                       // address of word
+    U8 *p = PTR(adr);                       ///< pointer to word
     last  = PTR(GET16(p));                  /// * reset last word address
     here  = p;                              /// * reset current pointer
 }
@@ -286,7 +277,7 @@ void N4Asm::save(bool autorun)
 ///
 ///> restore dictionary from EEPROM into RAM
 /// @return
-///    adr:   autorun address (of last word from EEPROM)
+///    lnk:   autorun address (of last word from EEPROM)
 ///    LFA_X: no autorun or EEPROM not been setup yet
 ///
 U16 N4Asm::load(bool autorun)
@@ -380,6 +371,25 @@ void N4Asm::trace(U16 a, U8 ir)
         d_chr('#'); d_u8(ir);
     }
     d_chr(' ');
+}
+///
+///> find word address of next input token 
+/// @brief scan the keyword through dictionary linked-list
+/// @return
+///    1 - token found<br/>
+///    0 - token not found
+///
+U8 N4Asm::_tok2adr(U8 *tkn, U16 *adr)
+{
+    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {
+        if (uc(p[2])==uc(tkn[0]) &&
+            uc(p[3])==uc(tkn[1]) &&
+            (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
+            *adr = IDX(p);
+            return 1;
+        }
+    }
+    return 0;
 }
 ///
 ///> create name field with link back to previous word
