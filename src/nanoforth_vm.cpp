@@ -67,9 +67,7 @@ void N4VM::meminfo()
 ///
 U8 N4VM::step()
 {
-	FPTR fn = static_cast<FPTR>(&this->_nest);
-	n4intr->service(fn);          ///> call interrupt service routines
-
+	_intr();                                     ///> service interrupts (if any)
     if (is_tib_empty()) _ok();                   ///> console ok prompt
 
     U8  *tkn = get_token();                      ///> get a token from console
@@ -137,6 +135,16 @@ void N4VM::_ok()
         d_num(*p); d_chr('_');
     }
     show("ok");                         /// * user input prompt
+}
+///
+///> virtual machine interrupt service routine
+///
+void N4VM::_intr() {
+	U16 xt[11];
+	U16 n = n4intr->isr(xt);
+	for (int i=0; i<n; i++) {
+		_nest(xt[i]);
+	}
 }
 ///
 ///> opcode execution unit
