@@ -59,21 +59,22 @@ constexpr U16 LFA_X    = 0xffff;     ///< end of link field
 ///
 class N4Asm : N4Core                // (10-byte header)
 {
-    U8  tab;                        ///< tracing indentation counter
+    U8  tab = 0;                  	///< tracing indentation counter
     U8  xxx;                        ///< reserved
 
 public:
-    U8  *last;                      ///< pointer to last word, for debugging
-    U8  *here;                      ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
+    U8  *last = NULL;               ///< pointer to last word, for debugging
+    U8  *here = NULL;               ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
 
     N4Asm() { /* do nothing */ }    ///< Assembler constructor
     U16 reset();                    ///< reset internal pointers (for BYE)
 
     /// Instruction Decoder
+    U16  query();                   ///< get address of input next token
     N4OP parse_token(
-        U8 *tkn,                    ///< token to be parsed
+        U8  *tkn,                   ///< token to be parsed
         U16 *rst,                   ///< parsed result
-        U8 run                      ///< run mode flag (1: run mode, 0: compile mode)
+        U8  run                     ///< run mode flag (1: run mode, 0: compile mode)
         );
 
     /// Forth compiler
@@ -85,10 +86,6 @@ public:
 
     // dictionary, string list scanners
     /// query(token) in dictionary for existing word
-    U8   query(
-        U8 *tkn,                    ///< token to be searched
-        U16 *adr                    ///< function address of the found word
-        );
     void words();                   ///< display words in dictionary
     void forget();                  ///< forgets word in the dictionary
 
@@ -100,10 +97,14 @@ public:
     /// print execution tracing info
     void trace(
         U16 adr,                    ///< address to word to be executed
-        U8 ir                       ///< instruction register value
+        U8  ir                      ///< instruction register value
         );
 
 private:
+    U8  _tok2adr(
+        U8  *tkn,                   ///< token to be searched
+        U16 *adr                    ///< function address of the found word
+        );
     void _add_word();               ///< create name field and link to previous word
     void _add_branch(U8 op);        ///< manage branching opcodes
     void _add_str();                ///< add string for ."
