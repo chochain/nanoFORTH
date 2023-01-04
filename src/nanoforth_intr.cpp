@@ -19,6 +19,18 @@ void N4Intr::reset() {
     p_hit = t_hit = t_idx = 0;
     SEI();
 }
+U16 N4Intr::isr(U16 *xt) {
+	U16 n = 0;
+	CLI();
+    for (int i=0; t_hit && i<t_idx; i++, t_hit>>=1) {
+        if (t_hit & 1) xt[n++] = t_xt[i];
+    }
+    for (int i=0; p_hit && i<3; i++, p_hit>>=1) {
+        if (p_hit & 1) xt[n++] = p_xt[i];
+    }
+	SEI();
+	return n;
+}
 void N4Intr::add_timer(U16 n, U16 adr)
 {
     if (t_idx > 7) return;                  // range check
@@ -28,15 +40,6 @@ void N4Intr::add_timer(U16 n, U16 adr)
     t_max[t_idx] = n;                       // period (in 0.1s)
 
     t_idx++;
-}
-void N4Intr::service(FPTR fn) {
-	if (!(t_hit || p_hit)) return;
-    //
-	//
-	//
-    CLI();
-    t_hit = p_hit = 0;
-    SEI();
 }
 #if ARDUINO
 ///
