@@ -8,12 +8,14 @@
 #include "nanoforth_core.h"
 
 class N4Asm;                   // forward declaration
+class N4Intr;
 ///
 /// nanoForth Virtual Machine class
 ///
 class N4VM : N4Core
 {                             //  (12-byte header)
-    N4Asm  *n4asm;            ///< assembler object pointer
+    N4Asm  *n4asm;            ///< assembler handler
+    N4Intr *n4intr;           ///< interrupt handler
     U16    dsz;               ///< dictionary size
 
 public:
@@ -35,7 +37,7 @@ private:
 
     ///@name VM execution units
     ///@{
-    void _nest(U16 adr);      ///< execute a colon word
+    void _nest(U16 xt);       ///< execute a colon word
     void _invoke(U8 op);      ///< invoke a built-in opcode
     ///@}
     ///@name Memory Dumper
