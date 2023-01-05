@@ -16,10 +16,10 @@
 
 typedef void (N4VM::* FPTR)(U16);
 struct N4Intr {
-	static U8   p_hit;           ///< pin change interrupt
-	static U8   t_hit;           ///< 8-bit for 8 vectors
-	static U8   t_idx;           ///< timer ISR index
-	static U8   xxx;             ///< reserved
+	static U8  t_idx;            ///< timer ISR index
+	static U8  t_hit;            ///< 8-bit for 8 timer ISR vectors
+	static U8  p_hit;            ///< pin change interrupt
+	static U8  xxx;              ///< reserved
 
     static U16  p_xt[3];         ///< pin change ISR
     static U16  t_cnt[8];        ///< timer counter
@@ -27,7 +27,7 @@ struct N4Intr {
     static U16  t_xt[8];         ///< timer ISR
 
     static void reset();         ///< reset interrupts
-    static U16  hit(U16 *xt);    ///< fetch interrupt service routines
+    static U16  hits(U16 *xt);   ///< fetch interrupt service routines
 
     static void add_timer(U16 prd, U16 xt);
 #if ARDUINO
