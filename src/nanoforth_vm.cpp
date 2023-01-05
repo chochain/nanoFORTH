@@ -67,27 +67,21 @@ void N4VM::meminfo()
 ///
 U8 N4VM::step()
 {
-	_intr();                                     ///> service interrupts (if any)
     if (is_tib_empty()) _ok();                   ///> console ok prompt
+	_intr();                                     ///> service interrupts (if any)
 
     U8  *tkn = get_token();                      ///> get a token from console
     U16 tmp;                                     /// * word address or numeric value
-    switch (n4asm->parse_token(tkn, &tmp, 1)) {  ///> parse action from token (keep opcode in tmp)
+    switch (n4asm->parse(tkn, &tmp, 1)) {        ///> parse action from token (keep opcode in tmp)
     case TKN_IMM:                                ///>> immediate words,
         switch (tmp) {
         case 0: n4asm->compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
         case 1: n4asm->variable();      break;   /// * VAR, create new variable
         case 2: n4asm->constant(POP()); break;   /// * CST, create new constant
-        case 3: {                                /// * PCI, create a pin change interrupt handler
-            U16 n   = POP();                     ///< pin number
-            U16 adr = n4asm->query();            ///< word address of next input token
-            if (adr) n4intr->add_pci(n, adr);
-        } break;
-        case 4: {                                /// * TMR, create a timer interrupt handler
-            U16 p   = POP();                     ///< period in 0.1 sec
-        	U16 adr = n4asm->query();            ///< find word address of next input token
-        	if (adr) n4intr->add_timer(p, adr);
-        } break;
+        case 3: n4intr->add_pci(				 /// * PCI, create a pin change interrupt handler
+        		POP(), n4asm->query()); break;
+        case 4: n4intr->add_timer(				 /// * TMR, create a timer interrupt handler
+    			POP(), n4asm->query()); break;   /// * period in 0.1 sec
         case 5: n4asm->forget();        break;   /// * FGT, rollback word created
         case 6: _dump(POP(), POP());    break;   /// * DMP, memory dump
         case 7: _init();                break;   /// * RST, restart the virtual machine (for debugging)
@@ -134,16 +128,17 @@ void N4VM::_ok()
     for (S16 *p=s0-1; p >= sp; p--) {    /// * dump stack content
         d_num(*p); d_chr('_');
     }
-    show("ok");                         /// * user input prompt
+    show("ok");                          /// * user input prompt
 }
 ///
 ///> virtual machine interrupt service routine
 ///
 void N4VM::_intr() {
 	U16 xt[11];
-	U16 n = n4intr->isr(xt);
+	U16 n = n4intr->hit(xt);
 	for (int i=0; i<n; i++) {
-		_nest(xt[i]);
+//		_nest(xt[i]);                   /// * execute interrupt service routines
+        d_num(i); d_chr(':'); d_adr(xt[i]); d_chr(' ');
 	}
 }
 ///
