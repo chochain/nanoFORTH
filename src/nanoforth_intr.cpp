@@ -19,25 +19,30 @@ void N4Intr::reset() {
     p_hit = t_hit = t_idx = 0;
     SEI();
 }
-U16 N4Intr::isr(U16 *xt) {
+U16 N4Intr::hit(U16 *xt) {
 	U16 n = 0;
 	CLI();
+//    for (int i=0; t_hit && i<t_idx; i++, t_hit>>=1) {
+//        if (t_hit & 1) xt[n++] = t_xt[i];
+//    }
     for (int i=0; t_hit && i<t_idx; i++, t_hit>>=1) {
-        if (t_hit & 1) xt[n++] = t_xt[i];
+        xt[n++] = t_xt[i];
     }
+    /*
     for (int i=0; p_hit && i<3; i++, p_hit>>=1) {
         if (p_hit & 1) xt[n++] = p_xt[i];
     }
+    */
 	SEI();
 	return n;
 }
-void N4Intr::add_timer(U16 n, U16 adr)
+void N4Intr::add_timer(U16 n, U16 xt)
 {
-    if (t_idx > 7) return;                  // range check
+    if (xt==0 || t_idx > 7) return;  // range check
 
-    t_xt[t_idx]  = adr + 2 + 3;             // ISR word (adr + lnk[2] + name[3])
-    t_cnt[t_idx] = 0;                       // init counter
-    t_max[t_idx] = n;                       // period (in 0.1s)
+    t_xt[t_idx]  = xt;               // ISR xt
+    t_cnt[t_idx] = 0;                // init counter
+    t_max[t_idx] = n;                // period (in 0.1s)
 
     t_idx++;
 }
@@ -46,6 +51,7 @@ void N4Intr::add_timer(U16 n, U16 adr)
 ///@name N4Intr static variables
 ///@{
 void N4Intr::add_pci(U16 p, U16 xt) {
+	if (xt==0) return;               // range check
     CLI();
     if (p < 8)       {
     	p_xt[2] = xt;
@@ -62,33 +68,26 @@ void N4Intr::add_pci(U16 p, U16 xt) {
     SEI();
 }
 
-void N4Intr::enable_pci() {
+void N4Intr::enable_pci(U16 f) {
     CLI();
-	if (p_xt[0]) PCICR |= _BV(PCIE0);  // enable PORTB
-	if (p_xt[1]) PCICR |= _BV(PCIE1);  // enable PORTC
-    if (p_xt[2]) PCICR |= _BV(PCIE2);  // enable PORTD
+    if (f) {
+        if (p_xt[0]) PCICR |= _BV(PCIE0);  // enable PORTB
+        if (p_xt[1]) PCICR |= _BV(PCIE1);  // enable PORTC
+        if (p_xt[2]) PCICR |= _BV(PCIE2);  // enable PORTD
+    }
+    else PCICR = 0;
     SEI();
 }
-void N4Intr::disable_pci() {
+void N4Intr::enable_timer(U16 f) {
     CLI();
-    PCICR = 0;
-    SEI();
-}
-void N4Intr::enable_timer() {
-    CLI();
-    
-    TCCR2A = TCCR2B = TCNT2 = 0;            // reset counter
-    TCCR2A = _BV(WGM21);                    // Set CTC mode
-    TCCR2B = _BV(CS22)|_BV(CS21);           // prescaler 256 (16000000 / 256) = 62500Hz = 16us
-    OCR2A  = 249;                           // 250Hz = 4ms, (250 - 1, must < 256)
-    TIMSK2 |= _BV(OCIE2A);                  // enable timer2 compare interrupt
-    
-    SEI();
-}
-
-void N4Intr::disable_timer() {
-    CLI();
-    TIMSK2 &= _BV(OCIE2A);                  // enable timer2 compare interrupt
+    if (f) {
+        TCCR2A = TCCR2B = TCNT2 = 0;            // reset counter
+        TCCR2A = _BV(WGM21);                    // Set CTC mode
+        TCCR2B = _BV(CS22)|_BV(CS21);           // prescaler 256 (16000000 / 256) = 62500Hz = 16us
+        OCR2A  = 249;                           // 250Hz = 4ms, (250 - 1, must < 256)
+        TIMSK2 |= _BV(OCIE2A);                  // enable timer2 compare interrupt
+    }
+    else TIMSK2 &= _BV(OCIE2A);                 // disable timer2 compare interrupt
     SEI();
 }
 ///
@@ -98,10 +97,10 @@ ISR(TIMER2_COMPA_vect) {
     volatile static int cnt = 0;
     if (++cnt < 25) return;                 // 25 * 4ms = 100ms
     cnt = 0;
-    for (int i=0; i < N4Intr::t_idx; i++) {
+    for (int i=0, b=1; i < N4Intr::t_idx; i++, b<<=1) {
         if (++N4Intr::t_cnt[i] >= N4Intr::t_max[i]) {
-            N4Intr::t_cnt[i] = 0;
-            N4Intr::t_hit[i] = 1;
+            N4Intr::t_cnt[i]  = 0;
+            N4Intr::t_hit    |= b;
         }
     }
 }
