@@ -15,7 +15,7 @@
 #endif // ARDUINO
 
 typedef void (N4VM::* FPTR)(U16);
-class N4Intr {
+struct N4Intr {
 	static U8   p_hit;           ///< pin change interrupt
 	static U8   t_hit;           ///< 8-bit for 8 vectors
 	static U8   t_idx;           ///< timer ISR index
@@ -26,19 +26,18 @@ class N4Intr {
     static U16  t_max[8];        ///< timer CTC value
     static U16  t_xt[8];         ///< timer ISR
 
-public:
     static void reset();         ///< reset interrupts
-    static U16  isr(U16 *xt);    ///< fetch interrupt service routines
+    static U16  hit(U16 *xt);    ///< fetch interrupt service routines
 
-    static void add_timer(U16 prd, U16 adr);
+    static void add_timer(U16 prd, U16 xt);
 #if ARDUINO
-    static void add_pci(U16 pin, U16 adr);
+    static void add_pci(U16 pin, U16 xt);
     static void enable_timer(U16 f);
     static void enable_pci(U16 f);
 #else // !ARDUINO (mocked interrupt handlers)
-    static void add_pci(U16 pin, U16 adr)   {}
-    static void enable_timer(U16 f)         {}
-    static void enable_pci(U16 f)  			{}
+    static void add_pci(U16 pin, U16 xt) {}
+    static void enable_timer(U16 f)      {}
+    static void enable_pci(U16 f)  		 {}
 #endif
 };
 #endif //__SRC_NANOFORTH_INTR_H
