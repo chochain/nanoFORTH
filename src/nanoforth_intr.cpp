@@ -16,23 +16,23 @@ U16 N4Intr::t_max[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 void N4Intr::reset() {
     CLI();
-    p_hit = t_hit = t_idx = 0;
+    t_idx = t_hit = p_hit = 0;
     SEI();
 }
-U16 N4Intr::hit(U16 *xt) {
+///
+///> fetch interrupt hit flags
+/// Note: once flags are collected, hit flags are clear
+///
+U16 N4Intr::hits(U16 *xt) {
+	if (!(t_hit || p_hit)) return 0;   // quick exit
 	U16 n = 0;
 	CLI();
-//    for (int i=0; t_hit && i<t_idx; i++, t_hit>>=1) {
-//        if (t_hit & 1) xt[n++] = t_xt[i];
-//    }
     for (int i=0; t_hit && i<t_idx; i++, t_hit>>=1) {
-        xt[n++] = t_xt[i];
+        if (t_hit & 1) xt[n++] = t_xt[i];
     }
-    /*
     for (int i=0; p_hit && i<3; i++, p_hit>>=1) {
         if (p_hit & 1) xt[n++] = p_xt[i];
     }
-    */
 	SEI();
 	return n;
 }
