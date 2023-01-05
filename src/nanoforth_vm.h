@@ -37,7 +37,7 @@ private:
 
     ///@name VM execution units
     ///@{
-    void _intr();             ///< execute interrupt service (if any)
+    void _isr();              ///< interrupt service routine (if any)
     void _nest(U16 xt);       ///< execute a colon word
     void _invoke(U8 op);      ///< invoke a built-in opcode
     ///@}

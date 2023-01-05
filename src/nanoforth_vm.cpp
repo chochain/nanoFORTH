@@ -67,8 +67,8 @@ void N4VM::meminfo()
 ///
 U8 N4VM::step()
 {
+//	_isr();                                      /// * service interrupts (if any)
     if (is_tib_empty()) _ok();                   ///> console ok prompt
-	_intr();                                     ///> service interrupts (if any)
 
     U8  *tkn = get_token();                      ///> get a token from console
     U16 tmp;                                     /// * word address or numeric value
@@ -133,16 +133,22 @@ void N4VM::_ok()
 ///
 ///> virtual machine interrupt service routine
 ///
-void N4VM::_intr() {
-	U16 xt[11];
-	U16 n = n4intr->hit(xt);
+void N4VM::_isr() {
+	static U16 n, xt[11];
+	if ((n = n4intr->hits(xt))==0) return;
+
+	S16 *sp0 = sp;                       /// * keep stack pointers
+	U16 *rp0 = rp;
+	d_chr('\n');
 	for (int i=0; i<n; i++) {
 //		_nest(xt[i]);                   /// * execute interrupt service routines
         d_num(i); d_chr(':'); d_adr(xt[i]); d_chr(' ');
 	}
+	sp = sp0;                            /// * restore stack pointers
+	rp = rp0;
 }
 ///
-///> opcode execution unit
+///> opcode execution unit i.e. inner interpreter
 ///
 void N4VM::_nest(U16 xt)
 {
@@ -189,6 +195,7 @@ void N4VM::_nest(U16 xt)
         }
         else PUSH(ir);                                    ///> handle number (1-byte literal)
 
+    	_isr();											  // service interrupts (if any)
         NanoForth::yield();                               ///> give user task some cycles
     }
 }
