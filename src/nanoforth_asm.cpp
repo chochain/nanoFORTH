@@ -248,7 +248,7 @@ void N4Asm::words()
 void N4Asm::forget()
 {
     U16 xt = query();                  ///< lfa of word
-    if (xt) return;                    /// * bail if word not found
+    if (!xt) return;                   /// * bail if word not found
     ///
     /// word found, rollback here
     ///
