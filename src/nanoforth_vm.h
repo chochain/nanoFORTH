@@ -15,7 +15,6 @@ class N4Intr;
 class N4VM : N4Core
 {                             //  (12-byte header)
     N4Asm  *n4asm;            ///< assembler handler
-    N4Intr *n4intr;           ///< interrupt handler
     U16    dsz;               ///< dictionary size
 
 public:

@@ -35,7 +35,7 @@
 ///> constructor and initializer
 ///
 N4VM::N4VM(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz) :
-    n4asm(new N4Asm()), n4intr(new N4Intr()), dsz(dic_sz)
+    n4asm(new N4Asm()), dsz(dic_sz)
 {
     set_mem(dic, dic_sz, stk_sz);
     set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
@@ -67,7 +67,7 @@ void N4VM::meminfo()
 ///
 U8 N4VM::step()
 {
-//	_isr();                                      /// * service interrupts (if any)
+    _isr();                                      /// * service interrupts (if any)
     if (is_tib_empty()) _ok();                   ///> console ok prompt
 
     U8  *tkn = get_token();                      ///> get a token from console
@@ -78,10 +78,10 @@ U8 N4VM::step()
         case 0: n4asm->compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
         case 1: n4asm->variable();      break;   /// * VAR, create new variable
         case 2: n4asm->constant(POP()); break;   /// * CST, create new constant
-        case 3: n4intr->add_pci(				 /// * PCI, create a pin change interrupt handler
-        		POP(), n4asm->query()); break;
-        case 4: n4intr->add_timer(				 /// * TMR, create a timer interrupt handler
-    			POP(), n4asm->query()); break;   /// * period in 0.1 sec
+        case 3: N4Intr::add_pci(                 /// * PCI, create a pin change interrupt handler
+                POP(), n4asm->query()); break;
+        case 4: N4Intr::add_timer(               /// * TMR, create a timer interrupt handler
+                POP(), n4asm->query()); break;   /// * period in 0.1 sec
         case 5: n4asm->forget();        break;   /// * FGT, rollback word created
         case 6: _dump(POP(), POP());    break;   /// * DMP, memory dump
         case 7: _init();                break;   /// * RST, restart the virtual machine (for debugging)
@@ -104,10 +104,9 @@ U8 N4VM::step()
 ///
 void N4VM::_init() {
     show("nanoForth v1.6 ");             /// * show init prompt
-
     rp = (U16*)(dic + dsz);              /// * reset return stack pointer
     sp = SP0;                            /// * reset data stack pointer
-    n4intr->reset();
+    N4Intr::reset();
 
     U16 xt = n4asm->reset();             /// * reload EEPROM and reset assembler
     if (xt != LFA_X) {                   /// * check autorun addr has been setup? (see SEX)
@@ -134,18 +133,16 @@ void N4VM::_ok()
 ///> virtual machine interrupt service routine
 ///
 void N4VM::_isr() {
-	static U16 n, xt[11];
-	if ((n = n4intr->hits(xt))==0) return;
+    static U16 n, xt[11];
+    if ((n = N4Intr::hits(xt))==0) return;
 
-	S16 *sp0 = sp;                       /// * keep stack pointers
-	U16 *rp0 = rp;
-	d_chr('\n');
-	for (int i=0; i<n; i++) {
-//		_nest(xt[i]);                   /// * execute interrupt service routines
-        d_num(i); d_chr(':'); d_adr(xt[i]); d_chr(' ');
-	}
-	sp = sp0;                            /// * restore stack pointers
-	rp = rp0;
+    S16 *sp0 = sp;                       /// * keep stack pointers
+    U16 *rp0 = rp;
+    for (int i=0; i<n; i++) {
+        _nest(xt[i]);                    /// * execute interrupt service routines
+    }
+    sp = sp0;                            /// * restore stack pointers
+    rp = rp0;
 }
 ///
 ///> opcode execution unit i.e. inner interpreter
@@ -195,7 +192,7 @@ void N4VM::_nest(U16 xt)
         }
         else PUSH(ir);                                    ///> handle number (1-byte literal)
 
-    	_isr();											  // service interrupts (if any)
+        _isr();                                              // service interrupts (if any)
         NanoForth::yield();                               ///> give user task some cycles
     }
 }
@@ -291,8 +288,8 @@ void N4VM::_invoke(U8 op)
     case 52: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
     case 53: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
     case 54: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
-    case 55: n4intr->enable_timer(POP());             break; // TMI - enable, disable timer interrupt
-    case 56: n4intr->enable_pci(POP());               break; // PCI - enable/disable pin change interrupts
+    case 55: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
+    case 56: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
 #endif //ARDUINO
     case 57: case 58: case 59: /* available */        break;
     case 60: PUSH(*(rp-1));               break; // I
