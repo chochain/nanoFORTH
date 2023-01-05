@@ -30,7 +30,7 @@
 ///
 ///@{
 PROGMEM const char CMD[] = "\x09" \
-    ":  " "VAR" "CST" "PCI" "TMI" "FGT" "DMP" "RST" "BYE";
+    ":  " "VAR" "CST" "PCI" "TMR" "FGT" "DMP" "RST" "BYE";
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
@@ -95,24 +95,43 @@ U16 N4Asm::reset()
     return load(true);
 }
 ///
+///> find colon word address of next input token
+/// @brief search the keyword through colon word linked-list
+/// @return
+///    1 - token found<br/>
+///    0 - token not found
+///
+U8 N4Asm::find(U8 *tkn, U16 *adr)
+{
+    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {
+        if (uc(p[2])==uc(tkn[0]) &&
+            uc(p[3])==uc(tkn[1]) &&
+            (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
+            *adr = IDX(p);
+            return 1;
+        }
+    }
+    return 0;
+}
+///
 ///> get address of next input token
 ///
 U16 N4Asm::query() {
-    U16 adr;                                ///< address of word
-    if (!_tok2adr(get_token(), &adr)) {     /// check if token is in dictionary
-        show("?!  ");                       /// * not found, bail
+    U16 adr;                        ///< lfa of word
+    if (!find(get_token(), &adr)) { /// check if token is in dictionary
+        show("?!  ");               /// * not found, bail
         return 0;
     }
-    return adr;
+    return adr + 2 + 3;             /// * xt = adr + lnk[2] + name[3]
 }
 ///
 ///> parse given token into actionable item
 ///
-N4OP N4Asm::parse_token(U8 *tkn, U16 *rst, U8 run)
+N4OP N4Asm::parse(U8 *tkn, U16 *rst, U8 run)
 {
-    if (_tok2adr(tkn, rst))              return TKN_WRD; /// * WRD - is a colon word? [lnk(2),name(3)]
-    if (find(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM - is a immediate word?
-    if (find(tkn, PRM, rst))             return TKN_PRM; /// * PRM - is a primitives?
+    if (find(tkn, rst))                  return TKN_WRD; /// * WRD - is a colon word? [lnk(2),name(3)]
+    if (scan(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM - is a immediate word?
+    if (scan(tkn, PRM, rst))             return TKN_PRM; /// * PRM - is a primitives?
     if (number(tkn, (S16*)rst))          return TKN_NUM; /// * NUM - is a number literal?
     return TKN_ERR;                                      /// * ERR - unknown token
 }
@@ -134,7 +153,7 @@ void N4Asm::compile(U16 *rp0)
 
         tkn = get_token();
         p0  = here;                         // keep current top of dictionary (for memdump)
-        switch(parse_token(tkn, &tmp, 0)) { ///>> **determine type of operation, and keep opcode in tmp**
+        switch(parse(tkn, &tmp, 0)) {       ///>> **determine type of operation, and keep opcode in tmp**
         case TKN_IMM:                       ///>> an immediate command?
             if (tmp==OP_EXIT) {             /// * handle return i.e. ; (semi-colon)
                 SET8(here, OP_RET);         //  terminate COLON definitions, or
@@ -228,14 +247,14 @@ void N4Asm::words()
 ///
 void N4Asm::forget()
 {
-    U16 adr = query();                      ///< address of word
-    if (!adr) return;                       /// * bail if word not found
+    U16 xt = query();                  ///< lfa of word
+    if (xt) return;                    /// * bail if word not found
     ///
     /// word found, rollback here
     ///
-    U8 *p = PTR(adr);                       ///< pointer to word
-    last  = PTR(GET16(p));                  /// * reset last word address
-    here  = p;                              /// * reset current pointer
+    U8 *lfa = PTR(xt - 2 - 3);         ///< pointer to word's link
+    last    = PTR(GET16(lfa));         /// * reset last word address
+    here    = lfa;                     /// * reset current pointer
 }
 ///
 ///> persist dictionary from RAM into EEPROM
@@ -371,25 +390,6 @@ void N4Asm::trace(U16 a, U8 ir)
         d_chr('#'); d_u8(ir);
     }
     d_chr(' ');
-}
-///
-///> find word address of next input token 
-/// @brief scan the keyword through dictionary linked-list
-/// @return
-///    1 - token found<br/>
-///    0 - token not found
-///
-U8 N4Asm::_tok2adr(U8 *tkn, U16 *adr)
-{
-    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {
-        if (uc(p[2])==uc(tkn[0]) &&
-            uc(p[3])==uc(tkn[1]) &&
-            (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
-            *adr = IDX(p);
-            return 1;
-        }
-    }
-    return 0;
 }
 ///
 ///> create name field with link back to previous word

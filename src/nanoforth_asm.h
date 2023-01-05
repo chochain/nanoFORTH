@@ -53,7 +53,7 @@ enum N4_EXT_OP {                 ///< extended opcode (used by for...nxt loop)
     I_NXT,                       ///< 62
     I_LIT                        ///< 63 = 0x3f 3-byte literal
 };
-constexpr U16 LFA_X    = 0xffff;     ///< end of link field
+constexpr U16 LFA_X = 0xffff;    ///< end of link field
 ///
 /// Assembler class
 ///
@@ -70,8 +70,11 @@ public:
     U16 reset();                    ///< reset internal pointers (for BYE)
 
     /// Instruction Decoder
-    U16  query();                   ///< get address of input next token
-    N4OP parse_token(
+    U8  find(
+        U8  *tkn,                   ///< token to be searched
+        U16 *adr                    ///< function address of the found word
+        );
+    N4OP parse(
         U8  *tkn,                   ///< token to be parsed
         U16 *rst,                   ///< parsed result
         U8  run                     ///< run mode flag (1: run mode, 0: compile mode)
@@ -85,7 +88,7 @@ public:
     void constant(S16 v);           ///< create a constant on dictionary
 
     // dictionary, string list scanners
-    /// query(token) in dictionary for existing word
+    U16  query();                   ///< get xt of next input token, 0 if not found
     void words();                   ///< display words in dictionary
     void forget();                  ///< forgets word in the dictionary
 
@@ -101,10 +104,6 @@ public:
         );
 
 private:
-    U8  _tok2adr(
-        U8  *tkn,                   ///< token to be searched
-        U16 *adr                    ///< function address of the found word
-        );
     void _add_word();               ///< create name field and link to previous word
     void _add_branch(U8 op);        ///< manage branching opcodes
     void _add_str();                ///< add string for ."
