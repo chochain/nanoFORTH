@@ -152,13 +152,13 @@ U8 *N4Core::get_token(bool rst)
 ///> search keyword in a nanoForth name field list
 ///  * one blank byte padded at the end of input string
 ///
-U8 N4Core::find(U8 *tkn, const char *lst, U16 *id)
+U8 N4Core::scan(U8 *tkn, const char *lst, U16 *id)
 {
     for (int n=1, m=pgm_read_byte(lst); n < m*3; n+=3) {
         if (uc(tkn[0])==pgm_read_byte(lst+n)   &&
             uc(tkn[1])==pgm_read_byte(lst+n+1) &&
             (tkn[1]==' ' || uc(tkn[2])==pgm_read_byte(lst+n+2))) {
-            *id = n/3;
+            *id = n/3;  // 3-char a word
             return 1;
         }
     }

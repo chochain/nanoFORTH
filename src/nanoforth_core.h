@@ -93,10 +93,10 @@ public:
         S16 *num                           ///< number pointer for return value
         );
     ///
-    /// find token in string list
+    /// scan token from a given string list
     ///
-    static U8   find(
-        U8 *tkn,                           ///< token to be found
+    static U8   scan(
+        U8 *tkn,                           ///< token to be searched
         const char *lst,                   ///< string list to be scanned
         U16 *id                            ///< resultant index if found
         );
