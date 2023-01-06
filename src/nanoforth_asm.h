@@ -57,16 +57,15 @@ constexpr U16 LFA_X = 0xffff;    ///< end of link field
 ///
 /// Assembler class
 ///
-class N4Asm                         // (10-byte header)
+namespace N4Asm                     // (10-byte header)
 {
-    U8  tab = 0;                  	///< tracing indentation counter
-    U8  xxx;                        ///< reserved
+    extern U8  *last;               ///< pointer to last word, for debugging
+    extern U8  *here;               ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
 
-public:
-    U8  *last = NULL;               ///< pointer to last word, for debugging
-    U8  *here = NULL;               ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
+    // EEPROM persistence I/O
+    void save(bool autorun=false);  ///< persist user dictionary to EEPROM
+    U16  load(bool autorun=false);  ///< restore user dictionary from EEPROM
 
-    N4Asm() { /* do nothing */ }    ///< Assembler constructor
     U16 reset();                    ///< reset internal pointers (for BYE)
 
     /// Instruction Decoder
@@ -92,21 +91,11 @@ public:
     void words();                   ///< display words in dictionary
     void forget();                  ///< forgets word in the dictionary
 
-    // EEPROM persistence I/O
-    void save(bool autorun=false);  ///< persist user dictionary to EEPROM
-    U16  load(bool autorun=false);  ///< restore user dictionary from EEPROM
-
     // execution tracing
     /// print execution tracing info
     void trace(
         U16 adr,                    ///< address to word to be executed
         U8  ir                      ///< instruction register value
         );
-
-private:
-    void _add_word();               ///< create name field and link to previous word
-    void _add_branch(U8 op);        ///< manage branching opcodes
-    void _add_str();                ///< add string for ."
-    void _list_voc(U16 n);          ///< list words from all vocabularies
-};
+};  // namespace N4Asm
 #endif //__SRC_NANOFORTH_ASM_H

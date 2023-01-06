@@ -19,6 +19,7 @@
 
 #include "nanoforth_core.h"
 using namespace N4Core;
+
 ///
 ///@name nanoForth built-in vocabularies
 ///
@@ -77,13 +78,191 @@ constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
 constexpr U16 N4_SIG  = (((U16)'N'<<8)+(U16)'4');  ///< EEPROM signature
 constexpr U16 N4_AUTO = N4_SIG | 0x8080;           ///< EEPROM auto-run signature
 constexpr U16 ROM_HDR = 6;                         ///< EEPROM header size
+constexpr U8  WORDS_PER_ROW = 20;                  ///< words per row when showing dictionary
+
+namespace N4Asm {
+
+U8  *last  { NULL };                ///< pointer to last word, for debugging
+U8  *here  { NULL };                ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
+U8  tab = 0;                  		///< tracing indentation counter
+///
+///> create name field with link back to previous word
+///
+void _add_word()
+{
+    U8  *tkn = get_token();         ///#### fetch one token from console
+    U16 tmp  = IDX(last);           // link to previous word
+
+    last = here;                    ///#### create 3-byte name field
+    SET16(here, tmp);               // lfa: pointer to previous word
+    SET8(here, tkn[0]);             // nfa: store token into 3-byte name field
+    SET8(here, tkn[1]);
+    SET8(here, tkn[1]!=' ' ? tkn[2] : ' ');
+}
+///
+///> create branching for instructions
+///>> f IF...THN, f IF...ELS...THN
+///>> BGN...f UTL, BGN...f WHL...RPT, BGN...f WHL...f UTL
+///>> n1 n0 FOR...NXT
+///
+void _add_branch(U8 op)
+{
+    switch (op) {
+    case 1: /* IF */
+        RPUSH(IDX(here));               // save current here A1
+        JMP000(here, OP_CDJ);           // alloc addr with jmp_flag
+        break;
+    case 2: /* ELS */
+        JMPSET(RPOP(), here+2);         // update A1 with next addr
+        RPUSH(IDX(here));               // save current here A2
+        JMP000(here, OP_UDJ);           // alloc space with jmp_flag
+        break;
+    case 3: /* THN */
+        JMPSET(RPOP(), here);           // update A2 with current addr
+        break;
+    case 4: /* BGN */
+        RPUSH(IDX(here));               // save current here A1
+        break;
+    case 5: /* UTL */
+        JMPBCK(RPOP(), OP_CDJ);         // conditional jump back to A1
+        break;
+    case 6: /* WHL */
+        RPUSH(IDX(here));               // save WHILE addr A2
+        JMP000(here, OP_CDJ);           // allocate branch addr A2 with jmp flag
+        break;
+    case 7: /* RPT */
+        JMPSET(RPOP(), here+2);         // update A2 with next addr
+        JMPBCK(RPOP(), OP_UDJ);         // unconditional jump back to A1
+        break;
+    case 8: /* I */
+        SET8(here, PRM_OPS | I_I);      // fetch loop counter
+        break;
+    case 9: /* FOR */
+        RPUSH(IDX(here+1));             // save current addr A1
+        SET8(here, PRM_OPS | I_FOR);    // encode FOR opcode
+        break;
+    case 10: /* NXT */
+        SET8(here, PRM_OPS | I_NXT);    // encode NXT opcode
+        JMPBCK(RPOP(), OP_UDJ);         // unconditionally jump back to A1
+        break;
+    }
+}
+///
+///> display the opcode name
+///
+void _add_str()
+{
+    U8 *p0 = get_token();               // get string from input buffer
+    U8 sz  = 0;
+    for (U8 *p=p0; *p!='"'; p++, sz++);
+    SET8(here, sz);
+    for (int i=0; i<sz; i++) SET8(here, *p0++);
+}
+///
+///> list words in built-in vocabularies
+///
+void _list_voc(U16 n)
+{
+    const char *lst[] PROGMEM = { CMD, JMP, PRM };      // list of built-in primitives
+    for (U8 i=0; i<3; i++) {
+#if ARDUINO
+        U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
+#else
+        U8 sz = *(lst[i]);
+#endif //ARDUINO
+        while (sz--) {
+            d_chr(n++%WORDS_PER_ROW ? ' ' : '\n');
+            d_name(sz, lst[i], 1);
+        }
+    }
+}
+///
+///> persist dictionary from RAM into EEPROM
+///
+void save(bool autorun)
+{
+    U8  trc    = is_tracing();
+    U16 here_i = IDX(here);
+
+    if (trc) show("dic>>ROM ");
+
+    U16 last_i = IDX(last);
+    ///
+    /// verify EEPROM capacity to hold user dictionary
+    ///
+    if ((ROM_HDR + here_i) > EEPROM.length()) {
+        show("ERROR: dictionary larger than EEPROM");
+        return;
+    }
+    ///
+    /// create EEPROM dictionary header
+    ///
+    U16 sig = autorun ? N4_AUTO : N4_SIG;
+    EEPROM.update(0, sig>>8);    EEPROM.update(1, sig   &0xff);
+    EEPROM.update(2, last_i>>8); EEPROM.update(3, last_i&0xff);
+    EEPROM.update(4, here_i>>8); EEPROM.update(5, here_i&0xff);
+    ///
+    /// copy user dictionary into EEPROM byte-by-byte
+    ///
+    U8 *p = dic;
+    for (int i=0; i<here_i; i++) {
+        EEPROM.update(ROM_HDR+i, *p++);
+    }
+    if (trc) {
+        d_num(here_i);
+        show(" bytes saved\n");
+    }
+}
+///
+///> restore dictionary from EEPROM into RAM
+/// @return
+///    lnk:   autorun address (of last word from EEPROM)
+///    LFA_X: no autorun or EEPROM not been setup yet
+///
+U16 load(bool autorun)
+{
+    U8 trc = is_tracing();
+
+    if (trc && !autorun) show("dic<<ROM ");
+    ///
+    /// validate EEPROM contains user dictionary (from previous run)
+    ///
+    U16 n4 = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
+    if (autorun) {
+        if (n4 != N4_AUTO) return LFA_X;          // EEPROM is not set to autorun
+    }
+    else if (n4 != N4_SIG) return LFA_X;          // EEPROM has no saved words
+    ///
+    /// retrieve metadata (sizes) of user dictionary
+    ///
+    U16 last_i = ((U16)EEPROM.read(2)<<8) + EEPROM.read(3);
+    U16 here_i = ((U16)EEPROM.read(4)<<8) + EEPROM.read(5);
+    ///
+    /// retrieve user dictionary byte-by-byte into memory
+    ///
+    U8 *p = dic;
+    for (int i=0; i<here_i; i++) {
+        *p++ = EEPROM.read(ROM_HDR+i);
+    }
+    ///
+    /// adjust user dictionary pointers
+    ///
+    last = PTR(last_i);
+    here = PTR(here_i);
+
+    if (trc && !autorun) {
+        d_num(here_i);
+        show(" bytes loaded\n");
+    }
+    return last_i;
+}
 ///
 ///> reset internal pointers (called by VM::reset)
 /// @return
 ///  1: autorun last word from EEPROM
 ///  0: clean start
 ///
-U16 N4Asm::reset()
+U16 reset()
 {
     here    = dic;                       // rewind to dictionary base
     last    = PTR(LFA_X);                // root of linked field
@@ -104,7 +283,7 @@ U16 N4Asm::reset()
 ///    1 - token found<br/>
 ///    0 - token not found
 ///
-U8 N4Asm::find(U8 *tkn, U16 *adr)
+U8 find(U8 *tkn, U16 *adr)
 {
     for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {
         if (uc(p[2])==uc(tkn[0]) &&
@@ -119,7 +298,7 @@ U8 N4Asm::find(U8 *tkn, U16 *adr)
 ///
 ///> get address of next input token
 ///
-U16 N4Asm::query() {
+U16 query() {
     U16 adr;                        ///< lfa of word
     if (!find(get_token(), &adr)) { /// check if token is in dictionary
         show("?!  ");               /// * not found, bail
@@ -130,7 +309,7 @@ U16 N4Asm::query() {
 ///
 ///> parse given token into actionable item
 ///
-N4OP N4Asm::parse(U8 *tkn, U16 *rst, U8 run)
+N4OP parse(U8 *tkn, U16 *rst, U8 run)
 {
     if (find(tkn, rst))                  return TKN_WRD; /// * WRD - is a colon word? [lnk(2),name(3)]
     if (scan(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM - is a immediate word?
@@ -141,7 +320,7 @@ N4OP N4Asm::parse(U8 *tkn, U16 *rst, U8 run)
 ///
 ///> Forth assembler (creates word onto dictionary)
 ///
-void N4Asm::compile(U16 *rp0)
+void compile(U16 *rp0)
 {
     rp = rp0;                       // set return stack pointer
     U8 *l0 = last, *h0 = here;
@@ -195,7 +374,7 @@ void N4Asm::compile(U16 *rp0)
 ///> create a variable on dictionary
 /// * note: 8 or 10-byte per variable
 ///
-void N4Asm::variable()
+void variable()
 {
     _add_word();                            /// **fetch token, create name field linked to previous word**
 
@@ -215,7 +394,7 @@ void N4Asm::variable()
 ///> create a constant on dictionary
 /// * note: 8 or 10-byte per variable
 ///
-void N4Asm::constant(S16 v)
+void constant(S16 v)
 {
     _add_word();                            /// **fetch token, create name field linked to previous word**
 
@@ -231,8 +410,7 @@ void N4Asm::constant(S16 v)
 ///
 ///> display words in dictionary
 ///
-constexpr U8 WORDS_PER_ROW = 20;        ///< words per row when showing dictionary
-void N4Asm::words()
+void words()
 {
     U8  trc = is_tracing();
     U8  wrp = WORDS_PER_ROW >> (trc ? 1 : 0);                 ///> wraping width
@@ -248,7 +426,7 @@ void N4Asm::words()
 ///
 ///> drop words from the dictionary
 ///
-void N4Asm::forget()
+void forget()
 {
     U16 xt = query();                  ///< lfa of word
     if (!xt) return;                   /// * bail if word not found
@@ -260,89 +438,9 @@ void N4Asm::forget()
     here    = lfa;                     /// * reset current pointer
 }
 ///
-///> persist dictionary from RAM into EEPROM
-///
-void N4Asm::save(bool autorun)
-{
-    U8  trc    = is_tracing();
-    U16 here_i = IDX(here);
-
-    if (trc) show("dic>>ROM ");
-
-    U16 last_i = IDX(last);
-    ///
-    /// verify EEPROM capacity to hold user dictionary
-    ///
-    if ((ROM_HDR + here_i) > EEPROM.length()) {
-        show("ERROR: dictionary larger than EEPROM");
-        return;
-    }
-    ///
-    /// create EEPROM dictionary header
-    ///
-    U16 sig = autorun ? N4_AUTO : N4_SIG;
-    EEPROM.update(0, sig>>8);    EEPROM.update(1, sig   &0xff);
-    EEPROM.update(2, last_i>>8); EEPROM.update(3, last_i&0xff);
-    EEPROM.update(4, here_i>>8); EEPROM.update(5, here_i&0xff);
-    ///
-    /// copy user dictionary into EEPROM byte-by-byte
-    ///
-    U8 *p = dic;
-    for (int i=0; i<here_i; i++) {
-        EEPROM.update(ROM_HDR+i, *p++);
-    }
-    if (trc) {
-        d_num(here_i);
-        show(" bytes saved\n");
-    }
-}
-///
-///> restore dictionary from EEPROM into RAM
-/// @return
-///    lnk:   autorun address (of last word from EEPROM)
-///    LFA_X: no autorun or EEPROM not been setup yet
-///
-U16 N4Asm::load(bool autorun)
-{
-    U8 trc = is_tracing();
-
-    if (trc && !autorun) show("dic<<ROM ");
-    ///
-    /// validate EEPROM contains user dictionary (from previous run)
-    ///
-    U16 n4 = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
-    if (autorun) {
-        if (n4 != N4_AUTO) return LFA_X;          // EEPROM is not set to autorun
-    }
-    else if (n4 != N4_SIG) return LFA_X;          // EEPROM has no saved words
-    ///
-    /// retrieve metadata (sizes) of user dictionary
-    ///
-    U16 last_i = ((U16)EEPROM.read(2)<<8) + EEPROM.read(3);
-    U16 here_i = ((U16)EEPROM.read(4)<<8) + EEPROM.read(5);
-    ///
-    /// retrieve user dictionary byte-by-byte into memory
-    ///
-    U8 *p = dic;
-    for (int i=0; i<here_i; i++) {
-        *p++ = EEPROM.read(ROM_HDR+i);
-    }
-    ///
-    /// adjust user dictionary pointers
-    ///
-    last = PTR(last_i);
-    here = PTR(here_i);
-
-    if (trc && !autorun) {
-        d_num(here_i);
-        show(" bytes loaded\n");
-    }
-    return last_i;
-}
-///
 ///> execution tracer (debugger, can be modified into single-stepper)
 ///
-void N4Asm::trace(U16 a, U8 ir)
+void trace(U16 a, U8 ir)
 {
     if (!is_tracing()) return;                        ///> check tracing flag
 
@@ -394,94 +492,5 @@ void N4Asm::trace(U16 a, U8 ir)
     }
     d_chr(' ');
 }
-///
-///> create name field with link back to previous word
-///
-void N4Asm::_add_word()
-{
-    U8  *tkn = get_token();         ///#### fetch one token from console
-    U16 tmp  = IDX(last);           // link to previous word
 
-    last = here;                    ///#### create 3-byte name field
-    SET16(here, tmp);               // lfa: pointer to previous word
-    SET8(here, tkn[0]);             // nfa: store token into 3-byte name field
-    SET8(here, tkn[1]);
-    SET8(here, tkn[1]!=' ' ? tkn[2] : ' ');
-}
-///
-///> create branching for instructions
-///>> f IF...THN, f IF...ELS...THN
-///>> BGN...f UTL, BGN...f WHL...RPT, BGN...f WHL...f UTL
-///>> n1 n0 FOR...NXT
-///
-void N4Asm::_add_branch(U8 op)
-{
-    switch (op) {
-    case 1: /* IF */
-        RPUSH(IDX(here));               // save current here A1
-        JMP000(here, OP_CDJ);           // alloc addr with jmp_flag
-        break;
-    case 2: /* ELS */
-        JMPSET(RPOP(), here+2);         // update A1 with next addr
-        RPUSH(IDX(here));               // save current here A2
-        JMP000(here, OP_UDJ);           // alloc space with jmp_flag
-        break;
-    case 3: /* THN */
-        JMPSET(RPOP(), here);           // update A2 with current addr
-        break;
-    case 4: /* BGN */
-        RPUSH(IDX(here));               // save current here A1
-        break;
-    case 5: /* UTL */
-        JMPBCK(RPOP(), OP_CDJ);         // conditional jump back to A1
-        break;
-    case 6: /* WHL */
-        RPUSH(IDX(here));               // save WHILE addr A2
-        JMP000(here, OP_CDJ);           // allocate branch addr A2 with jmp flag
-        break;
-    case 7: /* RPT */
-        JMPSET(RPOP(), here+2);         // update A2 with next addr
-        JMPBCK(RPOP(), OP_UDJ);         // unconditional jump back to A1
-        break;
-    case 8: /* I */
-        SET8(here, PRM_OPS | I_I);      // fetch loop counter
-        break;
-    case 9: /* FOR */
-        RPUSH(IDX(here+1));             // save current addr A1
-        SET8(here, PRM_OPS | I_FOR);    // encode FOR opcode
-        break;
-    case 10: /* NXT */
-        SET8(here, PRM_OPS | I_NXT);    // encode NXT opcode
-        JMPBCK(RPOP(), OP_UDJ);         // unconditionally jump back to A1
-        break;
-    }
-}
-///
-///> display the opcode name
-///
-void N4Asm::_add_str()
-{
-    U8 *p0 = get_token();               // get string from input buffer
-    U8 sz  = 0;
-    for (U8 *p=p0; *p!='"'; p++, sz++);
-    SET8(here, sz);
-    for (int i=0; i<sz; i++) SET8(here, *p0++);
-}
-///
-///> list words in built-in vocabularies
-///
-void N4Asm::_list_voc(U16 n)
-{
-    const char *lst[] PROGMEM = { CMD, JMP, PRM };      // list of built-in primitives
-    for (U8 i=0; i<3; i++) {
-#if ARDUINO
-        U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
-#else
-        U8 sz = *(lst[i]);
-#endif //ARDUINO
-        while (sz--) {
-            d_chr(n++%WORDS_PER_ROW ? ' ' : '\n');
-            d_name(sz, lst[i], 1);
-        }
-    }
-}
+}  // namespace N4Asm
