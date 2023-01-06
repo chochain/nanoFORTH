@@ -14,7 +14,7 @@
  */
 #ifndef __SRC_NANOFORTH_ASM_H
 #define __SRC_NANOFORTH_ASM_H
-#include "nanoforth_core.h"
+#include "nanoforth.h"
 ///
 /// parser actions enum used by execution and assembler units
 ///
@@ -57,7 +57,7 @@ constexpr U16 LFA_X = 0xffff;    ///< end of link field
 ///
 /// Assembler class
 ///
-class N4Asm : N4Core                // (10-byte header)
+class N4Asm                         // (10-byte header)
 {
     U8  tab = 0;                  	///< tracing indentation counter
     U8  xxx;                        ///< reserved
