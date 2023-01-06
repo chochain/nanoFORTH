@@ -19,7 +19,6 @@
 #define SEI()
 #endif // ARDUINO
 
-typedef void (N4VM::* FPTR)(U16);
 struct N4Intr {
     volatile static U8  t_hit;     ///< 8-bit for 8 timer ISR vectors
     volatile static U8  p_hit;     ///< pin change interrupt
@@ -32,7 +31,7 @@ struct N4Intr {
     static U16  t_xt[8];           ///< timer ISR
 
     static void reset();           ///< reset interrupts
-    static U16  hits(U16 *xt);     ///< fetch interrupt service routines
+    static U16  hits();            ///< fetch interrupt service routines
 
     static void add_timer(U16 prd, U16 xt);
 #if ARDUINO

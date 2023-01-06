@@ -20,37 +20,29 @@ void N4Intr::reset() {
     CLI();
     t_idx = t_hit = p_hit = 0;
     SEI();
-    for (int i=0; i<sizeof(LED)/sizeof(U8); i++) {
+    for (int i=0; i<7; i++) {
         pinMode(LED[i], OUTPUT);
     }
 }
 ///
 ///> fetch interrupt hit flags
-/// Note: once flags are collected, hit flags are clear
 ///
-U16 N4Intr::hits(U16 *xt) {
-//    if (!(t_hit || p_hit)) return 0;   // quick exit
-    U16 n = 0;
+U16 N4Intr::hits() {
+    digitalWrite(16+t_hit, digitalRead(16+t_hit) ? LOW : HIGH);
     CLI();
-    for (int i=0; t_hit && i<t_idx; i++, t_hit>>=1) {
-        if (t_hit & 1) xt[n++] = t_xt[i];
-    }
-    for (int i=0; p_hit && i<3; i++, p_hit>>=1) {
-        if (p_hit & 1) xt[n++] = p_xt[i];
-    }
+    U16 hx = (p_hit << 8) | t_hit;   // capture interrupt flags
+    p_hit = t_hit = 0;
     SEI();
-    digitalWrite(16+n, digitalRead(16+n) ? LOW : HIGH);
-    return n;
+    return hx;
 }
 void N4Intr::add_timer(U16 n, U16 xt)
 {
     if (xt==0 || t_idx > 7) return;  // range check
 
+    CLI();
     t_xt[t_idx]  = xt;               // ISR xt
     t_cnt[t_idx] = 0;                // init counter
     t_max[t_idx] = n;                // period (in 0.1s)
-    
-    CLI();
     t_idx++;
     SEI();
 }
@@ -89,7 +81,7 @@ void N4Intr::enable_pci(U16 f) {
 void N4Intr::enable_timer(U16 f) {
     CLI();
     pinMode(7, OUTPUT);
-    digitalWrite(7, HIGH);
+    digitalWrite(7, HIGH);                      // DEBUG: timer2 interrupt eabled
 
     TCCR2A = TCCR2B = TCNT2 = 0;                // reset counter
     if (f) {
@@ -114,11 +106,12 @@ ISR(TIMER2_COMPA_vect) {
     if (++cnt < 25) return;                     // 25 * 4ms = 100ms
     cnt = 0;
     for (U8 i=0, b=1; i < N4Intr::t_idx; i++, b<<=1) {
-        digitalWrite(7, digitalRead(7) ? LOW : HIGH);
+        digitalWrite(7, digitalRead(7) ? LOW : HIGH);  // DEBUG: ISR called
         if (++N4Intr::t_cnt[i] < N4Intr::t_max[i]) continue;
         N4Intr::t_hit    |= b;
         N4Intr::t_cnt[i]  = 0;
-        digitalWrite(4+N4Intr::t_hit, digitalRead(4+N4Intr::t_hit) ? LOW : HIGH);
+        U8 n = 4 + N4Intr::t_hit;
+        digitalWrite(n, digitalRead(n) ? LOW : HIGH);  // DEBUG: t_hit flag triggered
     }
 }
 ISR(PCINT0_vect) { N4Intr::p_hit |= 1; }
