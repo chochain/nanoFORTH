@@ -12,9 +12,12 @@
  *                                TOS TOS1 (top of stack)
  * @endcode
  */
+#include "nanoforth_core.h"
 #include "nanoforth_asm.h"
 #include "nanoforth_intr.h"
 #include "nanoforth_vm.h"
+
+using namespace N4Core;
 ///
 ///@name Data Stack and Return Stack Ops
 ///@{
