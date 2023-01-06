@@ -16,6 +16,9 @@
 #else
 #include "mockrom.h"
 #endif //ARDUINO
+
+#include "nanoforth_core.h"
+using namespace N4Core;
 ///
 ///@name nanoForth built-in vocabularies
 ///
