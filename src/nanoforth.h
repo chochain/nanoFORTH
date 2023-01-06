@@ -37,8 +37,8 @@
 #define PROGMEM
 #define millis()          10000
 #define pgm_read_byte(p)  (*(p))
-#define log(msg)          printf("%s", msg)
-#define logx(v)           printf("%x", (U16)v)
+#define log(msg)          ::printf("%s", msg)
+#define logx(v)           ::printf("%x", (U16)v)
 #define Stream            int
 extern  int Serial;
 #endif // ARDUINO
@@ -84,7 +84,6 @@ typedef struct n4_task {
                         if (millis() < (_p_)->t) return;
 #define N4_END          } (_p_)->ci = 0; }
 ///@}
-class N4VM;
 ///
 /// nanoForth main control object (with static members that support multi-threading)
 ///
@@ -93,7 +92,6 @@ class NanoForth
     static n4_tptr _n4tsk;        ///< user function linked-list
 
     U8     *_mem;                 ///< pointer to nanoForth memory block
-    N4VM   *_n4vm;                ///< virtual machine object pointer
 
 public:
     ///
