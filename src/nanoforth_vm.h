@@ -5,14 +5,14 @@
  */
 #ifndef __SRC_NANOFORTH_VM_H
 #define __SRC_NANOFORTH_VM_H
-#include "nanoforth_core.h"
+#include "nanoforth.h"
 
 class N4Asm;                   // forward declaration
 class N4Intr;
 ///
 /// nanoForth Virtual Machine class
 ///
-class N4VM : N4Core
+class N4VM
 {                             //  (12-byte header)
     N4Asm  *n4asm;            ///< assembler handler
     U16    dsz;               ///< dictionary size
