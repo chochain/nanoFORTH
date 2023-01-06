@@ -18,12 +18,11 @@ int NanoForth::begin(Stream &io, U8 ucase, U16 dic_sz, U16 stk_sz, U16 tib_sz)
 {
 	U16 msz = dic_sz + stk_sz + tib_sz;
     _mem  = (U8*)malloc(msz);                            /// * allocate Forth memory block
-    _n4vm = new N4VM(io, ucase, _mem, dic_sz, stk_sz);   /// * create Virtual Machine
+    if (!_mem) return -1;
 
-    if (!_mem || !_n4vm) return -1;
-
+    N4VM::setup(io, ucase, _mem, dic_sz, stk_sz);   	 /// * create Virtual Machine
 #if ARDUINO
-    _n4vm->meminfo();                                    // display detailed pointers
+    N4VM::meminfo();                                     // display detailed pointers
 #else
     log("MEM=$");   logx(msz);                           // forth memory block
     log("[DIC=$");  logx(dic_sz);                        // dictionary size
@@ -51,7 +50,7 @@ void NanoForth::add(void (*ufunc)(n4_tptr))
 ///
 void NanoForth::exec()
 {
-    while (_n4vm->step()) {                    /// * step through commands from input buffer
+    while (N4VM::step()) {                    /// * step through commands from input buffer
         yield();
     }
 }
@@ -76,6 +75,7 @@ void NanoForth::wait(U32 ms)
 // for Eclipse debugging
 //
 #if !ARDUINO
+#include <stdio.h>
 int main(int argc, char **argv)
 {
     setvbuf(stdout, NULL, _IONBF, 0);       // autoflush (turn STDOUT buffering off)
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
  *  * [6782,1056] add protothread multi-tasker
  *  * [6930,1056] add threads
  *  * [6908,1014] use F()
- *  * [6860,852]  use PROGMEM, pgm_read_byte in find()
+ *  * [6860,852]  use PROGMEM, pgm_read_byte in scan()
  *  * [6906,852]  getnum support negative number
  *  * [7012,860]  add digitalR/W
  *
