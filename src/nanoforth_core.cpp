@@ -1,7 +1,7 @@
 /**
  * @file
  * @brief nanoForth Core Utilities
- *
+ *        - low level memory and IO management
  */
 #include "nanoforth_core.h"
 
@@ -13,18 +13,18 @@ namespace N4Core {
 ///
 ///@name VM static variables
 ///@{
-Stream *xio    { &Serial };                    ///< default to Arduino Serial Monitor
+Stream *io    { &Serial };                     ///< default to Arduino Serial Monitor
 U8     *dic    { NULL };                       ///< base of dictionary
 U16    *rp     { NULL };                       ///< base of return stack
 S16    *sp     { NULL };                       ///< top of data stack
 U8     *tib    { NULL };                       ///< base of terminal input buffer
+U8     trc     { 0 };                          ///< tracing flag
 ///@}
 ///@name IO controls
 ///@{
 U8      _hex   { 0 };                          ///< numeric radix for display
 U8      _empty { 1 };                          ///< empty flag for terminal input buffer
 U8      _ucase { 1 };                          ///< empty flag for terminal input buffer
-U8      _trc   { 0 };                          ///< tracing flag for debug output
 
 void set_mem(U8 *mem, U16 msz, U16 ssz) {
     dic = mem;                                 /// * start of dictionary
@@ -32,10 +32,8 @@ void set_mem(U8 *mem, U16 msz, U16 ssz) {
     sp  = (S16*)(mem+msz+ssz);                 /// * grows toward 0
     tib = (U8*)sp;                             /// * grows toward max
 }
-void set_io(Stream *io) { xio  = io; }         ///< initialize or redirect IO stream
+void set_io(Stream *s)  { io   = s; }          ///< initialize or redirect IO stream
 void set_hex(U8 f)      { _hex = f; }          ///< enable/disable hex numeric radix
-void set_trace(U8 f)    { _trc = f; }          ///< enable/disable execution tracing
-U8   is_tracing()       { return _trc; }       ///< return tracing flag
 void set_ucase(U8 uc)   { _ucase = uc; }       ///< set case sensitiveness
 char uc(char c)      {                         ///< upper case for case-insensitive matching
     return (_ucase && (c>='A')) ? c&0x5f : c;
@@ -50,19 +48,19 @@ char uc(char c)      {                         ///< upper case for case-insensit
 ///
 char key()
 {
-    while (!xio->available()) NanoForth::yield();  /// TODO: add _isr here
-    return xio->read();
+    while (!io->available()) NanoForth::yield();  /// TODO: add _isr here
+    return io->read();
 }
 void d_chr(char c)     {
-    xio->print(c);
+    io->print(c);
     if (c=='\n') {
-        xio->flush();
+        io->flush();
         NanoForth::yield();
     }
 }
 void d_adr(U16 a)      { d_nib(a>>8); d_nib((a>>4)&0xf); d_nib(a&0xf); }
 void d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
-void d_num(S16 n)      { _hex ? xio->print(n&0xffff,HEX) : xio->print(n); }
+void d_num(S16 n)      { _hex ? io->print(n&0xffff,HEX) : io->print(n); }
 #else
 char key()             { return getchar();  }
 void d_chr(char c)     { printf("%c", c);   }
@@ -185,7 +183,7 @@ U8 *get_token(bool rst)
     U8 cx = dq ? '"' : ' ';                  /// * set delimiter
     U8 sz = 0;
     while (*tp && *tp!='(' && *tp++!=cx) sz++;/// * count token length
-    if (_trc) {                              /// * optionally print token for debugging
+    if (trc) {                               /// * optionally print token for debugging
         d_chr('\n');
         for (int i=0; i<5; i++) {
             d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
@@ -214,4 +212,5 @@ U8 scan(U8 *tkn, const char *lst, U16 *id)
     }
     return 0;
 }
+
 } // namespace N4Core
