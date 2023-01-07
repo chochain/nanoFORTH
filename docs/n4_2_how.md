@@ -85,8 +85,8 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 * to benchmark something, let's define a function **zz** that runs in empty loops and time it
 > : **zz** 10000 FOR NXT ;⏎<br/>
 > CLK DNG **zz** CLK D+ ⏎<br/>
-> ⇨ 227_0_ok
->> \> Our ten-thousand cycles are completed in 227ms, i.e. 23us/cycle, not too shabby!<br/>
+> ⇨ 160_0_ok
+>> \> Our ten-thousand cycles are completed in 160ms, i.e. 16us/cycle, not too shabby!<br/>
 >> \> DNG negate the first clock ticks<br/>
 >> \> D+ add two clock counts (i.e. (-t0) + t1) to deduce the time difference
 
