@@ -416,6 +416,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">PCE </td><td class="markdownTableBodyLeft"><code>( f -- )</code> </td><td class="markdownTableBodyLeft">enable/disable pin change interrupt, 0:disable, 1:enable  </td></tr>
 </table>
+<p>Note: nanoForth utilizes timer2 for timer interrupt. It might conflict with libraries which also uses timer2 such as Tone().</p>
 <p><b>Examples</b></p>
 <p>: aa 65 emt ; ➤ <em>ok</em> (define a word <b>aa</b> which emit 'A' on console)<br  />
  : bb 66 emt ; ➤ <em>ok</em> (define a word <b>bb</b> which emit 'B' on console)<br  />

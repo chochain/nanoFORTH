@@ -204,6 +204,7 @@ nanoFORTH handles only integer numbers.
 > |PCI|`( p -- )`|capture pin #p change (either HIGH to LOW or LOW to HIGH)|
 > |TME|`( f -- )`|enable/disable timer interrupt, 0:disable, 1:enable|
 > |PCE|`( f -- )`|enable/disable pin change interrupt, 0:disable, 1:enable|
+> Note: nanoForth utilizes timer2 for timer interrupt. It might conflict with libraries which also uses timer2 such as Tone().
 >
 > **Examples**
 >
