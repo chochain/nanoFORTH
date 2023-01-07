@@ -17,7 +17,7 @@
 #include "nanoforth_intr.h"
 #include "nanoforth_vm.h"
 
-using namespace N4Core;
+using namespace N4Core;                             /// * make utilities available
 ///
 ///@name Data Stack and Return Stack Ops
 ///@{
@@ -110,7 +110,7 @@ void _invoke(U8 op)
     case 36: N4Asm::save();               break; // SAV
     case 37: N4Asm::load();               break; // LD
     case 38: N4Asm::save(true);           break; // SEX - save/execute (autorun)
-    case 39: set_trace(POP());            break; // TRC
+    case 39: trc = POP();                 break; // TRC
     case 40: {                                   // CLK
         U32 u = millis();       // millisecond (32-bit value)
         PUSH(LO16(u));
@@ -165,7 +165,9 @@ void _nest(U16 xt)
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
-        N4Asm::trace(a, ir);                              // execution tracing when enabled
+#if    TRC_VERBOSE > 0
+        if (trc) N4Asm::trace(a, ir);                     // execution tracing when enabled
+#endif // TRC_VERBOSE
 
         U8  op = ir & CTL_BITS;                           ///> determine control bits
         if (op==JMP_OPS) {                                ///> handle branching instruction
@@ -203,7 +205,7 @@ void _nest(U16 xt)
         }
         else PUSH(ir);                                    ///> handle number (1-byte literal)
 
-        NanoForth::yield();                               ///> give user task some cycles
+        NanoForth::yield();         	 ///> give user task some cycles (800us)
     }
 }
 ///
@@ -213,7 +215,7 @@ void _init() {
     show("nanoForth v1.6 ");             /// * show init prompt
     rp = (U16*)(dic + dsz);              /// * reset return stack pointer
     sp = SP0;                            /// * reset data stack pointer
-    N4Intr::reset();
+    N4Intr::reset();                     /// * init interrupt handler
 
     U16 xt = N4Asm::reset();             /// * reload EEPROM and reset assembler
     if (xt != LFA_X) {                   /// * check autorun addr has been setup? (see SEX)
@@ -226,7 +228,6 @@ void _init() {
 ///
 void _dump(U16 p0, U16 sz0)
 {
-#if MEM_DEBUG
     U8  *p = PTR((p0&0xffe0));
     U16 sz = (sz0+0x1f)&0xffe0;
     for (U16 i=0; i<sz; i+=0x20) {
@@ -238,21 +239,18 @@ void _dump(U16 p0, U16 sz0)
             d_chr((c==0x7f||c<0x20) ? '_' : c);
         }
     }
-#endif // MEM_DEBUG
 }
 ///
 ///> constructor and initializer
 ///
 void setup(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz)
 {
-	N4Asm::reset();
-
     set_mem(dic, dsz = dic_sz, stk_sz);
     set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
     set_ucase(ucase);        /// * set case sensitiveness
     set_hex(0);              /// * set radix = 10
 
-    _init();      			 /// * bail if creation failed
+    _init();      			 /// * init VM
 }
 ///
 ///> show system memory allocation info
@@ -260,13 +258,13 @@ void setup(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz)
 void meminfo()
 {
     S16 free = IDX(&free) - IDX(sp);               // in bytes
-#if ARDUINO && MEM_DEBUG
+#if ARDUINO && TRC_VERBOSE > 0
     show("mem[");         d_ptr(dic);
     show("=dic|0x");      d_adr((U16)((U8*)rp - dic));
     show("|rp->0x");      d_adr((U16)((U8*)sp - (U8*)rp));
     show("<-sp|tib=");    d_num(free);
     show("..|max=");      d_ptr((U8*)&free);
-#endif // MEM_DEBUG
+#endif // ARDUINO
     show("]\n");
 }
 ///
@@ -294,9 +292,8 @@ void isr() {
 ///  1: more token(s) in input buffer<br/>
 ///  0: buffer empty (yield control back to hardware)
 ///
-U8 step()
+U8 outer()
 {
-    //_isr();                                      /// * service interrupts (if any)
     if (is_tib_empty()) _ok();                   ///> console ok prompt
 
     U8  *tkn = get_token();                      ///> get a token from console
