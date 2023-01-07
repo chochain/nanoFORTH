@@ -60,7 +60,8 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 * if that's a bit too slow! nanoFORTH allows you redefine **xy** by "forget" it first
 > FGT **xy** ⏎<br/>
 >> \> that erased **xy** from memory, we can redefine it now<br/>
->> \> actually, multiple definition of the same function is allowed, the latest one takes precedence.
+>> \> actually, multiple definition of the same function is allowed, the latest one takes precedence.<br/>
+>> \> also, FGT a word that is an interrupt service (see page3) might cause undefined behaviour
 >
 > : **xy** FOR **red** 200 DLY **blu** 300 DLY **I .** NXT ; ⏎<br/>
 

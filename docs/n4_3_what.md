@@ -104,6 +104,14 @@ nanoFORTH handles only integer numbers.
 > |BGN xxx f WHL yyy RPT|@image html forth_bgn_whl_rpt.gif width=300px|
 > |n FOR xxx NXT|for loop, index value I count down from n to 1|
 
+### Return Stack Ops
+> |opcode|stack|description|
+> |:--|:--|:--|
+> |I |`( -- w)`|fetch word from top of return stack, aka R@ in other FORTHs|
+> |>R|`(w -- )`|push word on top of data stack onto return stack|
+> |R>|`( -- w)`| pop top of return stack value and push it onto data stack|
+> * note: FORTH programmers often use return stack as temp storage. However do use >R and R> carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter.
+
 ### Memory Access Ops
 > |opcode|stack|description|
 > |:--|:--|:--|
@@ -160,20 +168,12 @@ nanoFORTH handles only integer numbers.
 > |RST|`( -- )`|reset nanoFORTH for debugging on PC|
 > |BYE|`( -- )`|reset nanoFORTH on Arduino, exit to OS on other platform|
 > |DMP|`(a w -- )`|dump nanoFORTH user dictionary from address 'a' for w bytes|
-> |TRC|`(t -- )`|enable/diable execution tracing|
+> |TRC|`(t -- )`|enable/disable execution tracing|
 >
 > **Examples**
 > ||
 > |:--|
 > |@image html nanoforth_bye_trc_dmp.png width=800px|
-
-### Return Stack Ops
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |I |`( -- w)`|fetch word from top of return stack, aka R@ in other FORTHs|
-> |>R|`(w -- )`|push word on top of data stack onto return stack|
-> |R>|`( -- w)`| pop top of return stack value and push it onto data stack|
-> * note: FORTH programmers often use return stack as temp storage. However do use >R and R> carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter.
 
 ### EEPROM Access
 > |opcode|stack|description|
@@ -196,6 +196,30 @@ nanoFORTH handles only integer numbers.
 > **Examples**
 >
 > 1 13 OUT ⏎ ➤ *ok*  (built-in LED is turn on, i.e. digitalWrite(13, 1) called)<br/>
+
+### Interrupt ops
+> |opcode|stack|description|
+> |:--|:--|:--|
+> |TMR|`( n -- )`|set timer ISR with period at n*0.1 second i.g. 100 is 10 second|
+> |PCI|`( p -- )`|capture pin #p change (either HIGH to LOW or LOW to HIGH)|
+> |TME|`( f -- )`|enable/disable timer interrupt, 0:disable, 1:enable|
+> |PCE|`( f -- )`|enable/disable pin change interrupt, 0:disable, 1:enable|
+>
+> **Examples**
+>
+> : aa 65 emt ; ➤ *ok* (define a word **aa** which emit 'A' on console)<br/>
+> : bb 66 emt ; ➤ *ok* (define a word **bb** which emit 'B' on console)<br/>
+>
+> 100 TMR **aa** ➤ *ok* (run **aa** every 10 seconds)<br/>
+> 250 TMR **bb** ➤ *ok* (run **bb** every 25 seconds)<br/>
+> 1 TME ➤ *ok* (enable timer interrupt)<br/>
+> AABAAABAABAA (interrupt routines been called)<br/>
+> 0 TME ➤ *ok* (disable timer interrupt)<br/>
+>
+> 8 PCI **aa** ➤ *ok* (run **aa** when pic 8 changed)<br/>
+> 1 PCI ➤ *ok* (enable pin change interrupt)<br/>
+> AA (assuming you have a push button hooked up at pin 8)<br/>
+>
 
 ### 32-bit Arithmatic (for Arduino Clock mostly)
 > |opcode|stack|description|
