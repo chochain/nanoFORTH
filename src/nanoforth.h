@@ -21,7 +21,7 @@
 #ifndef __SRC_NANOFORTH_H
 #define __SRC_NANOFORTH_H
 
-#define MEM_DEBUG         1
+#define TRC_VERBOSE       1       /* tracing verbosity level */
 
 ///@name Arduino Console Output Support
 ///@{
@@ -42,6 +42,8 @@
 #define Stream            int
 extern  int Serial;
 #endif // ARDUINO
+#define INLINE            inline __attribute__((always_inline))
+
 ///@}
 ///
 ///@name Portable Types
