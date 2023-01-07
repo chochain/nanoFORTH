@@ -1,17 +1,16 @@
 /**
  * @file
  * @brief nanoForth Core Utilities
+ *        + memory and IO helper functions
  */
 #ifndef __SRC_NANOFORTH_CORE_H
 #define __SRC_NANOFORTH_CORE_H
 #include "nanoforth.h"
 
 #if ARDUINO
-#define show(s)      { xio->print(F(s)); xio->flush(); }
-#define INLINE       __attribute__((always_inline))
+#define show(s)      { io->print(F(s)); io->flush(); }
 #else
 #define show(s)      log(s)
-#define INLINE       __attribute__((always_inline))
 #endif // ARDUINO
 
 ///@name Memory Access Ops
@@ -28,21 +27,20 @@
 #define GET16(p)       (((U16)(*(U8*)(p))<<8) + *((U8*)(p)+1))
 ///@}
 ///
-/// nanoForth Core Helper abstract class
+/// nanoForth memory and IO helper functions
 ///
 namespace N4Core
 {
-    extern Stream *xio;             ///< default to Arduino Serial Monitor
+    extern Stream *io;              ///< default to Arduino Serial Monitor
     extern U8     *dic;             ///< base of dictionary
     extern U16    *rp;				///< base of return stack
     extern S16    *sp;              ///< top of data stack
     extern U8     *tib;             ///< base of terminal input buffer
+    extern U8     trc;              ///< tracing flag
 
     void set_mem(U8 *mem, U16 msz, U16 ssz);
-    void set_io(Stream *io);        ///< initialize or redirect IO stream
+    void set_io(Stream *s);         ///< initialize or redirect IO stream
     void set_hex(U8 f);             ///< enable/disable hex numeric radix
-    void set_trace(U8 f);           ///< enable/disable execution tracing
-    U8   is_tracing();              ///< return tracing flag
     void set_ucase(U8 uc);          ///< set case sensitiveness
     char uc(char c);
     ///
@@ -69,7 +67,7 @@ namespace N4Core
         );
     ///@}
     ///
-    ///@name Search Functions
+    ///@name Input buffer Functions
     ///@{
     U8   is_tib_empty();            ///< check whether input buffer is empty
     void clear_tib();               ///< reset input buffer
@@ -81,7 +79,7 @@ namespace N4Core
     ///
     /// scan token from a given string list
     ///
-    U8   scan(
+    U8  scan(                       ///< find token in given string list
         U8 *tkn,                    ///< token to be searched
         const char *lst,            ///< string list to be scanned
         U16 *id                     ///< resultant index if found
