@@ -50,15 +50,21 @@ void NanoForth::add(void (*ufunc)(n4_tptr))
 ///
 void NanoForth::exec()
 {
-    while (N4VM::step()) {                    /// * step through commands from input buffer
+    while (N4VM::outer()) {                    /// * step through commands from input buffer
         yield();
     }
 }
 ///
 ///> n4 yield, execute one round of user hardware tasks
+///  Note:
+///    * 0 isr, n4: 1 blinker - 17us/cycle
 ///
 void NanoForth::yield()
 {
+	static U16 n = 0;
+	if (++n < ISR_PERIOD) return;              /// * tick divider, so VM gets more time
+	n = 0;
+	N4VM::isr();                               /// * service hardware interrupts
     for (n4_tptr tp=_n4tsk; tp; tp=tp->next) { /// * follow task linked list
         tp->func(tp);                          /// * execute task function once
     }
@@ -91,8 +97,12 @@ int main(int argc, char **argv)
 /*
  * Revision History
  * -----------------
- *> 2022-12-28: chochain@yahoo.com - v1.6
- *  * [13920,678] with computed goto; (cut 1% not good enough)
+ *> 2023-01-06: chochain@yahoo.com - v1.6
+ *  * [14830,303] make namespace N4VM, N4Asm, N4Core (singletons)
+ *                yield handles isr (2x slower, tuning)
+ *
+ *> 2022-12-28: chochain@yahoo.com - v1.5
+ *  * [13920,678] with computed goto; (cut 1%, not good enough)
  *  * [13692,230] static dic,rp,sp; (speed up 2%)
  *
  *> 2022-01-20: chochain@yahoo.com - v1.4
