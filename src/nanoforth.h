@@ -21,7 +21,8 @@
 #ifndef __SRC_NANOFORTH_H
 #define __SRC_NANOFORTH_H
 
-#define TRC_VERBOSE       1       /* tracing verbosity level */
+#define TRC_LEVEL         1       /* tracing verbosity level        */
+#define ISR_PERIOD        16      /* tick divider, higher => longer */
 
 ///@name Arduino Console Output Support
 ///@{
