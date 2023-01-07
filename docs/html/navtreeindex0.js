@@ -56,7 +56,6 @@ var NAVTREEINDEX0 =
 "nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73":[6,0,1,2,10],
 "nanoforth_8h.html#aeb245820b2fa4873404a042d8ee0f6b5":[6,0,1,2,19],
 "nanoforth_8h_source.html":[6,0,1,2],
-"nanoforth_8ino.html":[6,0,2],
 "nanoforth__asm_8cpp.html":[6,0,1,3],
 "nanoforth__asm_8cpp.html#a1b304aa3f1d9625342f28364803c681e":[6,0,1,3,26],
 "nanoforth__asm_8cpp.html#a2167c97965233bc0198413dddbf0dd28":[6,0,1,3,1],
