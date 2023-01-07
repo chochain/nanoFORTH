@@ -14,7 +14,7 @@ volatile U8  N4Intr::t_hit   { 0 };
 volatile U8  N4Intr::p_hit   { 0 };
 volatile U16 N4Intr::t_cnt[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 
-static U8 LED[] = { 7, 4, 5, 6, 16, 17, 18 };
+const U8 LED[] = { 7, 4, 5, 6, 16, 17, 18 }; // DEBUG: hit
 
 void N4Intr::reset() {
     CLI();
@@ -28,7 +28,6 @@ void N4Intr::reset() {
 ///> fetch interrupt hit flags
 ///
 U16 N4Intr::hits() {
-    digitalWrite(16+t_hit, digitalRead(16+t_hit) ? LOW : HIGH);
     CLI();
     U16 hx = (p_hit << 8) | t_hit;   // capture interrupt flags
     p_hit = t_hit = 0;
@@ -80,8 +79,7 @@ void N4Intr::enable_pci(U16 f) {
 }
 void N4Intr::enable_timer(U16 f) {
     CLI();
-    pinMode(7, OUTPUT);
-    digitalWrite(7, HIGH);                      // DEBUG: timer2 interrupt eabled
+    pinMode(7, OUTPUT);                         // DEBUG: timer2 interrupt enable/disable
 
     TCCR2A = TCCR2B = TCNT2 = 0;                // reset counter
     if (f) {
@@ -89,9 +87,11 @@ void N4Intr::enable_timer(U16 f) {
         TCCR2B = _BV(CS22)|_BV(CS21);           // prescaler 256 (16000000 / 256) = 62500Hz = 16us
         OCR2A  = 249;                           // 250Hz = 4ms, (250 - 1, must < 256)
         TIMSK2 |= _BV(OCIE2A);                  // enable timer2 compare interrupt
+        digitalWrite(7, HIGH);                  // DEBUG: timer2 enabled
     }
     else {
-        TIMSK2 &= _BV(OCIE2A);                 // disable timer2 compare interrupt
+        TIMSK2 &= _BV(OCIE2A);                  // disable timer2 compare interrupt
+        digitalWrite(7, LOW);                   // DEBUG: timer disabled
         digitalWrite(4, LOW);
         digitalWrite(5, LOW);
         digitalWrite(6, LOW);
@@ -103,14 +103,14 @@ void N4Intr::enable_timer(U16 f) {
 ///
 ISR(TIMER2_COMPA_vect) {
     volatile static int cnt = 0;
-    if (++cnt < 25) return;                     // 25 * 4ms = 100ms
+    if (++cnt < 25) return;                      // 25 * 4ms = 100ms
     cnt = 0;
     for (U8 i=0, b=1; i < N4Intr::t_idx; i++, b<<=1) {
         digitalWrite(7, digitalRead(7) ? LOW : HIGH);  // DEBUG: ISR called
         if (++N4Intr::t_cnt[i] < N4Intr::t_max[i]) continue;
         N4Intr::t_hit    |= b;
         N4Intr::t_cnt[i]  = 0;
-        U8 n = 4 + N4Intr::t_hit;
+        U8 n = LED[N4Intr::t_hit];
         digitalWrite(n, digitalRead(n) ? LOW : HIGH);  // DEBUG: t_hit flag triggered
     }
 }
