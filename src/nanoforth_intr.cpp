@@ -4,38 +4,35 @@
  */
 #include "nanoforth_intr.h"
 ///
-/// Interrupt handler -  static variables
+/// nanoForth Interrupt handler -  static variables
 ///
-U8  N4Intr::t_idx   { 0 };
-U16 N4Intr::p_xt[]  { 0, 0, 0 };
-U16 N4Intr::t_xt[]  { 0, 0, 0, 0, 0, 0, 0, 0 };
-U16 N4Intr::t_max[] { 0, 0, 0, 0, 0, 0, 0, 0 };
-volatile U8  N4Intr::t_hit   { 0 };
-volatile U8  N4Intr::p_hit   { 0 };
-volatile U16 N4Intr::t_cnt[] { 0, 0, 0, 0, 0, 0, 0, 0 };
+namespace N4Intr {
 
-const U8 LED[] = { 7, 4, 5, 6, 16, 17, 18 }; // DEBUG: hit
+U8  t_idx  { 0 };          ///< timer ISR index
+U16 p_xt[] { 0, 0, 0 };    ///< pin change interrupt vectors
+U16 t_xt[8]; 		       ///< timer interrupt vectors
+U16 t_max[8]; 		       ///< timer CTC top value
 
-void N4Intr::reset() {
+volatile U8  t_hit { 0 };  ///< 8-bit for 8 timer ISR
+volatile U8  p_hit { 0 };  ///< pin change interrupt (PORT-B,C,D)
+volatile U16 t_cnt[8];     ///< timer CTC counters
+
+void reset() {
     CLI();
     t_idx = t_hit = p_hit = 0;
     SEI();
-    for (int i=0; i<7; i++) {
-        pinMode(LED[i], OUTPUT);
-    }
 }
 ///
 ///> fetch interrupt hit flags
 ///
-U16 N4Intr::hits() {
+U16 hits() {
     CLI();
     U16 hx = (p_hit << 8) | t_hit;   // capture interrupt flags
     p_hit = t_hit = 0;
     SEI();
     return hx;
 }
-void N4Intr::add_timer(U16 n, U16 xt)
-{
+void add_timer(U16 n, U16 xt) {
     if (xt==0 || t_idx > 7) return;  // range check
 
     CLI();
@@ -45,11 +42,15 @@ void N4Intr::add_timer(U16 n, U16 xt)
     t_idx++;
     SEI();
 }
-#if ARDUINO
+#if !ARDUINO
+void add_pci(U16 p, U16 xt) {}       // mocked functions for x86
+void enable_pci(U16 f)      {}
+void enable_timer(U16 f)    {}
+#else  // ARDUINO
 ///
 ///@name N4Intr static variables
 ///@{
-void N4Intr::add_pci(U16 p, U16 xt) {
+void add_pci(U16 p, U16 xt) {
     if (xt==0) return;               // range check
     CLI();
     if (p < 8)       {
@@ -66,8 +67,7 @@ void N4Intr::add_pci(U16 p, U16 xt) {
     }
     SEI();
 }
-
-void N4Intr::enable_pci(U16 f) {
+void enable_pci(U16 f) {
     CLI();
     if (f) {
         if (p_xt[0]) PCICR |= _BV(PCIE0);  // enable PORTB
@@ -77,7 +77,7 @@ void N4Intr::enable_pci(U16 f) {
     else PCICR = 0;
     SEI();
 }
-void N4Intr::enable_timer(U16 f) {
+void enable_timer(U16 f) {
     CLI();
     pinMode(7, OUTPUT);                         // DEBUG: timer2 interrupt enable/disable
 
@@ -92,15 +92,16 @@ void N4Intr::enable_timer(U16 f) {
     else {
         TIMSK2 &= _BV(OCIE2A);                  // disable timer2 compare interrupt
         digitalWrite(7, LOW);                   // DEBUG: timer disabled
-        digitalWrite(4, LOW);
-        digitalWrite(5, LOW);
-        digitalWrite(6, LOW);
     }
     SEI();
 }
+#endif // ARDUINO
+
+};  // namespace N4Intr
 ///
 /// Arduino interrupt service routines
 ///
+#if ARDUINO
 ISR(TIMER2_COMPA_vect) {
     volatile static int cnt = 0;
     if (++cnt < 25) return;                      // 25 * 4ms = 100ms
@@ -110,8 +111,6 @@ ISR(TIMER2_COMPA_vect) {
         if (++N4Intr::t_cnt[i] < N4Intr::t_max[i]) continue;
         N4Intr::t_hit    |= b;
         N4Intr::t_cnt[i]  = 0;
-        U8 n = LED[N4Intr::t_hit];
-        digitalWrite(n, digitalRead(n) ? LOW : HIGH);  // DEBUG: t_hit flag triggered
     }
 }
 ISR(PCINT0_vect) { N4Intr::p_hit |= 1; }
