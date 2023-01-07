@@ -18,7 +18,7 @@
 #endif //ARDUINO
 
 #include "nanoforth_core.h"
-using namespace N4Core;
+using namespace N4Core;                       /// * make utilities available
 
 ///
 ///@name nanoForth built-in vocabularies
@@ -85,6 +85,25 @@ namespace N4Asm {
 U8  *last  { NULL };                ///< pointer to last word, for debugging
 U8  *here  { NULL };                ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
 U8  tab = 0;                  		///< tracing indentation counter
+///
+///> find colon word address of next input token
+/// @brief search the keyword through colon word linked-list
+/// @return
+///    1 - token found<br/>
+///    0 - token not found
+///
+U8 _find(U8 *tkn, U16 *adr)
+{
+    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {
+        if (uc(p[2])==uc(tkn[0]) &&
+            uc(p[3])==uc(tkn[1]) &&
+            (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
+            *adr = IDX(p);
+            return 1;
+        }
+    }
+    return 0;
+}
 ///
 ///> create name field with link back to previous word
 ///
@@ -181,7 +200,6 @@ void _list_voc(U16 n)
 ///
 void save(bool autorun)
 {
-    U8  trc    = is_tracing();
     U16 here_i = IDX(here);
 
     if (trc) show("dic>>ROM ");
@@ -221,8 +239,6 @@ void save(bool autorun)
 ///
 U16 load(bool autorun)
 {
-    U8 trc = is_tracing();
-
     if (trc && !autorun) show("dic<<ROM ");
     ///
     /// validate EEPROM contains user dictionary (from previous run)
@@ -269,38 +285,19 @@ U16 reset()
     tab     = 0;
     
 #if ARDUINO
-    set_trace(0);
+    trc = 0;
 #else
-    set_trace(1);                        // debugging on PC
+    trc = 1;                             // tracing on PC
 #endif // ARDUINO
 
     return load(true);
-}
-///
-///> find colon word address of next input token
-/// @brief search the keyword through colon word linked-list
-/// @return
-///    1 - token found<br/>
-///    0 - token not found
-///
-U8 find(U8 *tkn, U16 *adr)
-{
-    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {
-        if (uc(p[2])==uc(tkn[0]) &&
-            uc(p[3])==uc(tkn[1]) &&
-            (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
-            *adr = IDX(p);
-            return 1;
-        }
-    }
-    return 0;
 }
 ///
 ///> get address of next input token
 ///
 U16 query() {
     U16 adr;                        ///< lfa of word
-    if (!find(get_token(), &adr)) { /// check if token is in dictionary
+    if (!_find(get_token(), &adr)) {/// check if token is in dictionary
         show("?!  ");               /// * not found, bail
         return 0;
     }
@@ -311,7 +308,7 @@ U16 query() {
 ///
 N4OP parse(U8 *tkn, U16 *rst, U8 run)
 {
-    if (find(tkn, rst))                  return TKN_WRD; /// * WRD - is a colon word? [lnk(2),name(3)]
+    if (_find(tkn, rst))                 return TKN_WRD; /// * WRD - is a colon word? [lnk(2),name(3)]
     if (scan(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM - is a immediate word?
     if (scan(tkn, PRM, rst))             return TKN_PRM; /// * PRM - is a primitives?
     if (number(tkn, (S16*)rst))          return TKN_NUM; /// * NUM - is a number literal?
@@ -325,7 +322,6 @@ void compile(U16 *rp0)
     rp = rp0;                       // set return stack pointer
     U8 *l0 = last, *h0 = here;
     U8 *p0 = here;
-    U8 trc = is_tracing();
 
     _add_word();                    /// **fetch token, create name field linked to previous word**
 
@@ -412,7 +408,6 @@ void constant(S16 v)
 ///
 void words()
 {
-    U8  trc = is_tracing();
     U8  wrp = WORDS_PER_ROW >> (trc ? 1 : 0);                 ///> wraping width
     U16 n   = 0;
     for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {        /// **from last, loop through dictionary**
@@ -442,8 +437,6 @@ void forget()
 ///
 void trace(U16 a, U8 ir)
 {
-    if (!is_tracing()) return;                        ///> check tracing flag
-
     d_adr(a);                                         // opcode address
 
     U8 *p, op = ir & CTL_BITS;

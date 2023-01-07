@@ -68,17 +68,12 @@ namespace N4Asm                     // (10-byte header)
 
     U16 reset();                    ///< reset internal pointers (for BYE)
 
-    /// Instruction Decoder
-    U8  find(
-        U8  *tkn,                   ///< token to be searched
-        U16 *adr                    ///< function address of the found word
-        );
+    /// Instruction decoder
     N4OP parse(
         U8  *tkn,                   ///< token to be parsed
         U16 *rst,                   ///< parsed result
         U8  run                     ///< run mode flag (1: run mode, 0: compile mode)
         );
-
     /// Forth compiler
     void compile(
         U16 *rp0                    ///< memory address to be used as assembler return stack
@@ -91,7 +86,6 @@ namespace N4Asm                     // (10-byte header)
     void words();                   ///< display words in dictionary
     void forget();                  ///< forgets word in the dictionary
 
-    // execution tracing
     /// print execution tracing info
     void trace(
         U16 adr,                    ///< address to word to be executed
