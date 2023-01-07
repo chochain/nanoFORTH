@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['parse_5ftoken_209',['parse_token',['../classN4Asm.html#ad51748c320d7e2d27425d4f29f42c3b4',1,'N4Asm']]]
+  ['number_238',['number',['../namespaceN4Core.html#a6e0ac9033341f5ace29123d7fff5a755',1,'N4Core']]]
 ];

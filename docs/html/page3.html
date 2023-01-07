@@ -256,6 +256,22 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <td class="markdownTableBodyLeft">n FOR xxx NXT </td><td class="markdownTableBodyLeft">for loop, index value I count down from n to 1  </td></tr>
 </table>
 </blockquote>
+<h3>Return Stack Ops</h3>
+<blockquote class="doxtable">
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">description  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">I </td><td class="markdownTableBodyLeft"><code>( -- w)</code> </td><td class="markdownTableBodyLeft">fetch word from top of return stack, aka R@ in other FORTHs  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">&gt;R </td><td class="markdownTableBodyLeft"><code>(w -- )</code> </td><td class="markdownTableBodyLeft">push word on top of data stack onto return stack  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">R&gt; </td><td class="markdownTableBodyLeft"><code>( -- w)</code> </td><td class="markdownTableBodyLeft">pop top of return stack value and push it onto data stack  </td></tr>
+</table>
+<ul>
+<li>note: FORTH programmers often use return stack as temp storage. However do use &gt;R and R&gt; carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter. </li>
+</ul>
+</blockquote>
 <h3>Memory Access Ops</h3>
 <blockquote class="doxtable">
 <table class="markdownTable">
@@ -337,7 +353,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">DMP </td><td class="markdownTableBodyLeft"><code>(a w -- )</code> </td><td class="markdownTableBodyLeft">dump nanoFORTH user dictionary from address 'a' for w bytes  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">TRC </td><td class="markdownTableBodyLeft"><code>(t -- )</code> </td><td class="markdownTableBodyLeft">enable/diable execution tracing  </td></tr>
+<td class="markdownTableBodyLeft">TRC </td><td class="markdownTableBodyLeft"><code>(t -- )</code> </td><td class="markdownTableBodyLeft">enable/disable execution tracing  </td></tr>
 </table>
 <p><b>Examples</b> </p><table class="markdownTable">
 <tr class="markdownTableHead">
@@ -348,22 +364,6 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 </div>
  </td></tr>
 </table>
-</blockquote>
-<h3>Return Stack Ops</h3>
-<blockquote class="doxtable">
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">description  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">I </td><td class="markdownTableBodyLeft"><code>( -- w)</code> </td><td class="markdownTableBodyLeft">fetch word from top of return stack, aka R@ in other FORTHs  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">&gt;R </td><td class="markdownTableBodyLeft"><code>(w -- )</code> </td><td class="markdownTableBodyLeft">push word on top of data stack onto return stack  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">R&gt; </td><td class="markdownTableBodyLeft"><code>( -- w)</code> </td><td class="markdownTableBodyLeft">pop top of return stack value and push it onto data stack  </td></tr>
-</table>
-<ul>
-<li>note: FORTH programmers often use return stack as temp storage. However do use &gt;R and R&gt; carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter. </li>
-</ul>
 </blockquote>
 <h3>EEPROM Access</h3>
 <blockquote class="doxtable">
@@ -401,6 +401,36 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <p><b>Examples</b></p>
 <p>1 13 OUT ⏎ ➤ <em>ok</em> (built-in LED is turn on, i.e. digitalWrite(13, 1) called)<br  />
  </p>
+</blockquote>
+<h3>Interrupt ops</h3>
+<blockquote class="doxtable">
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">description  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">TMR </td><td class="markdownTableBodyLeft"><code>( n -- )</code> </td><td class="markdownTableBodyLeft">set timer ISR with period at n*0.1 second i.g. 100 is 10 second  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">PCI </td><td class="markdownTableBodyLeft"><code>( p -- )</code> </td><td class="markdownTableBodyLeft">capture pin #p change (either HIGH to LOW or LOW to HIGH)  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">TME </td><td class="markdownTableBodyLeft"><code>( f -- )</code> </td><td class="markdownTableBodyLeft">enable/disable timer interrupt, 0:disable, 1:enable  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">PCE </td><td class="markdownTableBodyLeft"><code>( f -- )</code> </td><td class="markdownTableBodyLeft">enable/disable pin change interrupt, 0:disable, 1:enable  </td></tr>
+</table>
+<p><b>Examples</b></p>
+<p>: aa 65 emt ; ➤ <em>ok</em> (define a word <b>aa</b> which emit 'A' on console)<br  />
+ : bb 66 emt ; ➤ <em>ok</em> (define a word <b>bb</b> which emit 'B' on console)<br  />
+</p>
+<p>100 TMR <b>aa</b> ➤ <em>ok</em> (run <b>aa</b> every 10 seconds)<br  />
+ 250 TMR <b>bb</b> ➤ <em>ok</em> (run <b>bb</b> every 25 seconds)<br  />
+ 1 TME ➤ <em>ok</em> (enable timer interrupt)<br  />
+ AABAAABAABAA (interrupt routines been called)<br  />
+ 0 TME ➤ <em>ok</em> (disable timer interrupt)<br  />
+</p>
+<p>8 PCI <b>aa</b> ➤ <em>ok</em> (run <b>aa</b> when pic 8 changed)<br  />
+ 1 PCI ➤ <em>ok</em> (enable pin change interrupt)<br  />
+ AA (assuming you have a push button hooked up at pin 8)<br  />
+</p>
+<p></p>
 </blockquote>
 <h3>32-bit Arithmatic (for Arduino Clock mostly)</h3>
 <blockquote class="doxtable">

@@ -97,87 +97,13 @@ Include dependency graph for nanoforth.cpp:</div>
 <map name="src_2nanoforth_8cpp" id="src_2nanoforth_8cpp">
 <area shape="rect" title="nanoForth main controller class implementation" alt="" coords="5,5,140,32"/>
 <area shape="rect" href="nanoforth__vm_8h.html" title="nanoForth Virtual Machine class" alt="" coords="10,80,135,107"/>
-<area shape="rect" href="nanoforth__core_8h.html" title="nanoForth Core Utility abstract class" alt="" coords="7,155,139,181"/>
-<area shape="rect" href="nanoforth_8h.html" title="nanoForth main controller" alt="" coords="24,229,121,256"/>
-<area shape="rect" title=" " alt="" coords="31,304,115,331"/>
+<area shape="rect" href="nanoforth_8h.html" title="nanoForth main controller" alt="" coords="24,155,121,181"/>
+<area shape="rect" title=" " alt="" coords="31,229,115,256"/>
 </map>
 </div>
 </div><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>nanoForth main controller class implementation </p>
-<h2>Refactor History: </h2>
-<blockquote class="doxtable">
-<p>2004-07 T. NAKAGAWA (Tiny FORTH), original reference<br  />
- 2020-08 <a href="#" onclick="location.href='mai'+'lto:'+'cir'+'cu'+'it4'+'u@'+'med'+'iu'+'m.c'+'om'; return false;">circu<span style="display: none;">.nosp@m.</span>it4u<span style="display: none;">.nosp@m.</span>@medi<span style="display: none;">.nosp@m.</span>um.c<span style="display: none;">.nosp@m.</span>om</a> (Tiny Forth NXT), Arduino reference<br  />
- 2021-03 <a href="#" onclick="location.href='mai'+'lto:'+'cho'+'ch'+'ain'+'@y'+'aho'+'o.'+'com'; return false;">choch<span style="display: none;">.nosp@m.</span>ain@<span style="display: none;">.nosp@m.</span>yahoo<span style="display: none;">.nosp@m.</span>.com</a> (CC Lee) </p>
-</blockquote>
-<ul>
-<li>[6698,1006] modularize with comments</li>
-<li>[6924,1036] add TIB buffer handler</li>
-</ul>
-<blockquote class="doxtable">
-<p>2021-04-02: <a href="#" onclick="location.href='mai'+'lto:'+'cho'+'ch'+'ain'+'@y'+'aho'+'o.'+'com'; return false;">choch<span style="display: none;">.nosp@m.</span>ain@<span style="display: none;">.nosp@m.</span>yahoo<span style="display: none;">.nosp@m.</span>.com</a> </p>
-</blockquote>
-<ul>
-<li>[6782,1056] add protothread multi-tasker</li>
-<li>[6930,1056] add threads</li>
-<li>[6908,1014] use F()</li>
-<li>[6860,852] use PROGMEM, pgm_read_byte in find()</li>
-<li>[6906,852] getnum support negative number</li>
-<li>[7012,860] add digitalR/W</li>
-</ul>
-<blockquote class="doxtable">
-<p>2021-04-03: <a href="#" onclick="location.href='mai'+'lto:'+'cho'+'ch'+'ain'+'@y'+'aho'+'o.'+'com'; return false;">choch<span style="display: none;">.nosp@m.</span>ain@<span style="display: none;">.nosp@m.</span>yahoo<span style="display: none;">.nosp@m.</span>.com</a> </p>
-</blockquote>
-<ul>
-<li>[6898,852] add vm_delay</li>
-<li>[6912,852] update EEPROM IO</li>
-<li>[6842,852] execution tracing enable/disable</li>
-<li>[6922,852] add CELL (CEL), ALLOT (ALO) opcodes</li>
-</ul>
-<blockquote class="doxtable">
-<p>2021-04-16: <a href="#" onclick="location.href='mai'+'lto:'+'cho'+'ch'+'ain'+'@y'+'aho'+'o.'+'com'; return false;">choch<span style="display: none;">.nosp@m.</span>ain@<span style="display: none;">.nosp@m.</span>yahoo<span style="display: none;">.nosp@m.</span>.com</a> </p>
-</blockquote>
-<ul>
-<li>[7446,932] add list_word, use 80-byte console buffer</li>
-<li>[7396,932] add ASM_TRACE from EXE_TRACE options</li>
-<li>[7676,802] grow Task at end of heap</li>
-<li>[8266,802] if use array instead of pointer arithmetics, revert!</li>
-</ul>
-<blockquote class="doxtable">
-<p>2021-05-03: <a href="#" onclick="location.href='mai'+'lto:'+'cho'+'ch'+'ain'+'@y'+'aho'+'o.'+'com'; return false;">choch<span style="display: none;">.nosp@m.</span>ain@<span style="display: none;">.nosp@m.</span>yahoo<span style="display: none;">.nosp@m.</span>.com</a> </p>
-</blockquote>
-<ul>
-<li>[7818,1428] forget Task struct; grow MEM_SZ to DIC_SZ+STK_SZ (1K+64*2)</li>
-<li>[8254,1430] add execution tracing option</li>
-</ul>
-<blockquote class="doxtable">
-<p>2021-05-06: <a href="#" onclick="location.href='mai'+'lto:'+'cho'+'ch'+'ain'+'@y'+'aho'+'o.'+'com'; return false;">choch<span style="display: none;">.nosp@m.</span>ain@<span style="display: none;">.nosp@m.</span>yahoo<span style="display: none;">.nosp@m.</span>.com</a> </p>
-</blockquote>
-<ul>
-<li>[9214,1424] refactor to C++ for Arduino lib</li>
-<li>[11750,280] add mem,stk sizing; VM and ASM objects dynamically created</li>
-<li>[11956,272] add struct <a class="el" href="structn4__task.html">n4_task</a> and N4_FUNC multi-tasker</li>
-</ul>
-<blockquote class="doxtable">
-<p>2021-05-11: <a href="#" onclick="location.href='mai'+'lto:'+'cho'+'ch'+'ain'+'@y'+'aho'+'o.'+'com'; return false;">choch<span style="display: none;">.nosp@m.</span>ain@<span style="display: none;">.nosp@m.</span>yahoo<span style="display: none;">.nosp@m.</span>.com</a> </p>
-</blockquote>
-<ul>
-<li>[12124,270] reformat opcodes for 64-primitives</li>
-<li>[12420,270] display more system memory info and malloc error catch</li>
-</ul>
-<blockquote class="doxtable">
-<p>2021-05-16: <a href="#" onclick="location.href='mai'+'lto:'+'cho'+'ch'+'ain'+'@y'+'aho'+'o.'+'com'; return false;">choch<span style="display: none;">.nosp@m.</span>ain@<span style="display: none;">.nosp@m.</span>yahoo<span style="display: none;">.nosp@m.</span>.com</a> - v1.2 </p>
-</blockquote>
-<ul>
-<li>[12360,272] move static variables into <a class="el" href="classNanoForth.html">NanoForth</a> class</li>
-<li>[15180,472] add EEPROM; BlueTooth/BLE&lt;=&gt;stream IO</li>
-</ul>
-<blockquote class="doxtable">
-<p>2022-01-20: <a href="#" onclick="location.href='mai'+'lto:'+'cho'+'ch'+'ain'+'@y'+'aho'+'o.'+'com'; return false;">choch<span style="display: none;">.nosp@m.</span>ain@<span style="display: none;">.nosp@m.</span>yahoo<span style="display: none;">.nosp@m.</span>.com</a> - v1.4 </p>
-</blockquote>
-<ul>
-<li>[15634,472] autorun; handles Forth comments </li>
-</ul>
+<p>Revision History: see tail of this file </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

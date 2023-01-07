@@ -83,8 +83,9 @@ $(document).ready(function(){initNavTree('nanoforth__asm_8h.html',''); initResiz
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Structures</a> &#124;
+<a href="#namespaces">Namespaces</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">nanoforth_asm.h File Reference</div>  </div>
@@ -93,16 +94,15 @@ $(document).ready(function(){initNavTree('nanoforth__asm_8h.html',''); initResiz
 
 <p>nanoForth Assembler class  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="nanoforth__core_8h_source.html">nanoforth_core.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="nanoforth_8h_source.html">nanoforth.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for nanoforth_asm.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="nanoforth__asm_8h__incl.png" border="0" usemap="#src_2nanoforth__asm_8h" alt=""/></div>
 <map name="src_2nanoforth__asm_8h" id="src_2nanoforth__asm_8h">
 <area shape="rect" title="nanoForth Assembler class" alt="" coords="5,5,160,32"/>
-<area shape="rect" href="nanoforth__core_8h.html" title="nanoForth Core Utility abstract class" alt="" coords="17,80,149,107"/>
-<area shape="rect" href="nanoforth_8h.html" title="nanoForth main controller" alt="" coords="34,155,131,181"/>
-<area shape="rect" title=" " alt="" coords="41,229,125,256"/>
+<area shape="rect" href="nanoforth_8h.html" title="nanoForth main controller" alt="" coords="34,80,131,107"/>
+<area shape="rect" title=" " alt="" coords="41,155,125,181"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -118,16 +118,16 @@ This graph shows which files directly or indirectly include this file:</div>
 </div>
 <p><a href="nanoforth__asm_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4Asm.html">N4Asm</a></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceN4Asm"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html">N4Asm</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:a0af31b1478147525dc0774389c9ba4d4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a0af31b1478147525dc0774389c9ba4d4">N4OP</a> { <br />
 &#160;&#160;<a class="el" href="nanoforth__asm_8h.html#a0af31b1478147525dc0774389c9ba4d4a519782c3d4f1e59db91152fdd2ed33d8">TKN_IMM</a> = 1, 
-<a class="el" href="nanoforth__asm_8h.html#a0af31b1478147525dc0774389c9ba4d4a24e7d1adaa1496363c5e426caa61feeb">TKN_DIC</a>, 
+<a class="el" href="nanoforth__asm_8h.html#a0af31b1478147525dc0774389c9ba4d4a0129112977afc323c9f1d14fec72c916">TKN_WRD</a>, 
 <a class="el" href="nanoforth__asm_8h.html#a0af31b1478147525dc0774389c9ba4d4ab70b86eb3ed9488a64143f88d133d4c7">TKN_EXT</a>, 
 <a class="el" href="nanoforth__asm_8h.html#a0af31b1478147525dc0774389c9ba4d4aa6e497aed7b3efe5056dddc021f861d3">TKN_PRM</a>, 
 <br />
@@ -137,16 +137,51 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="separator:a0af31b1478147525dc0774389c9ba4d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab277eef7cdcc7632f73c9b95eeb8a032"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032">N4_EXT_OP</a> { <br />
-&#160;&#160;<a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a8cd3b63201f2d98323d8cb584171d373">I_DQ</a> = 0x1d, 
-<a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a8dffc118526dc2de6ec198adf32339c4">I_FOR</a> = 0x3b, 
+&#160;&#160;<a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a8cd3b63201f2d98323d8cb584171d373">I_DQ</a> = 29, 
+<a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a85c55d94aeacac3ccd0094b4f4dc733c">I_I</a> = 60, 
+<a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a8dffc118526dc2de6ec198adf32339c4">I_FOR</a>, 
 <a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032aab50a9637a298670cb02d49e02f79339">I_NXT</a>, 
-<a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032acf95ff71a88a49ecf42edb562dae09be">I_BRK</a>, 
 <br />
-&#160;&#160;<a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a85c55d94aeacac3ccd0094b4f4dc733c">I_I</a>, 
-<a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032af9db9448bc03b218c32b4ff370dab892">I_LIT</a>
+&#160;&#160;<a class="el" href="nanoforth__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032af9db9448bc03b218c32b4ff370dab892">I_LIT</a>
 <br />
  }</td></tr>
 <tr class="separator:ab277eef7cdcc7632f73c9b95eeb8a032"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:afcb99e6d1f5944d1a329a905b5c8f04c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#afcb99e6d1f5944d1a329a905b5c8f04c">N4Asm::save</a> (bool autorun=false)</td></tr>
+<tr class="memdesc:afcb99e6d1f5944d1a329a905b5c8f04c"><td class="mdescLeft">&#160;</td><td class="mdescRight">persist user dictionary to EEPROM  <a href="namespaceN4Asm.html#afcb99e6d1f5944d1a329a905b5c8f04c">More...</a><br /></td></tr>
+<tr class="separator:afcb99e6d1f5944d1a329a905b5c8f04c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afeb6b8ea1af0cb3d35635c1bd94c7bfd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#afeb6b8ea1af0cb3d35635c1bd94c7bfd">N4Asm::load</a> (bool autorun=false)</td></tr>
+<tr class="memdesc:afeb6b8ea1af0cb3d35635c1bd94c7bfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">restore user dictionary from EEPROM  <a href="namespaceN4Asm.html#afeb6b8ea1af0cb3d35635c1bd94c7bfd">More...</a><br /></td></tr>
+<tr class="separator:afeb6b8ea1af0cb3d35635c1bd94c7bfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9c18d1a37bff77cad6e2e2699df398d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#ac9c18d1a37bff77cad6e2e2699df398d">N4Asm::reset</a> ()</td></tr>
+<tr class="memdesc:ac9c18d1a37bff77cad6e2e2699df398d"><td class="mdescLeft">&#160;</td><td class="mdescRight">reset internal pointers (for BYE)  <a href="namespaceN4Asm.html#ac9c18d1a37bff77cad6e2e2699df398d">More...</a><br /></td></tr>
+<tr class="separator:ac9c18d1a37bff77cad6e2e2699df398d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88b485c8620c0f5b71cc3b170c0031ce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth__asm_8h.html#a0af31b1478147525dc0774389c9ba4d4">N4OP</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#a88b485c8620c0f5b71cc3b170c0031ce">N4Asm::parse</a> (<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *tkn, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> *rst, <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> run)</td></tr>
+<tr class="memdesc:a88b485c8620c0f5b71cc3b170c0031ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Instruction decoder.  <a href="namespaceN4Asm.html#a88b485c8620c0f5b71cc3b170c0031ce">More...</a><br /></td></tr>
+<tr class="separator:a88b485c8620c0f5b71cc3b170c0031ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf20a9f3f951f2f183eb60398618c66e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#adf20a9f3f951f2f183eb60398618c66e">N4Asm::compile</a> (<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> *rp0)</td></tr>
+<tr class="memdesc:adf20a9f3f951f2f183eb60398618c66e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forth compiler.  <a href="namespaceN4Asm.html#adf20a9f3f951f2f183eb60398618c66e">More...</a><br /></td></tr>
+<tr class="separator:adf20a9f3f951f2f183eb60398618c66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3f87b8f17e103c19afc2544bbb42a146"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#a3f87b8f17e103c19afc2544bbb42a146">N4Asm::variable</a> ()</td></tr>
+<tr class="memdesc:a3f87b8f17e103c19afc2544bbb42a146"><td class="mdescLeft">&#160;</td><td class="mdescRight">create a variable on dictionary  <a href="namespaceN4Asm.html#a3f87b8f17e103c19afc2544bbb42a146">More...</a><br /></td></tr>
+<tr class="separator:a3f87b8f17e103c19afc2544bbb42a146"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46691d4daa880d7a492a263925c6869e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#a46691d4daa880d7a492a263925c6869e">N4Asm::constant</a> (<a class="el" href="nanoforth_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a> v)</td></tr>
+<tr class="memdesc:a46691d4daa880d7a492a263925c6869e"><td class="mdescLeft">&#160;</td><td class="mdescRight">create a constant on dictionary  <a href="namespaceN4Asm.html#a46691d4daa880d7a492a263925c6869e">More...</a><br /></td></tr>
+<tr class="separator:a46691d4daa880d7a492a263925c6869e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab47ea1457ae8f3956dba74039c6db578"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#ab47ea1457ae8f3956dba74039c6db578">N4Asm::query</a> ()</td></tr>
+<tr class="memdesc:ab47ea1457ae8f3956dba74039c6db578"><td class="mdescLeft">&#160;</td><td class="mdescRight">get xt of next input token, 0 if not found  <a href="namespaceN4Asm.html#ab47ea1457ae8f3956dba74039c6db578">More...</a><br /></td></tr>
+<tr class="separator:ab47ea1457ae8f3956dba74039c6db578"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae7b0979a6accbb7d0f1bc5c646c960f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#aae7b0979a6accbb7d0f1bc5c646c960f">N4Asm::words</a> ()</td></tr>
+<tr class="memdesc:aae7b0979a6accbb7d0f1bc5c646c960f"><td class="mdescLeft">&#160;</td><td class="mdescRight">display words in dictionary  <a href="namespaceN4Asm.html#aae7b0979a6accbb7d0f1bc5c646c960f">More...</a><br /></td></tr>
+<tr class="separator:aae7b0979a6accbb7d0f1bc5c646c960f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcb801624632a840580a79196f744762"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#abcb801624632a840580a79196f744762">N4Asm::forget</a> ()</td></tr>
+<tr class="memdesc:abcb801624632a840580a79196f744762"><td class="mdescLeft">&#160;</td><td class="mdescRight">forgets word in the dictionary  <a href="namespaceN4Asm.html#abcb801624632a840580a79196f744762">More...</a><br /></td></tr>
+<tr class="separator:abcb801624632a840580a79196f744762"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d1e9aaa4bf1feb4dcabfa17088d612d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Asm.html#a9d1e9aaa4bf1feb4dcabfa17088d612d">N4Asm::trace</a> (<a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> adr, <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> ir)</td></tr>
+<tr class="memdesc:a9d1e9aaa4bf1feb4dcabfa17088d612d"><td class="mdescLeft">&#160;</td><td class="mdescRight">print execution tracing info  <a href="namespaceN4Asm.html#a9d1e9aaa4bf1feb4dcabfa17088d612d">More...</a><br /></td></tr>
+<tr class="separator:a9d1e9aaa4bf1feb4dcabfa17088d612d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -154,33 +189,36 @@ Variables</h2></td></tr>
 <tr class="separator:ab5323cac9355ea333e8a426c25cc70f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Opcode Masks</div></td></tr>
 <tr class="memitem:a0b2400848a0f21e8dcd935a8d3c98933"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a0b2400848a0f21e8dcd935a8d3c98933">CTL_BITS</a> = 0xc0</td></tr>
-<tr class="memdesc:a0b2400848a0f21e8dcd935a8d3c98933"><td class="mdescLeft">&#160;</td><td class="mdescRight">1100 0000, 11xx: JMP, 10xx: PRM, 0xxx: NUM  <a href="nanoforth__asm_8h.html#a0b2400848a0f21e8dcd935a8d3c98933">More...</a><br /></td></tr>
+<tr class="memdesc:a0b2400848a0f21e8dcd935a8d3c98933"><td class="mdescLeft">&#160;</td><td class="mdescRight">1100 0000, JMP - 11nn xxxx, PRM - 10nn nnnn, NUM - 0nnn nnnn  <a href="nanoforth__asm_8h.html#a0b2400848a0f21e8dcd935a8d3c98933">More...</a><br /></td></tr>
 <tr class="separator:a0b2400848a0f21e8dcd935a8d3c98933"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aff1eec6400f0021e8f46bc945d5df157"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#aff1eec6400f0021e8f46bc945d5df157">PFX_PRM</a> = 0x80</td></tr>
-<tr class="memdesc:aff1eec6400f0021e8f46bc945d5df157"><td class="mdescLeft">&#160;</td><td class="mdescRight">1000 0000  <a href="nanoforth__asm_8h.html#aff1eec6400f0021e8f46bc945d5df157">More...</a><br /></td></tr>
-<tr class="separator:aff1eec6400f0021e8f46bc945d5df157"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ad40eec06d1ba85b8f4a5c50c1d2243"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a7ad40eec06d1ba85b8f4a5c50c1d2243">PRM_MASK</a> = 0x3f</td></tr>
-<tr class="memdesc:a7ad40eec06d1ba85b8f4a5c50c1d2243"><td class="mdescLeft">&#160;</td><td class="mdescRight">0011 1111, 6-bit primitive opcodes  <a href="nanoforth__asm_8h.html#a7ad40eec06d1ba85b8f4a5c50c1d2243">More...</a><br /></td></tr>
-<tr class="separator:a7ad40eec06d1ba85b8f4a5c50c1d2243"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7585da0b4ae076b0800d6dca55746d8"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#ac7585da0b4ae076b0800d6dca55746d8">JMP_OPS</a> = 0xc0</td></tr>
+<tr class="memdesc:ac7585da0b4ae076b0800d6dca55746d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">1100 0000  <a href="nanoforth__asm_8h.html#ac7585da0b4ae076b0800d6dca55746d8">More...</a><br /></td></tr>
+<tr class="separator:ac7585da0b4ae076b0800d6dca55746d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9783e35109050005b254d0d7aa1dfa40"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a9783e35109050005b254d0d7aa1dfa40">JMP_MASK</a> = 0xf0</td></tr>
-<tr class="memdesc:a9783e35109050005b254d0d7aa1dfa40"><td class="mdescLeft">&#160;</td><td class="mdescRight">1111 0000  <a href="nanoforth__asm_8h.html#a9783e35109050005b254d0d7aa1dfa40">More...</a><br /></td></tr>
+<tr class="memdesc:a9783e35109050005b254d0d7aa1dfa40"><td class="mdescLeft">&#160;</td><td class="mdescRight">11nn xxxx, nn - CALL 00, CDJ 01, UDJ 10, RET 11  <a href="nanoforth__asm_8h.html#a9783e35109050005b254d0d7aa1dfa40">More...</a><br /></td></tr>
 <tr class="separator:a9783e35109050005b254d0d7aa1dfa40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7ea15e8b8ec0f4873b99ae7eb1b1997"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#ad7ea15e8b8ec0f4873b99ae7eb1b1997">PRM_OPS</a> = 0x80</td></tr>
+<tr class="memdesc:ad7ea15e8b8ec0f4873b99ae7eb1b1997"><td class="mdescLeft">&#160;</td><td class="mdescRight">1000 0000  <a href="nanoforth__asm_8h.html#ad7ea15e8b8ec0f4873b99ae7eb1b1997">More...</a><br /></td></tr>
+<tr class="separator:ad7ea15e8b8ec0f4873b99ae7eb1b1997"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ad40eec06d1ba85b8f4a5c50c1d2243"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a7ad40eec06d1ba85b8f4a5c50c1d2243">PRM_MASK</a> = 0x3f</td></tr>
+<tr class="memdesc:a7ad40eec06d1ba85b8f4a5c50c1d2243"><td class="mdescLeft">&#160;</td><td class="mdescRight">00nn nnnn, 6-bit primitive opcodes  <a href="nanoforth__asm_8h.html#a7ad40eec06d1ba85b8f4a5c50c1d2243">More...</a><br /></td></tr>
+<tr class="separator:a7ad40eec06d1ba85b8f4a5c50c1d2243"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a174dd17d5b642c707938e42a79a09fc4"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a174dd17d5b642c707938e42a79a09fc4">ADR_MASK</a> = 0x0fff</td></tr>
 <tr class="memdesc:a174dd17d5b642c707938e42a79a09fc4"><td class="mdescLeft">&#160;</td><td class="mdescRight">0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions  <a href="nanoforth__asm_8h.html#a174dd17d5b642c707938e42a79a09fc4">More...</a><br /></td></tr>
 <tr class="separator:a174dd17d5b642c707938e42a79a09fc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Opcode Prefixes</div></td></tr>
-<tr class="memitem:af9b16f3b1dd173f6b0437269174c90f9"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#af9b16f3b1dd173f6b0437269174c90f9">PFX_CALL</a> = 0xc0</td></tr>
-<tr class="memdesc:af9b16f3b1dd173f6b0437269174c90f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">1100 0000  <a href="nanoforth__asm_8h.html#af9b16f3b1dd173f6b0437269174c90f9">More...</a><br /></td></tr>
-<tr class="separator:af9b16f3b1dd173f6b0437269174c90f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02abb1529742323ec714602ace9d6877"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a02abb1529742323ec714602ace9d6877">PFX_CDJ</a> = 0xd0</td></tr>
-<tr class="memdesc:a02abb1529742323ec714602ace9d6877"><td class="mdescLeft">&#160;</td><td class="mdescRight">1101 0000  <a href="nanoforth__asm_8h.html#a02abb1529742323ec714602ace9d6877">More...</a><br /></td></tr>
-<tr class="separator:a02abb1529742323ec714602ace9d6877"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae072facef66883ae2dfc1c8cc0f2bedd"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#ae072facef66883ae2dfc1c8cc0f2bedd">PFX_UDJ</a> = 0xe0</td></tr>
-<tr class="memdesc:ae072facef66883ae2dfc1c8cc0f2bedd"><td class="mdescLeft">&#160;</td><td class="mdescRight">1110 0000  <a href="nanoforth__asm_8h.html#ae072facef66883ae2dfc1c8cc0f2bedd">More...</a><br /></td></tr>
-<tr class="separator:ae072facef66883ae2dfc1c8cc0f2bedd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0404ce117eb19938b3d21c376604a0c6"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a0404ce117eb19938b3d21c376604a0c6">PFX_RET</a> = 0xf0</td></tr>
-<tr class="memdesc:a0404ce117eb19938b3d21c376604a0c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">1111 0000  <a href="nanoforth__asm_8h.html#a0404ce117eb19938b3d21c376604a0c6">More...</a><br /></td></tr>
-<tr class="separator:a0404ce117eb19938b3d21c376604a0c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a224ce243e33ebbf1dda8050c0b416c50"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a224ce243e33ebbf1dda8050c0b416c50">OP_CALL</a> = 0xc0</td></tr>
+<tr class="memdesc:a224ce243e33ebbf1dda8050c0b416c50"><td class="mdescLeft">&#160;</td><td class="mdescRight">1100 0000  <a href="nanoforth__asm_8h.html#a224ce243e33ebbf1dda8050c0b416c50">More...</a><br /></td></tr>
+<tr class="separator:a224ce243e33ebbf1dda8050c0b416c50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a006dd0582e2403710175a993bf6ee3c1"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a006dd0582e2403710175a993bf6ee3c1">OP_CDJ</a> = 0xd0</td></tr>
+<tr class="memdesc:a006dd0582e2403710175a993bf6ee3c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">1101 0000  <a href="nanoforth__asm_8h.html#a006dd0582e2403710175a993bf6ee3c1">More...</a><br /></td></tr>
+<tr class="separator:a006dd0582e2403710175a993bf6ee3c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06b727c2ba8690ccbfe6bf593c3b632c"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#a06b727c2ba8690ccbfe6bf593c3b632c">OP_UDJ</a> = 0xe0</td></tr>
+<tr class="memdesc:a06b727c2ba8690ccbfe6bf593c3b632c"><td class="mdescLeft">&#160;</td><td class="mdescRight">1110 0000  <a href="nanoforth__asm_8h.html#a06b727c2ba8690ccbfe6bf593c3b632c">More...</a><br /></td></tr>
+<tr class="separator:a06b727c2ba8690ccbfe6bf593c3b632c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedf2f5a68bb68defb651b3267031ca51"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth__asm_8h.html#aedf2f5a68bb68defb651b3267031ca51">OP_RET</a> = 0xf0</td></tr>
+<tr class="memdesc:aedf2f5a68bb68defb651b3267031ca51"><td class="mdescLeft">&#160;</td><td class="mdescRight">1111 0000  <a href="nanoforth__asm_8h.html#aedf2f5a68bb68defb651b3267031ca51">More...</a><br /></td></tr>
+<tr class="separator:aedf2f5a68bb68defb651b3267031ca51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>nanoForth Assembler class </p>
@@ -206,7 +244,7 @@ Variables</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a0af31b1478147525dc0774389c9ba4d4a519782c3d4f1e59db91152fdd2ed33d8"></a>TKN_IMM&#160;</td><td class="fielddoc"><p>immediate word </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a0af31b1478147525dc0774389c9ba4d4a24e7d1adaa1496363c5e426caa61feeb"></a>TKN_DIC&#160;</td><td class="fielddoc"><p>dictionary (user defined) word </p>
+<tr><td class="fieldname"><a id="a0af31b1478147525dc0774389c9ba4d4a0129112977afc323c9f1d14fec72c916"></a>TKN_WRD&#160;</td><td class="fielddoc"><p>colon (user defined) word </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a0af31b1478147525dc0774389c9ba4d4ab70b86eb3ed9488a64143f88d133d4c7"></a>TKN_EXT&#160;</td><td class="fielddoc"><p>extended built-in word </p>
 </td></tr>
@@ -236,15 +274,13 @@ Variables</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab277eef7cdcc7632f73c9b95eeb8a032a8cd3b63201f2d98323d8cb584171d373"></a>I_DQ&#160;</td><td class="fielddoc"><p>extended opcode (used by for...nxt loop) </p>
 <p>." handler (adjust, if field name list changed) </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ab277eef7cdcc7632f73c9b95eeb8a032a8dffc118526dc2de6ec198adf32339c4"></a>I_FOR&#160;</td><td class="fielddoc"><p>0x3b </p>
+<tr><td class="fieldname"><a id="ab277eef7cdcc7632f73c9b95eeb8a032a85c55d94aeacac3ccd0094b4f4dc733c"></a>I_I&#160;</td><td class="fielddoc"><p>60 loop counter </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ab277eef7cdcc7632f73c9b95eeb8a032aab50a9637a298670cb02d49e02f79339"></a>I_NXT&#160;</td><td class="fielddoc"><p>0x3c </p>
+<tr><td class="fieldname"><a id="ab277eef7cdcc7632f73c9b95eeb8a032a8dffc118526dc2de6ec198adf32339c4"></a>I_FOR&#160;</td><td class="fielddoc"><p>61 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ab277eef7cdcc7632f73c9b95eeb8a032acf95ff71a88a49ecf42edb562dae09be"></a>I_BRK&#160;</td><td class="fielddoc"><p>0x3d </p>
+<tr><td class="fieldname"><a id="ab277eef7cdcc7632f73c9b95eeb8a032aab50a9637a298670cb02d49e02f79339"></a>I_NXT&#160;</td><td class="fielddoc"><p>62 </p>
 </td></tr>
-<tr><td class="fieldname"><a id="ab277eef7cdcc7632f73c9b95eeb8a032a85c55d94aeacac3ccd0094b4f4dc733c"></a>I_I&#160;</td><td class="fielddoc"><p>0x3e loop counter </p>
-</td></tr>
-<tr><td class="fieldname"><a id="ab277eef7cdcc7632f73c9b95eeb8a032af9db9448bc03b218c32b4ff370dab892"></a>I_LIT&#160;</td><td class="fielddoc"><p>0x3f 3-byte literal </p>
+<tr><td class="fieldname"><a id="ab277eef7cdcc7632f73c9b95eeb8a032af9db9448bc03b218c32b4ff370dab892"></a>I_LIT&#160;</td><td class="fielddoc"><p>63 = 0x3f 3-byte literal </p>
 </td></tr>
 </table>
 
@@ -271,12 +307,12 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>1100 0000, 11xx: JMP, 10xx: PRM, 0xxx: NUM </p>
+<p>1100 0000, JMP - 11nn xxxx, PRM - 10nn nnnn, NUM - 0nnn nnnn </p>
 
 </div>
 </div>
-<a id="aff1eec6400f0021e8f46bc945d5df157"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aff1eec6400f0021e8f46bc945d5df157">&#9670;&nbsp;</a></span>PFX_PRM</h2>
+<a id="ac7585da0b4ae076b0800d6dca55746d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7585da0b4ae076b0800d6dca55746d8">&#9670;&nbsp;</a></span>JMP_OPS</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -285,7 +321,55 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> PFX_PRM = 0x80</td>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> JMP_OPS = 0xc0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>1100 0000 </p>
+
+</div>
+</div>
+<a id="a9783e35109050005b254d0d7aa1dfa40"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9783e35109050005b254d0d7aa1dfa40">&#9670;&nbsp;</a></span>JMP_MASK</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> JMP_MASK = 0xf0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>11nn xxxx, nn - CALL 00, CDJ 01, UDJ 10, RET 11 </p>
+
+</div>
+</div>
+<a id="ad7ea15e8b8ec0f4873b99ae7eb1b1997"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7ea15e8b8ec0f4873b99ae7eb1b1997">&#9670;&nbsp;</a></span>PRM_OPS</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> PRM_OPS = 0x80</td>
         </tr>
       </table>
   </td>
@@ -319,31 +403,7 @@ Variables</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>0011 1111, 6-bit primitive opcodes </p>
-
-</div>
-</div>
-<a id="a9783e35109050005b254d0d7aa1dfa40"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9783e35109050005b254d0d7aa1dfa40">&#9670;&nbsp;</a></span>JMP_MASK</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> JMP_MASK = 0xf0</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>1111 0000 </p>
+<p>00nn nnnn, 6-bit primitive opcodes </p>
 
 </div>
 </div>
@@ -371,8 +431,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="af9b16f3b1dd173f6b0437269174c90f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af9b16f3b1dd173f6b0437269174c90f9">&#9670;&nbsp;</a></span>PFX_CALL</h2>
+<a id="a224ce243e33ebbf1dda8050c0b416c50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a224ce243e33ebbf1dda8050c0b416c50">&#9670;&nbsp;</a></span>OP_CALL</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -381,7 +441,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> PFX_CALL = 0xc0</td>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> OP_CALL = 0xc0</td>
         </tr>
       </table>
   </td>
@@ -395,8 +455,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a02abb1529742323ec714602ace9d6877"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a02abb1529742323ec714602ace9d6877">&#9670;&nbsp;</a></span>PFX_CDJ</h2>
+<a id="a006dd0582e2403710175a993bf6ee3c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a006dd0582e2403710175a993bf6ee3c1">&#9670;&nbsp;</a></span>OP_CDJ</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -405,7 +465,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> PFX_CDJ = 0xd0</td>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> OP_CDJ = 0xd0</td>
         </tr>
       </table>
   </td>
@@ -419,8 +479,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="ae072facef66883ae2dfc1c8cc0f2bedd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae072facef66883ae2dfc1c8cc0f2bedd">&#9670;&nbsp;</a></span>PFX_UDJ</h2>
+<a id="a06b727c2ba8690ccbfe6bf593c3b632c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06b727c2ba8690ccbfe6bf593c3b632c">&#9670;&nbsp;</a></span>OP_UDJ</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -429,7 +489,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> PFX_UDJ = 0xe0</td>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> OP_UDJ = 0xe0</td>
         </tr>
       </table>
   </td>
@@ -443,8 +503,8 @@ Variables</h2></td></tr>
 
 </div>
 </div>
-<a id="a0404ce117eb19938b3d21c376604a0c6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0404ce117eb19938b3d21c376604a0c6">&#9670;&nbsp;</a></span>PFX_RET</h2>
+<a id="aedf2f5a68bb68defb651b3267031ca51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedf2f5a68bb68defb651b3267031ca51">&#9670;&nbsp;</a></span>OP_RET</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -453,7 +513,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> PFX_RET = 0xf0</td>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> OP_RET = 0xf0</td>
         </tr>
       </table>
   </td>

@@ -1,10 +1,27 @@
 var nanoforth__core_8h =
 [
-    [ "N4Core", "classN4Core.html", "classN4Core" ],
     [ "show", "nanoforth__core_8h.html#a1b6f4e8567ad08a015fca3e83b3dc584", null ],
     [ "SET8", "nanoforth__core_8h.html#a5fbe8c099d455dc8049978119712ed97", null ],
     [ "SET16", "nanoforth__core_8h.html#a7e7ed6ececb483febb8dbc47a9ca26e2", null ],
     [ "GET16", "nanoforth__core_8h.html#a0347fc520bda2a3f684f7e344b180065", null ],
-    [ "TIB_SZ", "nanoforth__core_8h.html#a319786058564b50624b066393850a7a9", null ],
-    [ "TIB_CLR", "nanoforth__core_8h.html#af458e91b53116caa289b4a0c3c45d8c1", null ]
+    [ "set_mem", "nanoforth__core_8h.html#a045f1f0686edef57d09b0d31c96ba0fc", null ],
+    [ "set_io", "nanoforth__core_8h.html#af3f2a7a80bc031dbc26d29cc0c029f15", null ],
+    [ "set_hex", "nanoforth__core_8h.html#a9093443521bb5aa5f7984d39926916d6", null ],
+    [ "set_ucase", "nanoforth__core_8h.html#a370606874b2b14eca3ef32481c0fe16e", null ],
+    [ "uc", "nanoforth__core_8h.html#a0d5cc20491c3146786349fde57c13f5b", null ],
+    [ "key", "nanoforth__core_8h.html#ad93f809a92778f2f4fcdabc9350a3ea8", null ],
+    [ "d_chr", "nanoforth__core_8h.html#a3a3e4ae4954551e76c19625c18e72182", null ],
+    [ "d_adr", "nanoforth__core_8h.html#aee71abce5f671bc9e867f683e327a6e6", null ],
+    [ "d_str", "nanoforth__core_8h.html#a8ebd0caea89dd845a216290731901fa9", null ],
+    [ "d_ptr", "nanoforth__core_8h.html#aae3a814b552f13eb6f533f04e59793e6", null ],
+    [ "d_nib", "nanoforth__core_8h.html#a00f8c798ee3ddd89c038999180347d17", null ],
+    [ "d_u8", "nanoforth__core_8h.html#a76fd10331f7f55db3f1a924fcdf7e1d5", null ],
+    [ "d_num", "nanoforth__core_8h.html#a4579127c2ecf48ea5ed3641446e6f4bc", null ],
+    [ "d_mem", "nanoforth__core_8h.html#a812d012a57ba1a74c8028cca118cb17d", null ],
+    [ "d_name", "nanoforth__core_8h.html#a286ee4feeeb87bfd3a44d3d353b2713c", null ],
+    [ "is_tib_empty", "nanoforth__core_8h.html#a5518038a71555f1f54263a57f0d905e5", null ],
+    [ "clear_tib", "nanoforth__core_8h.html#a3d456e769c6b769d0ff9a121ef67bbfe", null ],
+    [ "get_token", "nanoforth__core_8h.html#a1ee955bfab23663c77ae10b4a26a6f6d", null ],
+    [ "number", "nanoforth__core_8h.html#a6e0ac9033341f5ace29123d7fff5a755", null ],
+    [ "scan", "nanoforth__core_8h.html#aa7ee2231a6702a3c7829a2c4f111ae2c", null ]
 ];

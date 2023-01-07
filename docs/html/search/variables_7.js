@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['last_239',['last',['../classN4Asm.html#a3359e8f4af8cd505e38fbf96ef632ce6',1,'N4Asm']]],
-  ['lfa_5fx_240',['LFA_X',['../nanoforth__asm_8h.html#ab5323cac9355ea333e8a426c25cc70f3',1,'nanoforth_asm.h']]]
+  ['jmp_270',['JMP',['../nanoforth__asm_8cpp.html#a9a42bfe95413e9933bed0e815b6dfec4',1,'nanoforth_asm.cpp']]],
+  ['jmp_5fmask_271',['JMP_MASK',['../nanoforth__asm_8h.html#a9783e35109050005b254d0d7aa1dfa40',1,'nanoforth_asm.h']]],
+  ['jmp_5fops_272',['JMP_OPS',['../nanoforth__asm_8h.html#ac7585da0b4ae076b0800d6dca55746d8',1,'nanoforth_asm.h']]]
 ];

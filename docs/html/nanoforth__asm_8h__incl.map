@@ -1,6 +1,5 @@
 <map id="src/nanoforth_asm.h" name="src/nanoforth_asm.h">
 <area shape="rect" id="node1" title="nanoForth Assembler class" alt="" coords="5,5,160,32"/>
-<area shape="rect" id="node2" href="$nanoforth__core_8h.html" title="nanoForth Core Utility abstract class" alt="" coords="17,80,149,107"/>
-<area shape="rect" id="node3" href="$nanoforth_8h.html" title="nanoForth main controller" alt="" coords="34,155,131,181"/>
-<area shape="rect" id="node4" title=" " alt="" coords="41,229,125,256"/>
+<area shape="rect" id="node2" href="$nanoforth_8h.html" title="nanoForth main controller" alt="" coords="34,80,131,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="41,155,125,181"/>
 </map>

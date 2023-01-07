@@ -8,5 +8,18 @@ var nanoforth__vm_8cpp =
     [ "RPUSH", "nanoforth__vm_8cpp.html#a82363ba7a7cd1a9826fa73d03805e641", null ],
     [ "RPOP", "nanoforth__vm_8cpp.html#a55b5173e6face979deb7372dcbb643df", null ],
     [ "PTR", "nanoforth__vm_8cpp.html#ac62a7e198c1051fe2878cf3da32ee163", null ],
-    [ "IDX", "nanoforth__vm_8cpp.html#a5736213940db38c8e215a3bb8688522c", null ]
+    [ "IDX", "nanoforth__vm_8cpp.html#a5736213940db38c8e215a3bb8688522c", null ],
+    [ "HI16", "nanoforth__vm_8cpp.html#a1c050c369c45826409279e1f8f8af1f4", null ],
+    [ "LO16", "nanoforth__vm_8cpp.html#a13c77dd9c96efe75abb4c5eed2241ed1", null ],
+    [ "TO32", "nanoforth__vm_8cpp.html#a84ceb45af8b0dcd4f7c7b0ffa289fd4e", null ],
+    [ "_ok", "nanoforth__vm_8cpp.html#ae6c606cbed97608df274d595b2fe4d27", null ],
+    [ "_invoke", "nanoforth__vm_8cpp.html#af47d373469f092404ddaf5a35a3d1837", null ],
+    [ "_nest", "nanoforth__vm_8cpp.html#abaaf6556a0cc5356df014a627d6f37e0", null ],
+    [ "_init", "nanoforth__vm_8cpp.html#a71ce1c2bbebb2db9931a9a40cf6acb04", null ],
+    [ "_dump", "nanoforth__vm_8cpp.html#a91ade7758e883568be3c28ea7e0d41bf", null ],
+    [ "setup", "nanoforth__vm_8cpp.html#acc5569f7302f021dfc397c5b82eb56a9", null ],
+    [ "meminfo", "nanoforth__vm_8cpp.html#a224b81d2df781a4fa8c6a37bc47551ff", null ],
+    [ "isr", "nanoforth__vm_8cpp.html#af5f10b83017db8821ca3411eec82f5e2", null ],
+    [ "outer", "nanoforth__vm_8cpp.html#a24569b5818039c82851e722137097a8f", null ],
+    [ "dsz", "nanoforth__vm_8cpp.html#aca7f61f8ae717a630e54ff1e77da4998", null ]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['sp_260',['sp',['../classN4VM.html#a66e245ee075706e2d3f78c6eb5545e54',1,'N4VM']]],
-  ['ssz_261',['ssz',['../classN4VM.html#a04feea0e4544b890e3f14f6fd734da97',1,'N4VM']]]
+  ['sp_295',['sp',['../namespaceN4Core.html#aa9e558f030395d3ab72a3e137875d493',1,'N4Core']]]
 ];

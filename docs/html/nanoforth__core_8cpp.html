@@ -82,12 +82,15 @@ $(document).ready(function(){initNavTree('nanoforth__core_8cpp.html',''); initRe
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">nanoforth_core.cpp File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>nanoForth Core Utility abstract class implementation  
+<p>nanoForth Core Utilities  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="nanoforth__core_8h_source.html">nanoforth_core.h</a>&quot;</code><br />
 <code>#include &lt;avr/pgmspace.h&gt;</code><br />
@@ -96,15 +99,86 @@ Include dependency graph for nanoforth_core.cpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="nanoforth__core_8cpp__incl.png" border="0" usemap="#src_2nanoforth__core_8cpp" alt=""/></div>
 <map name="src_2nanoforth__core_8cpp" id="src_2nanoforth__core_8cpp">
-<area shape="rect" title="nanoForth Core Utility abstract class implementation" alt="" coords="62,5,233,32"/>
-<area shape="rect" href="nanoforth__core_8h.html" title="nanoForth Core Utility abstract class" alt="" coords="5,80,137,107"/>
+<area shape="rect" title="nanoForth Core Utilities" alt="" coords="62,5,233,32"/>
+<area shape="rect" href="nanoforth__core_8h.html" title="nanoForth Core Utilities" alt="" coords="5,80,137,107"/>
 <area shape="rect" title=" " alt="" coords="161,80,288,107"/>
 <area shape="rect" href="nanoforth_8h.html" title="nanoForth main controller" alt="" coords="23,155,120,181"/>
 <area shape="rect" title=" " alt="" coords="29,229,113,256"/>
 </map>
 </div>
-</div><a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>nanoForth Core Utility abstract class implementation </p>
+</div><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceN4Core"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html">N4Core</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a50a8de717ec705a5871cdb946538aee3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a50a8de717ec705a5871cdb946538aee3">N4Core::_console_input</a> ()</td></tr>
+<tr class="separator:a50a8de717ec705a5871cdb946538aee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr><td colspan="2"><div class="groupHeader">VM static variables</div></td></tr>
+<tr class="memitem:a86633f8fd989f4914e0f225ae75f7f70"><td class="memItemLeft" align="right" valign="top">Stream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a86633f8fd989f4914e0f225ae75f7f70">N4Core::io</a> { &amp;Serial }</td></tr>
+<tr class="memdesc:a86633f8fd989f4914e0f225ae75f7f70"><td class="mdescLeft">&#160;</td><td class="mdescRight">default to Arduino Serial Monitor  <a href="namespaceN4Core.html#a86633f8fd989f4914e0f225ae75f7f70">More...</a><br /></td></tr>
+<tr class="separator:a86633f8fd989f4914e0f225ae75f7f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab11fdda5dd4a2660128e64087a7d507b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#ab11fdda5dd4a2660128e64087a7d507b">N4Core::dic</a> { NULL }</td></tr>
+<tr class="memdesc:ab11fdda5dd4a2660128e64087a7d507b"><td class="mdescLeft">&#160;</td><td class="mdescRight">base of dictionary  <a href="namespaceN4Core.html#ab11fdda5dd4a2660128e64087a7d507b">More...</a><br /></td></tr>
+<tr class="separator:ab11fdda5dd4a2660128e64087a7d507b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb185f8146013c23d28c1d53d72111c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#adb185f8146013c23d28c1d53d72111c9">N4Core::rp</a> { NULL }</td></tr>
+<tr class="memdesc:adb185f8146013c23d28c1d53d72111c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">base of return stack  <a href="namespaceN4Core.html#adb185f8146013c23d28c1d53d72111c9">More...</a><br /></td></tr>
+<tr class="separator:adb185f8146013c23d28c1d53d72111c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9e558f030395d3ab72a3e137875d493"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#aa9e558f030395d3ab72a3e137875d493">N4Core::sp</a> { NULL }</td></tr>
+<tr class="memdesc:aa9e558f030395d3ab72a3e137875d493"><td class="mdescLeft">&#160;</td><td class="mdescRight">top of data stack  <a href="namespaceN4Core.html#aa9e558f030395d3ab72a3e137875d493">More...</a><br /></td></tr>
+<tr class="separator:aa9e558f030395d3ab72a3e137875d493"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6a03f737ad5214b3b81b922a3e70b9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#ad6a03f737ad5214b3b81b922a3e70b9d">N4Core::tib</a> { NULL }</td></tr>
+<tr class="memdesc:ad6a03f737ad5214b3b81b922a3e70b9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">base of terminal input buffer  <a href="namespaceN4Core.html#ad6a03f737ad5214b3b81b922a3e70b9d">More...</a><br /></td></tr>
+<tr class="separator:ad6a03f737ad5214b3b81b922a3e70b9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a081af5090a01cf873522af7fb88915bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a081af5090a01cf873522af7fb88915bd">N4Core::trc</a> { 0 }</td></tr>
+<tr class="memdesc:a081af5090a01cf873522af7fb88915bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">tracing flag  <a href="namespaceN4Core.html#a081af5090a01cf873522af7fb88915bd">More...</a><br /></td></tr>
+<tr class="separator:a081af5090a01cf873522af7fb88915bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">VM static variables</div></td></tr>
+<tr class="memitem:a86633f8fd989f4914e0f225ae75f7f70"><td class="memItemLeft" align="right" valign="top">Stream *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a86633f8fd989f4914e0f225ae75f7f70">N4Core::io</a> { &amp;Serial }</td></tr>
+<tr class="memdesc:a86633f8fd989f4914e0f225ae75f7f70"><td class="mdescLeft">&#160;</td><td class="mdescRight">default to Arduino Serial Monitor  <a href="namespaceN4Core.html#a86633f8fd989f4914e0f225ae75f7f70">More...</a><br /></td></tr>
+<tr class="separator:a86633f8fd989f4914e0f225ae75f7f70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab11fdda5dd4a2660128e64087a7d507b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#ab11fdda5dd4a2660128e64087a7d507b">N4Core::dic</a> { NULL }</td></tr>
+<tr class="memdesc:ab11fdda5dd4a2660128e64087a7d507b"><td class="mdescLeft">&#160;</td><td class="mdescRight">base of dictionary  <a href="namespaceN4Core.html#ab11fdda5dd4a2660128e64087a7d507b">More...</a><br /></td></tr>
+<tr class="separator:ab11fdda5dd4a2660128e64087a7d507b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb185f8146013c23d28c1d53d72111c9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#adb185f8146013c23d28c1d53d72111c9">N4Core::rp</a> { NULL }</td></tr>
+<tr class="memdesc:adb185f8146013c23d28c1d53d72111c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">base of return stack  <a href="namespaceN4Core.html#adb185f8146013c23d28c1d53d72111c9">More...</a><br /></td></tr>
+<tr class="separator:adb185f8146013c23d28c1d53d72111c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9e558f030395d3ab72a3e137875d493"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#aa9e558f030395d3ab72a3e137875d493">N4Core::sp</a> { NULL }</td></tr>
+<tr class="memdesc:aa9e558f030395d3ab72a3e137875d493"><td class="mdescLeft">&#160;</td><td class="mdescRight">top of data stack  <a href="namespaceN4Core.html#aa9e558f030395d3ab72a3e137875d493">More...</a><br /></td></tr>
+<tr class="separator:aa9e558f030395d3ab72a3e137875d493"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6a03f737ad5214b3b81b922a3e70b9d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#ad6a03f737ad5214b3b81b922a3e70b9d">N4Core::tib</a> { NULL }</td></tr>
+<tr class="memdesc:ad6a03f737ad5214b3b81b922a3e70b9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">base of terminal input buffer  <a href="namespaceN4Core.html#ad6a03f737ad5214b3b81b922a3e70b9d">More...</a><br /></td></tr>
+<tr class="separator:ad6a03f737ad5214b3b81b922a3e70b9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a081af5090a01cf873522af7fb88915bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a081af5090a01cf873522af7fb88915bd">N4Core::trc</a> { 0 }</td></tr>
+<tr class="memdesc:a081af5090a01cf873522af7fb88915bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">tracing flag  <a href="namespaceN4Core.html#a081af5090a01cf873522af7fb88915bd">More...</a><br /></td></tr>
+<tr class="separator:a081af5090a01cf873522af7fb88915bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="member-group"></a>
+IO controls</h2></td></tr>
+<tr class="memitem:a32950658199a766610fd3f626900d510"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a32950658199a766610fd3f626900d510">N4Core::_hex</a> { 0 }</td></tr>
+<tr class="memdesc:a32950658199a766610fd3f626900d510"><td class="mdescLeft">&#160;</td><td class="mdescRight">numeric radix for display  <a href="namespaceN4Core.html#a32950658199a766610fd3f626900d510">More...</a><br /></td></tr>
+<tr class="separator:a32950658199a766610fd3f626900d510"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a576fdfd58a5d48965099bf43ba17098e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a576fdfd58a5d48965099bf43ba17098e">N4Core::_empty</a> { 1 }</td></tr>
+<tr class="memdesc:a576fdfd58a5d48965099bf43ba17098e"><td class="mdescLeft">&#160;</td><td class="mdescRight">empty flag for terminal input buffer  <a href="namespaceN4Core.html#a576fdfd58a5d48965099bf43ba17098e">More...</a><br /></td></tr>
+<tr class="separator:a576fdfd58a5d48965099bf43ba17098e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06161fdbfa8516401c3c3a7da9c79620"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a06161fdbfa8516401c3c3a7da9c79620">N4Core::_ucase</a> { 1 }</td></tr>
+<tr class="memdesc:a06161fdbfa8516401c3c3a7da9c79620"><td class="mdescLeft">&#160;</td><td class="mdescRight">empty flag for terminal input buffer  <a href="namespaceN4Core.html#a06161fdbfa8516401c3c3a7da9c79620">More...</a><br /></td></tr>
+<tr class="separator:a06161fdbfa8516401c3c3a7da9c79620"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a045f1f0686edef57d09b0d31c96ba0fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a045f1f0686edef57d09b0d31c96ba0fc">N4Core::set_mem</a> (<a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *mem, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> msz, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> ssz)</td></tr>
+<tr class="separator:a045f1f0686edef57d09b0d31c96ba0fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d5cc20491c3146786349fde57c13f5b"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a0d5cc20491c3146786349fde57c13f5b">N4Core::uc</a> (char c)</td></tr>
+<tr class="separator:a0d5cc20491c3146786349fde57c13f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>nanoForth Core Utilities </p>
+<ul>
+<li>low level memory and IO management </li>
+</ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

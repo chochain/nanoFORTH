@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['begin_19',['begin',['../classNanoForth.html#a998e9aed0ecab79311bcbf021f614d26',1,'NanoForth']]]
+  ['begin_20',['begin',['../classNanoForth.html#a7e51ab91fab56a4263be272a072ff080',1,'NanoForth']]]
 ];

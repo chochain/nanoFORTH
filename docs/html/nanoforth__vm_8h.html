@@ -83,7 +83,8 @@ $(document).ready(function(){initNavTree('nanoforth__vm_8h.html',''); initResiza
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Structures</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">nanoforth_vm.h File Reference</div>  </div>
 </div><!--header-->
@@ -91,16 +92,15 @@ $(document).ready(function(){initNavTree('nanoforth__vm_8h.html',''); initResiza
 
 <p>nanoForth Virtual Machine class  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="nanoforth__core_8h_source.html">nanoforth_core.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="nanoforth_8h_source.html">nanoforth.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for nanoforth_vm.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="nanoforth__vm_8h__incl.png" border="0" usemap="#src_2nanoforth__vm_8h" alt=""/></div>
 <map name="src_2nanoforth__vm_8h" id="src_2nanoforth__vm_8h">
 <area shape="rect" title="nanoForth Virtual Machine class" alt="" coords="5,5,153,32"/>
-<area shape="rect" href="nanoforth__core_8h.html" title="nanoForth Core Utility abstract class" alt="" coords="13,80,145,107"/>
-<area shape="rect" href="nanoforth_8h.html" title="nanoForth main controller" alt="" coords="31,155,128,181"/>
-<area shape="rect" title=" " alt="" coords="37,229,121,256"/>
+<area shape="rect" href="nanoforth_8h.html" title="nanoForth main controller" alt="" coords="31,80,128,107"/>
+<area shape="rect" title=" " alt="" coords="37,155,121,181"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -116,10 +116,24 @@ This graph shows which files directly or indirectly include this file:</div>
 </div>
 <p><a href="nanoforth__vm_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classN4VM.html">N4VM</a></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:namespaceN4VM"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html">N4VM</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:acc5569f7302f021dfc397c5b82eb56a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#acc5569f7302f021dfc397c5b82eb56a9">N4VM::setup</a> (Stream &amp;io, <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> ucase, <a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> *dic, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> dic_sz, <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> stk_sz)</td></tr>
+<tr class="separator:acc5569f7302f021dfc397c5b82eb56a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a224b81d2df781a4fa8c6a37bc47551ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#a224b81d2df781a4fa8c6a37bc47551ff">N4VM::meminfo</a> ()</td></tr>
+<tr class="memdesc:a224b81d2df781a4fa8c6a37bc47551ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">display VM system info  <a href="namespaceN4VM.html#a224b81d2df781a4fa8c6a37bc47551ff">More...</a><br /></td></tr>
+<tr class="separator:a224b81d2df781a4fa8c6a37bc47551ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24569b5818039c82851e722137097a8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#a24569b5818039c82851e722137097a8f">N4VM::outer</a> ()</td></tr>
+<tr class="memdesc:a24569b5818039c82851e722137097a8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">outer-interpreter  <a href="namespaceN4VM.html#a24569b5818039c82851e722137097a8f">More...</a><br /></td></tr>
+<tr class="separator:a24569b5818039c82851e722137097a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5f10b83017db8821ca3411eec82f5e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#af5f10b83017db8821ca3411eec82f5e2">N4VM::isr</a> ()</td></tr>
+<tr class="memdesc:af5f10b83017db8821ca3411eec82f5e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">interrupt service routine  <a href="namespaceN4VM.html#af5f10b83017db8821ca3411eec82f5e2">More...</a><br /></td></tr>
+<tr class="separator:af5f10b83017db8821ca3411eec82f5e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>nanoForth Virtual Machine class </p>

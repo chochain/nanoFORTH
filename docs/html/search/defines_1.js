@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['idx_290',['IDX',['../nanoforth__asm_8cpp.html#a5736213940db38c8e215a3bb8688522c',1,'IDX():&#160;nanoforth_asm.cpp'],['../nanoforth__vm_8cpp.html#a5736213940db38c8e215a3bb8688522c',1,'IDX():&#160;nanoforth_vm.cpp']]]
+  ['get16_328',['GET16',['../nanoforth__core_8h.html#a0347fc520bda2a3f684f7e344b180065',1,'nanoforth_core.h']]]
 ];
