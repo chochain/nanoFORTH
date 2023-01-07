@@ -165,9 +165,9 @@ void _nest(U16 xt)
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
-#if    TRC_VERBOSE > 0
+#if    TRC_LEVEL > 0
         if (trc) N4Asm::trace(a, ir);                     // execution tracing when enabled
-#endif // TRC_VERBOSE
+#endif // TRC_LEVEL
 
         U8  op = ir & CTL_BITS;                           ///> determine control bits
         if (op==JMP_OPS) {                                ///> handle branching instruction
@@ -258,7 +258,7 @@ void setup(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz)
 void meminfo()
 {
     S16 free = IDX(&free) - IDX(sp);               // in bytes
-#if ARDUINO && TRC_VERBOSE > 0
+#if ARDUINO && TRC_LEVEL > 0
     show("mem[");         d_ptr(dic);
     show("=dic|0x");      d_adr((U16)((U8*)rp - dic));
     show("|rp->0x");      d_adr((U16)((U8*)sp - (U8*)rp));
