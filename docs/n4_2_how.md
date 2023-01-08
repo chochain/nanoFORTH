@@ -52,7 +52,7 @@ You can skip to next section and start getting your hands dirty right away. Howe
 > <br/>
 > |screen shot|
 > |:--|
-> |@image html nanoforth_init_screen.png|
+> |@image html images/nanoforth_init_screen.png|
 <br/>
 
 ### Exercise

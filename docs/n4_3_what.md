@@ -101,9 +101,9 @@ nanoFORTH handles only integer numbers.
 > |branching ops|description|
 > |:--|:--|
 > |f IF xxx THN|conditional branch|
-> |f IF xxx ELS yyy THN|@image html forth_if_els_thn.gif width=300px|
-> |BGN xxx f UTL|@image html forth_bgn_utl.gif width=300px|
-> |BGN xxx f WHL yyy RPT|@image html forth_bgn_whl_rpt.gif width=300px|
+> |f IF xxx ELS yyy THN|@image html images/forth_if_els_thn.gif width=300px|
+> |BGN xxx f UTL|@image html images/forth_bgn_utl.gif width=300px|
+> |BGN xxx f WHL yyy RPT|@image html images/forth_bgn_whl_rpt.gif width=300px|
 > |n FOR xxx NXT|for loop, index value I count down from n to 1|
 
 ### Return Stack Ops
@@ -175,7 +175,7 @@ nanoFORTH handles only integer numbers.
 > **Examples**
 > ||
 > |:--|
-> |@image html nanoforth_bye_trc_dmp.png width=800px|
+> |@image html images/nanoforth_bye_trc_dmp.png width=800px|
 
 ### EEPROM Access
 > |opcode|stack|description|

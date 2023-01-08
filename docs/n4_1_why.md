@@ -30,7 +30,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 > 1 5 OUT ⏎
 > ||
 > |:--|
-> |@image html nanoforth_led_red.jpg width=200px|
+> |@image html images/nanoforth_led_red.jpg width=200px|
 <br/>
 
 * turn off LED(blue) on digital pin 6, (0 is LOW)
@@ -110,7 +110,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 > WRD ⏎
 > ||
 > |:--|
-> |@image html nanoforth_wrd_list.png width=800px|
+> |@image html images/nanoforth_wrd_list.png width=800px|
 >> \> Behold! This is nanoFORTH in its entirety. It's a short list of 'words' which should be rather easy to master.
 <br/>
 
