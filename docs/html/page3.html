@@ -178,11 +178,13 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <td class="markdownTableBodyLeft">MOD </td><td class="markdownTableBodyLeft"><code>(a b -- a%b</code>) </td><td class="markdownTableBodyLeft">modulo  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">NEG </td><td class="markdownTableBodyLeft"><code>(a -- -a)</code> </td><td class="markdownTableBodyLeft">negate  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">ABS </td><td class="markdownTableBodyLeft"><code>(a -- abs(a) )</code> </td><td class="markdownTableBodyLeft">absolute value of a  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">MIN </td><td class="markdownTableBodyLeft"><code>(a b -- min(a, b) )</code> </td><td class="markdownTableBodyLeft">minimum value between a and b  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">MAX </td><td class="markdownTableBodyLeft"><code>(a b -- max(a, b) )</code> </td><td class="markdownTableBodyLeft">maximum value between a and b  </td></tr>
 </table>
-<p>|ABS|<code>(a -- %|a%| )</code>|absolute value of a| </p>
-</blockquote>
-<blockquote class="doxtable">
-<p>|MIN|<code>(a b -- min(a, b) )</code>|minimum value between a and b| |MAX|<code>(a b -- max(a, b) )</code>|maximum value between a and b|</p>
 <p><b>Examples</b></p>
 <p>17 5 + ⏎ ➤ <em>22_ok</em><br  />
  1 2 3 4 + + + ⏎ ➤ <em>10_ok</em><br  />
