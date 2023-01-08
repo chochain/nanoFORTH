@@ -64,7 +64,10 @@ nanoFORTH handles only integer numbers.
 > |/  |`(a b -- a/b)`|divide|
 > |MOD|`(a b -- a%%b`)|modulo|
 > |NEG|`(a   -- -a)`|negate|
-> |ABS|`(a   -- |a|)`|absolute|
+> |ABS|`(a   -- %|a%| )`|absolute value of a|
+
+> |MIN|`(a b -- min(a, b) )`|minimum value between a and b|
+> |MAX|`(a b -- max(a, b) )`|maximum value between a and b|
 >
 > **Examples**
 >
