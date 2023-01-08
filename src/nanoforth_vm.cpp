@@ -133,9 +133,9 @@ void _invoke(U8 op)
         SS(1) = (S16)LO16(v);
         TOS   = (S16)HI16(v);
     }                                     break;
-    case 44: set_hex(1);                              break; // HEX
-    case 45: set_hex(0);                              break; // DEC
-    case 46: TOS = abs(TOS);                          break; // ABS
+    case 44: TOS = abs(TOS);                          break; // ABS
+    case 45: set_hex(1);                              break; // HEX
+    case 46: set_hex(0);                              break; // DEC
     case 47: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
     case 48: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
 #if ARDUINO
