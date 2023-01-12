@@ -174,6 +174,7 @@ void _nest(U16 xt)
             a = GET16(pc-1) & ADR_MASK;                   // target address
             switch (ir & JMP_MASK) {                      // get branch opcode
             case OP_CALL:                                 // 0xc0 subroutine call
+                NanoForth::yield();         	 		  ///> give user task some cycles (800us)
                 RPUSH(IDX(pc+1));                         // keep next instruction on return stack
                 pc = PTR(a);                              // jump to subroutine till I_RET
                 break;
@@ -204,8 +205,6 @@ void _nest(U16 xt)
             }
         }
         else PUSH(ir);                                    ///> handle number (1-byte literal)
-
-        NanoForth::yield();         	 ///> give user task some cycles (800us)
     }
 }
 ///
@@ -257,13 +256,13 @@ void setup(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz)
 ///
 void meminfo()
 {
-    S16 free = IDX(&free) - IDX(sp);               // in bytes
+    S16 bsz = (S16)(&bsz - SP0);       // free for TIB in bytes
 #if ARDUINO && TRC_LEVEL > 0
     show("mem[");         d_ptr(dic);
-    show("=dic|0x");      d_adr((U16)((U8*)rp - dic));
-    show("|rp->0x");      d_adr((U16)((U8*)sp - (U8*)rp));
-    show("<-sp|tib=");    d_num(free);
-    show("..|max=");      d_ptr((U8*)&free);
+    show("=dic|x");       d_adr((U16)((U8*)rp - dic));
+    show("|rp->x");       d_adr((U16)((U8*)sp - (U8*)rp));
+    show("<-sp|tib->");   d_num(bsz);
+    show("<-auto=");      d_ptr((U8*)&bsz);
 #endif // ARDUINO
     show("]\n");
 }
@@ -292,7 +291,7 @@ void isr() {
 ///  1: more token(s) in input buffer<br/>
 ///  0: buffer empty (yield control back to hardware)
 ///
-U8 outer()
+void outer()
 {
     if (is_tib_empty()) _ok();                   ///> console ok prompt
 
@@ -323,7 +322,6 @@ U8 outer()
     default:                                     ///>> or, error (unknown action)
         show("?\n");
     }
-    return !is_tib_empty();                      // stack check and prompt OK
 }
 
 } // namespace N4VM
