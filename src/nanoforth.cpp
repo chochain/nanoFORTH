@@ -14,9 +14,9 @@ n4_tptr NanoForth::_n4tsk{ NULL };                       ///< initialize task li
 ///   0 - if all allocation are OK<br>
 ///   1 - any allocation failure
 ///
-int NanoForth::begin(Stream &io, U8 ucase, U16 dic_sz, U16 stk_sz, U16 tib_sz)
+int NanoForth::begin(Stream &io, U8 ucase, U16 dic_sz, U16 stk_sz)
 {
-	U16 msz = dic_sz + stk_sz + tib_sz;
+	U16 msz = dic_sz + stk_sz;                           ///< total RAM size for Forth core
     _mem  = (U8*)malloc(msz);                            /// * allocate Forth memory block
     if (!_mem) return -1;
 
@@ -27,8 +27,7 @@ int NanoForth::begin(Stream &io, U8 ucase, U16 dic_sz, U16 stk_sz, U16 tib_sz)
     log("MEM=$");   logx(msz);                           // forth memory block
     log("[DIC=$");  logx(dic_sz);                        // dictionary size
     log(",STK=$");  logx(stk_sz);                        // stack size
-    log(",TIB=$");  logx(tib_sz);                        // input buffer size
-    log("]\n");
+    log("]+TIB\n");
 #endif // ARDUINO
 
     return 0;
@@ -36,7 +35,7 @@ int NanoForth::begin(Stream &io, U8 ucase, U16 dic_sz, U16 stk_sz, U16 tib_sz)
 ///
 ///> add new (user defined) hardware task to linked-list
 ///
-void NanoForth::add(void (*ufunc)(n4_tptr))
+void NanoForth::add_task(void (*ufunc)(n4_tptr))
 {
     n4_tptr tp = (n4_tptr)malloc(sizeof(n4_task));
 
@@ -46,13 +45,12 @@ void NanoForth::add(void (*ufunc)(n4_tptr))
     _n4tsk   = tp;      /// * reset head
 }
 ///
-///> n4 execute one line of command from input buffer
+///> n4 execute one line of commands from input buffer
 ///
 void NanoForth::exec()
 {
-    while (N4VM::outer()) {                    /// * step through commands from input buffer
-        yield();
-    }
+    N4VM::outer();      /// * step through commands from input buffer
+    yield();            /// * give some cycles to user defined tasks
 }
 ///
 ///> n4 yield, execute one round of user hardware tasks
@@ -89,7 +87,7 @@ int main(int argc, char **argv)
     NanoForth n4;
     n4.begin();
     while (1) {
-        n4.exec();
+    	n4.exec();
     }
     return 0;
 }
