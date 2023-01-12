@@ -8,12 +8,12 @@
  *    |-----:|-----:|:----------------:|:-:|
  *    |0x0000|      |Interrupt Vectors |   |
  *    |0x0100|      |Arduino libraries |   |
- *    |      |0x0000|Dictionary==>     |x  |
+ *    |0x02c0|0x0000|Dictionary==>     |x  |
  *    |      |      |...1K-byte...     |x  |
- *    |      |0x0400|Return Stack==>   |   |
- *    |      |      |...128 entries... |   |
+ *    |0x06c0|0x0400|Return Stack==>   |   |
+ *    |      |      |...64 entries...  |   |
  *    |      |      |<==Data Stack     |   |
- *    |      |0x0500|Input Buffer      |   |
+ *    |0x0740|0x0480|Input Buffer      |   |
  *    |      |      |...free memory... |   |
  *    |      |      |Arduino heap      |   |
  *    |0x0900|      |                  |   |
@@ -58,9 +58,8 @@ typedef int32_t      S32;         ///< 32-bit signed integer
 ///
 //@name Default Heap sizing
 ///@{
-constexpr U16 N4_DIC_SZ = 0x400;                 /**< default dictionary size                   */
-constexpr U16 N4_STK_SZ = 0x100;                 /**< default parameter/return stack size       */
-constexpr U16 N4_TIB_SZ = 0x100;                 /**< default terminal input buffer size        */
+constexpr U16 N4_DIC_SZ = 0x400;  /**< default dictionary size             */
+constexpr U16 N4_STK_SZ = 0x80;   /**< default parameter/return stack size */
 ///@}
 ///
 /// nanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
@@ -104,14 +103,13 @@ public:
         Stream &io=Serial,        ///< iostream which can be redirected to SoftwareSerial
         U8  ucase=1,              ///< case sensitiveness (default: insensitive)
         U16 dic_sz=N4_DIC_SZ,     ///< dictionary size (default: N4_DIC_SZ=0x400)
-        U16 stk_sz=N4_STK_SZ,     ///< parameter+return stack size (default: N4_STK_SZ=0x80)
-		U16 tib_sz=N4_TIB_SZ
+        U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size (default: N4_STK_SZ=0x100)
         );                        ///< placeholder for extra setup
-    void exec();                  ///< nanoForth run one line of command input
+    void exec();                  ///< nanoForth execute one line of command input
     //
     // protothreading support
     //
-    static void add(              ///< add the user function to NanoForth task manager
+    static void add_task(         ///< add the user function to NanoForth task manager
         void (*ufunc)(n4_tptr)    ///< user task pointer to be added
         );
     static void yield();          ///< nanoForth yield to user tasks
