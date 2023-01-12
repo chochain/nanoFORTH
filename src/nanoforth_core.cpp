@@ -44,11 +44,11 @@ char uc(char c)      {                         ///< upper case for case-insensit
 #if ARDUINO
 #include <avr/pgmspace.h>
 ///
-///> char input from console
+///> char IO from console i.e. RX/TX
 ///
 char key()
 {
-    while (!io->available()) NanoForth::yield();  /// TODO: add _isr here
+    while (!io->available()) NanoForth::yield();
     return io->read();
 }
 void d_chr(char c)     {
@@ -151,7 +151,7 @@ void _console_input()
             d_chr(' ');
             d_chr('\b');
         }
-        else if (p > (U8*)(&c - 0x10)) {     /// * address of auto variable
+        else if (p > (U8*)(&c - sizeof(U32))) { /// * prevent buffer overrun (into auto vars)
             show("TIB!\n");
             *p = 0;
             break;
