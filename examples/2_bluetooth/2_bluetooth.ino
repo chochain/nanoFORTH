@@ -31,12 +31,12 @@ void setup() {
     bt.begin(9600);                 ///< setup Bluetooth serial device at 9600 baud
     delay(1000);                    ///< wait for a while, for it to stable
 
+    pinMode(LED_BUILTIN, OUTPUT);
+    
+    n4.add_task(blink13);           ///< add the blink task to NanoForth task manager
     if (n4.begin(bt)) {             ///< setup Bluetooth as nanoFORTH console
         Serial.print(F("ERROR: memory allocation failed!"));
     }
-    n4.add(blink13);                ///< add the blink task to NanoForth task manager
-
-    pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {

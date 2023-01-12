@@ -16,15 +16,16 @@ NanoForth n4;                     ///< our NanoForth instance
 void setup() {
     Serial.begin(115200);         ///< init Serial IO, make sure it is set to 'Both BL & CR' to capture input
 
-    if (n4.begin()) {             /// initialize NanoForth and Serial Monitor as output
-        Serial.print(F("ERROR: memory allocation failed!"));
-    }
-    n4.add(blink13);              ///< add blink13 task to NanoForth task manager
-    n4.add(led_toggle);           ///< add the second task: led_toggle
-
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(5, OUTPUT);
     pinMode(6, OUTPUT);
+    
+    n4.add_task(blink13);         ///< add blink13 task to NanoForth task manager
+    n4.add_task(led_toggle);      ///< add the second task: led_toggle
+
+    if (n4.begin()) {             /// initialize NanoForth and Serial Monitor as output
+        Serial.print(F("ERROR: memory allocation failed!"));
+    }
 }
 
 void loop() {
