@@ -198,9 +198,8 @@ IO controls</h2></td></tr>
 
 <p>Arduino's Serial.getchar(), yield to user tasks when waiting. </p>
 <blockquote class="doxtable">
-<p>char input from console </p>
+<p>char IO from console i.e. RX/TX </p>
 </blockquote>
-<p>TODO: add _isr here</p>
 
 </div>
 </div>
@@ -557,7 +556,7 @@ IO controls</h2></td></tr>
 <li>terminate input string</li>
 <li>skip empty token</li>
 <li>backspace</li>
-<li>address of auto variable</li>
+<li>prevent buffer overrun (into auto vars)</li>
 </ul>
 
 </div>

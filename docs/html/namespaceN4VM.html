@@ -109,9 +109,9 @@ Functions</h2></td></tr>
 <tr class="memitem:af5f10b83017db8821ca3411eec82f5e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#af5f10b83017db8821ca3411eec82f5e2">isr</a> ()</td></tr>
 <tr class="memdesc:af5f10b83017db8821ca3411eec82f5e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">interrupt service routine  <a href="namespaceN4VM.html#af5f10b83017db8821ca3411eec82f5e2">More...</a><br /></td></tr>
 <tr class="separator:af5f10b83017db8821ca3411eec82f5e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24569b5818039c82851e722137097a8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#a24569b5818039c82851e722137097a8f">outer</a> ()</td></tr>
-<tr class="memdesc:a24569b5818039c82851e722137097a8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">outer-interpreter  <a href="namespaceN4VM.html#a24569b5818039c82851e722137097a8f">More...</a><br /></td></tr>
-<tr class="separator:a24569b5818039c82851e722137097a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a943be53277c6329fdcad7f4118f07c24"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#a943be53277c6329fdcad7f4118f07c24">outer</a> ()</td></tr>
+<tr class="memdesc:a943be53277c6329fdcad7f4118f07c24"><td class="mdescLeft">&#160;</td><td class="mdescRight">outer-interpreter  <a href="namespaceN4VM.html#a943be53277c6329fdcad7f4118f07c24">More...</a><br /></td></tr>
+<tr class="separator:a943be53277c6329fdcad7f4118f07c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>nanoForth Virtual Machine class </p>
@@ -191,13 +191,13 @@ Functions</h2></td></tr>
 <p>handle branching instruction </p>
 </blockquote>
 <blockquote class="doxtable">
+<p>give user task some cycles (800us) </p>
+</blockquote>
+<blockquote class="doxtable">
 <p>handle primitive word </p>
 </blockquote>
 <blockquote class="doxtable">
 <p>handle number (1-byte literal) </p>
-</blockquote>
-<blockquote class="doxtable">
-<p>give user task some cycles (800us) </p>
 </blockquote>
 
 </div>
@@ -375,14 +375,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a24569b5818039c82851e722137097a8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a24569b5818039c82851e722137097a8f">&#9670;&nbsp;</a></span>outer()</h2>
+<a id="a943be53277c6329fdcad7f4118f07c24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a943be53277c6329fdcad7f4118f07c24">&#9670;&nbsp;</a></span>outer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> N4VM::outer </td>
+          <td class="memname">void N4VM::outer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>

@@ -182,10 +182,8 @@ Variables</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader"></div></td></tr>
 <tr class="memitem:a0fbd46bf8acfaff6cb92691910ff3ad4"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a0fbd46bf8acfaff6cb92691910ff3ad4">N4_DIC_SZ</a> = 0x400</td></tr>
 <tr class="separator:a0fbd46bf8acfaff6cb92691910ff3ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b47c655a4d981330600913136da8a62"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a6b47c655a4d981330600913136da8a62">N4_STK_SZ</a> = 0x100</td></tr>
+<tr class="memitem:a6b47c655a4d981330600913136da8a62"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#a6b47c655a4d981330600913136da8a62">N4_STK_SZ</a> = 0x80</td></tr>
 <tr class="separator:a6b47c655a4d981330600913136da8a62"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb245820b2fa4873404a042d8ee0f6b5"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoforth_8h.html#aeb245820b2fa4873404a042d8ee0f6b5">N4_TIB_SZ</a> = 0x100</td></tr>
-<tr class="separator:aeb245820b2fa4873404a042d8ee0f6b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>nanoForth main controller </p>
@@ -198,17 +196,17 @@ Variables</h2></td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyRight">0x0100 </td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyCenter">Arduino libraries </td><td class="markdownTableBodyCenter"></td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight"></td><td class="markdownTableBodyRight">0x0000 </td><td class="markdownTableBodyCenter">Dictionary==&gt; </td><td class="markdownTableBodyCenter">x  </td></tr>
+<td class="markdownTableBodyRight">0x02c0 </td><td class="markdownTableBodyRight">0x0000 </td><td class="markdownTableBodyCenter">Dictionary==&gt; </td><td class="markdownTableBodyCenter">x  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyRight"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyCenter">...1K-byte... </td><td class="markdownTableBodyCenter">x  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight"></td><td class="markdownTableBodyRight">0x0400 </td><td class="markdownTableBodyCenter">Return Stack==&gt; </td><td class="markdownTableBodyCenter"></td></tr>
+<td class="markdownTableBodyRight">0x06c0 </td><td class="markdownTableBodyRight">0x0400 </td><td class="markdownTableBodyCenter">Return Stack==&gt; </td><td class="markdownTableBodyCenter"></td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyRight"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyCenter">...128 entries... </td><td class="markdownTableBodyCenter"></td></tr>
+<td class="markdownTableBodyRight"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyCenter">...64 entries... </td><td class="markdownTableBodyCenter"></td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyRight"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyCenter">&lt;==Data Stack </td><td class="markdownTableBodyCenter"></td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyRight"></td><td class="markdownTableBodyRight">0x0500 </td><td class="markdownTableBodyCenter">Input Buffer </td><td class="markdownTableBodyCenter"></td></tr>
+<td class="markdownTableBodyRight">0x0740 </td><td class="markdownTableBodyRight">0x0480 </td><td class="markdownTableBodyCenter">Input Buffer </td><td class="markdownTableBodyCenter"></td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyRight"></td><td class="markdownTableBodyRight"></td><td class="markdownTableBodyCenter">...free memory... </td><td class="markdownTableBodyCenter"></td></tr>
 <tr class="markdownTableRowEven">
@@ -499,7 +497,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> N4_STK_SZ = 0x100</td>
+          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> N4_STK_SZ = 0x80</td>
         </tr>
       </table>
   </td>
@@ -508,32 +506,7 @@ Variables</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>default parameter/return stack size <br  />
- </p>
-
-</div>
-</div>
-<a id="aeb245820b2fa4873404a042d8ee0f6b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb245820b2fa4873404a042d8ee0f6b5">&#9670;&nbsp;</a></span>N4_TIB_SZ</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr <a class="el" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> N4_TIB_SZ = 0x100</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">constexpr</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>default terminal input buffer size <br  />
- </p>
+<p>default parameter/return stack size </p>
 
 </div>
 </div>

@@ -18,6 +18,5 @@ var nanoforth_8h =
     [ "n4_tptr", "nanoforth_8h.html#a1c8394224254af4a65ddc05349f1fce8", null ],
     [ "N4", "nanoforth_8h.html#a1f8c7dfe05abb1e969b291e5ae01016f", null ],
     [ "N4_DIC_SZ", "nanoforth_8h.html#a0fbd46bf8acfaff6cb92691910ff3ad4", null ],
-    [ "N4_STK_SZ", "nanoforth_8h.html#a6b47c655a4d981330600913136da8a62", null ],
-    [ "N4_TIB_SZ", "nanoforth_8h.html#aeb245820b2fa4873404a042d8ee0f6b5", null ]
+    [ "N4_STK_SZ", "nanoforth_8h.html#a6b47c655a4d981330600913136da8a62", null ]
 ];

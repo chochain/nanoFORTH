@@ -20,6 +20,6 @@ var nanoforth__vm_8cpp =
     [ "setup", "nanoforth__vm_8cpp.html#acc5569f7302f021dfc397c5b82eb56a9", null ],
     [ "meminfo", "nanoforth__vm_8cpp.html#a224b81d2df781a4fa8c6a37bc47551ff", null ],
     [ "isr", "nanoforth__vm_8cpp.html#af5f10b83017db8821ca3411eec82f5e2", null ],
-    [ "outer", "nanoforth__vm_8cpp.html#a24569b5818039c82851e722137097a8f", null ],
+    [ "outer", "nanoforth__vm_8cpp.html#a943be53277c6329fdcad7f4118f07c24", null ],
     [ "dsz", "nanoforth__vm_8cpp.html#aca7f61f8ae717a630e54ff1e77da4998", null ]
 ];
