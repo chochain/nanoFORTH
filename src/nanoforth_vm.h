@@ -20,7 +20,7 @@ namespace N4VM
         U16 stk_sz            ///< stack block size
         );
     void meminfo();           ///< display VM system info
-    U8   outer();             ///< outer-interpreter
+    void outer();             ///< outer-interpreter
     void isr();               ///< interrupt service routine
 };  // namespace N4VM
 #endif //__SRC_NANOFORTH_VM_H
