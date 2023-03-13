@@ -10,11 +10,8 @@
 #define CLI()   cli()
 #define SEI()   sei()
 #else  // !ARDUINO
-#define pinMode(p,v)
-#define digitalWrite(p,v)
-#define digitalRead(p)              1
-#define LOW                         0
-#define HIGH                        1
+#define LOW     0
+#define HIGH    1
 #define CLI()
 #define SEI()
 #endif // ARDUINO

@@ -13,7 +13,7 @@ namespace N4Core {
 ///
 ///@name VM static variables
 ///@{
-Stream *io    { &Serial };                     ///< default to Arduino Serial Monitor
+Stream *io     { &Serial };                    ///< default to Arduino Serial Monitor
 U8     *dic    { NULL };                       ///< base of dictionary
 U16    *rp     { NULL };                       ///< base of return stack
 S16    *sp     { NULL };                       ///< top of data stack
