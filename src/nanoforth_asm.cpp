@@ -34,18 +34,18 @@ using namespace N4Core;                       /// * make utilities available
 ///
 ///@{
 PROGMEM const char CMD[] = "\x09" \
-    ":  " "VAR" "CST" "PCI" "TMR" "FGT" "DMP" "RST" "BYE";
+    ":  " "VAR" "CST" "PCI" "TMI" "FGT" "DMP" "RST" "BYE";
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
     "NXT";
-PROGMEM const char PRM[] = "\x39" \
+PROGMEM const char PRM[] = "\x3a" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
     "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " ">  " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "SEX" "TRC" \
     "CLK" "D+ " "D- " "DNG" "ABS" "HEX" "DEC" "MAX" "MIN" "DLY" \
-	"IN " "AIN" "OUT" "PWM" "PIN" "TME" "PCE";
+	"IN " "AIN" "OUT" "PWM" "PIN" "TME" "PCE" "API";
 
 PROGMEM const char PMX[] = "\x3" \
     "I  " "FOR" "NXT";
@@ -78,7 +78,7 @@ constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
 constexpr U16 N4_SIG  = (((U16)'N'<<8)+(U16)'4');  ///< EEPROM signature
 constexpr U16 N4_AUTO = N4_SIG | 0x8080;           ///< EEPROM auto-run signature
 constexpr U16 ROM_HDR = 6;                         ///< EEPROM header size
-constexpr U8  WORDS_PER_ROW = 20;                  ///< words per row when showing dictionary
+constexpr U8  WORDS_PER_ROW = 16;                  ///< words per row when showing dictionary
 
 namespace N4Asm {
 
@@ -355,6 +355,7 @@ void compile(U16 *rp0)
                 SET16(here, tmp);
             }
             break;
+        case TKN_EXT:                       ///>> extended words, not implemented yet
         default:                            ///>> then, token type not found
             show("??  ");
             last = l0;                      /// * restore last, here pointers
