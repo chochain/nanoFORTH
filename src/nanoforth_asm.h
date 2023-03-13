@@ -19,11 +19,11 @@
 /// parser actions enum used by execution and assembler units
 ///
 enum N4OP {
-    TKN_IMM = 1,     ///< immediate word
+    TKN_IMM = 0,     ///< immediate word
     TKN_WRD,         ///< colon (user defined) word
-    TKN_EXT,         ///< extended built-in word
     TKN_PRM,         ///< primitive built-in word
     TKN_NUM,         ///< number (literal)
+    TKN_EXT,         ///< extended built-in word
     TKN_ERR          ///< parse error (unknown token)
 };
 ///
