@@ -138,7 +138,6 @@ void _invoke(U8 op)
     case 46: set_hex(0);                              break; // DEC
     case 47: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
     case 48: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
-#if ARDUINO
     case 49: NanoForth::wait((U32)POP());             break; // DLY
     case 50: PUSH(digitalRead(POP()));                break; // IN
     case 51: PUSH(analogRead(POP()));                 break; // AIN
@@ -147,12 +146,12 @@ void _invoke(U8 op)
     case 54: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
     case 55: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
     case 56: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
-#endif //ARDUINO
-    case 57: case 58: case 59: /* available */        break;
-    case 60: PUSH(*(rp-1));               break; // I
-    case 61: RPUSH(POP());                break; // FOR
-    case 62: /* handled one level up */   break; // NXT
-    case 63: /* handled one level up */   break; // LIT
+    case 57: NanoForth::api(POP());                   break; // API
+    case 58: case 59:                                 break; // available
+    case I_I:   PUSH(*(rp-1));                        break; // I
+    case I_FOR: RPUSH(POP());                         break; // FOR
+    case I_NXT: /* handled at upper level */          break; // NXT
+    case I_LIT: /* handled at upper level */          break; // LIT
     }
 }
 ///
@@ -225,15 +224,16 @@ void _init() {
 ///
 ///> show a section of memory in Forth dump format
 ///
+#define DUMP_PER_LINE 0x10
 void _dump(U16 p0, U16 sz0)
 {
     U8  *p = PTR((p0&0xffe0));
     U16 sz = (sz0+0x1f)&0xffe0;
-    for (U16 i=0; i<sz; i+=0x20) {
+    for (U16 i=0; i<sz; i+=DUMP_PER_LINE) {
         d_chr('\n');
-        d_mem(dic, p, 0x20, ' ');
+        d_mem(dic, p, DUMP_PER_LINE, ' ');
         d_chr(' ');
-        for (U8 j=0; j<0x20; j++, p++) {         // print and advance to next byte
+        for (U8 j=0; j<DUMP_PER_LINE; j++, p++) {         // print and advance to next byte
             char c = *p & 0x7f;
             d_chr((c==0x7f||c<0x20) ? '_' : c);
         }
@@ -319,6 +319,7 @@ void outer()
     case TKN_WRD: _nest(tmp + 2 + 3);   break;   ///>> execute colon word (user defined)
     case TKN_PRM: _invoke((U8)tmp);     break;   ///>> execute primitive built-in word,
     case TKN_NUM: PUSH(tmp);            break;   ///>> push a number (literal) to stack top,
+    case TKN_EXT:                                ///>> extended words, not implemented yet
     default:                                     ///>> or, error (unknown action)
         show("?\n");
     }
