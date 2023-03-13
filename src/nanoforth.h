@@ -38,6 +38,11 @@
 #define PROGMEM
 #define millis()          10000
 #define pgm_read_byte(p)  (*(p))
+#define pinMode(p,v)
+#define digitalWrite(p,v)
+#define digitalRead(p)    (1)
+#define analogWrite(p,v)
+#define analogRead(p)     (1)
 #define log(msg)          ::printf("%s", msg)
 #define logx(v)           ::printf("%x", (U16)v)
 #define Stream            int
@@ -64,42 +69,24 @@ constexpr U16 N4_STK_SZ = 0x80;   /**< default parameter/return stack size */
 ///
 /// nanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
 ///
-typedef struct n4_task {
-    void (*func)(n4_task*);       ///< function pointer
-    n4_task *next;                ///< next item in linked-list (root=0)
-    U32  t;                       ///< delay timer
-    U16  ci;                      ///< protothread case index
-} *n4_tptr;
-///
-///@name nanoForth multi-tasking
-///
-/// \def N4_TASK
-/// \brief define a user task block with name
-/// \def N4_DELAY
-/// \brief pause the user task for ms microseconds
-/// \def N4_END
-/// \brief end of the user task block.
-///
-///@{
-#define N4_TASK(tname)  void tname(n4_tptr _p_) { switch((_p_)->ci) { case 0:
-#define N4_DELAY(ms)    (_p_)->t = millis()+(U32)(ms); (_p_)->ci = __LINE__; case __LINE__: \
-                        if (millis() < (_p_)->t) return;
-#define N4_END          } (_p_)->ci = 0; }
-///@}
+typedef struct n4_func {
+    U16  id;                      ///< protothread case index
+    void (*func)(n4_func*);       ///< function pointer
+    n4_func *next;                ///< next item in linked-list (root=0)
+} *n4_fptr;
 ///
 /// nanoForth main control object (with static members that support multi-threading)
 ///
 class NanoForth
 {
-    static n4_tptr _n4tsk;        ///< user function linked-list
-
+    static n4_fptr _n4fp;         ///< user function linked-list
     U8     *_mem;                 ///< pointer to nanoForth memory block
 
 public:
     ///
     /// initializer with dynamic memory sizing
     ///
-    int  begin(
+    int  init(
         Stream &io=Serial,        ///< iostream which can be redirected to SoftwareSerial
         U8  ucase=1,              ///< case sensitiveness (default: insensitive)
         U16 dic_sz=N4_DIC_SZ,     ///< dictionary size (default: N4_DIC_SZ=0x400)
@@ -109,15 +96,12 @@ public:
     //
     // protothreading support
     //
-    static void add_task(         ///< add the user function to NanoForth task manager
-        void (*ufunc)(n4_tptr)    ///< user task pointer to be added
+    static void add_func(         ///< add the user function to NanoForth task manager
+        void (*ufunc)(n4_fptr)    ///< user task pointer to be added
         );
     static void yield();          ///< nanoForth yield to user tasks
     static void wait(U32 ms);     ///< pause NanoForth thread for ms microseconds, yield to user tasks
+    static void api(U16 id);      ///< C API interface
 };
-///
-/// short-hand to NanoForth class
-///
-typedef NanoForth N4;
 
 #endif // __SRC_NANOFORTH_H
