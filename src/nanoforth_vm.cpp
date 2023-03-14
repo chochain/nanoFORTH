@@ -17,7 +17,7 @@
 #include "nanoforth_intr.h"
 #include "nanoforth_vm.h"
 
-using namespace N4Core;                             /// * make utilities available
+using namespace N4Core;                             /// * VM built with core units
 ///
 ///@name Data Stack and Return Stack Ops
 ///@{
@@ -34,8 +34,6 @@ using namespace N4Core;                             /// * make utilities availab
 #define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
 #define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
 ///@}
-
-U16 dsz { 0 };
 
 namespace N4VM {
 ///
@@ -210,8 +208,9 @@ void _nest(U16 xt)
 ///> reset virtual machine
 ///
 void _init() {
-    show("nanoForth v1.6 ");             /// * show init prompt
-    rp = (U16*)(dic + dsz);              /// * reset return stack pointer
+    show(APP_NAME); show(APP_VERSION);   /// * show init prompt
+
+    rp = (U16*)(dic + N4_DIC_SZ);        /// * reset return stack pointer
     sp = SP0;                            /// * reset data stack pointer
     N4Intr::reset();                     /// * init interrupt handler
 
@@ -242,29 +241,16 @@ void _dump(U16 p0, U16 sz0)
 ///
 ///> constructor and initializer
 ///
-void setup(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz)
+void setup(Stream &io, U8 ucase)
 {
-    set_mem(dic, dsz = dic_sz, stk_sz);
+    init_mem();
+    memstat();               ///< display VM system info
+
     set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
     set_ucase(ucase);        /// * set case sensitiveness
     set_hex(0);              /// * set radix = 10
 
     _init();      			 /// * init VM
-}
-///
-///> show system memory allocation info
-///
-void meminfo()
-{
-    S16 bsz = (S16)(&bsz - SP0);       // free for TIB in bytes
-#if ARDUINO && TRC_LEVEL > 0
-    show("mem[");         d_ptr(dic);
-    show("=dic|x");       d_adr((U16)((U8*)rp - dic));
-    show("|rp->x");       d_adr((U16)((U8*)sp - (U8*)rp));
-    show("<-sp|tib->");   d_num(bsz);
-    show("<-auto=");      d_ptr((U8*)&bsz);
-#endif // ARDUINO
-    show("]\n");
 }
 ///
 ///> virtual machine interrupt service routine
