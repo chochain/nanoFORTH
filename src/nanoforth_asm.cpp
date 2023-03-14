@@ -94,7 +94,7 @@ U8  tab = 0;                  		///< tracing indentation counter
 ///
 U8 _find(U8 *tkn, U16 *adr)
 {
-    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {
+    for (U8 *p=last, *ex=PTR(LFA_X); p!=ex; p=PTR(GET16(p))) {
         if (uc(p[2])==uc(tkn[0]) &&
             uc(p[3])==uc(tkn[1]) &&
             (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
@@ -411,7 +411,7 @@ void words()
 {
     U8  wrp = WORDS_PER_ROW >> (trc ? 1 : 0);                 ///> wraping width
     U16 n   = 0;
-    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {        /// **from last, loop through dictionary**
+    for (U8 *p=last, *ex=PTR(LFA_X); p!=ex; p=PTR(GET16(p))) {/// **from last, loop through dictionary**
         d_chr(n++%wrp ? ' ' : '\n');
         if (trc) { d_adr(IDX(p)); d_chr(':'); }               ///>> optionally show address
         d_chr(p[2]); d_chr(p[3]); d_chr(p[4]);                ///>> 3-char name
