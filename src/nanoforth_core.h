@@ -6,7 +6,14 @@
 #ifndef __SRC_NANOFORTH_CORE_H
 #define __SRC_NANOFORTH_CORE_H
 #include "nanoforth.h"
-
+///
+///@name Default Heap sizing
+///@{
+constexpr U16 N4_DIC_SZ = 0x400;  /**< default dictionary size             */
+constexpr U16 N4_STK_SZ = 0x80;   /**< default parameter/return stack size */
+constexpr U16 N4_TIB_SZ = 0x80;
+///@}
+///
 #if ARDUINO
 #define show(s)      { io->print(F(s)); io->flush(); }
 #else
@@ -38,7 +45,9 @@ namespace N4Core
     extern U8     *tib;             ///< base of terminal input buffer
     extern U8     trc;              ///< tracing flag
 
-    void set_mem(U8 *mem, U16 msz, U16 ssz);
+    void init_mem();                ///< initialize MMU
+    void memstat();                 ///< display MMU statistics
+
     void set_io(Stream *s);         ///< initialize or redirect IO stream
     void set_hex(U8 f);             ///< enable/disable hex numeric radix
     void set_ucase(U8 uc);          ///< set case sensitiveness
