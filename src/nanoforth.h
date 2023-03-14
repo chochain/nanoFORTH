@@ -21,6 +21,8 @@
 #ifndef __SRC_NANOFORTH_H
 #define __SRC_NANOFORTH_H
 
+#define APP_NAME          "nanoForth "
+#define APP_VERSION       "2.0 "
 #define TRC_LEVEL         1       /* tracing verbosity level        */
 #define ISR_PERIOD        16      /* tick divider, higher => longer */
 
@@ -49,7 +51,6 @@
 extern  int Serial;
 #endif // ARDUINO
 #define INLINE            inline __attribute__((always_inline))
-
 ///@}
 ///
 ///@name Portable Types
@@ -59,12 +60,6 @@ typedef uint16_t     U16;         ///< 16-bit unsigned integer, for return stack
 typedef int16_t      S16;         ///< 16-bit signed integer, for general numbers
 typedef uint32_t     U32;         ///< 32-bit unsigned integer, for millis()
 typedef int32_t      S32;         ///< 32-bit signed integer
-///@}
-///
-//@name Default Heap sizing
-///@{
-constexpr U16 N4_DIC_SZ = 0x400;  /**< default dictionary size             */
-constexpr U16 N4_STK_SZ = 0x80;   /**< default parameter/return stack size */
 ///@}
 ///
 /// nanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
@@ -80,17 +75,11 @@ typedef struct n4_func {
 class NanoForth
 {
     static n4_fptr _n4fp;         ///< user function linked-list
-    U8     *_mem;                 ///< pointer to nanoForth memory block
 
 public:
-    ///
-    /// initializer with dynamic memory sizing
-    ///
-    int  init(
+    void setup(
         Stream &io=Serial,        ///< iostream which can be redirected to SoftwareSerial
-        U8  ucase=1,              ///< case sensitiveness (default: insensitive)
-        U16 dic_sz=N4_DIC_SZ,     ///< dictionary size (default: N4_DIC_SZ=0x400)
-        U16 stk_sz=N4_STK_SZ      ///< parameter+return stack size (default: N4_STK_SZ=0x100)
+        U8 ucase=1                ///< case sensitiveness (default: insensitive)
         );                        ///< placeholder for extra setup
     void exec();                  ///< nanoForth execute one line of command input
     //
