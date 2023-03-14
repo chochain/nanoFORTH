@@ -37,21 +37,6 @@ using namespace N4Core;                             /// * VM built with core uni
 
 namespace N4VM {
 ///
-///> console prompt with stack dump
-///
-void _ok()
-{
-    S16 *s0 = SP0;                       /// * fetch top of heap
-    if (sp > s0) {                       /// * check stack overflow
-        show("OVF!\n");
-        sp = s0;                         // reset to top of stack block
-    }
-    for (S16 *p=s0-1; p >= sp; p--) {    /// * dump stack content
-        d_num(*p); d_chr('_');
-    }
-    show("ok");                          /// * user input prompt
-}
-///
 ///> invoke a built-in opcode
 ///
 void _invoke(U8 op)
@@ -158,7 +143,7 @@ void _invoke(U8 op)
 void _nest(U16 xt)
 {
     RPUSH(LFA_X);                                         // enter function call
-    for (U8 *pc=PTR(xt); pc!=PTR(LFA_X); ) {              ///> walk through instruction sequences
+    for (U8 *pc=PTR(xt), *ex=PTR(LFA_X); pc!=ex; ) {      ///> walk through instruction sequences
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
@@ -195,6 +180,7 @@ void _nest(U16 xt)
                     pc+=2;                                // if (i==0) break loop
                     RPOP();                               // pop off index
                 }
+                NanoForth::yield();         	 		  ///> give user task some cycles (800us)
                 break;
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
             case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
@@ -279,8 +265,7 @@ void isr() {
 ///
 void outer()
 {
-    if (is_tib_empty()) _ok();                   ///> console ok prompt
-
+    ok();                                        ///> console ok prompt if tib is empty
     U8  *tkn = get_token();                      ///> get a token from console
     U16 tmp;                                     /// * word address or numeric value
     switch (N4Asm::parse(tkn, &tmp, 1)) {        ///> parse action from token (keep opcode in tmp)
