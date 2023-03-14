@@ -24,16 +24,19 @@ void reset() {
     SEI();
 }
 ///
-///> fetch interrupt hit flags
+///> fetch interrupt service routine if any
 ///
 U16 isr() {
+	static U16 n = 0;
+    if (!_hits && ++n < ISR_PERIOD) return 0;
+    n = 0;
     CLI();
     if (!_hits) {
         _hits = (p_hit << 8) | t_hit;   // capture interrupt flags
-        t_idx = t_hit = p_hit = 0;
+        t_idx = t_hit = p_hit = 0;      // clear flags
     }
     SEI();
-    if (_hits) {
+    if (!_hits) {
         U8 hx = _hits & 0xff;
         for (int i=0, t=1; hx && i<t_idx; i++, t<<=1, hx>>=1) {
             if (_hits & t) { _hits &= ~t; return t_xt[i]; }
