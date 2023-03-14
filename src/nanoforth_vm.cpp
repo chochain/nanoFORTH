@@ -242,20 +242,8 @@ void setup(Stream &io, U8 ucase)
 ///> virtual machine interrupt service routine
 ///
 void serv_isr() {
-	auto srv = [](U8 hit, U8 n, U16* xt) {
-	    for (int i=0; hit && i<n; i++, hit>>=1) {
-	        if (hit & 1) _nest(xt[i]);
-	    }
-	};
 	U16 xt = N4Intr::isr();
-	if (!xt) return;
-
-    S16 *sp0 = sp;                       		/// * keep stack pointers
-    U16 *rp0 = rp;
-	srv(hx & 0xff, N4Intr::t_idx, N4Intr::t_xt);
-	srv(hx >> 8,   3,             N4Intr::p_xt);
-    sp = sp0;                            		/// * restore stack pointers
-    rp = rp0;
+	if (xt) _nest(xt);
 }
 ///
 ///> virtual machine execute single step (outer interpreter)
