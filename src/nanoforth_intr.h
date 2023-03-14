@@ -6,6 +6,8 @@
 #define __SRC_NANOFORTH_INTR_H
 #include "nanoforth_core.h"
 
+#define ISR_PERIOD 100             /* tick divider, higher => longer */
+
 #if ARDUINO
 #define CLI()   cli()
 #define SEI()   sei()

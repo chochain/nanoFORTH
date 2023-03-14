@@ -24,7 +24,6 @@
 #define APP_NAME          "nanoForth "
 #define APP_VERSION       "2.0 "
 #define TRC_LEVEL         1       /* tracing verbosity level        */
-#define ISR_PERIOD        16      /* tick divider, higher => longer */
 
 ///@name Arduino Console Output Support
 ///@{
