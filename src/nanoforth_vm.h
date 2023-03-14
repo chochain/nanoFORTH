@@ -10,16 +10,12 @@
 /// nanoForth Virtual Machine class
 ///
 namespace N4VM
-{                             //  (12-byte header)
+{
     // nanoForth Virtual Machine constructor
     void setup(
         Stream &io,           ///< IO stream
-        U8 ucase,             ///< case sensitiveness
-        U8 *dic,              ///< dictionary base pointer
-        U16 dic_sz,           ///< dictionary block size
-        U16 stk_sz            ///< stack block size
+        U8 ucase              ///< case sensitiveness
         );
-    void meminfo();           ///< display VM system info
     void outer();             ///< outer-interpreter
     void isr();               ///< interrupt service routine
 };  // namespace N4VM
