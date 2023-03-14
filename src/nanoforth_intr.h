@@ -22,10 +22,11 @@ namespace N4Intr {
 	extern U16  t_xt[8];           ///< timer ISR
 
     void reset();                  ///< reset interrupts
-    U16  hits();                   ///< fetch interrupt service routines
+    U16  isr();                    ///< fetch interrupt service routines
 
-    void add_timer(U16 prd, U16 xt);
-    void add_pci(U16 pin, U16 xt);
+    void add_tmisr(U16 prd, U16 xt);
+    void add_pcisr(U16 pin, U16 xt);
+
     void enable_timer(U16 f);
     void enable_pci(U16 f);
 };    // namespace N4Intr
