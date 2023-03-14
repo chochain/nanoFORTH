@@ -31,6 +31,8 @@
 #include <Arduino.h>
 #define log(msg)          Serial.print(F(msg))
 #define logx(v)           Serial.print((U16)v, HEX)
+extern void n4_setup();
+extern void n4_run();
 #else
 #include <cstdint>                // uint_t
 #include <cstdio>                 // printf
