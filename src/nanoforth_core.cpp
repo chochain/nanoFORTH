@@ -138,13 +138,6 @@ U8 number(U8 *str, S16 *num)
     return 1;
 }
 ///
-///> check whether token available in input buffer
-///
-U8 is_tib_empty()
-{
-    return _empty;
-}
-///
 ///> clear terminal input buffer
 ///
 void clear_tib() {
@@ -179,6 +172,27 @@ void _console_input()
         else *p++ = c;
     }
     _empty = (p==tib);
+}
+///
+///> display OK prompt if input buffer is empty
+///
+U8 ok()
+{
+	if (_empty) {
+		///
+		///> console prompt with stack dump
+		///
+		S16 *s0 = (S16*)tib;                 /// * fetch top of heap
+	    if (sp > s0) {                       /// * check stack overflow
+	        show("OVF!\n");
+	        sp = s0;                         // reset to top of stack block
+	    }
+	    for (S16 *p=s0-1; p >= sp; p--) {    /// * dump stack content
+	        d_num(*p); d_chr('_');
+	    }
+	    show("ok");                          /// * user input prompt
+	}
+    return _empty;
 }
 ///
 ///> capture a token from console input buffer

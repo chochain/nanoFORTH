@@ -78,8 +78,8 @@ namespace N4Core
     ///
     ///@name Input buffer Functions
     ///@{
-    U8   is_tib_empty();            ///< check whether input buffer is empty
     void clear_tib();               ///< reset input buffer
+    U8   ok();                      ///< check whether input buffer is empty
     U8   *get_token(bool rst=false);///< get a token from console input
     U8   number(                    ///< process a literal from string given
         U8 *tkn,                    ///< token string of a number
