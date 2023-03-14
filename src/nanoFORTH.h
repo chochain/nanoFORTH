@@ -8,4 +8,6 @@
 extern void n4_setup();
 extern void n4_run();
 
+#define nanoFORTH NanoForth
+
 #endif // __NANOFORTH_H
