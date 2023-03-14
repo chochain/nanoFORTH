@@ -17,6 +17,6 @@ namespace N4VM
         U8 ucase              ///< case sensitiveness
         );
     void outer();             ///< outer-interpreter
-    void isr();               ///< interrupt service routine
+    void serv_isr();          ///< interrupt service routine
 };  // namespace N4VM
 #endif //__SRC_NANOFORTH_VM_H

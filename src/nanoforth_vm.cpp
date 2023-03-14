@@ -184,7 +184,7 @@ void _nest(U16 xt)
                 break;
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
             case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
-            default: _invoke(op);                         // handle other opcodes
+            default:    _invoke(op);                      // handle other opcodes
             }
         }
         else PUSH(ir);                                    ///> handle number (1-byte literal)
@@ -241,14 +241,14 @@ void setup(Stream &io, U8 ucase)
 ///
 ///> virtual machine interrupt service routine
 ///
-void isr() {
+void serv_isr() {
 	auto srv = [](U8 hit, U8 n, U16* xt) {
 	    for (int i=0; hit && i<n; i++, hit>>=1) {
 	        if (hit & 1) _nest(xt[i]);
 	    }
 	};
-	U16 hx = N4Intr::hits();
-	if (!hx) return;
+	U16 xt = N4Intr::isr();
+	if (!xt) return;
 
     S16 *sp0 = sp;                       		/// * keep stack pointers
     U16 *rp0 = rp;
@@ -274,9 +274,9 @@ void outer()
         case 0: N4Asm::compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
         case 1: N4Asm::variable();      break;   /// * VAR, create new variable
         case 2: N4Asm::constant(POP()); break;   /// * CST, create new constant
-        case 3: N4Intr::add_pci(                 /// * PCI, create a pin change interrupt handler
+        case 3: N4Intr::add_pcisr(               /// * PCI, create a pin change interrupt handler
                 POP(), N4Asm::query()); break;
-        case 4: N4Intr::add_timer(               /// * TMR, create a timer interrupt handler
+        case 4: N4Intr::add_tmisr(               /// * TMR, create a timer interrupt handler
                 POP(), N4Asm::query()); break;   /// * period in 0.1 sec
         case 5: N4Asm::forget();        break;   /// * FGT, rollback word created
         case 6: _dump(POP(), POP());    break;   /// * DMP, memory dump
