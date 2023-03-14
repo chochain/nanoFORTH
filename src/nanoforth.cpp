@@ -59,10 +59,7 @@ void NanoForth::api(U16 id)
 ///
 void NanoForth::yield()
 {
-	static U16 n = 0;
-	if (++n < ISR_PERIOD) return;              /// * tick divider, so VM gets more time
-	n = 0;
-	N4VM::isr();                               /// * service hardware interrupts
+	N4VM::serv_isr();                          /// * service hardware interrupts
 }
 ///
 ///> aka Arduino delay(), yield to hardware context while waiting
