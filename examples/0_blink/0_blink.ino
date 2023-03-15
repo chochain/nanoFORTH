@@ -14,33 +14,23 @@
  *  Once compiled/uploaded, you should see
  *  + some nanoFORTH init system info and the ok prompt
  *  + in Serial Monitor input, type WRD and hit <return>
+ *  + enter the following 
+ *    > : xx 13 in 1 xor 13 out ; \ toggle built-in LED
+ *    > 50 xx tmi                 \ tick xx every 500ms = 50x10ms
+ *    > 1 tme                     \ enable timer interrupt
  */
 #include <nanoforth.h>
 
-NanoForth my_n4;                  ///< our NanoForth instance
 void setup() {
     Serial.begin(115200);         ///< init Serial IO, make sure it is set to 'Both BL & CR' to capture input
 
     pinMode(LED_BUILTIN, OUTPUT);
     
-    my_n4.add_task(lets_blink);   ///< add the blink task to NanoForth task manager
-    
-    if (my_n4.begin()) {          ///< initialize NanoForth and default Serial Monitor as our output
-        Serial.print(F("ERROR: memory allocation failed!"));
-    }
+    n4_setup();
 }
 
 void loop() {
-    my_n4.exec();                 ///< execute VM of our NanoForth instance
+    n4_run();                     ///< execute NanoForth instance
 }
-///
-/// User defined task - turn built-in LED on/off every 500ms (pin 13)
-///
-N4_TASK(lets_blink) {             ///< create a blinking task (i.e. built-in LED on pin 13)
-    digitalWrite(LED_BUILTIN, HIGH);
-    N4_DELAY(500);
-    digitalWrite(LED_BUILTIN, LOW);
-    N4_DELAY(500);
-} N4_END;
 
 
