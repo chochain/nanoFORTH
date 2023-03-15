@@ -2,9 +2,9 @@
  * @file
  * @brief nanoForth interrupt handler class
  */
-#ifndef __SRC_NANOFORTH_INTR_H
-#define __SRC_NANOFORTH_INTR_H
-#include "nanoforth_core.h"
+#ifndef __SRC_N4_INTR_H
+#define __SRC_N4_INTR_H
+#include "n4_core.h"
 
 #define ISR_PERIOD 100             /* tick divider, higher => longer */
 
@@ -33,4 +33,4 @@ namespace N4Intr {
     void enable_pci(U16 f);
 };    // namespace N4Intr
 
-#endif //__SRC_NANOFORTH_INTR_H
+#endif //__SRC_N4_INTR_H

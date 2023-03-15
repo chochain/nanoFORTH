@@ -2,7 +2,7 @@
  * @file
  * @brief nanoForth Interrupt handlers implementation
  */
-#include "nanoforth_intr.h"
+#include "n4_intr.h"
 ///
 /// nanoForth Interrupt handler -  static variables
 ///

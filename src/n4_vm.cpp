@@ -1,5 +1,5 @@
 /**
- * @file nanoforth_vm.cpp
+ * @file
  * @brief nanoForth Virtual Machine class implementation
  *
  * #### Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)
@@ -12,10 +12,10 @@
  *                                TOS TOS1 (top of stack)
  * @endcode
  */
-#include "nanoforth_core.h"
-#include "nanoforth_asm.h"
-#include "nanoforth_intr.h"
-#include "nanoforth_vm.h"
+#include "n4_core.h"
+#include "n4_asm.h"
+#include "n4_intr.h"
+#include "n4_vm.h"
 
 using namespace N4Core;                             /// * VM built with core units
 ///

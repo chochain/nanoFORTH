@@ -1,5 +1,5 @@
 /**
- * @file mockrom.h
+ * @file
  * @brief nanoForth mock EEPROM interface class (for testing)
  */
 #ifndef __SRC_EEPROM_H

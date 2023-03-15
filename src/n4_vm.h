@@ -1,11 +1,11 @@
 /**
- * @file nanoforth_vm.h
+ * @file
  * @brief nanoForth Virtual Machine class
  *
  */
-#ifndef __SRC_NANOFORTH_VM_H
-#define __SRC_NANOFORTH_VM_H
-#include "nanoforth.h"
+#ifndef __SRC_N4_VM_H
+#define __SRC_N4_VM_H
+#include "n4.h"
 ///
 /// nanoForth Virtual Machine class
 ///
@@ -19,4 +19,4 @@ namespace N4VM
     void outer();             ///< outer-interpreter
     void serv_isr();          ///< interrupt service routine
 };  // namespace N4VM
-#endif //__SRC_NANOFORTH_VM_H
+#endif //__SRC_N4_VM_H

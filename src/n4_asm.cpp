@@ -1,5 +1,5 @@
 /**
- * @file nanoforth_asm.cpp
+ * @file
  * @brief nanoForth Assmebler implementation
  *
  * ####Assembler Memory Map:
@@ -10,14 +10,14 @@
  *       +-dic-->     +-->sp  rp<--+
  * @endcode
  */
-#include "nanoforth_asm.h"
+#include "n4_asm.h"
 #if ARDUINO
 #include <EEPROM.h>
 #else
 #include "mockrom.h"
 #endif //ARDUINO
 
-#include "nanoforth_core.h"
+#include "n4_core.h"
 using namespace N4Core;                       /// * make utilities available
 
 ///

@@ -1,5 +1,5 @@
 /**
- * @file nanoforth.h
+ * @file
  * @brief nanoForth main controller
  *
  * ####Memory Map
@@ -18,8 +18,8 @@
  *    |      |      |Arduino heap      |   |
  *    |0x0900|      |                  |   |
  */
-#ifndef __SRC_NANOFORTH_H
-#define __SRC_NANOFORTH_H
+#ifndef __SRC_N4_H
+#define __SRC_N4_H
 
 #define APP_NAME          "nanoForth "
 #define APP_VERSION       "2.0 "
@@ -94,4 +94,4 @@ public:
     static void api(U16 id);      ///< C API interface
 };
 
-#endif // __SRC_NANOFORTH_H
+#endif // __SRC_N4_H

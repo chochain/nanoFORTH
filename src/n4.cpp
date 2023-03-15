@@ -4,7 +4,7 @@
  *
  * Revision History: see tail of this file
  */
-#include "nanoforth_vm.h"
+#include "n4_vm.h"
 //
 // user function linked-list
 //

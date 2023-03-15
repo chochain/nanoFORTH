@@ -3,7 +3,7 @@
  * @brief nanoForth Core Utilities
  *        - low level memory and IO management
  */
-#include "nanoforth_core.h"
+#include "n4_core.h"
 
 #if !ARDUINO
 int  Serial;           				     ///< fake serial interface

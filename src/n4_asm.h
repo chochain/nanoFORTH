@@ -1,5 +1,5 @@
 /**
- * @file nanoforth_asm.h
+ * @file
  * @brief nanoForth Assembler class
  *
  * ####nanoForth Opcode formats
@@ -12,9 +12,9 @@
  *    n-byte str: len, byte, byte, ...           (used in print str i.e. .")
  * @endcode
  */
-#ifndef __SRC_NANOFORTH_ASM_H
-#define __SRC_NANOFORTH_ASM_H
-#include "nanoforth.h"
+#ifndef __SRC_N4_ASM_H
+#define __SRC_N4_ASM_H
+#include "n4.h"
 ///
 /// parser actions enum used by execution and assembler units
 ///
@@ -92,4 +92,4 @@ namespace N4Asm                     // (10-byte header)
         U8  ir                      ///< instruction register value
         );
 };  // namespace N4Asm
-#endif //__SRC_NANOFORTH_ASM_H
+#endif //__SRC_N4_ASM_H

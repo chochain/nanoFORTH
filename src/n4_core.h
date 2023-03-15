@@ -3,9 +3,9 @@
  * @brief nanoForth Core Utilities
  *        + memory and IO helper functions
  */
-#ifndef __SRC_NANOFORTH_CORE_H
-#define __SRC_NANOFORTH_CORE_H
-#include "nanoforth.h"
+#ifndef __SRC_N4_CORE_H
+#define __SRC_N4_CORE_H
+#include "n4.h"
 ///
 ///@name Default Heap sizing
 ///@{
@@ -95,4 +95,4 @@ namespace N4Core
         );
     ///@}
 };
-#endif //__SRC_NANOFORTH_CORE_H
+#endif //__SRC_N4_CORE_H
