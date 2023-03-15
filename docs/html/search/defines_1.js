@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['get16_326',['GET16',['../nanoforth__core_8h.html#a0347fc520bda2a3f684f7e344b180065',1,'nanoforth_core.h']]]
+  ['cli_325',['CLI',['../n4__intr_8h.html#a60bc02dc3bbd02fe2c8f7472d473a659',1,'n4_intr.h']]]
 ];

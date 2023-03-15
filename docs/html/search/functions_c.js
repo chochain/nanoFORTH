@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['meminfo_238',['meminfo',['../namespaceN4VM.html#a224b81d2df781a4fa8c6a37bc47551ff',1,'N4VM']]]
+  ['ok_238',['ok',['../namespaceN4Core.html#a5d15840dcc371f24919df0796a184046',1,'N4Core']]],
+  ['outer_239',['outer',['../namespaceN4VM.html#a943be53277c6329fdcad7f4118f07c24',1,'N4VM']]]
 ];

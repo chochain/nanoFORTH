@@ -1,5 +1,5 @@
 var annotated_dup =
 [
-    [ "n4_task", "structn4__task.html", "structn4__task" ],
+    [ "n4_func", "structn4__func.html", "structn4__func" ],
     [ "NanoForth", "classNanoForth.html", "classNanoForth" ]
 ];

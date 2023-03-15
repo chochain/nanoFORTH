@@ -1,10 +1,15 @@
 var searchData=
 [
-  ['ci_21',['ci',['../structn4__task.html#abfee8f823ca6974b6487feaae14f9004',1,'n4_task']]],
-  ['clear_5ftib_22',['clear_tib',['../namespaceN4Core.html#a3d456e769c6b769d0ff9a121ef67bbfe',1,'N4Core']]],
-  ['cli_23',['CLI',['../nanoforth__intr_8h.html#a60bc02dc3bbd02fe2c8f7472d473a659',1,'nanoforth_intr.h']]],
-  ['cmd_24',['CMD',['../nanoforth__asm_8cpp.html#a9e2ebb9c3229c435ee2e71725323ea6e',1,'nanoforth_asm.cpp']]],
-  ['compile_25',['compile',['../namespaceN4Asm.html#adf20a9f3f951f2f183eb60398618c66e',1,'N4Asm']]],
-  ['constant_26',['constant',['../namespaceN4Asm.html#a46691d4daa880d7a492a263925c6869e',1,'N4Asm']]],
-  ['ctl_5fbits_27',['CTL_BITS',['../nanoforth__asm_8h.html#a0b2400848a0f21e8dcd935a8d3c98933',1,'nanoforth_asm.h']]]
+  ['d_5fadr_29',['d_adr',['../namespaceN4Core.html#aee71abce5f671bc9e867f683e327a6e6',1,'N4Core']]],
+  ['d_5fchr_30',['d_chr',['../namespaceN4Core.html#a3a3e4ae4954551e76c19625c18e72182',1,'N4Core']]],
+  ['d_5fmem_31',['d_mem',['../namespaceN4Core.html#a812d012a57ba1a74c8028cca118cb17d',1,'N4Core']]],
+  ['d_5fname_32',['d_name',['../namespaceN4Core.html#a286ee4feeeb87bfd3a44d3d353b2713c',1,'N4Core']]],
+  ['d_5fnib_33',['d_nib',['../namespaceN4Core.html#a00f8c798ee3ddd89c038999180347d17',1,'N4Core']]],
+  ['d_5fnum_34',['d_num',['../namespaceN4Core.html#a4579127c2ecf48ea5ed3641446e6f4bc',1,'N4Core']]],
+  ['d_5fptr_35',['d_ptr',['../namespaceN4Core.html#aae3a814b552f13eb6f533f04e59793e6',1,'N4Core']]],
+  ['d_5fstr_36',['d_str',['../namespaceN4Core.html#a8ebd0caea89dd845a216290731901fa9',1,'N4Core']]],
+  ['d_5fu8_37',['d_u8',['../namespaceN4Core.html#a76fd10331f7f55db3f1a924fcdf7e1d5',1,'N4Core']]],
+  ['dic_38',['dic',['../namespaceN4Core.html#ab11fdda5dd4a2660128e64087a7d507b',1,'N4Core']]],
+  ['dump_5fper_5fline_39',['DUMP_PER_LINE',['../n4__vm_8cpp.html#af76800feb65a72436c3dd83a82dc8c2d',1,'n4_vm.cpp']]],
+  ['documentation_20pages_40',['Documentation Pages',['../index.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['reset_243',['reset',['../namespaceN4Asm.html#ac9c18d1a37bff77cad6e2e2699df398d',1,'N4Asm::reset()'],['../namespaceN4Intr.html#a8a52e26e10bce795f4bb11dd62d2578e',1,'N4Intr::reset()']]]
+  ['trace_250',['trace',['../namespaceN4Asm.html#a9d1e9aaa4bf1feb4dcabfa17088d612d',1,'N4Asm']]]
 ];

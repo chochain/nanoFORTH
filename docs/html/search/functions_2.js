@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['begin_215',['begin',['../classNanoForth.html#aa5571a5c8cdc1620e4839a278c36875b',1,'NanoForth']]]
+  ['clear_5ftib_213',['clear_tib',['../namespaceN4Core.html#a3d456e769c6b769d0ff9a121ef67bbfe',1,'N4Core']]],
+  ['compile_214',['compile',['../namespaceN4Asm.html#adf20a9f3f951f2f183eb60398618c66e',1,'N4Asm']]],
+  ['constant_215',['constant',['../namespaceN4Asm.html#a46691d4daa880d7a492a263925c6869e',1,'N4Asm']]]
 ];

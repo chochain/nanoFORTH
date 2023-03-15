@@ -90,24 +90,26 @@ $(document).ready(function(){initNavTree('mockrom_8h_source.html',''); initResiz
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#ifndef __SRC_EEPROM_H</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define __SRC_EEPROM_H</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#if !ARDUINO</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">static</span> <a class="code" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> _eeprom[<a class="code" href="nanoforth_8h.html#a0fbd46bf8acfaff6cb92691910ff3ad4">N4_DIC_SZ</a>];          </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">class </span>MockRom                          </div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;{</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <a class="code" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>  length() { <span class="keywordflow">return</span> <a class="code" href="nanoforth_8h.html#a0fbd46bf8acfaff6cb92691910ff3ad4">N4_DIC_SZ</a>; }</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <a class="code" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>   read(<a class="code" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> idx) { <span class="keywordflow">return</span> _eeprom[idx]; }</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keywordtype">void</span> update(<a class="code" href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> idx, <a class="code" href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> v) { _eeprom[idx] = v; }</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;};</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;MockRom EEPROM;                        </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#endif // ARDUINO</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#endif // __SRC_MOCKROM_H</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="mockrom_8h.html#ada5d615b300522bbc9e1ad325d9c5e9b">    8</a></span>&#160;<span class="preprocessor">#define EEPROM_SZ 0x400                </span><span class="comment">/* default 1K */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#if !ARDUINO</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">static</span> <a class="code" href="n4_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> _eeprom[<a class="code" href="mockrom_8h.html#ada5d615b300522bbc9e1ad325d9c5e9b">EEPROM_SZ</a>];          </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keyword">class </span>MockRom                          </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <a class="code" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>  length() { <span class="keywordflow">return</span> <a class="code" href="mockrom_8h.html#ada5d615b300522bbc9e1ad325d9c5e9b">EEPROM_SZ</a>; }</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <a class="code" href="n4_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>   read(<a class="code" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> idx) { <span class="keywordflow">return</span> _eeprom[idx]; }</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keywordtype">void</span> update(<a class="code" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> idx, <a class="code" href="n4_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> v) { _eeprom[idx] = v; }</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;};</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;MockRom EEPROM;                        </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#endif // ARDUINO</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#endif // __SRC_MOCKROM_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="ananoforth_8h_html_a0a0a322d5fa4a546d293a77ba8b4a71f"><div class="ttname"><a href="nanoforth_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a></div><div class="ttdeci">uint16_t U16</div><div class="ttdoc">16-bit unsigned integer, for return stack, and pointers</div><div class="ttdef"><b>Definition:</b> nanoforth.h:53</div></div>
-<div class="ttc" id="ananoforth_8h_html_aa63ef7b996d5487ce35a5a66601f3e73"><div class="ttname"><a href="nanoforth_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a></div><div class="ttdeci">uint8_t U8</div><div class="ttdoc">8-bit unsigned integer, for char and short int</div><div class="ttdef"><b>Definition:</b> nanoforth.h:52</div></div>
-<div class="ttc" id="ananoforth_8h_html_a0fbd46bf8acfaff6cb92691910ff3ad4"><div class="ttname"><a href="nanoforth_8h.html#a0fbd46bf8acfaff6cb92691910ff3ad4">N4_DIC_SZ</a></div><div class="ttdeci">constexpr U16 N4_DIC_SZ</div><div class="ttdef"><b>Definition:</b> nanoforth.h:61</div></div>
+<div class="ttc" id="amockrom_8h_html_ada5d615b300522bbc9e1ad325d9c5e9b"><div class="ttname"><a href="mockrom_8h.html#ada5d615b300522bbc9e1ad325d9c5e9b">EEPROM_SZ</a></div><div class="ttdeci">#define EEPROM_SZ</div><div class="ttdef"><b>Definition:</b> mockrom.h:8</div></div>
+<div class="ttc" id="an4_8h_html_a0a0a322d5fa4a546d293a77ba8b4a71f"><div class="ttname"><a href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a></div><div class="ttdeci">uint16_t U16</div><div class="ttdoc">16-bit unsigned integer, for return stack, and pointers</div><div class="ttdef"><b>Definition:</b> n4.h:60</div></div>
+<div class="ttc" id="an4_8h_html_aa63ef7b996d5487ce35a5a66601f3e73"><div class="ttname"><a href="n4_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a></div><div class="ttdeci">uint8_t U8</div><div class="ttdoc">8-bit unsigned integer, for char and short int</div><div class="ttdef"><b>Definition:</b> n4.h:59</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

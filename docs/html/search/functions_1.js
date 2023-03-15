@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['add_5fpci_212',['add_pci',['../namespaceN4Intr.html#afa888cb6aab4a5f53b1cc2488e53a8df',1,'N4Intr']]],
-  ['add_5ftask_213',['add_task',['../classNanoForth.html#a423ab8b7b4da462213db2d40fe645cdc',1,'NanoForth']]],
-  ['add_5ftimer_214',['add_timer',['../namespaceN4Intr.html#a3553acbbbbbdf797942837c289a99fbe',1,'N4Intr']]]
+  ['add_5ffunc_209',['add_func',['../classNanoForth.html#a4d780a9feb178201eee2b544116064ff',1,'NanoForth']]],
+  ['add_5fpcisr_210',['add_pcisr',['../namespaceN4Intr.html#af3afe4983b422925417593f892d8a0e2',1,'N4Intr']]],
+  ['add_5ftmisr_211',['add_tmisr',['../namespaceN4Intr.html#a019a82af83d8e3e9b440d1b8b74a698f',1,'N4Intr']]],
+  ['api_212',['api',['../classNanoForth.html#af70ef0d82c0659ac3477218f9e213037',1,'NanoForth']]]
 ];

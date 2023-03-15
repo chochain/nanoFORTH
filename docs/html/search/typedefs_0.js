@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['n4_305',['N4',['../nanoforth_8h.html#a1f8c7dfe05abb1e969b291e5ae01016f',1,'nanoforth.h']]],
-  ['n4_5ftptr_306',['n4_tptr',['../nanoforth_8h.html#a1c8394224254af4a65ddc05349f1fce8',1,'nanoforth.h']]]
+  ['n4_5ffptr_304',['n4_fptr',['../n4_8h.html#aa8d9265e03c8ecf15db62eca16e75e7b',1,'n4.h']]]
 ];

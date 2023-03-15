@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['rpop_343',['RPOP',['../nanoforth__asm_8cpp.html#a55b5173e6face979deb7372dcbb643df',1,'RPOP():&#160;nanoforth_asm.cpp'],['../nanoforth__vm_8cpp.html#a55b5173e6face979deb7372dcbb643df',1,'RPOP():&#160;nanoforth_vm.cpp']]],
-  ['rpush_344',['RPUSH',['../nanoforth__asm_8cpp.html#a82363ba7a7cd1a9826fa73d03805e641',1,'RPUSH():&#160;nanoforth_asm.cpp'],['../nanoforth__vm_8cpp.html#a82363ba7a7cd1a9826fa73d03805e641',1,'RPUSH():&#160;nanoforth_vm.cpp']]]
+  ['lo16_336',['LO16',['../n4__vm_8cpp.html#a13c77dd9c96efe75abb4c5eed2241ed1',1,'n4_vm.cpp']]],
+  ['log_337',['log',['../n4_8h.html#a642fd9241bc9e4219ea15503ca87fefb',1,'n4.h']]],
+  ['logx_338',['logx',['../n4_8h.html#a0c6ed456da2d729add89153d74894f35',1,'n4.h']]]
 ];

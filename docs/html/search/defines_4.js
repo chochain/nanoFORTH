@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['jmp000_331',['JMP000',['../nanoforth__asm_8cpp.html#a6890bb77e82b3706ffb77c8f2f2d81ff',1,'nanoforth_asm.cpp']]],
-  ['jmpbck_332',['JMPBCK',['../nanoforth__asm_8cpp.html#a92cc7957e8d8f21d50b2abb068cf7ee8',1,'nanoforth_asm.cpp']]],
-  ['jmpset_333',['JMPSET',['../nanoforth__asm_8cpp.html#a2167c97965233bc0198413dddbf0dd28',1,'nanoforth_asm.cpp']]]
+  ['get16_328',['GET16',['../n4__core_8h.html#a0347fc520bda2a3f684f7e344b180065',1,'n4_core.h']]]
 ];

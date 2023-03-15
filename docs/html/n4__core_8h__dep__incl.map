@@ -1,0 +1,8 @@
+<map id="src/n4_core.h" name="src/n4_core.h">
+<area shape="rect" id="node1" title="nanoForth Core Utilities" alt="" coords="227,5,335,32"/>
+<area shape="rect" id="node2" href="$n4__asm_8cpp.html" title="nanoForth Assmebler implementation" alt="" coords="5,80,128,107"/>
+<area shape="rect" id="node3" href="$n4__core_8cpp.html" title="nanoForth Core Utilities" alt="" coords="152,80,275,107"/>
+<area shape="rect" id="node4" href="$n4__intr_8h.html" title="nanoForth interrupt handler class" alt="" coords="299,80,400,107"/>
+<area shape="rect" id="node6" href="$n4__vm_8cpp.html" title="nanoForth Virtual Machine class implementation" alt="" coords="379,155,495,181"/>
+<area shape="rect" id="node5" href="$n4__intr_8cpp.html" title="nanoForth Interrupt handlers implementation" alt="" coords="239,155,355,181"/>
+</map>
