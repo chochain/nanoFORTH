@@ -23,20 +23,35 @@ void reset() {
     t_idx = t_hit = p_hit = 0;
     SEI();
 }
+#if ARDUINO
+#define _fake_intr()
+#else // !ARDUINO
+U8  tmr_on = 0;                   ///< fake timer enabler
+void _fake_intr()
+{
+    static int n = 0;                              // fake interrupt
+    if (tmr_on && !_hits && ++n >= 2) {
+        n=0; t_hit = 1;
+    }
+}
+#endif // ARDUINO
 ///
 ///> fetch interrupt service routine if any
 ///
 U16 isr() {
 	static U16 n = 0;
+
+    _fake_intr();
+    
     if (!_hits && ++n < ISR_PERIOD) return 0;
     n = 0;
     CLI();
     if (!_hits) {
-        _hits = (p_hit << 8) | t_hit;   // capture interrupt flags
-        t_idx = t_hit = p_hit = 0;      // clear flags
+        _hits = (p_hit << 8) | t_hit; // capture interrupt flags
+        t_hit = p_hit = 0;            // clear flags, ready for next round
     }
     SEI();
-    if (!_hits) {
+    if (_hits) {
         U8 hx = _hits & 0xff;
         for (int i=0, t=1; hx && i<t_idx; i++, t<<=1, hx>>=1) {
             if (_hits & t) { _hits &= ~t; return t_xt[i]; }
@@ -61,7 +76,7 @@ void add_tmisr(U16 n, U16 xt) {
 #if !ARDUINO
 void add_pcisr(U16 p, U16 xt) {}     // mocked functions for x86
 void enable_pci(U16 f)        {}
-void enable_timer(U16 f)      {}
+void enable_timer(U16 f)      { tmr_on = f; }
 #else  // ARDUINO
 ///
 ///@name N4Intr static variables
