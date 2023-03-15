@@ -156,7 +156,7 @@ void _nest(U16 xt)
             a = GET16(pc-1) & ADR_MASK;                   // target address
             switch (ir & JMP_MASK) {                      // get branch opcode
             case OP_CALL:                                 // 0xc0 subroutine call
-                NanoForth::yield();         	 		  ///> give user task some cycles (800us)
+                serv_isr();                 	 		  ///> give user task some cycles (800us)
                 RPUSH(IDX(pc+1));                         // keep next instruction on return stack
                 pc = PTR(a);                              // jump to subroutine till I_RET
                 break;
@@ -180,7 +180,7 @@ void _nest(U16 xt)
                     pc+=2;                                // if (i==0) break loop
                     RPOP();                               // pop off index
                 }
-                NanoForth::yield();         	 		  ///> give user task some cycles (800us)
+                serv_isr();                 	 		  ///> give user task some cycles (800us)
                 break;
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
             case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
