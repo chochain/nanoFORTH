@@ -1,5 +1,5 @@
 /**
- * @file nanoforth_asm.h
+ * @file
  * @brief nanoForth Assembler class
  *
  * ####nanoForth Opcode formats
@@ -12,18 +12,18 @@
  *    n-byte str: len, byte, byte, ...           (used in print str i.e. .")
  * @endcode
  */
-#ifndef __SRC_NANOFORTH_ASM_H
-#define __SRC_NANOFORTH_ASM_H
-#include "nanoforth.h"
+#ifndef __SRC_N4_ASM_H
+#define __SRC_N4_ASM_H
+#include "n4.h"
 ///
 /// parser actions enum used by execution and assembler units
 ///
 enum N4OP {
-    TKN_IMM = 1,     ///< immediate word
+    TKN_IMM = 0,     ///< immediate word
     TKN_WRD,         ///< colon (user defined) word
-    TKN_EXT,         ///< extended built-in word
     TKN_PRM,         ///< primitive built-in word
     TKN_NUM,         ///< number (literal)
+    TKN_EXT,         ///< extended built-in word
     TKN_ERR          ///< parse error (unknown token)
 };
 ///
@@ -92,4 +92,4 @@ namespace N4Asm                     // (10-byte header)
         U8  ir                      ///< instruction register value
         );
 };  // namespace N4Asm
-#endif //__SRC_NANOFORTH_ASM_H
+#endif //__SRC_N4_ASM_H

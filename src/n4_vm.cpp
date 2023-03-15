@@ -1,5 +1,5 @@
 /**
- * @file nanoforth_vm.cpp
+ * @file
  * @brief nanoForth Virtual Machine class implementation
  *
  * #### Forth VM stack opcode macros (notes: rp grows upward and may collide with sp)
@@ -12,12 +12,12 @@
  *                                TOS TOS1 (top of stack)
  * @endcode
  */
-#include "nanoforth_core.h"
-#include "nanoforth_asm.h"
-#include "nanoforth_intr.h"
-#include "nanoforth_vm.h"
+#include "n4_core.h"
+#include "n4_asm.h"
+#include "n4_intr.h"
+#include "n4_vm.h"
 
-using namespace N4Core;                             /// * make utilities available
+using namespace N4Core;                             /// * VM built with core units
 ///
 ///@name Data Stack and Return Stack Ops
 ///@{
@@ -35,24 +35,7 @@ using namespace N4Core;                             /// * make utilities availab
 #define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
 ///@}
 
-U16 dsz { 0 };
-
 namespace N4VM {
-///
-///> console prompt with stack dump
-///
-void _ok()
-{
-    S16 *s0 = SP0;                       /// * fetch top of heap
-    if (sp > s0) {                       /// * check stack overflow
-        show("OVF!\n");
-        sp = s0;                         // reset to top of stack block
-    }
-    for (S16 *p=s0-1; p >= sp; p--) {    /// * dump stack content
-        d_num(*p); d_chr('_');
-    }
-    show("ok");                          /// * user input prompt
-}
 ///
 ///> invoke a built-in opcode
 ///
@@ -138,7 +121,6 @@ void _invoke(U8 op)
     case 46: set_hex(0);                              break; // DEC
     case 47: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
     case 48: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
-#if ARDUINO
     case 49: NanoForth::wait((U32)POP());             break; // DLY
     case 50: PUSH(digitalRead(POP()));                break; // IN
     case 51: PUSH(analogRead(POP()));                 break; // AIN
@@ -147,12 +129,12 @@ void _invoke(U8 op)
     case 54: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
     case 55: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
     case 56: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
-#endif //ARDUINO
-    case 57: case 58: case 59: /* available */        break;
-    case 60: PUSH(*(rp-1));               break; // I
-    case 61: RPUSH(POP());                break; // FOR
-    case 62: /* handled one level up */   break; // NXT
-    case 63: /* handled one level up */   break; // LIT
+    case 57: NanoForth::api(POP());                   break; // API
+    case 58: case 59:                                 break; // available
+    case I_I:   PUSH(*(rp-1));                        break; // I
+    case I_FOR: RPUSH(POP());                         break; // FOR
+    case I_NXT: /* handled at upper level */          break; // NXT
+    case I_LIT: /* handled at upper level */          break; // LIT
     }
 }
 ///
@@ -161,7 +143,7 @@ void _invoke(U8 op)
 void _nest(U16 xt)
 {
     RPUSH(LFA_X);                                         // enter function call
-    for (U8 *pc=PTR(xt); pc!=PTR(LFA_X); ) {              ///> walk through instruction sequences
+    for (U8 *pc=PTR(xt), *ex=PTR(LFA_X); pc!=ex; ) {      ///> walk through instruction sequences
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
@@ -198,10 +180,11 @@ void _nest(U16 xt)
                     pc+=2;                                // if (i==0) break loop
                     RPOP();                               // pop off index
                 }
+                NanoForth::yield();         	 		  ///> give user task some cycles (800us)
                 break;
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
             case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
-            default: _invoke(op);                         // handle other opcodes
+            default:    _invoke(op);                      // handle other opcodes
             }
         }
         else PUSH(ir);                                    ///> handle number (1-byte literal)
@@ -211,8 +194,9 @@ void _nest(U16 xt)
 ///> reset virtual machine
 ///
 void _init() {
-    show("nanoForth v1.6 ");             /// * show init prompt
-    rp = (U16*)(dic + dsz);              /// * reset return stack pointer
+    show(APP_NAME); show(APP_VERSION);   /// * show init prompt
+
+    rp = (U16*)(dic + N4_DIC_SZ);        /// * reset return stack pointer
     sp = SP0;                            /// * reset data stack pointer
     N4Intr::reset();                     /// * init interrupt handler
 
@@ -225,15 +209,16 @@ void _init() {
 ///
 ///> show a section of memory in Forth dump format
 ///
+#define DUMP_PER_LINE 0x10
 void _dump(U16 p0, U16 sz0)
 {
     U8  *p = PTR((p0&0xffe0));
     U16 sz = (sz0+0x1f)&0xffe0;
-    for (U16 i=0; i<sz; i+=0x20) {
+    for (U16 i=0; i<sz; i+=DUMP_PER_LINE) {
         d_chr('\n');
-        d_mem(dic, p, 0x20, ' ');
+        d_mem(dic, p, DUMP_PER_LINE, ' ');
         d_chr(' ');
-        for (U8 j=0; j<0x20; j++, p++) {         // print and advance to next byte
+        for (U8 j=0; j<DUMP_PER_LINE; j++, p++) {         // print and advance to next byte
             char c = *p & 0x7f;
             d_chr((c==0x7f||c<0x20) ? '_' : c);
         }
@@ -242,9 +227,11 @@ void _dump(U16 p0, U16 sz0)
 ///
 ///> constructor and initializer
 ///
-void setup(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz)
+void setup(Stream &io, U8 ucase)
 {
-    set_mem(dic, dsz = dic_sz, stk_sz);
+    init_mem();
+    memstat();               ///< display VM system info
+
     set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
     set_ucase(ucase);        /// * set case sensitiveness
     set_hex(0);              /// * set radix = 10
@@ -252,38 +239,11 @@ void setup(Stream &io, U8 ucase, U8 *dic, U16 dic_sz, U16 stk_sz)
     _init();      			 /// * init VM
 }
 ///
-///> show system memory allocation info
-///
-void meminfo()
-{
-    S16 bsz = (S16)(&bsz - SP0);       // free for TIB in bytes
-#if ARDUINO && TRC_LEVEL > 0
-    show("mem[");         d_ptr(dic);
-    show("=dic|x");       d_adr((U16)((U8*)rp - dic));
-    show("|rp->x");       d_adr((U16)((U8*)sp - (U8*)rp));
-    show("<-sp|tib->");   d_num(bsz);
-    show("<-auto=");      d_ptr((U8*)&bsz);
-#endif // ARDUINO
-    show("]\n");
-}
-///
 ///> virtual machine interrupt service routine
 ///
-void isr() {
-	auto srv = [](U8 hit, U8 n, U16* xt) {
-	    for (int i=0; hit && i<n; i++, hit>>=1) {
-	        if (hit & 1) _nest(xt[i]);
-	    }
-	};
-	U16 hx = N4Intr::hits();
-	if (!hx) return;
-
-    S16 *sp0 = sp;                       		/// * keep stack pointers
-    U16 *rp0 = rp;
-	srv(hx & 0xff, N4Intr::t_idx, N4Intr::t_xt);
-	srv(hx >> 8,   3,             N4Intr::p_xt);
-    sp = sp0;                            		/// * restore stack pointers
-    rp = rp0;
+void serv_isr() {
+	U16 xt = N4Intr::isr();
+	if (xt) _nest(xt);
 }
 ///
 ///> virtual machine execute single step (outer interpreter)
@@ -293,8 +253,7 @@ void isr() {
 ///
 void outer()
 {
-    if (is_tib_empty()) _ok();                   ///> console ok prompt
-
+    ok();                                        ///> console ok prompt if tib is empty
     U8  *tkn = get_token();                      ///> get a token from console
     U16 tmp;                                     /// * word address or numeric value
     switch (N4Asm::parse(tkn, &tmp, 1)) {        ///> parse action from token (keep opcode in tmp)
@@ -303,9 +262,9 @@ void outer()
         case 0: N4Asm::compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
         case 1: N4Asm::variable();      break;   /// * VAR, create new variable
         case 2: N4Asm::constant(POP()); break;   /// * CST, create new constant
-        case 3: N4Intr::add_pci(                 /// * PCI, create a pin change interrupt handler
+        case 3: N4Intr::add_pcisr(               /// * PCI, create a pin change interrupt handler
                 POP(), N4Asm::query()); break;
-        case 4: N4Intr::add_timer(               /// * TMR, create a timer interrupt handler
+        case 4: N4Intr::add_tmisr(               /// * TMR, create a timer interrupt handler
                 POP(), N4Asm::query()); break;   /// * period in 0.1 sec
         case 5: N4Asm::forget();        break;   /// * FGT, rollback word created
         case 6: _dump(POP(), POP());    break;   /// * DMP, memory dump
@@ -319,6 +278,7 @@ void outer()
     case TKN_WRD: _nest(tmp + 2 + 3);   break;   ///>> execute colon word (user defined)
     case TKN_PRM: _invoke((U8)tmp);     break;   ///>> execute primitive built-in word,
     case TKN_NUM: PUSH(tmp);            break;   ///>> push a number (literal) to stack top,
+    case TKN_EXT:                                ///>> extended words, not implemented yet
     default:                                     ///>> or, error (unknown action)
         show("?\n");
     }

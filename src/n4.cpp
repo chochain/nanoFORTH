@@ -4,53 +4,53 @@
  *
  * Revision History: see tail of this file
  */
-#include "nanoforth_vm.h"
+#include "n4_vm.h"
 //
 // user function linked-list
 //
-n4_tptr NanoForth::_n4tsk{ NULL };                       ///< initialize task linked-list (static member)
+n4_fptr NanoForth::_n4fp{ NULL };                       ///< initialize task linked-list (static member)
 ///
 /// @return
 ///   0 - if all allocation are OK<br>
 ///   1 - any allocation failure
 ///
-int NanoForth::begin(Stream &io, U8 ucase, U16 dic_sz, U16 stk_sz)
-{
-	U16 msz = dic_sz + stk_sz;                           ///< total RAM size for Forth core
-    _mem  = (U8*)malloc(msz);                            /// * allocate Forth memory block
-    if (!_mem) return -1;
-
-    N4VM::setup(io, ucase, _mem, dic_sz, stk_sz);   	 /// * create Virtual Machine
-#if ARDUINO
-    N4VM::meminfo();                                     // display detailed pointers
-#else
-    log("MEM=$");   logx(msz);                           // forth memory block
-    log("[DIC=$");  logx(dic_sz);                        // dictionary size
-    log(",STK=$");  logx(stk_sz);                        // stack size
-    log("]+TIB\n");
-#endif // ARDUINO
-
-    return 0;
-}
 ///
 ///> add new (user defined) hardware task to linked-list
 ///
-void NanoForth::add_task(void (*ufunc)(n4_tptr))
+void NanoForth::add_func(void (*ufunc)(n4_fptr))
 {
-    n4_tptr tp = (n4_tptr)malloc(sizeof(n4_task));
+    static int api_id = 0;
+    n4_fptr fp = (n4_fptr)malloc(sizeof(n4_func));
 
-    tp->func = ufunc;   /// * assign user function
-    tp->ci   = 0;       /// * reset case index
-    tp->next = _n4tsk;  /// * push into linked-list
-    _n4tsk   = tp;      /// * reset head
+    fp->id   = api_id++;      /// * reset case index
+    fp->func = ufunc;         /// * assign user function
+    fp->next = _n4fp;         /// * push into linked-list
+    _n4fp    = fp;            /// * reset head
+}
+///
+///> n4 VM init proxy
+///
+void NanoForth::setup(Stream &io, U8 ucase)
+{
+    N4VM::setup(io, ucase);   /// * create Virtual Machine
 }
 ///
 ///> n4 execute one line of commands from input buffer
 ///
 void NanoForth::exec()
 {
-    N4VM::outer();      /// * step through commands from input buffer
-    yield();            /// * give some cycles to user defined tasks
+    N4VM::outer();            /// * step through commands from input buffer
+    yield();                  /// * give some cycles to user defined tasks
+}
+
+void NanoForth::api(U16 id)
+{
+    for (n4_fptr fp=_n4fp; fp; fp=fp->next) {
+        if (fp->id!=id) {
+            fp->func(fp);
+            break;
+        }
+    }
 }
 ///
 ///> n4 yield, execute one round of user hardware tasks
@@ -59,13 +59,7 @@ void NanoForth::exec()
 ///
 void NanoForth::yield()
 {
-	static U16 n = 0;
-	if (++n < ISR_PERIOD) return;              /// * tick divider, so VM gets more time
-	n = 0;
-	N4VM::isr();                               /// * service hardware interrupts
-    for (n4_tptr tp=_n4tsk; tp; tp=tp->next) { /// * follow task linked list
-        tp->func(tp);                          /// * execute task function once
-    }
+	N4VM::serv_isr();                          /// * service hardware interrupts
 }
 ///
 ///> aka Arduino delay(), yield to hardware context while waiting
@@ -78,14 +72,18 @@ void NanoForth::wait(U32 ms)
 //
 // for Eclipse debugging
 //
-#if !ARDUINO
+#if ARDUINO
+NanoForth _n4;
+void n4_setup() { _n4.setup(); }
+void n4_run()   { _n4.exec();  }
+#else // !ARDUINO
 #include <stdio.h>
 int main(int argc, char **argv)
 {
     setvbuf(stdout, NULL, _IONBF, 0);       // autoflush (turn STDOUT buffering off)
 
     NanoForth n4;
-    n4.begin();
+    n4.setup();
     while (1) {
     	n4.exec();
     }

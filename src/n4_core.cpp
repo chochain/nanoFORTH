@@ -3,7 +3,7 @@
  * @brief nanoForth Core Utilities
  *        - low level memory and IO management
  */
-#include "nanoforth_core.h"
+#include "n4_core.h"
 
 #if !ARDUINO
 int  Serial;           				     ///< fake serial interface
@@ -11,32 +11,52 @@ int  Serial;           				     ///< fake serial interface
 
 namespace N4Core {
 ///
-///@name VM static variables
+///@name MMU controls
 ///@{
-Stream *io    { &Serial };                     ///< default to Arduino Serial Monitor
 U8     *dic    { NULL };                       ///< base of dictionary
 U16    *rp     { NULL };                       ///< base of return stack
 S16    *sp     { NULL };                       ///< top of data stack
 U8     *tib    { NULL };                       ///< base of terminal input buffer
-U8     trc     { 0 };                          ///< tracing flag
 ///@}
 ///@name IO controls
 ///@{
+Stream  *io    { &Serial };                    ///< default to Arduino Serial Monitor
+U8      trc    { 0 };                          ///< tracing flag
 U8      _hex   { 0 };                          ///< numeric radix for display
 U8      _empty { 1 };                          ///< empty flag for terminal input buffer
 U8      _ucase { 1 };                          ///< empty flag for terminal input buffer
-
-void set_mem(U8 *mem, U16 msz, U16 ssz) {
-    dic = mem;                                 /// * start of dictionary
-    rp  = (U16*)(mem+msz);                     /// * grows toward sp
-    sp  = (S16*)(mem+msz+ssz);                 /// * grows toward 0
-    tib = (U8*)sp;                             /// * grows toward max
+///@}
+///
+void init_mem() {
+    U16 sz = N4_DIC_SZ + N4_STK_SZ + N4_TIB_SZ;///< core memory block
+    dic = (U8*)malloc(sz);                     /// * allocate Forth memory block
+    tib = dic + N4_DIC_SZ + N4_STK_SZ;         /// * grows N4_TIB_SZ
 }
 void set_io(Stream *s)  { io   = s; }          ///< initialize or redirect IO stream
 void set_hex(U8 f)      { _hex = f; }          ///< enable/disable hex numeric radix
 void set_ucase(U8 uc)   { _ucase = uc; }       ///< set case sensitiveness
 char uc(char c)      {                         ///< upper case for case-insensitive matching
     return (_ucase && (c>='A')) ? c&0x5f : c;
+}
+///
+///> show system memory allocation info
+///
+void memstat()
+{
+#if ARDUINO && TRC_LEVEL > 0
+    S16 bsz = (S16)((U8*)&bsz - tib);                        // free for TIB in bytes
+    show("mem=");    d_ptr(dic);
+    show("[dic=$");  d_adr(N4_DIC_SZ);
+    show("|stk=$");  d_adr(N4_STK_SZ);
+    show("|tib=$");  d_adr(N4_TIB_SZ);
+    show("] auto="); d_num((U16)((U8*)&bsz - &tib[N4_TIB_SZ]));
+#else
+    log("MEM=$");    logx(N4_DIC_SZ + N4_STK_SZ + N4_TIB_SZ); // forth memory block
+    log("[DIC=$");   logx(N4_DIC_SZ);                         // dictionary size
+    log("|STK=$");   logx(N4_STK_SZ);                         // stack size
+    log("|TIB=$");   logx(N4_TIB_SZ);
+#endif // ARDUINO
+    show("]\n");
 }
 ///@}
 ///@name Console IO Functions with Cooperative Threading support
@@ -118,13 +138,6 @@ U8 number(U8 *str, S16 *num)
     return 1;
 }
 ///
-///> check whether token available in input buffer
-///
-U8 is_tib_empty()
-{
-    return _empty;
-}
-///
 ///> clear terminal input buffer
 ///
 void clear_tib() {
@@ -159,6 +172,27 @@ void _console_input()
         else *p++ = c;
     }
     _empty = (p==tib);
+}
+///
+///> display OK prompt if input buffer is empty
+///
+U8 ok()
+{
+	if (_empty) {
+		///
+		///> console prompt with stack dump
+		///
+		S16 *s0 = (S16*)tib;                 /// * fetch top of heap
+	    if (sp > s0) {                       /// * check stack overflow
+	        show("OVF!\n");
+	        sp = s0;                         // reset to top of stack block
+	    }
+	    for (S16 *p=s0-1; p >= sp; p--) {    /// * dump stack content
+	        d_num(*p); d_chr('_');
+	    }
+	    show("ok");                          /// * user input prompt
+	}
+    return _empty;
 }
 ///
 ///> capture a token from console input buffer

@@ -3,10 +3,17 @@
  * @brief nanoForth Core Utilities
  *        + memory and IO helper functions
  */
-#ifndef __SRC_NANOFORTH_CORE_H
-#define __SRC_NANOFORTH_CORE_H
-#include "nanoforth.h"
-
+#ifndef __SRC_N4_CORE_H
+#define __SRC_N4_CORE_H
+#include "n4.h"
+///
+///@name Default Heap sizing
+///@{
+constexpr U16 N4_DIC_SZ = 0x400;  /**< default dictionary size             */
+constexpr U16 N4_STK_SZ = 0x80;   /**< default parameter/return stack size */
+constexpr U16 N4_TIB_SZ = 0x80;
+///@}
+///
 #if ARDUINO
 #define show(s)      { io->print(F(s)); io->flush(); }
 #else
@@ -38,7 +45,9 @@ namespace N4Core
     extern U8     *tib;             ///< base of terminal input buffer
     extern U8     trc;              ///< tracing flag
 
-    void set_mem(U8 *mem, U16 msz, U16 ssz);
+    void init_mem();                ///< initialize MMU
+    void memstat();                 ///< display MMU statistics
+
     void set_io(Stream *s);         ///< initialize or redirect IO stream
     void set_hex(U8 f);             ///< enable/disable hex numeric radix
     void set_ucase(U8 uc);          ///< set case sensitiveness
@@ -69,8 +78,8 @@ namespace N4Core
     ///
     ///@name Input buffer Functions
     ///@{
-    U8   is_tib_empty();            ///< check whether input buffer is empty
     void clear_tib();               ///< reset input buffer
+    U8   ok();                      ///< check whether input buffer is empty
     U8   *get_token(bool rst=false);///< get a token from console input
     U8   number(                    ///< process a literal from string given
         U8 *tkn,                    ///< token string of a number
@@ -86,4 +95,4 @@ namespace N4Core
         );
     ///@}
 };
-#endif //__SRC_NANOFORTH_CORE_H
+#endif //__SRC_N4_CORE_H

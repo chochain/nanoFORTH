@@ -1,5 +1,5 @@
 /**
- * @file nanoforth_asm.cpp
+ * @file
  * @brief nanoForth Assmebler implementation
  *
  * ####Assembler Memory Map:
@@ -10,14 +10,14 @@
  *       +-dic-->     +-->sp  rp<--+
  * @endcode
  */
-#include "nanoforth_asm.h"
+#include "n4_asm.h"
 #if ARDUINO
 #include <EEPROM.h>
 #else
 #include "mockrom.h"
 #endif //ARDUINO
 
-#include "nanoforth_core.h"
+#include "n4_core.h"
 using namespace N4Core;                       /// * make utilities available
 
 ///
@@ -34,18 +34,18 @@ using namespace N4Core;                       /// * make utilities available
 ///
 ///@{
 PROGMEM const char CMD[] = "\x09" \
-    ":  " "VAR" "CST" "PCI" "TMR" "FGT" "DMP" "RST" "BYE";
+    ":  " "VAR" "CST" "PCI" "TMI" "FGT" "DMP" "RST" "BYE";
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
     "NXT";
-PROGMEM const char PRM[] = "\x39" \
+PROGMEM const char PRM[] = "\x3a" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
     "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " ">  " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "SEX" "TRC" \
     "CLK" "D+ " "D- " "DNG" "ABS" "HEX" "DEC" "MAX" "MIN" "DLY" \
-	"IN " "AIN" "OUT" "PWM" "PIN" "TME" "PCE";
+	"IN " "AIN" "OUT" "PWM" "PIN" "TME" "PCE" "API";
 
 PROGMEM const char PMX[] = "\x3" \
     "I  " "FOR" "NXT";
@@ -78,7 +78,7 @@ constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
 constexpr U16 N4_SIG  = (((U16)'N'<<8)+(U16)'4');  ///< EEPROM signature
 constexpr U16 N4_AUTO = N4_SIG | 0x8080;           ///< EEPROM auto-run signature
 constexpr U16 ROM_HDR = 6;                         ///< EEPROM header size
-constexpr U8  WORDS_PER_ROW = 20;                  ///< words per row when showing dictionary
+constexpr U8  WORDS_PER_ROW = 16;                  ///< words per row when showing dictionary
 
 namespace N4Asm {
 
@@ -94,7 +94,7 @@ U8  tab = 0;                  		///< tracing indentation counter
 ///
 U8 _find(U8 *tkn, U16 *adr)
 {
-    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {
+    for (U8 *p=last, *ex=PTR(LFA_X); p!=ex; p=PTR(GET16(p))) {
         if (uc(p[2])==uc(tkn[0]) &&
             uc(p[3])==uc(tkn[1]) &&
             (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
@@ -355,6 +355,7 @@ void compile(U16 *rp0)
                 SET16(here, tmp);
             }
             break;
+        case TKN_EXT:                       ///>> extended words, not implemented yet
         default:                            ///>> then, token type not found
             show("??  ");
             last = l0;                      /// * restore last, here pointers
@@ -410,7 +411,7 @@ void words()
 {
     U8  wrp = WORDS_PER_ROW >> (trc ? 1 : 0);                 ///> wraping width
     U16 n   = 0;
-    for (U8 *p=last; p!=PTR(LFA_X); p=PTR(GET16(p))) {        /// **from last, loop through dictionary**
+    for (U8 *p=last, *ex=PTR(LFA_X); p!=ex; p=PTR(GET16(p))) {/// **from last, loop through dictionary**
         d_chr(n++%wrp ? ' ' : '\n');
         if (trc) { d_adr(IDX(p)); d_chr(':'); }               ///>> optionally show address
         d_chr(p[2]); d_chr(p[3]); d_chr(p[4]);                ///>> 3-char name
