@@ -46,8 +46,8 @@ void memstat()
 #if ARDUINO && TRC_LEVEL > 0
     S16 bsz = (S16)((U8*)&bsz - tib);                        // free for TIB in bytes
     show("mem=");    d_ptr(dic);
-    show("[dic=$");  d_adr((U16)((U8*)rp - dic));
-    show("|stk=$");  d_adr((U16)((U8*)sp - (U8*)rp));
+    show("[dic=$");  d_adr(N4_DIC_SZ);
+    show("|stk=$");  d_adr(N4_STK_SZ);
     show("|tib=$");  d_adr(N4_TIB_SZ);
     show("] auto="); d_num((U16)((U8*)&bsz - &tib[N4_TIB_SZ]));
 #else
