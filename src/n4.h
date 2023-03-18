@@ -23,7 +23,8 @@
 
 #define APP_NAME          "nanoForth "
 #define APP_VERSION       "2.0 "
-#define TRC_LEVEL         1       /* tracing verbosity level        */
+#define TRC_LEVEL         1       /**< tracing verbosity level      */
+#define T4_API_SZ         8       /**< C API function pointer slots */
 
 ///@name Arduino Console Output Support
 ///@{
@@ -61,21 +62,14 @@ typedef uint16_t     U16;         ///< 16-bit unsigned integer, for return stack
 typedef int16_t      S16;         ///< 16-bit signed integer, for general numbers
 typedef uint32_t     U32;         ///< 32-bit unsigned integer, for millis()
 typedef int32_t      S32;         ///< 32-bit signed integer
+typedef void (*FPTR)();           ///< function pointer
 ///@}
-///
-/// nanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
-///
-typedef struct n4_func {
-    U16  id;                      ///< protothread case index
-    void (*func)(n4_func*);       ///< function pointer
-    n4_func *next;                ///< next item in linked-list (root=0)
-} *n4_fptr;
 ///
 /// nanoForth main control object (with static members that support multi-threading)
 ///
 class NanoForth
 {
-    static n4_fptr _n4fp;         ///< user function linked-list
+	static FPTR fp[T4_API_SZ];    ///< C API function pointer slots
 
 public:
     void setup(
@@ -87,12 +81,13 @@ public:
     //
     // protothreading support
     //
-    static void add_func(         ///< add the user function to NanoForth task manager
-        void (*ufunc)(n4_fptr)    ///< user task pointer to be added
+    static void add_api(          ///< add the user function to NanoForth task manager
+    	int  i,                   ///< index of function pointer slots
+        void (*fp)()              ///< user function pointer to be added
         );
     static void yield();          ///< nanoForth yield to user tasks
     static void wait(U32 ms);     ///< pause NanoForth thread for ms microseconds, yield to user tasks
-    static void api(U16 id);      ///< C API interface
+    static void call_api(U16 id); ///< call C API interface
 };
 
 #endif // __SRC_N4_H
