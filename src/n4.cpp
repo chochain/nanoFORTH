@@ -5,27 +5,14 @@
  * Revision History: see tail of this file
  */
 #include "n4_vm.h"
-//
-// user function linked-list
-//
-n4_fptr NanoForth::_n4fp{ NULL };                       ///< initialize task linked-list (static member)
-///
-/// @return
-///   0 - if all allocation are OK<br>
-///   1 - any allocation failure
-///
+
+FPTR NanoForth::fp[] = { NULL };
 ///
 ///> add new (user defined) hardware task to linked-list
 ///
-void NanoForth::add_func(void (*ufunc)(n4_fptr))
+void NanoForth::add_api(int i, FPTR ufunc)
 {
-    static int api_id = 0;
-    n4_fptr fp = (n4_fptr)malloc(sizeof(n4_func));
-
-    fp->id   = api_id++;      /// * reset case index
-    fp->func = ufunc;         /// * assign user function
-    fp->next = _n4fp;         /// * push into linked-list
-    _n4fp    = fp;            /// * reset head
+	if (i < T4_API_SZ) fp[i] = ufunc;
 }
 ///
 ///> n4 VM init proxy
@@ -43,14 +30,9 @@ void NanoForth::exec()
     yield();                  /// * give some cycles to user defined tasks
 }
 
-void NanoForth::api(U16 id)
+void NanoForth::call_api(U16 id)
 {
-    for (n4_fptr fp=_n4fp; fp; fp=fp->next) {
-        if (fp->id!=id) {
-            fp->func(fp);
-            break;
-        }
-    }
+	if (id < T4_API_SZ) fp[id]();
 }
 ///
 ///> n4 yield, execute one round of user hardware tasks
@@ -69,15 +51,29 @@ void NanoForth::wait(U32 ms)
     U32 t = millis() + ms;
     while (millis()<t) yield();
 }
-//
-// for Eclipse debugging
-//
+///
+/// VM proxy functions
+///
+void n4_push(int v) { N4VM::push(v);      }
+int  n4_pop()       { return N4VM::pop(); }
+///
+/// for Eclipse debugging
+///
 #if ARDUINO
-NanoForth _n4;
-void n4_setup(const char *code) { _n4.setup(code); }
-void n4_run()                   { _n4.exec();      }
+NanoForth _n4;                   ///< singleton instance
+
+void n4_api(int i, void (*fp)()) { _n4.add_api(i, fp); }
+void n4_setup(const char *code)  { _n4.setup(code);    }
+void n4_run()                    { _n4.exec();         }
 #else // !ARDUINO
 #include <stdio.h>
+void test1() {
+	int a = n4_pop();
+	int b = n4_pop();
+
+	n4_push(a + b);
+}
+
 int main(int argc, char **argv)
 {
 	const char *code = "wrd\n123 456\n+\n";
@@ -86,6 +82,7 @@ int main(int argc, char **argv)
 
     NanoForth n4;
     n4.setup(code);
+    n4.add_api(0, test1);
     while (1) {
     	n4.exec();
     }
