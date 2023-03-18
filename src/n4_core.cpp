@@ -16,12 +16,13 @@ namespace N4Core {
 U8     *dic    { NULL };                       ///< base of dictionary
 U16    *rp     { NULL };                       ///< base of return stack
 S16    *sp     { NULL };                       ///< top of data stack
-U8     *tib    { NULL };                       ///< base of terminal input buffer
 ///@}
 ///@name IO controls
 ///@{
 Stream  *io    { &Serial };                    ///< default to Arduino Serial Monitor
 U8      trc    { 0 };                          ///< tracing flag
+char    *_pre  { NULL };                       ///< preload Forth code
+U8      *_tib  { NULL };                       ///< base of terminal input buffer
 U8      _hex   { 0 };                          ///< numeric radix for display
 U8      _empty { 1 };                          ///< empty flag for terminal input buffer
 U8      _ucase { 1 };                          ///< empty flag for terminal input buffer
@@ -29,9 +30,10 @@ U8      _ucase { 1 };                          ///< empty flag for terminal inpu
 ///
 void init_mem() {
     U16 sz = N4_DIC_SZ + N4_STK_SZ + N4_TIB_SZ;///< core memory block
-    dic = (U8*)malloc(sz);                     /// * allocate Forth memory block
-    tib = dic + N4_DIC_SZ + N4_STK_SZ;         /// * grows N4_TIB_SZ
+    dic  = (U8*)malloc(sz);                    /// * allocate Forth memory block
+    _tib = dic + N4_DIC_SZ + N4_STK_SZ;        /// * grows N4_TIB_SZ
 }
+void set_pre(const char *code) { _pre = (char*)code; }
 void set_io(Stream *s)  { io   = s; }          ///< initialize or redirect IO stream
 void set_hex(U8 f)      { _hex = f; }          ///< enable/disable hex numeric radix
 void set_ucase(U8 uc)   { _ucase = uc; }       ///< set case sensitiveness
@@ -44,12 +46,12 @@ char uc(char c)      {                         ///< upper case for case-insensit
 void memstat()
 {
 #if ARDUINO && TRC_LEVEL > 0
-    S16 bsz = (S16)((U8*)&bsz - tib);                        // free for TIB in bytes
+    S16 bsz = (S16)((U8*)&bsz - _tib);                        // free for TIB in bytes
     show("mem=");    d_ptr(dic);
     show("[dic=$");  d_adr(N4_DIC_SZ);
     show("|stk=$");  d_adr(N4_STK_SZ);
     show("|tib=$");  d_adr(N4_TIB_SZ);
-    show("] auto="); d_num((U16)((U8*)&bsz - &tib[N4_TIB_SZ]));
+    show("] auto="); d_num((U16)((U8*)&bsz - &_tib[N4_TIB_SZ]));
 #else
     log("MEM=$");    logx(N4_DIC_SZ + N4_STK_SZ + N4_TIB_SZ); // forth memory block
     log("[DIC=$");   logx(N4_DIC_SZ);                         // dictionary size
@@ -146,20 +148,30 @@ void clear_tib() {
 ///
 ///> fill input buffer from console char-by-char til CR or LF hit
 ///
+char vkey() {
+	static char *p = _pre;                   /// capture preload Forth code
+#if ARDUINO
+    char c = pgm_read_byte(p);
+#else
+    char c = *p;
+#endif // ARDUINO
+	return c ? (p++, c) : key();                /// feed key() after preload exhausted
+}
+
 void _console_input()
 {
-    U8 *p = tib;
+    U8 *p = _tib;
     d_chr('\n');
     for (;;) {
-        char c = key();                      /// * get one char from input stream
+        char c = vkey();                     /// * get one char from input stream
         if (c=='\r' || c=='\n') {            /// * split on RETURN
-            if (p > tib) {
+            if (p > _tib) {
                 *p     = ' ';                /// * pad extra space (in case word is 1-char)
                 *(p+1) = 0;                  /// * terminate input string
                 break;                       /// * skip empty token
             }
         }
-        else if (c=='\b' && p > tib) {       /// * backspace
+        else if (c=='\b' && p > _tib) {      /// * backspace
             *(--p) = ' ';
             d_chr(' ');
             d_chr('\b');
@@ -171,7 +183,7 @@ void _console_input()
         }
         else *p++ = c;
     }
-    _empty = (p==tib);
+    _empty = (p==_tib);
 }
 ///
 ///> display OK prompt if input buffer is empty
@@ -182,7 +194,7 @@ U8 ok()
 		///
 		///> console prompt with stack dump
 		///
-		S16 *s0 = (S16*)tib;                 /// * fetch top of heap
+		S16 *s0 = (S16*)_tib;                /// * fetch top of heap
 	    if (sp > s0) {                       /// * check stack overflow
 	        show("OVF!\n");
 	        sp = s0;                         // reset to top of stack block
@@ -199,10 +211,10 @@ U8 ok()
 ///
 U8 *get_token(bool rst)
 {
-    static U8 *tp = tib;                     ///> token pointer to input buffer
+    static U8 *tp = _tib;                    ///> token pointer to input buffer
     static U8 dq  = 0;                       ///> dot_string flag
 
-    if (rst) { tp = tib; _empty = 1; return 0; }  /// * reset TIB for new input
+    if (rst) { tp = _tib; _empty = 1; return 0; }  /// * reset TIB for new input
     while (_empty || *tp==0 || *tp=='\\') {
         _console_input();                    ///>  read from console (with trailing blank)
         while (*tp==' ') tp++;               ///>  skip leading spaces
@@ -224,7 +236,7 @@ U8 *get_token(bool rst)
         }
     }
     while (*tp==' ') tp++;                   /// * skip spaces, advance pointer to next token
-    if (*tp==0 || *tp=='\\') { tp = tib; _empty = 1; }
+    if (*tp==0 || *tp=='\\') { tp = _tib; _empty = 1; }
 
     dq  = (*p=='.' && *(p+1)=='"');          /// * flag token was dot_string
 
