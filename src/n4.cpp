@@ -30,9 +30,9 @@ void NanoForth::add_func(void (*ufunc)(n4_fptr))
 ///
 ///> n4 VM init proxy
 ///
-void NanoForth::setup(const char *code, U8 ucase, Stream &io)
+void NanoForth::setup(const char *code, Stream &io, U8 ucase)
 {
-    N4VM::setup(code, ucase, io); /// * create Virtual Machine
+    N4VM::setup(code, io, ucase); /// * create Virtual Machine
 }
 ///
 ///> n4 execute one line of commands from input buffer

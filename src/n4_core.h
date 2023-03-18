@@ -46,7 +46,7 @@ namespace N4Core
     void init_mem();                ///< initialize MMU
     void memstat();                 ///< display MMU statistics
 
-    void set_pre(const char *code); ///< set preload Forth code
+    void set_pre(const char *code); ///< set embedded Forth code
     void set_io(Stream *s);         ///< initialize or redirect IO stream
     void set_hex(U8 f);             ///< enable/disable hex numeric radix
     void set_ucase(U8 uc);          ///< set case sensitiveness

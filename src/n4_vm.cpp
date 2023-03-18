@@ -227,14 +227,14 @@ void _dump(U16 p0, U16 sz0)
 ///
 ///> constructor and initializer
 ///
-void setup(const char *code, U8 ucase, Stream &io)
+    void setup(const char *code, Stream &io, U8 ucase)
 {
     init_mem();
     memstat();               ///< display VM system info
 
-    set_pre(code);           /// * install preload Forth code
-    set_ucase(ucase);        /// * set case sensitiveness
+    set_pre(code);           /// * install embedded Forth code
     set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
+    set_ucase(ucase);        /// * set case sensitiveness
     set_hex(0);              /// * set radix = 10
 
     _init();      			 /// * init VM
