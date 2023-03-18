@@ -30,9 +30,9 @@ void NanoForth::add_func(void (*ufunc)(n4_fptr))
 ///
 ///> n4 VM init proxy
 ///
-void NanoForth::setup(Stream &io, U8 ucase)
+void NanoForth::setup(const char *code, U8 ucase, Stream &io)
 {
-    N4VM::setup(io, ucase);   /// * create Virtual Machine
+    N4VM::setup(code, ucase, io); /// * create Virtual Machine
 }
 ///
 ///> n4 execute one line of commands from input buffer
@@ -74,16 +74,18 @@ void NanoForth::wait(U32 ms)
 //
 #if ARDUINO
 NanoForth _n4;
-void n4_setup() { _n4.setup(); }
-void n4_run()   { _n4.exec();  }
+void n4_setup(const char *code) { _n4.setup(code); }
+void n4_run()                   { _n4.exec();      }
 #else // !ARDUINO
 #include <stdio.h>
 int main(int argc, char **argv)
 {
+	const char *code = "wrd\n123 456\n+\n";
+
     setvbuf(stdout, NULL, _IONBF, 0);       // autoflush (turn STDOUT buffering off)
 
     NanoForth n4;
-    n4.setup();
+    n4.setup(code);
     while (1) {
     	n4.exec();
     }

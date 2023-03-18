@@ -79,8 +79,9 @@ class NanoForth
 
 public:
     void setup(
-        Stream &io=Serial,        ///< iostream which can be redirected to SoftwareSerial
-        U8 ucase=1                ///< case sensitiveness (default: insensitive)
+    	const char *code=0,       ///< preload Forth code
+        U8 ucase=1,               ///< case sensitiveness (default: insensitive)
+        Stream &io=Serial         ///< iostream which can be redirected to SoftwareSerial
         );                        ///< placeholder for extra setup
     void exec();                  ///< nanoForth execute one line of command input
     //
