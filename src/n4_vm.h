@@ -11,6 +11,9 @@
 ///
 namespace N4VM
 {
+	// interface
+	void push(int v);
+	int  pop();
     // nanoForth Virtual Machine constructor
     void setup(
     	const char *code,     ///< preload Forth code

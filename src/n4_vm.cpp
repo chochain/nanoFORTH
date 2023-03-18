@@ -25,7 +25,7 @@ using namespace N4Core;                             /// * VM built with core uni
 #define TOS            (*sp)                        /**< pointer to top of current stack     */
 #define SS(i)          (*(sp+(i)))                  /**< pointer to the nth on stack         */
 #define PUSH(v)        (*(--sp)=(S16)(v))           /**< push v onto parameter stack         */
-#define POP()          (sp<SP0 ? *sp++ : 0)         /**< pop value off parameter stack       */
+#define POP()          (*sp++)                      /**< pop value off parameter stack       */
 #define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack      */
 #define RPOP()         (*(--rp))                    /**< pop address from return stack       */
 ///@}
@@ -34,7 +34,6 @@ using namespace N4Core;                             /// * VM built with core uni
 #define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
 #define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
 ///@}
-
 namespace N4VM {
 ///
 ///> invoke a built-in opcode
@@ -129,7 +128,7 @@ void _invoke(U8 op)
     case 54: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
     case 55: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
     case 56: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
-    case 57: NanoForth::api(POP());                   break; // API
+    case 57: NanoForth::call_api(POP());              break; // API
     case 58: case 59:                                 break; // available
     case I_I:   PUSH(*(rp-1));                        break; // I
     case I_FOR: RPUSH(POP());                         break; // FOR
@@ -227,7 +226,7 @@ void _dump(U16 p0, U16 sz0)
 ///
 ///> constructor and initializer
 ///
-    void setup(const char *code, Stream &io, U8 ucase)
+void setup(const char *code, Stream &io, U8 ucase)
 {
     init_mem();
     memstat();               ///< display VM system info
@@ -239,6 +238,11 @@ void _dump(U16 p0, U16 sz0)
 
     _init();      			 /// * init VM
 }
+///
+///> VM proxy functions
+///
+void push(int v) { PUSH(v);      }
+int  pop()       { return POP(); }
 ///
 ///> virtual machine interrupt service routine
 ///
@@ -284,5 +288,4 @@ void outer()
         show("?\n");
     }
 }
-
 } // namespace N4VM
