@@ -1,5 +1,5 @@
 /**
- *  @file examples/0_blink/0_blink.ino
+ *  @file
  *  @brief nanoFORTH example - Blink pin 13
  *
  *  Our first Sketch - demostrates nanoFORTH support multi-tasking
@@ -14,23 +14,22 @@
  *  Once compiled/uploaded, you should see
  *  + some nanoFORTH init system info and the ok prompt
  *  + in Serial Monitor input, type WRD and hit <return>
- *  + enter the following 
- *    > : xx 13 in 1 xor 13 out ; \ toggle built-in LED
- *    > 50 xx tmi                 \ tick xx every 500ms = 50x10ms
- *    > 1 tme                     \ enable timer interrupt
  */
-#include <nanoforth.h>
+#include <nanoFORTH.h>
+
+const char code[] PROGMEM =        ///< define preload Forth code here
+    ": xx 13 in 1 xor 13 out ;\n"  // * define word xx to toggle built-in LED (pin 13)
+    "50 tmi xx\n"                  // * tick xx every 50x10ms=500ms
+    "1 tme\n";                     // * turn on timer interrupt
 
 void setup() {
-    Serial.begin(115200);         ///< init Serial IO, make sure it is set to 'Both BL & CR' to capture input
+    Serial.begin(115200);          ///< init Serial stream
 
     pinMode(LED_BUILTIN, OUTPUT);
     
-    n4_setup();
+    n4_setup(code);
 }
 
 void loop() {
     n4_run();                     ///< execute NanoForth instance
 }
-
-
