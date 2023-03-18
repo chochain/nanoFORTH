@@ -13,13 +13,12 @@ constexpr U16 N4_DIC_SZ = 0x400;  /**< default dictionary size             */
 constexpr U16 N4_STK_SZ = 0x80;   /**< default parameter/return stack size */
 constexpr U16 N4_TIB_SZ = 0x80;
 ///@}
-///
 #if ARDUINO
 #define show(s)      { io->print(F(s)); io->flush(); }
 #else
 #define show(s)      log(s)
 #endif // ARDUINO
-
+///
 ///@name Memory Access Ops
 ///
 /// @def SET8
@@ -42,12 +41,12 @@ namespace N4Core
     extern U8     *dic;             ///< base of dictionary
     extern U16    *rp;				///< base of return stack
     extern S16    *sp;              ///< top of data stack
-    extern U8     *tib;             ///< base of terminal input buffer
     extern U8     trc;              ///< tracing flag
 
     void init_mem();                ///< initialize MMU
     void memstat();                 ///< display MMU statistics
 
+    void set_pre(const char *code); ///< set preload Forth code
     void set_io(Stream *s);         ///< initialize or redirect IO stream
     void set_hex(U8 f);             ///< enable/disable hex numeric radix
     void set_ucase(U8 uc);          ///< set case sensitiveness
@@ -55,6 +54,7 @@ namespace N4Core
     ///
     ///@name dot_* for Console Input/Output Routines
     ///@{
+
     char key();                     ///< Arduino's Serial.getchar(), yield to user tasks when waiting
     void d_chr(char c);             ///< print a char to console
     void d_adr(U16 a);              ///< print a 12-bit address
