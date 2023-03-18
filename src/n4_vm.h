@@ -13,8 +13,9 @@ namespace N4VM
 {
     // nanoForth Virtual Machine constructor
     void setup(
-        Stream &io,           ///< IO stream
-        U8 ucase              ///< case sensitiveness
+    	const char *code,     ///< preload Forth code
+        U8 ucase,             ///< case sensitiveness
+        Stream &io            ///< IO stream
         );
     void outer();             ///< outer-interpreter
     void serv_isr();          ///< interrupt service routine

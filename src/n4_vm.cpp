@@ -21,7 +21,7 @@ using namespace N4Core;                             /// * VM built with core uni
 ///
 ///@name Data Stack and Return Stack Ops
 ///@{
-#define SP0            ((S16*)tib)                  /**< top of parameter stack              */
+#define SP0            ((S16*)&dic[N4_DIC_SZ + N4_STK_SZ])
 #define TOS            (*sp)                        /**< pointer to top of current stack     */
 #define SS(i)          (*(sp+(i)))                  /**< pointer to the nth on stack         */
 #define PUSH(v)        (*(--sp)=(S16)(v))           /**< push v onto parameter stack         */
@@ -227,13 +227,14 @@ void _dump(U16 p0, U16 sz0)
 ///
 ///> constructor and initializer
 ///
-void setup(Stream &io, U8 ucase)
+void setup(const char *code, U8 ucase, Stream &io)
 {
     init_mem();
     memstat();               ///< display VM system info
 
-    set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
+    set_pre(code);           /// * install preload Forth code
     set_ucase(ucase);        /// * set case sensitiveness
+    set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
     set_hex(0);              /// * set radix = 10
 
     _init();      			 /// * init VM
