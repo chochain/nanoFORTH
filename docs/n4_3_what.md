@@ -130,9 +130,8 @@ nanoFORTH handles only integer numbers.
 > |opcode|stack|description|
 > |:--|:--|:--|
 > |VAR|`( -- )`|define a 16-bit variable|
-> |CST|`(w -- )`|define a 16-bit constant|
-> |ALO|`(w -- )`|allocate space on user dictionary (for array allocation)|
-> |CEL|`( -- w)`|get number of byte of a single cell (for allocation)|
+> |VAL|`(w -- )`|define a 16-bit value (i.e. constant)|
+> |ALO|`(w -- )`|allocate extra w bytes on user dictionary (for array allocation)|
 >
 > **Examples**
 >
@@ -140,12 +139,12 @@ nanoFORTH handles only integer numbers.
 > 3 **x** ! ➤ *ok* (store 3 into variable **x**)<br/>
 > **x** @ 5 + ➤ *8_ok* (fetch value of **x** add 5 to it)<br/>
 >
-> 32 CST **N** ⏎ ➤ *ok* (a const **N** is created on user dictionary)<br/>
+> 32 VAL **N** ⏎ ➤ *ok* (a const **N** is created on user dictionary)<br/>
 > **N** 1 + ⏎ ➤ *33_ok*<br/>
 >
-> VAR **z** 3 CEL ALO ⏎ ➤ *ok* (a variable **z** with 3 extra cells allocated, i.e. **z**[0..3])<br/>
-> 5 **z** 2 CEL + ! ⏎ ➤ *ok*  (5 is stored into **z**[2])<br/>
-> **z** 2 CEL + @ ⏎ ➤ *5_ok* (retrieve **z**[2] onto data stack)<br/>
+> VAR **z** 6 ALO ⏎ ➤ *ok* (a variable **z** with 6 extra bytes allocated, i.e. **z**[0..3])<br/>
+> 5 **z** 4 + ! ⏎ ➤ *ok*   (5 is stored into **z**[2])<br/>
+> **z** 4 + @ ⏎ ➤ *5_ok* (retrieve **z**[2] onto data stack)<br/>
 
 ### Console I/O
 > |opcode|stack|description|
@@ -163,6 +162,11 @@ nanoFORTH handles only integer numbers.
 > ➤ *hello!*<br/>
 > ➤ *hello!*<br/>
 > ➤ *hello!ok*
+
+### C API function call
+> |opcode|stack|description|
+> |:--|:--|:--|
+> |API|`( n -- )`|call API by number defined in Arduino sketch|
 
 ### Reset, Debug, and Tracing
 > |opcode|stack|description|
