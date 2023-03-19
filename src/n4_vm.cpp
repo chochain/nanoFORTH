@@ -87,7 +87,7 @@ void _invoke(U8 op)
     case 31: PUSH(RPOP());                break; // R>
     case 32: N4Asm::words();              break; // WRD
     case 33: PUSH(IDX(N4Asm::here));      break; // HRE
-    case 34: PUSH(POP()*sizeof(U16));     break; // CEL
+    case 34: NanoForth::call_api(POP());  break; // API
     case 35: N4Asm::here += POP();        break; // ALO
     case 36: N4Asm::save();               break; // SAV
     case 37: N4Asm::load();               break; // LD
@@ -128,8 +128,7 @@ void _invoke(U8 op)
     case 54: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
     case 55: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
     case 56: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
-    case 57: NanoForth::call_api(POP());              break; // API
-    case 58: case 59:                                 break; // available
+    case 57: case 58: case 59:                        break; // available
     case I_I:   PUSH(*(rp-1));                        break; // I
     case I_FOR: RPUSH(POP());                         break; // FOR
     case I_NXT: /* handled at upper level */          break; // NXT
