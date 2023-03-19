@@ -265,7 +265,7 @@ void outer()
         switch (tmp) {
         case 0: N4Asm::compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
         case 1: N4Asm::variable();      break;   /// * VAR, create new variable
-        case 2: N4Asm::constant(POP()); break;   /// * CST, create new constant
+        case 2: N4Asm::constant(POP()); break;   /// * VAL, create new constant
         case 3: N4Intr::add_pcisr(               /// * PCI, create a pin change interrupt handler
                 POP(), N4Asm::query()); break;
         case 4: N4Intr::add_tmisr(               /// * TMR, create a timer interrupt handler

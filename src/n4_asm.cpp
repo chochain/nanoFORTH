@@ -34,7 +34,7 @@ using namespace N4Core;                       /// * make utilities available
 ///
 ///@{
 PROGMEM const char CMD[] = "\x09" \
-    ":  " "VAR" "CST" "PCI" "TMI" "FGT" "DMP" "RST" "BYE";
+    ":  " "VAR" "VAL" "PCI" "TMI" "FGT" "DMP" "RST" "BYE";
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
