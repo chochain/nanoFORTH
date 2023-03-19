@@ -73,7 +73,7 @@ public:
     void setup(
     	const char *code=0,       ///< preload Forth code
         Stream &io=Serial,        ///< iostream which can be redirected to SoftwareSerial
-        U8 ucase=1                ///< case sensitiveness (default: insensitive)
+        U8 ucase=0                ///< case sensitiveness (default: sensitive)
         );                        ///< placeholder for extra setup
     void exec();                  ///< nanoForth execute one line of command input
     //

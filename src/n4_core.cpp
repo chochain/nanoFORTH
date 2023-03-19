@@ -25,7 +25,7 @@ char    *_pre  { NULL };                       ///< preload Forth code
 U8      *_tib  { NULL };                       ///< base of terminal input buffer
 U8      _hex   { 0 };                          ///< numeric radix for display
 U8      _empty { 1 };                          ///< empty flag for terminal input buffer
-U8      _ucase { 1 };                          ///< empty flag for terminal input buffer
+U8      _ucase { 0 };                          ///< empty flag for terminal input buffer
 ///@}
 ///
 void init_mem() {
