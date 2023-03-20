@@ -127,13 +127,19 @@ void d_name(U8 op, const char *lst, U8 space)
 U8 number(U8 *str, S16 *num)
 {
     S16 n   = 0;
-    U8  neg = (*str=='-') ? (str++, 1)  : 0;  /// * handle negative sign
-    U8  base= _hex ? 16 : 10;                 /// * handle hex number
+    U8  c   = *str;
+    U8  neg = (c=='-') ? (c=*++str, 1)  : 0;              /// * handle negative sign
+    U8  base= c=='$' ? (str++, 16) : (_hex ? 16 : 10);    /// * handle hex number
 
-    for (; *str>='0'; str++) {
-        if (base==10 && *str > '9') return 0;
+    while ((c=*str++) >= '0') {
         n *= base;
-        n += (*str<='9') ? *str-'0' : (*str&0x5f)-'A'+10;
+        if (base==10 && c > '9') return 0;
+        if (c < '9') n += c - '0';
+        else {
+            c &= 0x5f;
+            if (c < 'A' || c > 'F') return 0;
+            n += c - 'A' + 10;
+        }
     }
     *num = neg ? -n : n;
 
