@@ -116,20 +116,18 @@ void _invoke(U8 op)
         TOS   = (S16)HI16(v);
     }                                     break;
     case 44: TOS = abs(TOS);                          break; // ABS
-    case 45: set_hex(1);                              break; // HEX
-    case 46: set_hex(0);                              break; // DEC
-    case 47: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
-    case 48: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
-    case 49: NanoForth::wait((U32)POP());             break; // DLY
-    case 50: PUSH(digitalRead(POP()));                break; // IN
-    case 51: PUSH(analogRead(POP()));                 break; // AIN
-    case 52: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
-    case 53: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
-    case 54: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
-    case 55: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
-    case 56: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
-    case 57: NanoForth::call_api(POP());              break; // API
-    case 58: case 59:                                 break; // available
+    case 45: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
+    case 46: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
+    case 47: NanoForth::wait((U32)POP());             break; // DLY
+    case 48: PUSH(digitalRead(POP()));                break; // IN
+    case 49: PUSH(analogRead(POP()));                 break; // AIN
+    case 50: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
+    case 51: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
+    case 52: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
+    case 53: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
+    case 54: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
+    case 55: NanoForth::call_api(POP());              break; // API
+    /* case 56~59 available */
     case I_I:   PUSH(*(rp-1));                        break; // I
     case I_FOR: RPUSH(POP());                         break; // FOR
     case I_NXT: /* handled at upper level */          break; // NXT
@@ -155,7 +153,7 @@ void _nest(U16 xt)
             a = GET16(pc-1) & ADR_MASK;                   // target address
             switch (ir & JMP_MASK) {                      // get branch opcode
             case OP_CALL:                                 // 0xc0 subroutine call
-                serv_isr();                 	 		  ///> give user task some cycles (800us)
+                serv_isr();                               ///> give user task some cycles (800us)
                 RPUSH(IDX(pc+1));                         // keep next instruction on return stack
                 pc = PTR(a);                              // jump to subroutine till I_RET
                 break;
@@ -179,7 +177,7 @@ void _nest(U16 xt)
                     pc+=2;                                // if (i==0) break loop
                     RPOP();                               // pop off index
                 }
-                serv_isr();                 	 		  ///> give user task some cycles (800us)
+                serv_isr();                               ///> give user task some cycles (800us)
                 break;
             case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
             case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
@@ -236,7 +234,7 @@ void setup(const char *code, Stream &io, U8 ucase)
     set_ucase(ucase);        /// * set case sensitiveness
     set_hex(0);              /// * set radix = 10
 
-    _init();      			 /// * init VM
+    _init();                   /// * init VM
 }
 ///
 ///> VM proxy functions
@@ -247,8 +245,8 @@ int  pop()       { return POP(); }
 ///> virtual machine interrupt service routine
 ///
 void serv_isr() {
-	U16 xt = N4Intr::isr();
-	if (xt) _nest(xt);
+    U16 xt = N4Intr::isr();
+    if (xt) _nest(xt);
 }
 ///
 ///> virtual machine execute single step (outer interpreter)
@@ -269,15 +267,20 @@ void outer()
         case 2: N4Asm::constant(POP()); break;   /// * VAL, create new constant
         case 3: N4Intr::add_pcisr(               /// * PCI, create a pin change interrupt handler
                 POP(), N4Asm::query()); break;
-        case 4: N4Intr::add_tmisr(               /// * TMR, create a timer interrupt handler
-                POP(), N4Asm::query()); break;   /// * period in 0.1 sec
-        case 5: N4Asm::forget();        break;   /// * FGT, rollback word created
-        case 6: _dump(POP(), POP());    break;   /// * DMP, memory dump
-        case 7: _init();                break;   /// * RST, restart the virtual machine (for debugging)
+        case 4:                                  /// * TMR, create a timer interrupt handler
+            tmp = POP();                         ///< tmp = ISR slot#
+            N4Intr::add_tmisr(
+                tmp, POP(),
+                N4Asm::query());        break;        /// * period in multiply of 10ms
+        case 5: set_hex(1);             break;   /// * HEX
+        case 6: set_hex(0);             break;   /// * DEC
+        case 7: N4Asm::forget();        break;   /// * FGT, rollback word created
+        case 8: _dump(POP(), POP());    break;   /// * DMP, memory dump
+        case 9: _init();                break;   /// * RST, restart the virtual machine (for debugging)
 #if ARDUINO
-        case 8: _init();                break;   /// * BYE, restart
+        case 10: _init();               break;   /// * BYE, restart
 #else
-        case 8: exit(0);                break;   /// * BYE, bail to OS
+        case 10: exit(0);               break;   /// * BYE, bail to OS
 #endif // ARDUINO
         }                               break;
     case TKN_WRD: _nest(tmp + 2 + 3);   break;   ///>> execute colon word (user defined)
