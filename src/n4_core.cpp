@@ -134,7 +134,7 @@ U8 number(U8 *str, S16 *num)
     while ((c=*str++) >= '0') {
         n *= base;
         if (base==10 && c > '9') return 0;
-        if (c < '9') n += c - '0';
+        if (c <= '9') n += c - '0';
         else {
             c &= 0x5f;
             if (c < 'A' || c > 'F') return 0;
