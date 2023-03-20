@@ -39,13 +39,13 @@ PROGMEM const char CMD[] = "\x09" \
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
     "NXT";
-PROGMEM const char PRM[] = "\x39" \
+PROGMEM const char PRM[] = "\x3a" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
     "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " ">  " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
-    ">R " "R> " "WRD" "HRE" "API" "ALO" "SAV" "LD " "SEX" "TRC" \
+    ">R " "R> " "WRD" "HRE" "RND" "ALO" "SAV" "LD " "SEX" "TRC" \
     "CLK" "D+ " "D- " "DNG" "ABS" "HEX" "DEC" "MAX" "MIN" "DLY" \
-	"IN " "AIN" "OUT" "PWM" "PIN" "TME" "PCE";
+	"IN " "AIN" "OUT" "PWM" "PIN" "TME" "PCE" "API";
 
 PROGMEM const char PMX[] = "\x3" \
     "I  " "FOR" "NXT";
