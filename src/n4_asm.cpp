@@ -33,19 +33,20 @@ using namespace N4Core;                       /// * make utilities available
 /// @brief loop control opcodes
 ///
 ///@{
-PROGMEM const char CMD[] = "\x09" \
-    ":  " "VAR" "VAL" "PCI" "TMI" "FGT" "DMP" "RST" "BYE";
+PROGMEM const char IMM[] = "\x0b" \
+    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "RST" \
+    "BYE";
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
     "NXT";
-PROGMEM const char PRM[] = "\x3a" \
+PROGMEM const char PRM[] = "\x38" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
     "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " ">  " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
     ">R " "R> " "WRD" "HRE" "RND" "ALO" "SAV" "LD " "SEX" "TRC" \
-    "CLK" "D+ " "D- " "DNG" "ABS" "HEX" "DEC" "MAX" "MIN" "DLY" \
-	"IN " "AIN" "OUT" "PWM" "PIN" "TME" "PCE" "API";
+    "CLK" "D+ " "D- " "DNG" "ABS" "MAX" "MIN" "DLY" "IN " "AIN" \
+    "OUT" "PWM" "PIN" "TME" "PCE" "API";
 
 PROGMEM const char PMX[] = "\x3" \
     "I  " "FOR" "NXT";
@@ -84,7 +85,7 @@ namespace N4Asm {
 
 U8  *last  { NULL };                ///< pointer to last word, for debugging
 U8  *here  { NULL };                ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
-U8  tab = 0;                  		///< tracing indentation counter
+U8  tab = 0;                        ///< tracing indentation counter
 ///
 ///> find colon word address of next input token
 /// @brief search the keyword through colon word linked-list
@@ -182,7 +183,7 @@ void _add_str()
 ///
 void _list_voc(U16 n)
 {
-    const char *lst[] PROGMEM = { CMD, JMP, PRM };      // list of built-in primitives
+    const char *lst[] PROGMEM = { IMM, JMP, PRM };      // list of built-in primitives
     for (U8 i=0; i<3; i++) {
 #if ARDUINO
         U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
@@ -309,7 +310,7 @@ U16 query() {
 N4OP parse(U8 *tkn, U16 *rst, U8 run)
 {
     if (_find(tkn, rst))                 return TKN_WRD; /// * WRD - is a colon word? [lnk(2),name(3)]
-    if (scan(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM - is a immediate word?
+    if (scan(tkn, run ? IMM : JMP, rst)) return TKN_IMM; /// * IMM - is a immediate word?
     if (scan(tkn, PRM, rst))             return TKN_PRM; /// * PRM - is a primitives?
     if (number(tkn, (S16*)rst))          return TKN_NUM; /// * NUM - is a number literal?
     return TKN_ERR;                                      /// * ERR - unknown token
