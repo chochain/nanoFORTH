@@ -72,7 +72,7 @@ void add_tmisr(U16 i, U16 n, U16 xt) {
     t_xt[i]  = xt;                   // ISR xt
     t_cnt[i] = 0;                    // init counter
     t_max[i] = n;                    // period (in 10ms)
-    if (i > t_idx) t_idx = i;        // cache max index
+    if (i >= t_idx) t_idx = i + 1;   // cache max index
     SEI();
 }
 #if !ARDUINO
