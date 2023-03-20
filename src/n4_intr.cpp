@@ -8,19 +8,21 @@
 ///
 namespace N4Intr {
 
-U8  t_idx  { 0 };          ///< timer ISR index
-U16 p_xt[] { 0, 0, 0 };    ///< pin change interrupt vectors
-U16 t_xt[8]; 		       ///< timer interrupt vectors
-U16 t_max[8]; 		       ///< timer CTC top value
+U8  t_idx   = { 0 };       ///< max timer interrupt slot index
+U16 p_xt[3] = { 0, 0, 0 }; ///< pin change interrupt vectors
+U16 t_xt[8];               ///< timer interrupt vectors
+U16 t_max[8];              ///< timer CTC top value
     
 volatile U8  _hits { 0 };  ///< interrupt flags
-volatile U8  t_hit { 0 };  ///< 8-bit for 8 timer ISR
 volatile U8  p_hit { 0 };  ///< pin change interrupt (PORT-B,C,D)
+volatile U8  t_hit { 0 };  ///< 8-bit for 8 timer ISR
 volatile U16 t_cnt[8];     ///< timer CTC counters
 
 void reset() {
     CLI();
     t_idx = t_hit = p_hit = 0;
+    for (int i=0; i < 8; i++) t_xt[i] = 0;
+    for (int i=0; i < 3; i++) p_xt[i] = 0;
     SEI();
 }
 #if ARDUINO
@@ -39,7 +41,7 @@ void _fake_intr()
 ///> fetch interrupt service routine if any
 ///
 U16 isr() {
-	static U16 n = 0;
+    static U16 n = 0;
 
     _fake_intr();
     
@@ -53,24 +55,24 @@ U16 isr() {
     SEI();
     if (_hits) {
         U8 hx = _hits & 0xff;
-        for (int i=0, t=1; hx && i<t_idx; i++, t<<=1, hx>>=1) {
+        for (int i=0, t=1; hx && i < t_idx; i++, t<<=1, hx>>=1) {
             if (_hits & t) { _hits &= ~t; return t_xt[i]; }
         }
         hx = _hits >> 8;
-        for (int i=0, t=0x100; hx && i<3; i++, t<<=1, hx>>=1) {
+        for (int i=0, t=0x100; hx && i < 3; i++, t<<=1, hx>>=1) {
             if (_hits & t) { _hits &= ~t; return p_xt[i]; }
         }
     }
     return 0;
 }
-void add_tmisr(U16 n, U16 xt) {
-    if (xt==0 || t_idx > 7) return;  // range check
+void add_tmisr(U16 i, U16 n, U16 xt) {
+    if (xt==0 || i > 7) return;      // range check
 
     CLI();
-    t_xt[t_idx]  = xt;               // ISR xt
-    t_cnt[t_idx] = 0;                // init counter
-    t_max[t_idx] = n;                // period (in 10ms)
-    t_idx++;
+    t_xt[i]  = xt;                   // ISR xt
+    t_cnt[i] = 0;                    // init counter
+    t_max[i] = n;                    // period (in 10ms)
+    if (i > t_idx) t_idx = i;        // cache max index
     SEI();
 }
 #if !ARDUINO
@@ -117,7 +119,6 @@ void enable_timer(U16 f) {
 //        OCR2A  = 249;                         // 250KHz = 4ms, (250 - 1, must < 256)
         OCR2A  = 124;                           // 500KHz = 2ms, (125 - 1, must < 256)
         TIMSK2 |= _BV(OCIE2A);                  // enable timer2 compare interrupt
-        digitalWrite(7, HIGH);                  // DEBUG: timer2 enabled
     }
     else {
         TIMSK2 &= _BV(OCIE2A);                  // disable timer2 compare interrupt
@@ -137,8 +138,8 @@ ISR(TIMER2_COMPA_vect) {
     if (++cnt < 5) return;                         // 5 * 2ms = 10ms (allows ~400 ops, max 320 sec)
     cnt = 0;
     for (U8 i=0, b=1; i < N4Intr::t_idx; i++, b<<=1) {
-        digitalWrite(7, digitalRead(7) ? LOW : HIGH);  // DEBUG: ISR called
-        if (++N4Intr::t_cnt[i] < N4Intr::t_max[i]) continue;
+        if (!N4Intr::t_xt[i] ||
+            (++N4Intr::t_cnt[i] < N4Intr::t_max[i])) continue;
         N4Intr::t_hit    |= b;
         N4Intr::t_cnt[i]  = 0;
     }
