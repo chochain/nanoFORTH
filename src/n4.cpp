@@ -76,7 +76,7 @@ void test1() {
 
 int main(int argc, char **argv)
 {
-	const char *code = "wrd\n123 456\n+\n";
+	const char *code = "WRD\n123 456\n+\n";
 
     setvbuf(stdout, NULL, _IONBF, 0);       // autoflush (turn STDOUT buffering off)
 
