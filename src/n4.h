@@ -39,6 +39,7 @@
 #include <iostream>
 #define PROGMEM
 #define millis()          10000
+#define random(v)         (rand()%v)
 #define pgm_read_byte(p)  (*(p))
 #define pinMode(p,v)
 #define digitalWrite(p,v)
