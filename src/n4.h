@@ -24,7 +24,7 @@
 #define APP_NAME          "nanoForth "
 #define APP_VERSION       "2.0 "
 #define TRC_LEVEL         1       /**< tracing verbosity level      */
-#define T4_API_SZ         8       /**< C API function pointer slots */
+#define N4_API_SZ         8       /**< C API function pointer slots */
 
 ///@name Arduino Console Output Support
 ///@{
@@ -68,7 +68,7 @@ typedef void (*FPTR)();           ///< function pointer
 ///
 class NanoForth
 {
-	static FPTR fp[T4_API_SZ];    ///< C API function pointer slots
+	static FPTR fp[N4_API_SZ];    ///< C API function pointer slots
 
 public:
     void setup(

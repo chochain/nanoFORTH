@@ -12,7 +12,7 @@ FPTR NanoForth::fp[] = { NULL };
 ///
 void NanoForth::add_api(int i, FPTR ufunc)
 {
-	if (i < T4_API_SZ) fp[i] = ufunc;
+	if (i <= N4_API_SZ) fp[i] = ufunc;
 }
 ///
 ///> n4 VM init proxy
@@ -32,7 +32,7 @@ void NanoForth::exec()
 
 void NanoForth::call_api(U16 id)
 {
-	if (id < T4_API_SZ) fp[id]();
+	if (id < N4_API_SZ) fp[id]();
 }
 ///
 ///> n4 yield, execute one round of user hardware tasks
