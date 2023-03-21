@@ -121,7 +121,7 @@ void _invoke(U8 op)
     case 47: NanoForth::wait((U32)POP());             break; // DLY
     case 48: PUSH(digitalRead(POP()));                break; // IN
     case 49: PUSH(analogRead(POP()));                 break; // AIN
-    case 50: { U16 p=POP(); digitalWrite(p, POP()); } break; // OUT
+    case 50: { U16 p=POP(); d_out(p, POP()); }        break; // OUT
     case 51: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
     case 52: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
     case 53: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt

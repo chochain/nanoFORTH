@@ -97,7 +97,7 @@ void d_out(U16 p, U16 v) {
         DDRC  = DDRC | (p & 0xff);
         PORTC = (U8)(v & p) | (PORTC & ~p);
         break;
-    default: digitalWrite(p, POP());
+    default: digitalWrite(p, v);
     }
 }
 #else
