@@ -265,22 +265,24 @@ void outer()
         case 0: N4Asm::compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
         case 1: N4Asm::variable();      break;   /// * VAR, create new variable
         case 2: N4Asm::constant(POP()); break;   /// * VAL, create new constant
-        case 3: N4Intr::add_pcisr(               /// * PCI, create a pin change interrupt handler
+        case 3: N4Asm::comma(POP());    break;
+        case 4: N4Asm::ccomma(POP());   break;
+        case 5: N4Intr::add_pcisr(               /// * PCI, create a pin change interrupt handler
                 POP(), N4Asm::query()); break;
-        case 4:                                  /// * TMR, create a timer interrupt handler
+        case 6:                                  /// * TMR, create a timer interrupt handler
             tmp = POP();                         ///< tmp = ISR slot#
             N4Intr::add_tmisr(
                 tmp, POP(),
                 N4Asm::query());        break;        /// * period in multiply of 10ms
-        case 5: set_hex(1);             break;   /// * HEX
-        case 6: set_hex(0);             break;   /// * DEC
-        case 7: N4Asm::forget();        break;   /// * FGT, rollback word created
-        case 8: _dump(POP(), POP());    break;   /// * DMP, memory dump
-        case 9: _init();                break;   /// * RST, restart the virtual machine (for debugging)
+        case 7: set_hex(1);             break;   /// * HEX
+        case 8: set_hex(0);             break;   /// * DEC
+        case 9: N4Asm::forget();        break;   /// * FGT, rollback word created
+        case 10: _dump(POP(), POP());   break;   /// * DMP, memory dump
+        case 11: _init();               break;   /// * RST, restart the virtual machine (for debugging)
 #if ARDUINO
-        case 10: _init();               break;   /// * BYE, restart
+        case 12: _init();               break;   /// * BYE, restart
 #else
-        case 10: exit(0);               break;   /// * BYE, bail to OS
+        case 12: exit(0);               break;   /// * BYE, bail to OS
 #endif // ARDUINO
         }                               break;
     case TKN_WRD: _nest(tmp + 2 + 3);   break;   ///>> execute colon word (user defined)
