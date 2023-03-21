@@ -54,7 +54,6 @@ namespace N4Core
     ///
     ///@name dot_* for Console Input/Output Routines
     ///@{
-
     char key();                     ///< Arduino's Serial.getchar(), yield to user tasks when waiting
     void d_chr(char c);             ///< print a char to console
     void d_adr(U16 a);              ///< print a 12-bit address
@@ -63,6 +62,7 @@ namespace N4Core
     void d_nib(U8 n);               ///< print a nibble
     void d_u8(U8 c);                ///< print a 8-bit hex number
     void d_num(S16 n);              ///< sent a number literal to console
+    void d_out(U16 p, U16 v);       ///< send output to GPIO ports
     void d_mem(                     ///< display memory block
         U8 *base,                   ///< reference memory pointer (start of dictionary)<br/>
         U8 *p0,                     ///< starting memory pointer<br/>

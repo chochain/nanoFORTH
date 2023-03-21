@@ -83,12 +83,30 @@ void d_chr(char c)     {
 void d_adr(U16 a)      { d_nib(a>>8); d_nib((a>>4)&0xf); d_nib(a&0xf); }
 void d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
 void d_num(S16 n)      { _hex ? io->print(n&0xffff,HEX) : io->print(n); }
+void d_out(U16 p, U16 v) {
+    switch (p & 0x300) {
+    case 0x100:            // PORTD (0~7)
+        DDRD  = DDRD | (p & 0xfc);  /// * mask out RX,TX
+        PORTD = (U8)(v & p) | (PORTD & ~p);
+        break;
+    case 0x200:            // PORTB (8~13)
+        DDRB  = DDRB | (p & 0xff);
+        PORTB = (U8)(v & p) | (PORTB & ~p);
+        break;
+    case 0x300:            // PORTC (A0~A6)
+        DDRC  = DDRC | (p & 0xff);
+        PORTC = (U8)(v & p) | (PORTC & ~p);
+        break;
+    default: digitalWrite(p, POP());
+    }
+}
 #else
 char key()             { return getchar();  }
 void d_chr(char c)     { printf("%c", c);   }
 void d_adr(U16 a)      { printf("%03x", a); }
 void d_ptr(U8 *p)      { printf("%p", p);   }
 void d_num(S16 n)      { printf(_hex ? "%x" : "%d", n); }
+void d_out(U16 p, U16 v) { /* do nothing */ }
 #endif //ARDUINO
 void d_str(U8 *p)      { for (U8 i=0, sz=*p++; i<sz; i++) d_chr(*p++); }
 void d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
