@@ -80,6 +80,8 @@ namespace N4Asm                     // (10-byte header)
         );
     void variable();                ///< create a variable on dictionary
     void constant(S16 v);           ///< create a constant on dictionary
+    void comma(S16 v);              ///< compile a 16-bit value onto dictionary
+    void ccomma(S16 v);             ///< compile a 8-it value onto dictionary
 
     // dictionary, string list scanners
     U16  query();                   ///< get xt of next input token, 0 if not found

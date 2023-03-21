@@ -33,9 +33,9 @@ using namespace N4Core;                       /// * make utilities available
 /// @brief loop control opcodes
 ///
 ///@{
-PROGMEM const char IMM[] = "\x0b" \
-    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "RST" \
-    "BYE";
+PROGMEM const char IMM[] = "\x0d" \
+    ":  " "VAR" "VAL" ",  " "C, " "PCI" "TMI" "HEX" "DEC" "FGT" \
+    "DMP" "RST" "BYE";
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
@@ -404,6 +404,20 @@ void constant(S16 v)
         SET16(here, v);
     }
     SET8(here, OP_RET);
+}
+///
+///> compile a 16-bit value onto dictionary
+///
+void comma(S16 v)
+{
+    SET16(here, v);
+}
+///
+///> compile a 16-bit value onto dictionary
+///
+void ccomma(S16 v)
+{
+    SET8(here, v);
 }
 ///
 ///> display words in dictionary
