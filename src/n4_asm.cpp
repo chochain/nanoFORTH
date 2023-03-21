@@ -33,9 +33,15 @@ using namespace N4Core;                       /// * make utilities available
 /// @brief loop control opcodes
 ///
 ///@{
-PROGMEM const char IMM[] = "\x0d" \
-    ":  " "VAR" "VAL" ",  " "C, " "PCI" "TMI" "HEX" "DEC" "FGT" \
-    "DMP" "RST" "BYE";
+#if N4_META
+PROGMEM const char IMM[] = "\x10" \
+    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "RST" \
+	"BYE" "CRE" ",  " "C, " "'  " "EXE";
+#else
+PROGMEM const char IMM[] = "\xa" \
+    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "RST" \
+	"BYE";
+#endif // N4_META
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
@@ -369,11 +375,9 @@ void compile(U16 *rp0)
     if (trc && last>l0) d_mem(dic, last, (U16)(here-last), ' ');
 }
 ///
-///> create a variable on dictionary
-/// * note: 8 or 10-byte per variable
+///> meta compiler
 ///
-void variable()
-{
+void create() {                             ///> create a word header (link + name field)
     _add_word();                            /// **fetch token, create name field linked to previous word**
 
     U8 tmp = IDX(here+2);                   // address to variable storage
@@ -386,6 +390,16 @@ void variable()
         SET16(here, tmp);
     }
     SET8(here, OP_RET);
+}
+void comma(S16 v)  { SET16(here, v); }      ///> compile a 16-bit value onto dictionary
+void ccomma(S16 v) { SET8(here, v);  }      ///> compile a 16-bit value onto dictionary
+///
+///> create a variable on dictionary
+/// * note: 8 or 10-byte per variable
+///
+void variable()
+{
+    create();
     SET16(here, 0);                         /// add actual literal storage area
 }
 ///
@@ -404,20 +418,6 @@ void constant(S16 v)
         SET16(here, v);
     }
     SET8(here, OP_RET);
-}
-///
-///> compile a 16-bit value onto dictionary
-///
-void comma(S16 v)
-{
-    SET16(here, v);
-}
-///
-///> compile a 16-bit value onto dictionary
-///
-void ccomma(S16 v)
-{
-    SET8(here, v);
 }
 ///
 ///> display words in dictionary
