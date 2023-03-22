@@ -15,6 +15,8 @@
 #ifndef __SRC_N4_ASM_H
 #define __SRC_N4_ASM_H
 #include "n4.h"
+
+#define N4_META      1 /**< enable meta programming */
 ///
 /// parser actions enum used by execution and assembler units
 ///
@@ -80,7 +82,10 @@ namespace N4Asm                     // (10-byte header)
         );
     void variable();                ///< create a variable on dictionary
     void constant(S16 v);           ///< create a constant on dictionary
-
+    /// meta compiler
+    void create();                  ///< create a word name field
+    void comma(S16 v);              ///< compile a 16-bit value onto dictionary
+    void ccomma(S16 v);             ///< compile a 8-it value onto dictionary
     // dictionary, string list scanners
     U16  query();                   ///< get xt of next input token, 0 if not found
     void words();                   ///< display words in dictionary

@@ -19,17 +19,22 @@
 #endif // ARDUINO
 
 namespace N4Intr {
-	extern U8   t_idx;             ///< timer ISR index
-	extern U16  p_xt[3];           ///< pin change ISR
-	extern U16  t_xt[8];           ///< timer ISR
+    extern U8   t_idx;             ///< max slot# of timer interrupt
+    extern U16  p_xt[3];           ///< pin change ISR
+    extern U16  t_xt[8];           ///< timer ISR
 
     void reset();                  ///< reset interrupts
     U16  isr();                    ///< fetch interrupt service routines
 
-    void add_tmisr(U16 prd, U16 xt);
-    void add_pcisr(U16 pin, U16 xt);
+    void add_tmisr(
+            U16 i,                 ///< interrupt handler slot#
+            U16 n,                 ///< interrupt period (n x 10ms = period)
+            U16 xt);               ///< handler's xt
+    void add_pcisr(
+            U16 pin,               ///< pin change to capture
+            U16 xt);               ///< handler's xt
 
-    void enable_timer(U16 f);
+    void enable_timer(U16 f);      ///< ENABLE=1, DISABLE=0
     void enable_pci(U16 f);
 };    // namespace N4Intr
 

@@ -33,19 +33,26 @@ using namespace N4Core;                       /// * make utilities available
 /// @brief loop control opcodes
 ///
 ///@{
-PROGMEM const char CMD[] = "\x09" \
-    ":  " "VAR" "CST" "PCI" "TMI" "FGT" "DMP" "RST" "BYE";
+#if N4_META
+PROGMEM const char IMM[] = "\x10" \
+    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "RST" \
+	"BYE" "CRE" ",  " "C, " "'  " "EXE";
+#else
+PROGMEM const char IMM[] = "\xa" \
+    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "RST" \
+	"BYE";
+#endif // N4_META
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
     "NXT";
-PROGMEM const char PRM[] = "\x3a" \
+PROGMEM const char PRM[] = "\x38" \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
     "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " ">  " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
-    ">R " "R> " "WRD" "HRE" "CEL" "ALO" "SAV" "LD " "SEX" "TRC" \
-    "CLK" "D+ " "D- " "DNG" "ABS" "HEX" "DEC" "MAX" "MIN" "DLY" \
-	"IN " "AIN" "OUT" "PWM" "PIN" "TME" "PCE" "API";
+    ">R " "R> " "WRD" "HRE" "RND" "ALO" "SAV" "LD " "SEX" "TRC" \
+    "CLK" "D+ " "D- " "DNG" "ABS" "MAX" "MIN" "DLY" "IN " "AIN" \
+    "OUT" "PWM" "PIN" "TME" "PCE" "API";
 
 PROGMEM const char PMX[] = "\x3" \
     "I  " "FOR" "NXT";
@@ -84,7 +91,7 @@ namespace N4Asm {
 
 U8  *last  { NULL };                ///< pointer to last word, for debugging
 U8  *here  { NULL };                ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
-U8  tab = 0;                  		///< tracing indentation counter
+U8  tab = 0;                        ///< tracing indentation counter
 ///
 ///> find colon word address of next input token
 /// @brief search the keyword through colon word linked-list
@@ -182,7 +189,7 @@ void _add_str()
 ///
 void _list_voc(U16 n)
 {
-    const char *lst[] PROGMEM = { CMD, JMP, PRM };      // list of built-in primitives
+    const char *lst[] PROGMEM = { IMM, JMP, PRM };      // list of built-in primitives
     for (U8 i=0; i<3; i++) {
 #if ARDUINO
         U8 sz = pgm_read_byte(reinterpret_cast<PGM_P>(lst[i]));
@@ -309,7 +316,7 @@ U16 query() {
 N4OP parse(U8 *tkn, U16 *rst, U8 run)
 {
     if (_find(tkn, rst))                 return TKN_WRD; /// * WRD - is a colon word? [lnk(2),name(3)]
-    if (scan(tkn, run ? CMD : JMP, rst)) return TKN_IMM; /// * IMM - is a immediate word?
+    if (scan(tkn, run ? IMM : JMP, rst)) return TKN_IMM; /// * IMM - is a immediate word?
     if (scan(tkn, PRM, rst))             return TKN_PRM; /// * PRM - is a primitives?
     if (number(tkn, (S16*)rst))          return TKN_NUM; /// * NUM - is a number literal?
     return TKN_ERR;                                      /// * ERR - unknown token
@@ -368,11 +375,9 @@ void compile(U16 *rp0)
     if (trc && last>l0) d_mem(dic, last, (U16)(here-last), ' ');
 }
 ///
-///> create a variable on dictionary
-/// * note: 8 or 10-byte per variable
+///> meta compiler
 ///
-void variable()
-{
+void create() {                             ///> create a word header (link + name field)
     _add_word();                            /// **fetch token, create name field linked to previous word**
 
     U8 tmp = IDX(here+2);                   // address to variable storage
@@ -385,6 +390,16 @@ void variable()
         SET16(here, tmp);
     }
     SET8(here, OP_RET);
+}
+void comma(S16 v)  { SET16(here, v); }      ///> compile a 16-bit value onto dictionary
+void ccomma(S16 v) { SET8(here, v);  }      ///> compile a 16-bit value onto dictionary
+///
+///> create a variable on dictionary
+/// * note: 8 or 10-byte per variable
+///
+void variable()
+{
+    create();
     SET16(here, 0);                         /// add actual literal storage area
 }
 ///

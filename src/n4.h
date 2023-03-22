@@ -23,7 +23,8 @@
 
 #define APP_NAME          "nanoForth "
 #define APP_VERSION       "2.0 "
-#define TRC_LEVEL         1       /* tracing verbosity level        */
+#define TRC_LEVEL         1       /**< tracing verbosity level      */
+#define N4_API_SZ         8       /**< C API function pointer slots */
 
 ///@name Arduino Console Output Support
 ///@{
@@ -31,8 +32,6 @@
 #include <Arduino.h>
 #define log(msg)          Serial.print(F(msg))
 #define logx(v)           Serial.print((U16)v, HEX)
-extern void n4_setup();
-extern void n4_run();
 #else
 #include <cstdint>                // uint_t
 #include <cstdio>                 // printf
@@ -40,6 +39,7 @@ extern void n4_run();
 #include <iostream>
 #define PROGMEM
 #define millis()          10000
+#define random(v)         (rand()%v)
 #define pgm_read_byte(p)  (*(p))
 #define pinMode(p,v)
 #define digitalWrite(p,v)
@@ -61,37 +61,32 @@ typedef uint16_t     U16;         ///< 16-bit unsigned integer, for return stack
 typedef int16_t      S16;         ///< 16-bit signed integer, for general numbers
 typedef uint32_t     U32;         ///< 32-bit unsigned integer, for millis()
 typedef int32_t      S32;         ///< 32-bit signed integer
+typedef void (*FPTR)();           ///< function pointer
 ///@}
-///
-/// nanoForth light-weight multi-tasker (aka protothread by Adam Dunkels)
-///
-typedef struct n4_func {
-    U16  id;                      ///< protothread case index
-    void (*func)(n4_func*);       ///< function pointer
-    n4_func *next;                ///< next item in linked-list (root=0)
-} *n4_fptr;
 ///
 /// nanoForth main control object (with static members that support multi-threading)
 ///
 class NanoForth
 {
-    static n4_fptr _n4fp;         ///< user function linked-list
+	static FPTR fp[N4_API_SZ];    ///< C API function pointer slots
 
 public:
     void setup(
+    	const char *code=0,       ///< preload Forth code
         Stream &io=Serial,        ///< iostream which can be redirected to SoftwareSerial
-        U8 ucase=1                ///< case sensitiveness (default: insensitive)
+        U8 ucase=0                ///< case sensitiveness (default: sensitive)
         );                        ///< placeholder for extra setup
     void exec();                  ///< nanoForth execute one line of command input
     //
     // protothreading support
     //
-    static void add_func(         ///< add the user function to NanoForth task manager
-        void (*ufunc)(n4_fptr)    ///< user task pointer to be added
+    static void add_api(          ///< add the user function to NanoForth task manager
+    	int  i,                   ///< index of function pointer slots
+        void (*fp)()              ///< user function pointer to be added
         );
     static void yield();          ///< nanoForth yield to user tasks
     static void wait(U32 ms);     ///< pause NanoForth thread for ms microseconds, yield to user tasks
-    static void api(U16 id);      ///< C API interface
+    static void call_api(U16 id); ///< call C API interface
 };
 
 #endif // __SRC_N4_H
