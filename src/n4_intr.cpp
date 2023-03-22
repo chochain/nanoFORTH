@@ -71,7 +71,7 @@ void add_tmisr(U16 i, U16 n, U16 xt) {
     CLI();
     t_xt[i]  = xt;                   // ISR xt
     t_cnt[i] = 0;                    // init counter
-    t_max[i] = n;                    // period (in 10ms)
+    t_max[i] = n;                    // period (in 1ms)
     if (i >= t_idx) t_idx = i + 1;   // cache max index
     SEI();
 }
@@ -115,9 +115,8 @@ void enable_timer(U16 f) {
     TCCR2A = TCCR2B = TCNT2 = 0;                // reset counter
     if (f) {
         TCCR2A = _BV(WGM21);                    // Set CTC mode
-        TCCR2B = _BV(CS22)|_BV(CS21);           // prescaler 256 (16000000 / 256) = 62500Hz = 16us
-//        OCR2A  = 249;                         // 250KHz = 4ms, (250 - 1, must < 256)
-        OCR2A  = 124;                           // 500KHz = 2ms, (125 - 1, must < 256)
+        TCCR2B = _BV(CS22);                     // prescaler 64 (16MHz / 64) = 250KHz => 4us period
+        OCR2A  = 249;                           // 250x4us = 1ms, (250 - 1, must < 256)
         TIMSK2 |= _BV(OCIE2A);                  // enable timer2 compare interrupt
     }
     else {
@@ -129,14 +128,10 @@ void enable_timer(U16 f) {
 
 };  // namespace N4Intr
 ///
-/// Arduino interrupt service routines
+/// Arduino interrupt service routines (1ms precision)
 ///
 #if ARDUINO
 ISR(TIMER2_COMPA_vect) {
-    volatile static int cnt = 0;
-//    if (++cnt < 25) return;                      // 25 * 4ms = 100ms (allows ~4K ops, max 3200 sec)
-    if (++cnt < 5) return;                         // 5 * 2ms = 10ms (allows ~400 ops, max 320 sec)
-    cnt = 0;
     for (U8 i=0, b=1; i < N4Intr::t_idx; i++, b<<=1) {
         if (!N4Intr::t_xt[i] ||
             (++N4Intr::t_cnt[i] < N4Intr::t_max[i])) continue;
