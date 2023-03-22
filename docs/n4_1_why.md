@@ -17,16 +17,18 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 * be as simple to use as any example Sketch that comes with the IDE (no bootloader burning),
 * provide a REPL development/operating environment for Arduino,
 * provide core Arduino functions (i.g. pinMode, digitalRead/Write, analogRead/Write, millis, delay),
-* provide hardware thread(s) in addition to the nanoFORTH thread so that new components can be added (ig. Bluetooth),
 * provide an Arduino library that developers can include easily,
 * provide at least 1K RAM dictionary for reasonably size of work,
 * utilize EEPROM as the persistant storage for user defined words that can be reloaded after restart,
+* provide C API so that user defined functions/components can be integrated (ig. Servo, Bluetooth, ...),
+* provide timer interrupt handler to support multi-tasking,
+* privide pin change interrupt handler to support hardware trigger,
 * show assembly trace (i.e. byte-code stream) to help beginners to understand FORTH internal,
 * show execution trace to enable debugging, also provision for single-stepping.
 * capable of autorun after reboot (from saved EEPROM image).
 
 ### Use Cases - Interaction Examples
-* turn on LED(red) on digital pin 5, or imagine you have a board hooked up like this, (1 is HIGH)
+* turn on LED(red) on digital pin 5, imagine you have a board hooked up, or <a href="https://wokwi.com/projects/359920992049600513" target="_blank">check this Wokwi project</a>
 > 1 5 OUT ⏎
 > ||
 > |:--|
@@ -80,7 +82,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 > ⇨ ok
 >> \> 258 is gone now
 
-* define **lit** to read from photoresister and determine whether its value is > 200
+* define **lit** to read from photoresister (or a potentiometer) and determine whether its value is > 200
 > : **lit** 1 AIN 200 > ; ⏎
 
 * execute **lit**, it puts value 1 on data stack (FORTH's memory) if your room is bright enough, a value 0 otherwise
@@ -88,25 +90,23 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 > ⇨ 1_ok
 
 * define **?Z** that turns on red or blue depends on value on top of data stack. 
-> : **?Z** IF **red** ELS **blu** THN ; ⏎
->> \> **?Z** is our newly defined function. Unlike most of the other languages, you can create some really strange function names in FORTH.
+> : **?z** IF **red** ELS **blu** THN ; ⏎
+>> \> **?z** is our newly defined function. Unlike most of the other languages, you can create some really strange function names in FORTH.
 
-* run **?Z** which read from top of data stack, if it's 1 then turns on red LED or 0 turns on blue
-> 1 **?Z** ⏎<br>
-> 0 **?Z** ⏎
+* run **?z** which read from top of data stack, if it's 1 then turns on red LED or 0 turns on blue
+> 1 **?z** ⏎<br>
+> 0 **?z** ⏎
 
 * now we may turn on red or blue LED depending on lighting condition (try blocking the photoresister), **lit** leaves 1 or 0 on data stack, **?Z** takes the value and turns on the red or blue LED
-> **lit** **?Z** ⏎
+> **lit** **?z** ⏎
 
-* define a word **xyz** to check photoresister in a loop every 1 second, turn the blue or red LED on depending on the photoresister value read
-> : **xyz** FOR **lit** **?Z** 1000 DLY NXT ; ⏎<br>
-> 60 **xyz** ⏎
->> \> This runs **xyz** for a minute. Try blocking the photoresister to see the LED toggles.<br/>
->> \> Can this become a trigger i.e. mouse trap or something useful?<br/>
->> \> Make it run in an infinite loop like a web-server? Sure, but we will leave that detail to future chapter.<br/>
->> \> Have you noticed the Pin 13 green LED is blinking at its own pace?
+* define a word **xyz** to keep checking photoresister, turn the blue or red LED on depending on the photoresister value read until button hooked at pin 7 is pushed
+> : **xyz** BGN **lit** **?z** 7 IN UTL ; ⏎<br>
+> **xyz** ⏎
+>> \> Try blocking the photoresister to see the LED toggles.<br/>
+>> \> Can this become a trigger i.e. mouse trap or something useful? Why not!<br/>
 
-* show all nanoFORTH words available, including **xyz**, **?Z**, **xy**, **lit**, **blu**, **red** that we've just created
+* show all nanoFORTH words available, including **xyz**, **?z**, **xy**, **lit**, **blu**, **red** that we've just created
 > WRD ⏎
 > ||
 > |:--|

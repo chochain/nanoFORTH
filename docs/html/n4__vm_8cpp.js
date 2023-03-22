@@ -17,7 +17,9 @@ var n4__vm_8cpp =
     [ "_nest", "n4__vm_8cpp.html#abaaf6556a0cc5356df014a627d6f37e0", null ],
     [ "_init", "n4__vm_8cpp.html#a71ce1c2bbebb2db9931a9a40cf6acb04", null ],
     [ "_dump", "n4__vm_8cpp.html#a91ade7758e883568be3c28ea7e0d41bf", null ],
-    [ "setup", "n4__vm_8cpp.html#af816dd3717ac1cfe73b4ac5a9aabbc9f", null ],
+    [ "setup", "n4__vm_8cpp.html#ab88fb5c76add0b62c41d4212c1bae6ae", null ],
+    [ "push", "n4__vm_8cpp.html#a857336c3b2358782c6319614f55fc0e8", null ],
+    [ "pop", "n4__vm_8cpp.html#a350dd4672eedd8b0a3722faf37d6ef4f", null ],
     [ "serv_isr", "n4__vm_8cpp.html#a2a4b54c8ccb6a3677681158335f4663b", null ],
     [ "outer", "n4__vm_8cpp.html#a943be53277c6329fdcad7f4118f07c24", null ]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hi16_329',['HI16',['../n4__vm_8cpp.html#a1c050c369c45826409279e1f8f8af1f4',1,'n4_vm.cpp']]]
+  ['get16_348',['GET16',['../n4__core_8h.html#a0347fc520bda2a3f684f7e344b180065',1,'n4_core.h']]]
 ];

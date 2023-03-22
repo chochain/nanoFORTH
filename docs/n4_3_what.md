@@ -163,11 +163,6 @@ nanoFORTH handles only integer numbers.
 > ➤ *hello!*<br/>
 > ➤ *hello!ok*
 
-### C API function call
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |API|`( n -- )`|call API by number defined in Arduino sketch|
-
 ### Reset, Debug, and Tracing
 > |opcode|stack|description|
 > |:--|:--|:--|
@@ -205,10 +200,15 @@ nanoFORTH handles only integer numbers.
 > $F0 $1F0 OUT ⏎ ➤ *ok* (turn on pin 4,5,6,7 at once)<br/>
 >
 
+### C API function call
+> |opcode|stack|description|
+> |:--|:--|:--|
+> |API|`( n -- )`|call API by number registered via ef_api(n, func) in Arduino sketch|
+
 ### Interrupt ops
 > |opcode|stack|description|
 > |:--|:--|:--|
-> |TMR|`( n -- )`|set timer ISR with period at n*0.1 second i.g. 100 is 10 second|
+> |TMR|`( n i -- )`|set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds|
 > |PCI|`( p -- )`|capture pin #p change (either HIGH to LOW or LOW to HIGH)|
 > |TME|`( f -- )`|enable/disable timer interrupt, 0:disable, 1:enable|
 > |PCE|`( f -- )`|enable/disable pin change interrupt, 0:disable, 1:enable|
@@ -219,8 +219,8 @@ nanoFORTH handles only integer numbers.
 > : aa 65 emt ; ➤ *ok* (define a word **aa** which emit 'A' on console)<br/>
 > : bb 66 emt ; ➤ *ok* (define a word **bb** which emit 'B' on console)<br/>
 >
-> 100 TMR **aa** ➤ *ok* (run **aa** every 10 seconds)<br/>
-> 250 TMR **bb** ➤ *ok* (run **bb** every 25 seconds)<br/>
+> 1000 0 TMR **aa** ➤ *ok* (run **aa** every 10 seconds)<br/>
+> 2500 0 TMR **bb** ➤ *ok* (run **bb** every 25 seconds)<br/>
 > 1 TME ➤ *ok* (enable timer interrupt)<br/>
 > AABAAABAABAA (interrupt routines been called)<br/>
 > 0 TME ➤ *ok* (disable timer interrupt)<br/>
@@ -230,7 +230,7 @@ nanoFORTH handles only integer numbers.
 > AA (assuming you have a push button hooked up at pin 8)<br/>
 >
 
-### 32-bit Arithmatic (for Arduino Clock mostly)
+### Double precision (i.e. 32-bit) Arithmatic (for Arduino Clock mostly)
 > |opcode|stack|description|
 > |:--|:--|:--|
 > |D+ |`( d1 d0 -- d1+d0 )`|add two doubles|
@@ -241,7 +241,7 @@ nanoFORTH handles only integer numbers.
 >
 > CLK 1000 DLY CLK D- DNG ⏎ ➤ *1000_0_ok*
 
-### Meta Programming (advanced topic)
+### Meta Programming (available only via source recompilation with N4_META set to 1)
 > |opcode|stack|description|
 > |:--|:--|:--|
 > |,  |`( n -- )`|add a 16-bit value onto dictionary|

@@ -6,10 +6,10 @@ var indexSectionsWithContent =
   3: "mnr",
   4: "_acdefgiklmnopqrstuvwy",
   5: "_acdfhijlnoprstw",
-  6: "nsu",
+  6: "fsu",
   7: "n",
   8: "it",
-  9: "acdeghijlprst",
+  9: "_acdeghijlnprst",
   10: "d"
 };
 

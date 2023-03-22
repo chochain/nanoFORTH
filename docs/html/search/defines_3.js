@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['eeprom_5fsz_327',['EEPROM_SZ',['../mockrom_8h.html#ada5d615b300522bbc9e1ad325d9c5e9b',1,'mockrom.h']]]
+  ['dump_5fper_5fline_346',['DUMP_PER_LINE',['../n4__vm_8cpp.html#af76800feb65a72436c3dd83a82dc8c2d',1,'n4_vm.cpp']]]
 ];

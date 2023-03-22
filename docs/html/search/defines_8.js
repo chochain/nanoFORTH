@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['lo16_336',['LO16',['../n4__vm_8cpp.html#a13c77dd9c96efe75abb4c5eed2241ed1',1,'n4_vm.cpp']]],
-  ['log_337',['log',['../n4_8h.html#a642fd9241bc9e4219ea15503ca87fefb',1,'n4.h']]],
-  ['logx_338',['logx',['../n4_8h.html#a0c6ed456da2d729add89153d74894f35',1,'n4.h']]]
+  ['jmp000_353',['JMP000',['../n4__asm_8cpp.html#a6890bb77e82b3706ffb77c8f2f2d81ff',1,'n4_asm.cpp']]],
+  ['jmpbck_354',['JMPBCK',['../n4__asm_8cpp.html#a92cc7957e8d8f21d50b2abb068cf7ee8',1,'n4_asm.cpp']]],
+  ['jmpset_355',['JMPSET',['../n4__asm_8cpp.html#a2167c97965233bc0198413dddbf0dd28',1,'n4_asm.cpp']]]
 ];

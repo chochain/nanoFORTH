@@ -94,11 +94,16 @@ Functions</h2></td></tr>
 <tr class="memitem:a845d552476fac4f136b90d6a90c41c6c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a845d552476fac4f136b90d6a90c41c6c">init_mem</a> ()</td></tr>
 <tr class="memdesc:a845d552476fac4f136b90d6a90c41c6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">initialize MMU  <a href="namespaceN4Core.html#a845d552476fac4f136b90d6a90c41c6c">More...</a><br /></td></tr>
 <tr class="separator:a845d552476fac4f136b90d6a90c41c6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a38d3076bf721f94dcbd41c2353579a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a2a38d3076bf721f94dcbd41c2353579a">set_pre</a> (const char *code)</td></tr>
+<tr class="memdesc:a2a38d3076bf721f94dcbd41c2353579a"><td class="mdescLeft">&#160;</td><td class="mdescRight">set embedded Forth code  <a href="namespaceN4Core.html#a2a38d3076bf721f94dcbd41c2353579a">More...</a><br /></td></tr>
+<tr class="separator:a2a38d3076bf721f94dcbd41c2353579a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d5cc20491c3146786349fde57c13f5b"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a0d5cc20491c3146786349fde57c13f5b">uc</a> (char c)</td></tr>
 <tr class="separator:a0d5cc20491c3146786349fde57c13f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac339ddeaa3e7378fbb8495ae5f50ce35"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#ac339ddeaa3e7378fbb8495ae5f50ce35">memstat</a> ()</td></tr>
 <tr class="memdesc:ac339ddeaa3e7378fbb8495ae5f50ce35"><td class="mdescLeft">&#160;</td><td class="mdescRight">display MMU statistics  <a href="namespaceN4Core.html#ac339ddeaa3e7378fbb8495ae5f50ce35">More...</a><br /></td></tr>
 <tr class="separator:ac339ddeaa3e7378fbb8495ae5f50ce35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fdcd56f30ef39f37f8c0963eccdddc4"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a7fdcd56f30ef39f37f8c0963eccdddc4">vkey</a> ()</td></tr>
+<tr class="separator:a7fdcd56f30ef39f37f8c0963eccdddc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a50a8de717ec705a5871cdb946538aee3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#a50a8de717ec705a5871cdb946538aee3">_console_input</a> ()</td></tr>
 <tr class="separator:a50a8de717ec705a5871cdb946538aee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af3f2a7a80bc031dbc26d29cc0c029f15"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4Core.html#af3f2a7a80bc031dbc26d29cc0c029f15">set_io</a> (Stream *s)</td></tr>
@@ -135,6 +140,26 @@ Functions</h2></td></tr>
 <li>allocate Forth memory block</li>
 <li>grows N4_TIB_SZ</li>
 </ul>
+
+</div>
+</div>
+<a id="a2a38d3076bf721f94dcbd41c2353579a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a38d3076bf721f94dcbd41c2353579a">&#9670;&nbsp;</a></span>set_pre()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void N4Core::set_pre </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>code</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>set embedded Forth code </p>
 
 </div>
 </div>
@@ -278,6 +303,39 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>sent a number literal to console </p>
+
+</div>
+</div>
+<a id="a1f89113ebe2ce1d68c23d4cff96d1ee0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f89113ebe2ce1d68c23d4cff96d1ee0">&#9670;&nbsp;</a></span>d_out()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void N4Core::d_out </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>&#160;</td>
+          <td class="paramname"><em>v</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>send output to GPIO ports </p>
+<ul>
+<li>mask out RX,TX</li>
+</ul>
 
 </div>
 </div>
@@ -508,6 +566,28 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a7fdcd56f30ef39f37f8c0963eccdddc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fdcd56f30ef39f37f8c0963eccdddc4">&#9670;&nbsp;</a></span>vkey()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char N4Core::vkey </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<blockquote class="doxtable">
+<p>fill input buffer from console char-by-char til CR or LF hit </p>
+</blockquote>
+<p>capture preload Forth code</p>
+<p>feed <a class="el" href="namespaceN4Core.html#ad93f809a92778f2f4fcdabc9350a3ea8" title="Arduino&#39;s Serial.getchar(), yield to user tasks when waiting.">key()</a> after preload exhausted</p>
+
+</div>
+</div>
 <a id="a50a8de717ec705a5871cdb946538aee3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a50a8de717ec705a5871cdb946538aee3">&#9670;&nbsp;</a></span>_console_input()</h2>
 
@@ -522,9 +602,6 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<blockquote class="doxtable">
-<p>fill input buffer from console char-by-char til CR or LF hit </p>
-</blockquote>
 <ul>
 <li>get one char from input stream</li>
 <li>split on RETURN</li>
@@ -781,22 +858,6 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad6a03f737ad5214b3b81b922a3e70b9d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6a03f737ad5214b3b81b922a3e70b9d">&#9670;&nbsp;</a></span>tib</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="n4_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> * N4Core::tib { NULL }</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>base of terminal input buffer </p>
-
-</div>
-</div>
 <a id="a86633f8fd989f4914e0f225ae75f7f70"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a86633f8fd989f4914e0f225ae75f7f70">&#9670;&nbsp;</a></span>io</h2>
 
@@ -826,6 +887,38 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>tracing flag </p>
+
+</div>
+</div>
+<a id="a6b00d2be0ece52e7ec88de6798f2e3d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b00d2be0ece52e7ec88de6798f2e3d6">&#9670;&nbsp;</a></span>_pre</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* N4Core::_pre { NULL }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>preload Forth code </p>
+
+</div>
+</div>
+<a id="af4cfd55702a1a9197d05dd1304d1e8b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af4cfd55702a1a9197d05dd1304d1e8b4">&#9670;&nbsp;</a></span>_tib</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="n4_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a>* N4Core::_tib { NULL }</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>base of terminal input buffer </p>
 
 </div>
 </div>
@@ -868,7 +961,7 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="n4_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> N4Core::_ucase { 1 }</td>
+          <td class="memname"><a class="el" href="n4_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> N4Core::_ucase { 0 }</td>
         </tr>
       </table>
 </div><div class="memdoc">

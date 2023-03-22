@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['jmp000_333',['JMP000',['../n4__asm_8cpp.html#a6890bb77e82b3706ffb77c8f2f2d81ff',1,'n4_asm.cpp']]],
-  ['jmpbck_334',['JMPBCK',['../n4__asm_8cpp.html#a92cc7957e8d8f21d50b2abb068cf7ee8',1,'n4_asm.cpp']]],
-  ['jmpset_335',['JMPSET',['../n4__asm_8cpp.html#a2167c97965233bc0198413dddbf0dd28',1,'n4_asm.cpp']]]
+  ['idx_350',['IDX',['../n4__asm_8cpp.html#a5736213940db38c8e215a3bb8688522c',1,'IDX():&#160;n4_asm.cpp'],['../n4__vm_8cpp.html#a5736213940db38c8e215a3bb8688522c',1,'IDX():&#160;n4_vm.cpp']]],
+  ['inline_351',['INLINE',['../n4_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116',1,'n4.h']]],
+  ['isr_5fperiod_352',['ISR_PERIOD',['../n4__intr_8h.html#a29f0ecdac80b536613c342dd92cc1167',1,'n4_intr.h']]]
 ];

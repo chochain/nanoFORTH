@@ -132,7 +132,7 @@ Macros</h2></td></tr>
 <li>VM built with core units </li>
 </ul>
 </div></td></tr>
-<tr class="memitem:a5588ae260e9757e8666dfbcdc83cd175"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a5588ae260e9757e8666dfbcdc83cd175">SP0</a>&#160;&#160;&#160;((<a class="el" href="n4_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a>*)tib)</td></tr>
+<tr class="memitem:a5588ae260e9757e8666dfbcdc83cd175"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a5588ae260e9757e8666dfbcdc83cd175">SP0</a>&#160;&#160;&#160;((<a class="el" href="n4_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a>*)&amp;dic[<a class="el" href="n4__core_8h.html#a0fbd46bf8acfaff6cb92691910ff3ad4">N4_DIC_SZ</a> + <a class="el" href="n4__core_8h.html#a6b47c655a4d981330600913136da8a62">N4_STK_SZ</a>])</td></tr>
 <tr class="separator:a5588ae260e9757e8666dfbcdc83cd175"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ee1e26ca2891997f2b51dacefa3f475"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a7ee1e26ca2891997f2b51dacefa3f475">TOS</a>&#160;&#160;&#160;(*sp)</td></tr>
 <tr class="separator:a7ee1e26ca2891997f2b51dacefa3f475"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,7 +140,7 @@ Macros</h2></td></tr>
 <tr class="separator:a226f93ec68411372ccd30902117406f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5e48aa480f649754b62299ee5cbc35a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#af5e48aa480f649754b62299ee5cbc35a">PUSH</a>(v)&#160;&#160;&#160;(*(--sp)=(<a class="el" href="n4_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a>)(v))</td></tr>
 <tr class="separator:af5e48aa480f649754b62299ee5cbc35a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2106695e949772f765546777ef34690e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a2106695e949772f765546777ef34690e">POP</a>()&#160;&#160;&#160;(sp&lt;<a class="el" href="n4__vm_8cpp.html#a5588ae260e9757e8666dfbcdc83cd175">SP0</a> ? *sp++ : 0)</td></tr>
+<tr class="memitem:a2106695e949772f765546777ef34690e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a2106695e949772f765546777ef34690e">POP</a>()&#160;&#160;&#160;(*sp++)</td></tr>
 <tr class="separator:a2106695e949772f765546777ef34690e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a82363ba7a7cd1a9826fa73d03805e641"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a82363ba7a7cd1a9826fa73d03805e641">RPUSH</a>(a)&#160;&#160;&#160;(*(rp++)=(<a class="el" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)(a))</td></tr>
 <tr class="separator:a82363ba7a7cd1a9826fa73d03805e641"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -162,8 +162,12 @@ Functions</h2></td></tr>
 <tr class="separator:a71ce1c2bbebb2db9931a9a40cf6acb04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a91ade7758e883568be3c28ea7e0d41bf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#a91ade7758e883568be3c28ea7e0d41bf">N4VM::_dump</a> (<a class="el" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> p0, <a class="el" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> sz0)</td></tr>
 <tr class="separator:a91ade7758e883568be3c28ea7e0d41bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af816dd3717ac1cfe73b4ac5a9aabbc9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#af816dd3717ac1cfe73b4ac5a9aabbc9f">N4VM::setup</a> (Stream &amp;io, <a class="el" href="n4_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> ucase)</td></tr>
-<tr class="separator:af816dd3717ac1cfe73b4ac5a9aabbc9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab88fb5c76add0b62c41d4212c1bae6ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#ab88fb5c76add0b62c41d4212c1bae6ae">N4VM::setup</a> (const char *code, Stream &amp;io, <a class="el" href="n4_8h.html#aa63ef7b996d5487ce35a5a66601f3e73">U8</a> ucase)</td></tr>
+<tr class="separator:ab88fb5c76add0b62c41d4212c1bae6ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a857336c3b2358782c6319614f55fc0e8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#a857336c3b2358782c6319614f55fc0e8">N4VM::push</a> (int v)</td></tr>
+<tr class="separator:a857336c3b2358782c6319614f55fc0e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a350dd4672eedd8b0a3722faf37d6ef4f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#a350dd4672eedd8b0a3722faf37d6ef4f">N4VM::pop</a> ()</td></tr>
+<tr class="separator:a350dd4672eedd8b0a3722faf37d6ef4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a4b54c8ccb6a3677681158335f4663b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceN4VM.html#a2a4b54c8ccb6a3677681158335f4663b">N4VM::serv_isr</a> ()</td></tr>
 <tr class="memdesc:a2a4b54c8ccb6a3677681158335f4663b"><td class="mdescLeft">&#160;</td><td class="mdescRight">interrupt service routine  <a href="namespaceN4VM.html#a2a4b54c8ccb6a3677681158335f4663b">More...</a><br /></td></tr>
 <tr class="separator:a2a4b54c8ccb6a3677681158335f4663b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -188,12 +192,10 @@ Functions</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define SP0&#160;&#160;&#160;((<a class="el" href="n4_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a>*)tib)</td>
+          <td class="memname">#define SP0&#160;&#160;&#160;((<a class="el" href="n4_8h.html#a6d241ad21a823c90d4835380787db5d4">S16</a>*)&amp;dic[<a class="el" href="n4__core_8h.html#a0fbd46bf8acfaff6cb92691910ff3ad4">N4_DIC_SZ</a> + <a class="el" href="n4__core_8h.html#a6b47c655a4d981330600913136da8a62">N4_STK_SZ</a>])</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>top of parameter stack <br  />
- </p>
 
 </div>
 </div>
@@ -263,7 +265,7 @@ Functions</h2></td></tr>
           <td class="memname">#define POP</td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td>&#160;&#160;&#160;(sp&lt;<a class="el" href="n4__vm_8cpp.html#a5588ae260e9757e8666dfbcdc83cd175">SP0</a> ? *sp++ : 0)</td>
+          <td>&#160;&#160;&#160;(*sp++)</td>
         </tr>
       </table>
 </div><div class="memdoc">

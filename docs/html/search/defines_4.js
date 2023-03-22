@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['get16_328',['GET16',['../n4__core_8h.html#a0347fc520bda2a3f684f7e344b180065',1,'n4_core.h']]]
+  ['eeprom_5fsz_347',['EEPROM_SZ',['../mockrom_8h.html#ada5d615b300522bbc9e1ad325d9c5e9b',1,'mockrom.h']]]
 ];

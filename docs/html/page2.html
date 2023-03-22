@@ -177,8 +177,8 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 <li>to benchmark something, let's define a function <b>zz</b> that runs in empty loops and time it <blockquote class="doxtable">
 <p>: <b>zz</b> 10000 FOR NXT ;⏎<br  />
  CLK DNG <b>zz</b> CLK D+ ⏎<br  />
- ⇨ 160_0_ok </p><blockquote class="doxtable">
-<p>&gt; Our ten-thousand cycles are completed in 160ms, i.e. 16us/cycle, not too shabby!<br  />
+ ⇨ 103_0_ok </p><blockquote class="doxtable">
+<p>&gt; Our ten-thousand cycles are completed in 103ms, i.e. ~10us/cycle, not too shabby!<br  />
  &gt; DNG negate the first clock ticks<br  />
  &gt; D+ add two clock counts (i.e. (-t0) + t1) to deduce the time difference </p>
 </blockquote>
@@ -202,7 +202,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </li>
 <li>when needed, we can zap the sandbox i.e. reset the nanoFORTH system pointers for a fresh start <blockquote class="doxtable">
 <p>BYE ⏎<br  />
- ⇨ nanoFORTH v1.6 ok </p><blockquote class="doxtable">
+ ⇨ nanoFORTH v2.0 ok </p><blockquote class="doxtable">
 <p>&gt; The data stack, return stack, and instruction pointers will be reinitialized </p>
 </blockquote>
 </blockquote>
@@ -218,7 +218,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 <p>: <b>fun</b> ( - - ) 1000 DLY ." I'm alive! blink " 20 <b>xy</b> ; ⏎<br  />
  SEX ⏎<br  />
  BYE ⏎<br  />
- ⇨ nanoFORTH v1.6 reset<br  />
+ ⇨ nanoFORTH v2.0 reset<br  />
  ⇨ I'm alive! blink 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ok<br  />
  </p><blockquote class="doxtable">
 <p>&gt; When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is <b>fun</b>, the blinker.<br  />
@@ -230,11 +230,21 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 <li>to disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place. <blockquote class="doxtable">
 <p>SAV ⏎<br  />
  BYE ⏎<br  />
- ⇨ nanoFORTH v1.6 ok </p>
+ ⇨ nanoFORTH v2.0 ok </p>
 </blockquote>
 </li>
 </ul>
 <p>OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, double check it. Any suggestion is welcome before people hitting that button and stuck forever.</p>
+<ul>
+<li>multi-task with timer interrupt that blinks red LED at 100ms interval. <blockquote class="doxtable">
+<p>: <b>tic</b> 5 IN 1 XOR 5 OUT ; ⏎<br  />
+ 100 0 <b>TMI</b> tic ⏎<br  />
+ 1 TME ⏎<br  />
+ </p>
+</blockquote>
+</li>
+</ul>
+<p>nanoFORTH v2 has 8 slots for timer interrupt handlers. You can install or replace service routines in each slot independently (and on the fly if you really want to). So, <em>100 0 TMI tic</em> put our word <em>tic</em> in slot 0 at 100ms interval and <em>1 TME</em> turns on timer interrupt (of course, <em>0 TME</em> turns it off).</p>
 <p>So, nanoFORTH is <b>real-time</b>, and can <b>multi-task</b>. It is <b>interactive</b> and <b>extensible</b>. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.</p>
 <p><br  />
  <a href="page1.html">1. Why - Review nanoFORTH command examples</a><br  />

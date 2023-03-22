@@ -1,5 +1,6 @@
 var n4__asm_8h =
 [
+    [ "N4_META", "n4__asm_8h.html#a37ca24dd144eff164cbb87573e5f2507", null ],
     [ "N4OP", "n4__asm_8h.html#a0af31b1478147525dc0774389c9ba4d4", [
       [ "TKN_IMM", "n4__asm_8h.html#a0af31b1478147525dc0774389c9ba4d4a519782c3d4f1e59db91152fdd2ed33d8", null ],
       [ "TKN_WRD", "n4__asm_8h.html#a0af31b1478147525dc0774389c9ba4d4a0129112977afc323c9f1d14fec72c916", null ],
@@ -22,6 +23,9 @@ var n4__asm_8h =
     [ "compile", "n4__asm_8h.html#adf20a9f3f951f2f183eb60398618c66e", null ],
     [ "variable", "n4__asm_8h.html#a3f87b8f17e103c19afc2544bbb42a146", null ],
     [ "constant", "n4__asm_8h.html#a46691d4daa880d7a492a263925c6869e", null ],
+    [ "create", "n4__asm_8h.html#a3a2adf206b4e816082401a4045271a72", null ],
+    [ "comma", "n4__asm_8h.html#aec9bca8805d2e7135fb506e4ca5a344f", null ],
+    [ "ccomma", "n4__asm_8h.html#a2294c2f34392bd39c5f8ea54cc7fcec6", null ],
     [ "query", "n4__asm_8h.html#ab47ea1457ae8f3956dba74039c6db578", null ],
     [ "words", "n4__asm_8h.html#aae7b0979a6accbb7d0f1bc5c646c960f", null ],
     [ "forget", "n4__asm_8h.html#abcb801624632a840580a79196f744762", null ],

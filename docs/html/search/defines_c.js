@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['to32_350',['TO32',['../n4__vm_8cpp.html#a84ceb45af8b0dcd4f7c7b0ffa289fd4e',1,'n4_vm.cpp']]],
-  ['tos_351',['TOS',['../n4__vm_8cpp.html#a7ee1e26ca2891997f2b51dacefa3f475',1,'n4_vm.cpp']]],
-  ['trc_5flevel_352',['TRC_LEVEL',['../n4_8h.html#a5fb177bb8e18e5f101170ee484ad079d',1,'n4.h']]]
+  ['rpop_364',['RPOP',['../n4__asm_8cpp.html#a55b5173e6face979deb7372dcbb643df',1,'RPOP():&#160;n4_asm.cpp'],['../n4__vm_8cpp.html#a55b5173e6face979deb7372dcbb643df',1,'RPOP():&#160;n4_vm.cpp']]],
+  ['rpush_365',['RPUSH',['../n4__asm_8cpp.html#a82363ba7a7cd1a9826fa73d03805e641',1,'RPUSH():&#160;n4_asm.cpp'],['../n4__vm_8cpp.html#a82363ba7a7cd1a9826fa73d03805e641',1,'RPUSH():&#160;n4_vm.cpp']]]
 ];

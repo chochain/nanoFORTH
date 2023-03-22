@@ -85,8 +85,8 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 * to benchmark something, let's define a function **zz** that runs in empty loops and time it
 > : **zz** 10000 FOR NXT ;⏎<br/>
 > CLK DNG **zz** CLK D+ ⏎<br/>
-> ⇨ 160_0_ok
->> \> Our ten-thousand cycles are completed in 160ms, i.e. 16us/cycle, not too shabby!<br/>
+> ⇨ 103_0_ok
+>> \> Our ten-thousand cycles are completed in 103ms, i.e. ~10us/cycle, not too shabby!<br/>
 >> \> DNG negate the first clock ticks<br/>
 >> \> D+ add two clock counts (i.e. (-t0) + t1) to deduce the time difference
 
@@ -104,7 +104,7 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 
 * when needed, we can zap the sandbox i.e. reset the nanoFORTH system pointers for a fresh start
 > BYE ⏎<br/>
-> ⇨ nanoFORTH v1.6 ok
+> ⇨ nanoFORTH v2.0 ok
 >> \> The data stack, return stack, and instruction pointers will be reinitialized
 
 * after restart your Arduino, words can be restored from EEPROM where you saved earlier.
@@ -116,7 +116,7 @@ Alright! That has pretty much concluded our rounds of exercise. You probably hav
 > : **fun** ( - - ) 1000 DLY ." I'm alive! blink " 20 **xy** ; ⏎<br/>
 > SEX ⏎<br/>
 > BYE ⏎<br/>
-> ⇨ nanoFORTH v1.6 reset<br/>
+> ⇨ nanoFORTH v2.0 reset<br/>
 > ⇨ I'm alive! blink 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ok<br/>
 >> \> When you entered BYE this time, nanoFORTH reboot and runs the last word you've saved. In our case, it is **fun**, the blinker.<br/>
 >> \> Note that the ( - - ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comments to the end of your input line.<br/>
@@ -125,9 +125,16 @@ Alright! That has pretty much concluded our rounds of exercise. You probably hav
 * to disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place.
 > SAV ⏎<br/>
 > BYE ⏎<br/>
-> ⇨ nanoFORTH v1.6 ok
+> ⇨ nanoFORTH v2.0 ok
 
 OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, double check it. Any suggestion is welcome before people hitting that button and stuck forever.
+
+* multi-task with timer interrupt that blinks red LED at 100ms interval.
+> : **tic** 5 IN 1 XOR 5 OUT ; ⏎<br/>
+> 100 0 **TMI** tic ⏎<br/>
+> 1 TME ⏎<br/>
+
+nanoFORTH v2 has 8 slots for timer interrupt handlers. You can install or replace service routines in each slot independently (and on the fly if you really want to). So, *100 0 TMI tic* put our word *tic* in slot 0 at 100ms interval and *1 TME* turns on timer interrupt (of course, *0 TME* turns it off).
 
 So, nanoFORTH is **real-time**, and can **multi-task**. It is **interactive** and **extensible**. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.
 

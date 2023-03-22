@@ -1,6 +1,7 @@
 var n4__core_8cpp =
 [
     [ "init_mem", "n4__core_8cpp.html#a845d552476fac4f136b90d6a90c41c6c", null ],
+    [ "set_pre", "n4__core_8cpp.html#a2a38d3076bf721f94dcbd41c2353579a", null ],
     [ "uc", "n4__core_8cpp.html#a0d5cc20491c3146786349fde57c13f5b", null ],
     [ "memstat", "n4__core_8cpp.html#ac339ddeaa3e7378fbb8495ae5f50ce35", null ],
     [ "key", "n4__core_8cpp.html#ad93f809a92778f2f4fcdabc9350a3ea8", null ],
@@ -8,6 +9,7 @@ var n4__core_8cpp =
     [ "d_adr", "n4__core_8cpp.html#aee71abce5f671bc9e867f683e327a6e6", null ],
     [ "d_ptr", "n4__core_8cpp.html#aae3a814b552f13eb6f533f04e59793e6", null ],
     [ "d_num", "n4__core_8cpp.html#a4579127c2ecf48ea5ed3641446e6f4bc", null ],
+    [ "d_out", "n4__core_8cpp.html#a1f89113ebe2ce1d68c23d4cff96d1ee0", null ],
     [ "d_str", "n4__core_8cpp.html#a8ebd0caea89dd845a216290731901fa9", null ],
     [ "d_nib", "n4__core_8cpp.html#a00f8c798ee3ddd89c038999180347d17", null ],
     [ "d_u8", "n4__core_8cpp.html#a76fd10331f7f55db3f1a924fcdf7e1d5", null ],
@@ -15,6 +17,7 @@ var n4__core_8cpp =
     [ "d_name", "n4__core_8cpp.html#a286ee4feeeb87bfd3a44d3d353b2713c", null ],
     [ "number", "n4__core_8cpp.html#a6e0ac9033341f5ace29123d7fff5a755", null ],
     [ "clear_tib", "n4__core_8cpp.html#a3d456e769c6b769d0ff9a121ef67bbfe", null ],
+    [ "vkey", "n4__core_8cpp.html#a7fdcd56f30ef39f37f8c0963eccdddc4", null ],
     [ "_console_input", "n4__core_8cpp.html#a50a8de717ec705a5871cdb946538aee3", null ],
     [ "ok", "n4__core_8cpp.html#a5d15840dcc371f24919df0796a184046", null ],
     [ "get_token", "n4__core_8cpp.html#a1ee955bfab23663c77ae10b4a26a6f6d", null ],
@@ -22,9 +25,10 @@ var n4__core_8cpp =
     [ "dic", "n4__core_8cpp.html#ab11fdda5dd4a2660128e64087a7d507b", null ],
     [ "rp", "n4__core_8cpp.html#adb185f8146013c23d28c1d53d72111c9", null ],
     [ "sp", "n4__core_8cpp.html#aa9e558f030395d3ab72a3e137875d493", null ],
-    [ "tib", "n4__core_8cpp.html#ad6a03f737ad5214b3b81b922a3e70b9d", null ],
     [ "io", "n4__core_8cpp.html#a86633f8fd989f4914e0f225ae75f7f70", null ],
     [ "trc", "n4__core_8cpp.html#a081af5090a01cf873522af7fb88915bd", null ],
+    [ "_pre", "n4__core_8cpp.html#a6b00d2be0ece52e7ec88de6798f2e3d6", null ],
+    [ "_tib", "n4__core_8cpp.html#af4cfd55702a1a9197d05dd1304d1e8b4", null ],
     [ "_hex", "n4__core_8cpp.html#a32950658199a766610fd3f626900d510", null ],
     [ "_empty", "n4__core_8cpp.html#a576fdfd58a5d48965099bf43ba17098e", null ],
     [ "_ucase", "n4__core_8cpp.html#a06161fdbfa8516401c3c3a7da9c79620", null ]
