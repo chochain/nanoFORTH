@@ -316,7 +316,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <p>32 VAL <b>N</b> ⏎ ➤ <em>ok</em> (a const <b>N</b> is created on user dictionary)<br  />
  <b>N</b> 1 + ⏎ ➤ <em>33_ok</em><br  />
 </p>
-<p>VAR <b>z</b> 6 ALO ⏎ ➤ <em>ok</em> (a variable <b>z</b> with 6 extra bytes allocated, i.e. <b>z</b>[0..3])<br  />
+<p>VAR <b>z</b> 6 ALO ⏎ ➤ <em>ok</em> (a variable <b>z</b> with 8 (2+6 extra) bytes allocated, i.e. <b>z</b>[0..3])<br  />
  5 <b>z</b> 4 + ! ⏎ ➤ <em>ok</em> (5 is stored into <b>z</b>[2])<br  />
  <b>z</b> 4 + @ ⏎ ➤ <em>5_ok</em> (retrieve <b>z</b>[2] onto data stack)<br  />
  </p>
@@ -405,9 +405,10 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <p><b>Examples</b></p>
 <p>1 13 OUT ⏎ ➤ <em>ok</em> (built-in LED is turn on, i.e. digitalWrite(13, 1) called)<br  />
  $F0 $1F0 OUT ⏎ ➤ <em>ok</em> (turn on pin 4,5,6,7 at once)<br  />
-</p>
-<p></p>
+ </p>
 </blockquote>
+<p><br  />
+</p>
 <h3>C API function call</h3>
 <blockquote class="doxtable">
 <table class="markdownTable">
@@ -437,8 +438,8 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <p><b>Examples</b></p>
 <p>: aa 65 emt ; ➤ <em>ok</em> (define a word <b>aa</b> which emit 'A' on console)<br  />
  : bb 66 emt ; ➤ <em>ok</em> (define a word <b>bb</b> which emit 'B' on console)<br  />
- 1000 0 TMI <b>aa</b> ➤ <em>ok</em> (run <b>aa</b> every 10 seconds)<br  />
- 2500 0 TMI <b>bb</b> ➤ <em>ok</em> (run <b>bb</b> every 25 seconds)<br  />
+ 10000 0 TMI <b>aa</b> ➤ <em>ok</em> (set <b>aa</b> in handler slot #0, tigger every 10 seconds)<br  />
+ 25000 1 TMI <b>bb</b> ➤ <em>ok</em> (set <b>bb</b> in handler slot #1, tigger every 25 seconds)<br  />
  1 TME ➤ <em>ok</em> (enable timer interrupt)<br  />
  AABAAABAABAA (interrupt routines been called)<br  />
  0 TME ➤ <em>ok</em> (disable timer interrupt)<br  />
@@ -461,7 +462,7 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">DNG </td><td class="markdownTableBodyLeft"><code>( d0 -- -d0 )</code> </td><td class="markdownTableBodyLeft">negate a double number  </td></tr>
 </table>
-<p><b>Eexamples</b></p>
+<p><b>Examples</b></p>
 <p>CLK 1000 DLY CLK D- DNG ⏎ ➤ <em>1000_0_ok</em> </p>
 </blockquote>
 <h3>Meta Programming (available only via source recompilation with N4_META set to 1)</h3>
@@ -470,17 +471,22 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">, </td><td class="markdownTableBodyLeft"><code>( n -- )</code> </td><td class="markdownTableBodyLeft">add a 16-bit value onto dictionary  </td></tr>
+<td class="markdownTableBodyLeft">CRE </td><td class="markdownTableBodyLeft"><code>( -- )</code> </td><td class="markdownTableBodyLeft">create a word with link and name field  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">C, </td><td class="markdownTableBodyLeft"><code>( n -- )</code> </td><td class="markdownTableBodyLeft">add a 8-bit value onto dictionary  </td></tr>
+<td class="markdownTableBodyLeft">, </td><td class="markdownTableBodyLeft"><code>( n -- )</code> </td><td class="markdownTableBodyLeft">comma, add a 16-bit value onto dictionary  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">' </td><td class="markdownTableBodyLeft"><code>( -- xt )</code> </td><td class="markdownTableBodyLeft">fetch xt (parameter field address) of a word  </td></tr>
+<td class="markdownTableBodyLeft">C, </td><td class="markdownTableBodyLeft"><code>( n -- )</code> </td><td class="markdownTableBodyLeft">byte comma, add a 8-bit value onto dictionary  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">' </td><td class="markdownTableBodyLeft"><code>( -- xt )</code> </td><td class="markdownTableBodyLeft">tick, fetch xt (parameter field address) of a word  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">EXE </td><td class="markdownTableBodyLeft"><code>( xt -- )</code> </td><td class="markdownTableBodyLeft">execute an xt address  </td></tr>
 </table>
+<p><b>Examples</b></p>
+<p>: aa 123 ; ⏎ ➤ <em>ok</em> (create a word) CRE bb ⏎ ➤ <em>ok</em> (create a empty word bb with it link and name field only) ' aa ⏎ ➤ <em>5_ok</em> (aa's xt address is put on top of stack) $C0 OR , ⏎ ➤ <em>ok</em> (combile the address and call flag onto dictionary) $F0 , ⏎ ➤ <em>ok</em> (compile RET opcode onto dictionary) bb ⏎ ➤ <em>123_ok</em> (bb calls aa, so returns 123 on stack) ' bb ⏎ ➤ <em>123_11_ok</em> (get bb's xt address) EXE ➤ <em>123_123_ok</em> (execute bb's xt directly) </p>
 </blockquote>
 <p><br  />
- </p><h2>Function/Word Struct</h2>
+</p>
+<h2>Function/Word Struct</h2>
 <blockquote class="doxtable">
 <table class="markdownTable">
 <tr class="markdownTableHead">
