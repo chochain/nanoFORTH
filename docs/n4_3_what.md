@@ -142,7 +142,7 @@ nanoFORTH handles only integer numbers.
 > 32 VAL **N** ⏎ ➤ *ok* (a const **N** is created on user dictionary)<br/>
 > **N** 1 + ⏎ ➤ *33_ok*<br/>
 >
-> VAR **z** 6 ALO ⏎ ➤ *ok* (a variable **z** with 6 extra bytes allocated, i.e. **z**[0..3])<br/>
+> VAR **z** 6 ALO ⏎ ➤ *ok* (a variable **z** with 8 (2+6 extra) bytes allocated, i.e. **z**[0..3])<br/>
 > 5 **z** 4 + ! ⏎ ➤ *ok*   (5 is stored into **z**[2])<br/>
 > **z** 4 + @ ⏎ ➤ *5_ok* (retrieve **z**[2] onto data stack)<br/>
 
@@ -197,7 +197,7 @@ nanoFORTH handles only integer numbers.
 >
 > 1 13 OUT ⏎ ➤ *ok*  (built-in LED is turn on, i.e. digitalWrite(13, 1) called)<br/>
 > $F0 $1F0 OUT ⏎ ➤ *ok* (turn on pin 4,5,6,7 at once)<br/>
->
+<br/>
 
 ### C API function call
 > |opcode|stack|description|
@@ -217,8 +217,8 @@ nanoFORTH handles only integer numbers.
 >
 > : aa 65 emt ; ➤ *ok* (define a word **aa** which emit 'A' on console)<br/>
 > : bb 66 emt ; ➤ *ok* (define a word **bb** which emit 'B' on console)<br/>
-> 1000 0 TMI **aa** ➤ *ok* (run **aa** every 10 seconds)<br/>
-> 2500 0 TMI **bb** ➤ *ok* (run **bb** every 25 seconds)<br/>
+> 10000 0 TMI **aa** ➤ *ok* (set **aa** in handler slot #0, tigger every 10 seconds)<br/>
+> 25000 1 TMI **bb** ➤ *ok* (set **bb** in handler slot #1, tigger every 25 seconds)<br/>
 > 1 TME ➤ *ok* (enable timer interrupt)<br/>
 > AABAAABAABAA (interrupt routines been called)<br/>
 > 0 TME ➤ *ok* (disable timer interrupt)<br/>
@@ -235,19 +235,31 @@ nanoFORTH handles only integer numbers.
 > |D- |`( d1 d0 -- d1-d0 )`|subtract two doubles|
 > |DNG|`( d0 -- -d0 )`|negate a double number|
 >
-> **Eexamples**
+> **Examples**
 >
 > CLK 1000 DLY CLK D- DNG ⏎ ➤ *1000_0_ok*
 
 ### Meta Programming (available only via source recompilation with N4_META set to 1)
 > |opcode|stack|description|
 > |:--|:--|:--|
-> |,  |`( n -- )`|add a 16-bit value onto dictionary|
-> |C, |`( n -- )`|add a 8-bit value onto dictionary|
-> |'  |`( -- xt )`|fetch xt (parameter field address) of a word|
+> |CRE|`( -- )`|create a word with link and name field|
+> |,  |`( n -- )`|comma, add a 16-bit value onto dictionary|
+> |C, |`( n -- )`|byte comma, add a 8-bit value onto dictionary|
+> |'  |`( -- xt )`|tick, fetch xt (parameter field address) of a word|
 > |EXE|`( xt -- )`|execute an xt address|
-
+>
+> **Examples**
+>
+> : aa 123 ; ⏎ ➤ *ok*  (create a word)
+> CRE bb ⏎ ➤ *ok*      (create a empty word bb with it link and name field only)
+> ' aa ⏎ ➤ *5_ok*      (aa's xt address is put on top of stack)
+> $C0 OR , ⏎ ➤ *ok*    (combile the address and call flag onto dictionary)
+> $F0 , ⏎ ➤ *ok*       (compile RET opcode onto dictionary)
+> bb ⏎ ➤ *123_ok*      (bb calls aa, so returns 123 on stack)
+> ' bb ⏎ ➤ *123_11_ok* (get bb's xt address)
+> EXE ➤ *123_123_ok*   (execute bb's xt directly)
 <br/>
+
 ## Function/Word Struct
 > |size|field|
 > |:--|:--|
