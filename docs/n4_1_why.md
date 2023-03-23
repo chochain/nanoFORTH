@@ -89,7 +89,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 > **lit** ⏎<br>
 > ⇨ 1_ok
 
-* define **?Z** that turns on red or blue depends on value on top of data stack. 
+* define **?z** that turns on red or blue depends on value on top of data stack. 
 > : **?z** IF **red** ELS **blu** THN ; ⏎
 >> \> **?z** is our newly defined function. Unlike most of the other languages, you can create some really strange function names in FORTH.
 
@@ -97,7 +97,7 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 > 1 **?z** ⏎<br>
 > 0 **?z** ⏎
 
-* now we may turn on red or blue LED depending on lighting condition (try blocking the photoresister), **lit** leaves 1 or 0 on data stack, **?Z** takes the value and turns on the red or blue LED
+* now we may turn on red or blue LED depending on lighting condition (try blocking the photoresister), **lit** leaves 1 or 0 on data stack, **?z** takes the value and turns on the red or blue LED
 > **lit** **?z** ⏎
 
 * define a word **xyz** to keep checking photoresister, turn the blue or red LED on depending on the photoresister value read until button hooked at pin 7 is pushed
@@ -112,9 +112,11 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 > |:--|
 > |@image html images/nanoforth_wrd_list.png width=800px|
 >> \> Behold! This is nanoFORTH in its entirety. It's a short list of 'words' which should be rather easy to master.
+>> \> Note that this has been the way Forth programmers building their applications. One small word at a time. Debug each well then combine them into a "bigger" word. If a bug found, FGT the word, redefine it. Next word!
+
 <br/>
 
-OK, if that have captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Remember that we do these without any compilation, instead, "talk" directly with Arduino once nanoFORTH uploaded via the USB cable. The interactive nature changes the way we are very used to on this platform. Imagine, what if we can do it via WiFi or BLE using our Nano? Look Mom! I can talk to the mailbox. No cable!
+OK, if that have captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Let's stop and contemplate for a while. We did all of the above without any recompilation. Instead, we "talked" directly with the nanoFORTH on Arduino loaded only once via the USB cable. The interactive nature changes the way we are very used to on this platform. Just consider how many times you have to compile your pet C code to go through the functions shown above. So, let's imagine what if we can do it via WiFi or BLE using our Nano?
 
 <br/>
 <a href="page2.html">2. How - Ready to get nanoFORTH for a trial?</a><br/>

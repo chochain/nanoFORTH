@@ -40,7 +40,7 @@ You can skip to next section and start getting your hands dirty right away. Howe
 >
 > \> open nanoFORTH.ino with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board
 >
-> \> in nanoFORTH.ino, change the #include <nanoforth.h> to #include "./src/nanoforth.h"
+> \> in nanoFORTH.ino, change the #include <nanoFORTH.h> to #include "./src/nanoFORTH.h"
 >
 > \> open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL & CR'
 >
@@ -62,7 +62,7 @@ We have gone through a lot of 'paper work', time for some hands-on again. If nee
 Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 * turn the tracing flag on, and try everything we did in the previous page
 > 1 TRC ⏎<br/>
-> **lit** **?Z**
+> **lit** **?z**
 
 * if it's too much info for you, then turn the tracing off
 > 0 TRC ⏎<br/>
@@ -134,7 +134,7 @@ OK, we know microcontrollers in the field are often built to run in an endless l
 > 100 0 **TMI** tic ⏎<br/>
 > 1 TME ⏎<br/>
 
-nanoFORTH v2 has 8 slots for timer interrupt handlers. You can install or replace service routines in each slot independently (and on the fly if you really want to). So, *100 0 TMI tic* put our word *tic* in slot 0 at 100ms interval and *1 TME* turns on timer interrupt (of course, *0 TME* turns it off).
+nanoFORTH provides 8 slots for timer interrupt handlers. You can install or replace service routines in each slot independently (and on the fly if you want to). So, **100 0 TMI tic** put our word **tic** in slot 0 at 100ms interval and **1 TME** turns on timer interrupt (so, **0 TME** turns it off, of course).
 
 So, nanoFORTH is **real-time**, and can **multi-task**. It is **interactive** and **extensible**. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.
 

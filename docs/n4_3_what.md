@@ -7,20 +7,20 @@ At its core, nanoFORTH is a traditional **parse-dispatch virtual machine** inter
 Compared to any FORTH language tutorial, you probably will notice that the length of a word of nanoFORTH, unlike most are 31-character, is 3 characters or less. Core vocabulary is a short list which means makers need to define one if a more elaborated function is needed. There is no floating-point or meta-compiler supported. These depart from standard FORTHs and begs the question of whether nanoFORTH is truly a FORTH. Well, our target platform is a very small MCU and our application has probably a dozen of functions. Aside from saving a few bytes, it has the benefit in simplifying internal searching. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable. To qualify it as a FORTH or not, probably doesn't matter that much so long as it behaves well, runs fast enough, and useful for our needs.
 
 ### Arduino Nano Memory Map
-> |address|object|growth|forth|
-> |--:|:---:|:--:|:--:|
-> |0x900|Arduino RAM max|_|.|
-> |0x8f6|global/static variables|⇩|.|
-> |...|Arduino heap|⇩|.|
-> |...|Forth input buffer|⇧|X|
-> |0x618| **return stack** |⇩|X|
-> |...|0x100 shared space|_|X|
-> |0x518| **data stack** |⇧|X|
-> |...|user defined words|⇧|X|
-> |0x1e8| **user dictionary** starts|⇧|X|
-> |...|Arduino libraries|_|.|
-> |0x100|Arduino RAM starts|_|.|
-> |0x000|Arduino registers|_|.|
+> |address|object|growth|forth|EEPROM|
+> |--:|:---:|:--:|:--:|:--:|
+> |0x900|Arduino RAM max|_|.|.|
+> |0x8f6|global/static variables|⇩|.|.|
+> |...|Arduino heap|⇩|.|.|
+> |...|Forth input buffer|⇧|X|.|
+> |0x618| **return stack** |⇩|X|.|
+> |...|0x100 shared space|_|X|.|
+> |0x518| **data stack** |⇧|X|.|
+> |...|user defined words|⇧|X|X|
+> |0x1e8| **user dictionary** starts|⇧|X|X|
+> |...|Arduino libraries|_|.|.|
+> |0x100|Arduino RAM starts|_|.|.|
+> |0x000|Arduino registers|_|.|.|
 
 Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.
 
