@@ -60,14 +60,14 @@ You can skip to next section and start getting your hands dirty right away. Howe
 We have gone through a lot of 'paper work', time for some hands-on again. If needed, or you've skipped through somehow, please do review the previous page <a href="page1.html" target="_blank">HERE (the Why page)</a> for some instructions we've gone through earlier.
 
 Now let's try some fancy stuffs to see what nanoFORTH has to offer.
-* turn the tracing flag on, and try everything we did in the previous page
+* Turn the tracing flag on, and try everything we did in the previous page.
 > 1 TRC ⏎<br/>
 > **lit** **?z**
 
-* if it's too much info for you, then turn the tracing off
+* If it's too much info for you, then turn the tracing off.
 > 0 TRC ⏎<br/>
 
-* to do some logic ops in hex, and back in decimal, we can do this
+* To do some logic ops in hex, and back in decimal, we can do this.
 > HEX ⏎<br/>
 > 40 38
 > ⇨ 40_38_ok
@@ -76,13 +76,13 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 > DEC ⏎<br/>
 > ⇨ 120_ok
 
-* get Arduino clock/millis, a double precision (i.e. 32-bit) value
+* Get Arduino clock/millis, a double precision (i.e. 32-bit) value.
 > CLK ⏎<br/>
 > ⇨ 17786_9_ok
 >> \> nanoFORTH uses two 16-bit cells on data stack to represent the 32-bit number<br/>
 >> \> note the numbers above are for example only, your clock read will be different
 
-* to benchmark something, let's define a function **zz** that runs in empty loops and time it
+* To benchmark something, let's define a function **zz** that runs in empty loops and time it.
 > : **zz** 10000 FOR NXT ;⏎<br/>
 > CLK DNG **zz** CLK D+ ⏎<br/>
 > ⇨ 103_0_ok
@@ -90,29 +90,29 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 >> \> DNG negate the first clock ticks<br/>
 >> \> D+ add two clock counts (i.e. (-t0) + t1) to deduce the time difference
 
-* to find out how many bytes of memory has been used
+* To find out how many bytes of memory has been used.
 > HRE ⏎<br/>
 > ⇨ 76_ok
 
-* to dump the memory to see how all these words are encoded in the dictionary
+* To dump the memory to see how all these words are encoded in the dictionary.
 > 0 HRE DMP ⏎
 >> \> There! You can see the hex dump of our **red** ... **blu** ...<br/>
 >> \> in their gory detail all the way up to the latest word **zz**
 
-* at the end of the day, or to prevent a power outage hit, we can save what's been done so far into EEPROM
+* At the end of the day, or to prevent a power outage hit, we can save what's been done so far into EEPROM.
 > SAV ⏎
 
-* when needed, we can zap the sandbox i.e. reset the nanoFORTH system pointers for a fresh start
+* When needed, we can zap the sandbox i.e. reset the nanoFORTH system pointers for a fresh start.
 > BYE ⏎<br/>
 > ⇨ nanoFORTH v2.0 ok
 >> \> The data stack, return stack, and instruction pointers will be reinitialized
 
-* after restart your Arduino, words can be restored from EEPROM where you saved earlier.
+* After restart your Arduino, words can be restored from EEPROM where you saved earlier.
 > LD ⏎<br/>
 > 0 HRE DMP ⏎
 
 Alright! That has pretty much concluded our rounds of exercise. You probably have wondered that if the SAV/LD pair can provide the ability to withstand power failures, can it be rebooted in the field for our future apps on Nanos? Well, yes! To do that, we have another word for you - **SEX** - it is! Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboots, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.
-* here's one example
+* Here's one example for a turnkey start up.
 > : **fun** ( - - ) 1000 DLY ." I'm alive! blink " 20 **xy** ; ⏎<br/>
 > SEX ⏎<br/>
 > BYE ⏎<br/>
@@ -122,21 +122,29 @@ Alright! That has pretty much concluded our rounds of exercise. You probably hav
 >> \> Note that the ( - - ) is a Forth-style comment that you can use. A \\ (back slash) can also be used to ignore comments to the end of your input line.<br/>
 >> \> if you missed how **xy** worked, you might need to revisit the previous page <a href="page1.html" target="_blank">HERE</a> 
 
-* to disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place.
+* To disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place.
 > SAV ⏎<br/>
 > BYE ⏎<br/>
 > ⇨ nanoFORTH v2.0 ok
 
-OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, double check it. Any suggestion is welcome before people hitting that button and stuck forever.
+We know microcontrollers in the field are often built to run in an endless loop. But, before you get creative and save the wonderful turnkey application into EEPROM, make sure you know how to get out of a reboot loop. Since it might be your last word, do double check it. Regardless, if you found your Arduino is stuck, all is not lost. It's a bit messy but basically you need to compile/upload another .ino file that can wipe the EEPROM before you can reload nanoFORTH (or it will try loading your code from EEPROM and autoexec again).
 
-* multi-task with timer interrupt that blinks red LED at 100ms interval.
+OK, if you feel good so far, we can try some fancy stuffs. nanoFORTH uses Arduino 8-bit Timer2 for its internal "ticker". The 16-bit Timer1 is purposely left for other libraries such as Servo, AltSoftSerial. There are 8 slots available for timer interrupt handlers. You can install or replace service routines in each slot independently (and on the fly if you want to). Signal changed from either HIGH to LOW or LOW to HIGH can be track by installing Ping Change Interrupt handler.
+
+* Multi-task with timer interrupt that blinks red LED at 100ms interval.
 > : **tic** 5 IN 1 XOR 5 OUT ; ⏎<br/>
 > 100 0 **TMI** tic ⏎<br/>
 > 1 TME ⏎<br/>
+>> \> put our word **tic** in timer interrupt handler slot 0 and to serve at 100ms interval,<br/>
+>> \> 1 TME turns on timer interrupt, the red LED should start blinking, and 0 TME will turns it off, of course<br/>
 
-nanoFORTH provides 8 slots for timer interrupt handlers. You can install or replace service routines in each slot independently (and on the fly if you want to). So, **100 0 TMI tic** put our word **tic** in slot 0 at 100ms interval and **1 TME** turns on timer interrupt (so, **0 TME** turns it off, of course).
+* Track pin signal changed with Ping Change Interrupt.
+> 12 **PCI** tic ⏎<br/>
+>> \> when pin 12 signal changed, **tic** will be called.<br/>
+>> Note that, limited by design, Arduino ping change interrupt groups pings into only 3 ports (i.e. 0~7, 8~13, A0~A7). So if you have both pin 4 and 5 (in the same group) enabled, only one call to **tic** if signals changed. To identify which pin changed, you need to read the port themselves to make sure. Read <a href="https://electronoobs.com/eng_arduino_tut132.php" target="_blank">this site</a> for details.
 
-So, nanoFORTH is **real-time**, and can **multi-task**. It is **interactive** and **extensible**. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.
+
+All in all, nanoFORTH is **real-time**, and can **multi-task**. It is **interactive** and **extensible**. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.
 
 <br/>
 <a href="page1.html">1. Why - Review nanoFORTH command examples</a><br/>

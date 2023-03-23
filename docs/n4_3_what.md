@@ -7,14 +7,14 @@ At its core, nanoFORTH is a traditional **parse-dispatch virtual machine** inter
 Compared to any FORTH language tutorial, you probably will notice that the length of a word of nanoFORTH, unlike most are 31-character, is 3 characters or less. Core vocabulary is a short list which means makers need to define one if a more elaborated function is needed. There is no floating-point or meta-compiler supported. These depart from standard FORTHs and begs the question of whether nanoFORTH is truly a FORTH. Well, our target platform is a very small MCU and our application has probably a dozen of functions. Aside from saving a few bytes, it has the benefit in simplifying internal searching. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable. To qualify it as a FORTH or not, probably doesn't matter that much so long as it behaves well, runs fast enough, and useful for our needs.
 
 ### Arduino Nano Memory Map
-> |address|object|growth|forth|EEPROM|
+> |address|object|growth|Forth|EEPROM|
 > |--:|:---:|:--:|:--:|:--:|
 > |0x900|Arduino RAM max|_|.|.|
-> |0x8f6|global/static variables|⇩|.|.|
-> |...|Arduino heap|⇩|.|.|
-> |...|Forth input buffer|⇧|X|.|
-> |0x618| **return stack** |⇩|X|.|
-> |...|0x100 shared space|_|X|.|
+> |0x8f6|global/static variables/Arduino heap|⇩|.|.|
+> |...|...|...|.|.|
+> |0x618|Forth input buffer|⇧|X|.|
+> |0x617| **return stack** |⇩|X|.|
+> |...|0x100 shared space|...|X|.|
 > |0x518| **data stack** |⇧|X|.|
 > |...|user defined words|⇧|X|X|
 > |0x1e8| **user dictionary** starts|⇧|X|X|
@@ -22,7 +22,7 @@ Compared to any FORTH language tutorial, you probably will notice that the lengt
 > |0x100|Arduino RAM starts|_|.|.|
 > |0x000|Arduino registers|_|.|.|
 
-Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.
+Note, we have the 1K EEPROM sitting on the side which can save and restore the user dictionary when instructed.
 
 ## Number Representation
 nanoFORTH handles only integer numbers.
@@ -190,7 +190,7 @@ nanoFORTH handles only integer numbers.
 > |DLY|`( w -- )`|wait milliseconds (yield to hardware tasks)|
 > |PIN|`( w p -- )`|pinMode(p, w)|
 > |IN |`( p -- w )`|digitalRead(p)|
-> |OUT|`( w p -- )`|digitalWrite(p, w),<br/>when p=0x1xx, xx masks PORTD (pin 0~7),<br/>when p=0x2xx, xx masks PORTB (pin 8~13)<br/>when p=$3xx, xx masks PORTC (analog A0~A6)|
+> |OUT|`( w p -- )`|if p=0x0xx, digitalWrite(xx, w),<br/>if p=0x1xx, xx masks PORTD (pin 0~7) i.e. multi-port write,<br/>if p=0x2xx, xx masks PORTB (pin 8~13)<br/>if p=0x3xx, xx masks PORTC (analog A0~A6)|
 > |AIN|`( p -- w )`|analogRead(p)|
 > |PWM|`( w p -- )`|analogWrite(p, w)|
 > 
@@ -208,19 +208,18 @@ nanoFORTH handles only integer numbers.
 ### Interrupt ops
 > |opcode|stack|description|
 > |:--|:--|:--|
-> |TMR|`( n i -- )`|set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds|
+> |TMI|`( n i -- )`|set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds|
 > |PCI|`( p -- )`|capture pin #p change (either HIGH to LOW or LOW to HIGH)|
 > |TME|`( f -- )`|enable/disable timer interrupt, 0:disable, 1:enable|
 > |PCE|`( f -- )`|enable/disable pin change interrupt, 0:disable, 1:enable|
-> Note: nanoForth utilizes timer2 for timer interrupt. It might conflict with libraries which also uses timer2 such as Tone().
+>> Note: nanoForth utilizes timer2 for timer interrupt. It might conflict with libraries which also uses timer2 such as Tone().
 >
 > **Examples**
 >
 > : aa 65 emt ; ➤ *ok* (define a word **aa** which emit 'A' on console)<br/>
 > : bb 66 emt ; ➤ *ok* (define a word **bb** which emit 'B' on console)<br/>
->
-> 1000 0 TMR **aa** ➤ *ok* (run **aa** every 10 seconds)<br/>
-> 2500 0 TMR **bb** ➤ *ok* (run **bb** every 25 seconds)<br/>
+> 1000 0 TMI **aa** ➤ *ok* (run **aa** every 10 seconds)<br/>
+> 2500 0 TMI **bb** ➤ *ok* (run **bb** every 25 seconds)<br/>
 > 1 TME ➤ *ok* (enable timer interrupt)<br/>
 > AABAAABAABAA (interrupt routines been called)<br/>
 > 0 TME ➤ *ok* (disable timer interrupt)<br/>

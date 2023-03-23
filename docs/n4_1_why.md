@@ -28,38 +28,38 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 * capable of autorun after reboot (from saved EEPROM image).
 
 ### Use Cases - Interaction Examples
-* turn on LED(red) on digital pin 5, imagine you have a board hooked up, or <a href="https://wokwi.com/projects/359920992049600513" target="_blank">check this Wokwi project</a>
+* Turn on LED(red) on digital pin 5, imagine you have a board hooked up, or try <a href="https://wokwi.com/projects/359920992049600513" target="_blank">check this Wokwi project</a>
 > 1 5 OUT ⏎
 > ||
 > |:--|
 > |@image html images/nanoforth_led_red.jpg width=200px|
 <br/>
 
-* turn off LED(blue) on digital pin 6, (0 is LOW)
+* Turn off LED(blue) on digital pin 6, (0 is LOW).
 > 0 6 OUT ⏎
 
-* define a function, or a 'word' in FORTH, **red** to turn red LED on, and blue LED off
+* Tefine a function, or a 'word' in FORTH, **red** to turn red LED on, and blue LED off.
 > : **red** 1 5 OUT 0 6 OUT ; ⏎
 >> \> the symbol : starts the definition, and ; ends the function (or word) definition
 
-* define another word **blu** to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only)
+* Define another word **blu** to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only).
 > : **blu** 0 5 OUT 1 6 OUT ; ⏎
 
-* execute **blu**, i.e. to turn red LED off, and blue LED on 
+* Execute **blu**, i.e. to turn red LED off, and blue LED on.
 > **blu** ⏎
 >> \> a function is defines in the 'Compile Mode', and executed in 'Interpreter Mode'. The differece is at the leading ':' (colon) sign.
 
-* define a word **xy** to blink red/blue every 500 ms alternatively
+* Define a word **xy** to blink red/blue every 500 ms alternatively.
 > : **xy** FOR **red** 500 DLY **blu** 500 DLY NXT ; ⏎
 
-* run 10 cycles of **xy**
+* Run 10 cycles of **xy**.
 > 10 **xy** ⏎
 > ||
 > |:--|
 > |@htmlonly <iframe width="400" height="320" src="https://www.youtube.com/embed/trmDNh41-pQ?version=3&playlist=trmDNh41-pQ&loop=1&controls=0" title="" frameborder="0" allow="autoplay; picture-in-picture" allowfullscreen></iframe> @endhtmlonly|
 >> \> so, 10 FOR ... NXT is to loop 10 times, (counting down from 10, 9, 8, ..., 2, 1)
 
-* if that's a bit too slow! nanoFORTH allows you redefine **xy** by "forget" it first
+* If that's a bit too slow! nanoFORTH allows you redefine **xy** by "forget" it first.
 > FGT **xy** ⏎<br/>
 >> \> that erased **xy** from memory, we can redefine it now<br/>
 >> \> actually, multiple definition of the same function is allowed, the latest one takes precedence.<br/>
@@ -67,56 +67,60 @@ Following the footsteps of <a href="http://middleriver.chagasi.com/electronics/t
 >
 > : **xy** FOR **red** 200 DLY **blu** 300 DLY **I .** NXT ; ⏎<br/>
 
-* now try 20 cycles of **xy** this time
+* Now, try 20 cycles of **xy** this time.
 > 20 **xy** ⏎
 > ⇨ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ok
 >> \> so, you've probably noticed that **I** is the loop counter and . (dot) prints it<br/>
 
-* let's try analog, say read a value from analog pin 1 (photoresister value 0~1023), assuming you have one installed
+* Let's try analog, say read a value from analog pin 1, assuming you have one installed, or again try <a href="https://wokwi.com/projects/359920992049600513" target="_blank">this Wokwi project</a>
 > 1 AIN ⏎<br>
 > ⇨ 258_ok
 >> \> 258 is the value nanoFORTH read from photoresister, then place it on top of data stack
+>> \> a photoresister or potentiometer returns value between 0 and 1023
 
-* we don't need the value 258, let's drop it from data stack to keep it clean
+* If we don't need the value 258, we can drop it from data stack to keep it clean
 > DRP ⏎<br>
 > ⇨ ok
 >> \> 258 is gone now
 
-* define **lit** to read from photoresister (or a potentiometer) and determine whether its value is > 200
+* Define **lit** to read from photoresister (or a potentiometer) and determine whether its value is > 200.
 > : **lit** 1 AIN 200 > ; ⏎
 
-* execute **lit**, it puts value 1 on data stack (FORTH's memory) if your room is bright enough, a value 0 otherwise
+* Execute **lit**, it puts value 1 on data stack (FORTH's memory) if your room is bright enough, a value 0 otherwise.
 > **lit** ⏎<br>
 > ⇨ 1_ok
 
-* define **?z** that turns on red or blue depends on value on top of data stack. 
+* Define **?z** that turns on red or blue depends on value on top of data stack. 
 > : **?z** IF **red** ELS **blu** THN ; ⏎
 >> \> **?z** is our newly defined function. Unlike most of the other languages, you can create some really strange function names in FORTH.
 
-* run **?z** which read from top of data stack, if it's 1 then turns on red LED or 0 turns on blue
+* Run **?z** which read from top of data stack, if it's 1 then turns on red LED or 0 turns on blue. Try these
 > 1 **?z** ⏎<br>
 > 0 **?z** ⏎
 
-* now we may turn on red or blue LED depending on lighting condition (try blocking the photoresister), **lit** leaves 1 or 0 on data stack, **?z** takes the value and turns on the red or blue LED
+* We now can turn on red or blue LED depend on lighting condition (try blocking the photoresister), **lit** leaves 1 or 0 on data stack, **?z** takes the value and turns on the red or blue LED.
 > **lit** **?z** ⏎
 
-* define a word **xyz** to keep checking photoresister, turn the blue or red LED on depending on the photoresister value read until button hooked at pin 7 is pushed
+* Define a word **xyz** to keep checking photoresister, turn the blue or red LED on depending on the photoresister value read until button hooked at pin 7 is pushed.
 > : **xyz** BGN **lit** **?z** 7 IN UTL ; ⏎<br>
 > **xyz** ⏎
 >> \> Try blocking the photoresister to see the LED toggles.<br/>
 >> \> Can this become a trigger i.e. mouse trap or something useful? Why not!<br/>
 
-* show all nanoFORTH words available, including **xyz**, **?z**, **xy**, **lit**, **blu**, **red** that we've just created
+* Let's list all nanoFORTH words available in its dictionary.
 > WRD ⏎
 > ||
 > |:--|
 > |@image html images/nanoforth_wrd_list.png width=800px|
->> \> Behold! This is nanoFORTH in its entirety. It's a short list of 'words' which should be rather easy to master.
->> \> Note that this has been the way Forth programmers building their applications. One small word at a time. Debug each well then combine them into a "bigger" word. If a bug found, FGT the word, redefine it. Next word!
+>> \> See the latest, they include **xyz**, **?z**, **xy**, **lit**, **blu**, **red** that we've just created.
+
+Behold! This is nanoFORTH in its entirety. It's a short list of 'words' which should be rather easy to master. Note that the steps illustrated above has been the way Forth programmers building their applications. One small word at a time. Debug each well interactively then combine them into a "bigger" word. If a bug found, FGT the word, redefine it. Next word!
 
 <br/>
 
-OK, if that have captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Let's stop and contemplate for a while. We did all of the above without any recompilation. Instead, we "talked" directly with the nanoFORTH on Arduino loaded only once via the USB cable. The interactive nature changes the way we are very used to on this platform. Just consider how many times you have to compile your pet C code to go through the functions shown above. So, let's imagine what if we can do it via WiFi or BLE using our Nano?
+OK! If the process shown above has captured the essense, we should have an idea of what nanoFORTH is trying to do. Let's just stop and contemplate for a while. We did all of the above without any recompilation. Instead, we "talked" directly with the nanoFORTH uploaded only once via the USB cable. Should you code these in C, how do you go about doing it?
+
+The interactive nature is different from the way we are so used to on Arduino platform. Just consider how many times you have to compile your C code to go through the functions shown above. So, move forward, let's envision how we can control robots or what we can do using Bluetooth with our Nano...
 
 <br/>
 <a href="page2.html">2. How - Ready to get nanoFORTH for a trial?</a><br/>
