@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">nanoFORTH
-   &#160;<span id="projectnumber">v1.6</span>
+   &#160;<span id="projectnumber">v2.0</span>
    </div>
   </td>
  </tr>
@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('nanoFORTH_8h_source.html',''); initRes
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#ifndef __SRC_NANOFORTH_H</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define __SRC_NANOFORTH_H</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> <a class="code" href="nanoFORTH_8h.html#a5b3a7adf9153bf45681767bb9b414463">n4_setup</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *code);</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> <a class="code" href="nanoFORTH_8h.html#ae66230265262bfcec7e06b026079788b">n4_setup</a>(<span class="keyword">const</span> <span class="keywordtype">char</span> *code=0, Stream &amp;<a class="code" href="namespaceN4Core.html#a86633f8fd989f4914e0f225ae75f7f70">io</a>=Serial, <span class="keywordtype">int</span> ucase=0);</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> <a class="code" href="nanoFORTH_8h.html#a501e37146b3a03e38755e08a41067f7b">n4_api</a>(<span class="keywordtype">int</span> i, <span class="keywordtype">void</span> (*fp)());</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">void</span> <a class="code" href="nanoFORTH_8h.html#aed6916ae35c70dfbf2f712a6ea0d359b">n4_push</a>(<span class="keywordtype">int</span> v);</div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">extern</span> <span class="keywordtype">int</span>  <a class="code" href="nanoFORTH_8h.html#ae2c2d6cacdd559dfc10e5280284001fb">n4_pop</a>();</div>
@@ -99,9 +99,10 @@ $(document).ready(function(){initNavTree('nanoFORTH_8h_source.html',''); initRes
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#endif // __SRC_NANOFORTH_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="ananoFORTH_8h_html_a501e37146b3a03e38755e08a41067f7b"><div class="ttname"><a href="nanoFORTH_8h.html#a501e37146b3a03e38755e08a41067f7b">n4_api</a></div><div class="ttdeci">void n4_api(int i, void(*fp)())</div><div class="ttdef"><b>Definition:</b> n4.cpp:65</div></div>
-<div class="ttc" id="ananoFORTH_8h_html_a5b3a7adf9153bf45681767bb9b414463"><div class="ttname"><a href="nanoFORTH_8h.html#a5b3a7adf9153bf45681767bb9b414463">n4_setup</a></div><div class="ttdeci">void n4_setup(const char *code)</div><div class="ttdef"><b>Definition:</b> n4.cpp:66</div></div>
+<div class="ttc" id="ananoFORTH_8h_html_ae66230265262bfcec7e06b026079788b"><div class="ttname"><a href="nanoFORTH_8h.html#ae66230265262bfcec7e06b026079788b">n4_setup</a></div><div class="ttdeci">void n4_setup(const char *code=0, Stream &amp;io=Serial, int ucase=0)</div><div class="ttdef"><b>Definition:</b> n4.cpp:65</div></div>
+<div class="ttc" id="ananoFORTH_8h_html_a501e37146b3a03e38755e08a41067f7b"><div class="ttname"><a href="nanoFORTH_8h.html#a501e37146b3a03e38755e08a41067f7b">n4_api</a></div><div class="ttdeci">void n4_api(int i, void(*fp)())</div><div class="ttdef"><b>Definition:</b> n4.cpp:66</div></div>
 <div class="ttc" id="ananoFORTH_8h_html_aed6916ae35c70dfbf2f712a6ea0d359b"><div class="ttname"><a href="nanoFORTH_8h.html#aed6916ae35c70dfbf2f712a6ea0d359b">n4_push</a></div><div class="ttdeci">void n4_push(int v)</div><div class="ttdef"><b>Definition:</b> n4.cpp:57</div></div>
+<div class="ttc" id="anamespaceN4Core_html_a86633f8fd989f4914e0f225ae75f7f70"><div class="ttname"><a href="namespaceN4Core.html#a86633f8fd989f4914e0f225ae75f7f70">N4Core::io</a></div><div class="ttdeci">Stream * io</div><div class="ttdoc">default to Arduino Serial Monitor</div><div class="ttdef"><b>Definition:</b> n4_core.cpp:22</div></div>
 <div class="ttc" id="ananoFORTH_8h_html_ae2c2d6cacdd559dfc10e5280284001fb"><div class="ttname"><a href="nanoFORTH_8h.html#ae2c2d6cacdd559dfc10e5280284001fb">n4_pop</a></div><div class="ttdeci">int n4_pop()</div><div class="ttdef"><b>Definition:</b> n4.cpp:58</div></div>
 <div class="ttc" id="ananoFORTH_8h_html_a3042b3d86c75fe3e37ece7afdd496c42"><div class="ttname"><a href="nanoFORTH_8h.html#a3042b3d86c75fe3e37ece7afdd496c42">n4_run</a></div><div class="ttdeci">void n4_run()</div><div class="ttdef"><b>Definition:</b> n4.cpp:67</div></div>
 <!-- start footer part -->

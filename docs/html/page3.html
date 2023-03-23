@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">nanoFORTH
-   &#160;<span id="projectnumber">v1.6</span>
+   &#160;<span id="projectnumber">v2.0</span>
    </div>
   </td>
  </tr>
@@ -350,12 +350,10 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">RST </td><td class="markdownTableBodyLeft"><code>( -- )</code> </td><td class="markdownTableBodyLeft">reset nanoFORTH for debugging on PC  </td></tr>
-<tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">BYE </td><td class="markdownTableBodyLeft"><code>( -- )</code> </td><td class="markdownTableBodyLeft">reset nanoFORTH on Arduino, exit to OS on other platform  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">DMP </td><td class="markdownTableBodyLeft"><code>( a w -- )</code> </td><td class="markdownTableBodyLeft">dump nanoFORTH user dictionary from address 'a' for w bytes  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">DMP </td><td class="markdownTableBodyLeft"><code>( a w -- )</code> </td><td class="markdownTableBodyLeft">dump nanoFORTH user dictionary from address 'a' for w bytes  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">TRC </td><td class="markdownTableBodyLeft"><code>( t -- )</code> </td><td class="markdownTableBodyLeft">enable/disable execution tracing  </td></tr>
 </table>
 <p><b>Examples</b> </p><table class="markdownTable">

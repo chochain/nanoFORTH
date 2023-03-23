@@ -20,7 +20,7 @@ var searchData=
   ['n4_5fpop_101',['n4_pop',['../n4_8cpp.html#ae2c2d6cacdd559dfc10e5280284001fb',1,'n4_pop():&#160;n4.cpp'],['../nanoFORTH_8h.html#ae2c2d6cacdd559dfc10e5280284001fb',1,'n4_pop():&#160;n4.cpp']]],
   ['n4_5fpush_102',['n4_push',['../n4_8cpp.html#aed6916ae35c70dfbf2f712a6ea0d359b',1,'n4_push(int v):&#160;n4.cpp'],['../nanoFORTH_8h.html#aed6916ae35c70dfbf2f712a6ea0d359b',1,'n4_push(int v):&#160;n4.cpp']]],
   ['n4_5frun_103',['n4_run',['../n4_8cpp.html#a3042b3d86c75fe3e37ece7afdd496c42',1,'n4_run():&#160;n4.cpp'],['../nanoFORTH_8h.html#a3042b3d86c75fe3e37ece7afdd496c42',1,'n4_run():&#160;n4.cpp']]],
-  ['n4_5fsetup_104',['n4_setup',['../n4_8cpp.html#a5b3a7adf9153bf45681767bb9b414463',1,'n4_setup(const char *code):&#160;n4.cpp'],['../nanoFORTH_8h.html#a5b3a7adf9153bf45681767bb9b414463',1,'n4_setup(const char *code):&#160;n4.cpp']]],
+  ['n4_5fsetup_104',['n4_setup',['../n4_8cpp.html#a32751d2b8ad3e7dfd9568390746612ed',1,'n4_setup(const char *code, Stream &amp;io, int ucase):&#160;n4.cpp'],['../nanoFORTH_8h.html#ae66230265262bfcec7e06b026079788b',1,'n4_setup(const char *code=0, Stream &amp;io=Serial, int ucase=0):&#160;n4.cpp']]],
   ['n4_5fsig_105',['N4_SIG',['../n4__asm_8cpp.html#a6fed7cc230e401002916e4c487df5a9a',1,'n4_asm.cpp']]],
   ['n4_5fstk_5fsz_106',['N4_STK_SZ',['../n4__core_8h.html#a6b47c655a4d981330600913136da8a62',1,'n4_core.h']]],
   ['n4_5ftib_5fsz_107',['N4_TIB_SZ',['../n4__core_8h.html#aeb245820b2fa4873404a042d8ee0f6b5',1,'n4_core.h']]],

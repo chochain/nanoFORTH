@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">nanoFORTH
-   &#160;<span id="projectnumber">v1.6</span>
+   &#160;<span id="projectnumber">v2.0</span>
    </div>
   </td>
  </tr>
@@ -96,8 +96,8 @@ $(document).ready(function(){initNavTree('nanoFORTH_8h.html',''); initResizable(
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a5b3a7adf9153bf45681767bb9b414463"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoFORTH_8h.html#a5b3a7adf9153bf45681767bb9b414463">n4_setup</a> (const char *code)</td></tr>
-<tr class="separator:a5b3a7adf9153bf45681767bb9b414463"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae66230265262bfcec7e06b026079788b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoFORTH_8h.html#ae66230265262bfcec7e06b026079788b">n4_setup</a> (const char *code=0, Stream &amp;io=Serial, int ucase=0)</td></tr>
+<tr class="separator:ae66230265262bfcec7e06b026079788b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a501e37146b3a03e38755e08a41067f7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoFORTH_8h.html#a501e37146b3a03e38755e08a41067f7b">n4_api</a> (int i, void(*fp)())</td></tr>
 <tr class="separator:a501e37146b3a03e38755e08a41067f7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed6916ae35c70dfbf2f712a6ea0d359b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nanoFORTH_8h.html#aed6916ae35c70dfbf2f712a6ea0d359b">n4_push</a> (int v)</td></tr>
@@ -110,8 +110,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>nanoForth Arduino interface </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a5b3a7adf9153bf45681767bb9b414463"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b3a7adf9153bf45681767bb9b414463">&#9670;&nbsp;</a></span>n4_setup()</h2>
+<a id="ae66230265262bfcec7e06b026079788b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae66230265262bfcec7e06b026079788b">&#9670;&nbsp;</a></span>n4_setup()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -120,8 +120,24 @@ Functions</h2></td></tr>
           <td class="memname">void n4_setup </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>code</em></td><td>)</td>
+          <td class="paramname"><em>code</em> = <code>0</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">Stream &amp;&#160;</td>
+          <td class="paramname"><em>io</em> = <code>Serial</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>ucase</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
