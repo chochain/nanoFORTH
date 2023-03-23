@@ -123,7 +123,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 <p>&gt; copy examples/0_blink/0_blink.ino from sub-directory, then rename it as nanoFORTH.ino<br  />
 </p>
 <p>&gt; open nanoFORTH.ino with Arduino IDE, and setup your Nano/Uno (or ATmega328) development board</p>
-<p>&gt; in nanoFORTH.ino, change the #include &lt;nanoforth.h&gt; to #include "./src/nanoforth.h"</p>
+<p>&gt; in nanoFORTH.ino, change the #include &lt;<a class="el" href="nanoFORTH_8h.html" title="nanoForth Arduino interface">nanoFORTH.h</a>&gt; to #include "./src/nanoFORTH.h"</p>
 <p>&gt; open Serial Monitor, set baud rate to 115200, and line ending to 'Both NL &amp; CR'</p>
 <p>&gt; compile and upload, you should see the 'ok' prompt, and the built-in LED is blinking</p>
 <p>&gt; in Serial Monitor input bar atop, type WRD and hit &lt;return&gt;. See what nanoFORTH says.<br  />
@@ -149,24 +149,24 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 <h3>Exercise</h3>
 <p>We have gone through a lot of 'paper work', time for some hands-on again. If needed, or you've skipped through somehow, please do review the previous page <a href="page1.html" target="_blank">HERE (the Why page)</a> for some instructions we've gone through earlier.</p>
 <p>Now let's try some fancy stuffs to see what nanoFORTH has to offer.</p><ul>
-<li>turn the tracing flag on, and try everything we did in the previous page <blockquote class="doxtable">
+<li>Turn the tracing flag on, and try everything we did in the previous page. <blockquote class="doxtable">
 <p>1 TRC ⏎<br  />
- <b>lit</b> <b>?Z</b> </p>
+ <b>lit</b> <b>?z</b> </p>
 </blockquote>
 </li>
-<li>if it's too much info for you, then turn the tracing off <blockquote class="doxtable">
+<li>If it's too much info for you, then turn the tracing off. <blockquote class="doxtable">
 <p>0 TRC ⏎<br  />
  </p>
 </blockquote>
 </li>
-<li>to do some logic ops in hex, and back in decimal, we can do this <blockquote class="doxtable">
+<li>To do some logic ops in hex, and back in decimal, we can do this. <blockquote class="doxtable">
 <p>HEX ⏎<br  />
  40 38 ⇨ 40_38_ok OR ⏎<br  />
  78_ok DEC ⏎<br  />
  ⇨ 120_ok </p>
 </blockquote>
 </li>
-<li>get Arduino clock/millis, a double precision (i.e. 32-bit) value <blockquote class="doxtable">
+<li>Get Arduino clock/millis, a double precision (i.e. 32-bit) value. <blockquote class="doxtable">
 <p>CLK ⏎<br  />
  ⇨ 17786_9_ok </p><blockquote class="doxtable">
 <p>&gt; nanoFORTH uses two 16-bit cells on data stack to represent the 32-bit number<br  />
@@ -174,7 +174,7 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </blockquote>
 </blockquote>
 </li>
-<li>to benchmark something, let's define a function <b>zz</b> that runs in empty loops and time it <blockquote class="doxtable">
+<li>To benchmark something, let's define a function <b>zz</b> that runs in empty loops and time it. <blockquote class="doxtable">
 <p>: <b>zz</b> 10000 FOR NXT ;⏎<br  />
  CLK DNG <b>zz</b> CLK D+ ⏎<br  />
  ⇨ 103_0_ok </p><blockquote class="doxtable">
@@ -184,37 +184,37 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </blockquote>
 </blockquote>
 </li>
-<li>to find out how many bytes of memory has been used <blockquote class="doxtable">
+<li>To find out how many bytes of memory has been used. <blockquote class="doxtable">
 <p>HRE ⏎<br  />
  ⇨ 76_ok </p>
 </blockquote>
 </li>
-<li>to dump the memory to see how all these words are encoded in the dictionary <blockquote class="doxtable">
+<li>To dump the memory to see how all these words are encoded in the dictionary. <blockquote class="doxtable">
 <p>0 HRE DMP ⏎ </p><blockquote class="doxtable">
 <p>&gt; There! You can see the hex dump of our <b>red</b> ... <b>blu</b> ...<br  />
  &gt; in their gory detail all the way up to the latest word <b>zz</b> </p>
 </blockquote>
 </blockquote>
 </li>
-<li>at the end of the day, or to prevent a power outage hit, we can save what's been done so far into EEPROM <blockquote class="doxtable">
+<li>At the end of the day, or to prevent a power outage hit, we can save what's been done so far into EEPROM. <blockquote class="doxtable">
 <p>SAV ⏎ </p>
 </blockquote>
 </li>
-<li>when needed, we can zap the sandbox i.e. reset the nanoFORTH system pointers for a fresh start <blockquote class="doxtable">
+<li>When needed, we can zap the sandbox i.e. reset the nanoFORTH system pointers for a fresh start. <blockquote class="doxtable">
 <p>BYE ⏎<br  />
  ⇨ nanoFORTH v2.0 ok </p><blockquote class="doxtable">
 <p>&gt; The data stack, return stack, and instruction pointers will be reinitialized </p>
 </blockquote>
 </blockquote>
 </li>
-<li>after restart your Arduino, words can be restored from EEPROM where you saved earlier. <blockquote class="doxtable">
+<li>After restart your Arduino, words can be restored from EEPROM where you saved earlier. <blockquote class="doxtable">
 <p>LD ⏎<br  />
  0 HRE DMP ⏎ </p>
 </blockquote>
 </li>
 </ul>
 <p>Alright! That has pretty much concluded our rounds of exercise. You probably have wondered that if the SAV/LD pair can provide the ability to withstand power failures, can it be rebooted in the field for our future apps on Nanos? Well, yes! To do that, we have another word for you - <b>SEX</b> - it is! Short for Save and Execute. It saves the dictionary into EEPROM and set the autorun flag. When your Arduino reboots, the flag in EEPROM is checked. If it is indeed set, the last word saved will be executed.</p><ul>
-<li>here's one example <blockquote class="doxtable">
+<li>Here's one example for a turnkey start up. <blockquote class="doxtable">
 <p>: <b>fun</b> ( - - ) 1000 DLY ." I'm alive! blink " 20 <b>xy</b> ; ⏎<br  />
  SEX ⏎<br  />
  BYE ⏎<br  />
@@ -227,25 +227,37 @@ $(document).ready(function(){initNavTree('page2.html',''); initResizable(); });
 </blockquote>
 </blockquote>
 </li>
-<li>to disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place. <blockquote class="doxtable">
+<li>To disable the autorun, a normal SAV again will clear the flag. It does keep your dictionary intact in EEPROM, i.e. words you've created before are still in place. <blockquote class="doxtable">
 <p>SAV ⏎<br  />
  BYE ⏎<br  />
  ⇨ nanoFORTH v2.0 ok </p>
 </blockquote>
 </li>
 </ul>
-<p>OK, we know microcontrollers in the field are often built to run in an endless loop. However, before you get creative and save the wonderful service routine into EEPROM, I have to confess that I actually do not know how to get out of a reboot loop yet. Since it might be your last word, double check it. Any suggestion is welcome before people hitting that button and stuck forever.</p>
+<p>We know microcontrollers in the field are often built to run in an endless loop. But, before you get creative and save the wonderful turnkey application into EEPROM, make sure you know how to get out of a reboot loop. Since it might be your last word, do double check it. Regardless, if you found your Arduino is stuck, all is not lost. It's a bit messy but basically you need to compile/upload another .ino file that can wipe the EEPROM before you can reload nanoFORTH (or it will try loading your code from EEPROM and autoexec again).</p>
+<p>OK, if you feel good so far, we can try some fancy stuffs. nanoFORTH uses Arduino 8-bit Timer2 for its internal "ticker". The 16-bit Timer1 is purposely left for other libraries such as Servo, AltSoftSerial. There are 8 slots available for timer interrupt handlers. You can install or replace service routines in each slot independently (and on the fly if you want to). Signal changed from either HIGH to LOW or LOW to HIGH can be track by installing Ping Change Interrupt handler.</p>
 <ul>
-<li>multi-task with timer interrupt that blinks red LED at 100ms interval. <blockquote class="doxtable">
+<li>Multi-task with timer interrupt that blinks red LED at 100ms interval. <blockquote class="doxtable">
 <p>: <b>tic</b> 5 IN 1 XOR 5 OUT ; ⏎<br  />
  100 0 <b>TMI</b> tic ⏎<br  />
  1 TME ⏎<br  />
+ </p><blockquote class="doxtable">
+<p>&gt; put our word <b>tic</b> in timer interrupt handler slot 0 and to serve at 100ms interval,<br  />
+ &gt; 1 TME turns on timer interrupt, the red LED should start blinking, and 0 TME will turns it off, of course<br  />
  </p>
+</blockquote>
+</blockquote>
+</li>
+<li>Track pin signal changed with Ping Change Interrupt. <blockquote class="doxtable">
+<p>12 <b>PCI</b> tic ⏎<br  />
+ </p><blockquote class="doxtable">
+<p>&gt; when pin 12 signal changed, <b>tic</b> will be called.<br  />
+ Note that, limited by design, Arduino ping change interrupt groups pings into only 3 ports (i.e. 0~7, 8~13, A0~A7). So if you have both pin 4 and 5 (in the same group) enabled, only one call to <b>tic</b> if signals changed. To identify which pin changed, you need to read the port themselves to make sure. Read <a href="https://electronoobs.com/eng_arduino_tut132.php" target="_blank">this site</a> for details. </p>
+</blockquote>
 </blockquote>
 </li>
 </ul>
-<p>nanoFORTH v2 has 8 slots for timer interrupt handlers. You can install or replace service routines in each slot independently (and on the fly if you really want to). So, <em>100 0 TMI tic</em> put our word <em>tic</em> in slot 0 at 100ms interval and <em>1 TME</em> turns on timer interrupt (of course, <em>0 TME</em> turns it off).</p>
-<p>So, nanoFORTH is <b>real-time</b>, and can <b>multi-task</b>. It is <b>interactive</b> and <b>extensible</b>. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.</p>
+<p>All in all, nanoFORTH is <b>real-time</b>, and can <b>multi-task</b>. It is <b>interactive</b> and <b>extensible</b>. It can be reprogrammed on-the-fly or even over-the-air. Many many exciting stuffs can be added onto this simple system. Hopefully, this is a start of a fun journey far and beyond.</p>
 <p><br  />
  <a href="page1.html">1. Why - Review nanoFORTH command examples</a><br  />
  <a href="page3.html">3. What - Learn nanoFORTH internal details</a> </p>

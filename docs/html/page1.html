@@ -114,7 +114,7 @@ $(document).ready(function(){initNavTree('page1.html',''); initResizable(); });
 </ul>
 <h3>Use Cases - Interaction Examples</h3>
 <ul>
-<li>turn on LED(red) on digital pin 5, imagine you have a board hooked up, or <a href="https://wokwi.com/projects/359920992049600513" target="_blank">check this Wokwi project</a> <blockquote class="doxtable">
+<li>Turn on LED(red) on digital pin 5, imagine you have a board hooked up, or try <a href="https://wokwi.com/projects/359920992049600513" target="_blank">check this Wokwi project</a> <blockquote class="doxtable">
 <p>1 5 OUT ⏎ </p><table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft"></th></tr>
@@ -127,31 +127,31 @@ $(document).ready(function(){initNavTree('page1.html',''); initResizable(); });
 </blockquote>
 <br  />
 </li>
-<li>turn off LED(blue) on digital pin 6, (0 is LOW) <blockquote class="doxtable">
+<li>Turn off LED(blue) on digital pin 6, (0 is LOW). <blockquote class="doxtable">
 <p>0 6 OUT ⏎ </p>
 </blockquote>
 </li>
-<li>define a function, or a 'word' in FORTH, <b>red</b> to turn red LED on, and blue LED off <blockquote class="doxtable">
+<li>Tefine a function, or a 'word' in FORTH, <b>red</b> to turn red LED on, and blue LED off. <blockquote class="doxtable">
 <p>: <b>red</b> 1 5 OUT 0 6 OUT ; ⏎ </p><blockquote class="doxtable">
 <p>&gt; the symbol : starts the definition, and ; ends the function (or word) definition </p>
 </blockquote>
 </blockquote>
 </li>
-<li>define another word <b>blu</b> to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only) <blockquote class="doxtable">
+<li>Define another word <b>blu</b> to turn red LED off and turn blue LED on (sorry, no blue, nanoFORTH takes max 3 characters only). <blockquote class="doxtable">
 <p>: <b>blu</b> 0 5 OUT 1 6 OUT ; ⏎ </p>
 </blockquote>
 </li>
-<li>execute <b>blu</b>, i.e. to turn red LED off, and blue LED on <blockquote class="doxtable">
+<li>Execute <b>blu</b>, i.e. to turn red LED off, and blue LED on. <blockquote class="doxtable">
 <p><b>blu</b> ⏎ </p><blockquote class="doxtable">
 <p>&gt; a function is defines in the 'Compile Mode', and executed in 'Interpreter Mode'. The differece is at the leading ':' (colon) sign. </p>
 </blockquote>
 </blockquote>
 </li>
-<li>define a word <b>xy</b> to blink red/blue every 500 ms alternatively <blockquote class="doxtable">
+<li>Define a word <b>xy</b> to blink red/blue every 500 ms alternatively. <blockquote class="doxtable">
 <p>: <b>xy</b> FOR <b>red</b> 500 DLY <b>blu</b> 500 DLY NXT ; ⏎ </p>
 </blockquote>
 </li>
-<li>run 10 cycles of <b>xy</b> <blockquote class="doxtable">
+<li>Run 10 cycles of <b>xy</b>. <blockquote class="doxtable">
 <p>10 <b>xy</b> ⏎ </p><table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft"></th></tr>
@@ -163,7 +163,7 @@ $(document).ready(function(){initNavTree('page1.html',''); initResizable(); });
 </blockquote>
 </blockquote>
 </li>
-<li>if that's a bit too slow! nanoFORTH allows you redefine <b>xy</b> by "forget" it first <blockquote class="doxtable">
+<li>If that's a bit too slow! nanoFORTH allows you redefine <b>xy</b> by "forget" it first. <blockquote class="doxtable">
 <p>FGT <b>xy</b> ⏎<br  />
  </p><blockquote class="doxtable">
 <p>&gt; that erased <b>xy</b> from memory, we can redefine it now<br  />
@@ -174,52 +174,52 @@ $(document).ready(function(){initNavTree('page1.html',''); initResizable(); });
  </p>
 </blockquote>
 </li>
-<li>now try 20 cycles of <b>xy</b> this time <blockquote class="doxtable">
+<li>Now, try 20 cycles of <b>xy</b> this time. <blockquote class="doxtable">
 <p>20 <b>xy</b> ⏎ ⇨ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ok </p><blockquote class="doxtable">
 <p>&gt; so, you've probably noticed that <b>I</b> is the loop counter and . (dot) prints it<br  />
  </p>
 </blockquote>
 </blockquote>
 </li>
-<li>let's try analog, say read a value from analog pin 1 (photoresister value 0~1023), assuming you have one installed <blockquote class="doxtable">
+<li>Let's try analog, say read a value from analog pin 1, assuming you have one installed, or again try <a href="https://wokwi.com/projects/359920992049600513" target="_blank">this Wokwi project</a> <blockquote class="doxtable">
 <p>1 AIN ⏎<br  />
  ⇨ 258_ok </p><blockquote class="doxtable">
-<p>&gt; 258 is the value nanoFORTH read from photoresister, then place it on top of data stack </p>
+<p>&gt; 258 is the value nanoFORTH read from photoresister, then place it on top of data stack &gt; a photoresister or potentiometer returns value between 0 and 1023 </p>
 </blockquote>
 </blockquote>
 </li>
-<li>we don't need the value 258, let's drop it from data stack to keep it clean <blockquote class="doxtable">
+<li>If we don't need the value 258, we can drop it from data stack to keep it clean <blockquote class="doxtable">
 <p>DRP ⏎<br  />
  ⇨ ok </p><blockquote class="doxtable">
 <p>&gt; 258 is gone now </p>
 </blockquote>
 </blockquote>
 </li>
-<li>define <b>lit</b> to read from photoresister (or a potentiometer) and determine whether its value is &gt; 200 <blockquote class="doxtable">
+<li>Define <b>lit</b> to read from photoresister (or a potentiometer) and determine whether its value is &gt; 200. <blockquote class="doxtable">
 <p>: <b>lit</b> 1 AIN 200 &gt; ; ⏎ </p>
 </blockquote>
 </li>
-<li>execute <b>lit</b>, it puts value 1 on data stack (FORTH's memory) if your room is bright enough, a value 0 otherwise <blockquote class="doxtable">
+<li>Execute <b>lit</b>, it puts value 1 on data stack (FORTH's memory) if your room is bright enough, a value 0 otherwise. <blockquote class="doxtable">
 <p><b>lit</b> ⏎<br  />
  ⇨ 1_ok </p>
 </blockquote>
 </li>
-<li>define <b>?Z</b> that turns on red or blue depends on value on top of data stack. <blockquote class="doxtable">
+<li>Define <b>?z</b> that turns on red or blue depends on value on top of data stack. <blockquote class="doxtable">
 <p>: <b>?z</b> IF <b>red</b> ELS <b>blu</b> THN ; ⏎ </p><blockquote class="doxtable">
 <p>&gt; <b>?z</b> is our newly defined function. Unlike most of the other languages, you can create some really strange function names in FORTH. </p>
 </blockquote>
 </blockquote>
 </li>
-<li>run <b>?z</b> which read from top of data stack, if it's 1 then turns on red LED or 0 turns on blue <blockquote class="doxtable">
+<li>Run <b>?z</b> which read from top of data stack, if it's 1 then turns on red LED or 0 turns on blue. Try these <blockquote class="doxtable">
 <p>1 <b>?z</b> ⏎<br  />
  0 <b>?z</b> ⏎ </p>
 </blockquote>
 </li>
-<li>now we may turn on red or blue LED depending on lighting condition (try blocking the photoresister), <b>lit</b> leaves 1 or 0 on data stack, <b>?Z</b> takes the value and turns on the red or blue LED <blockquote class="doxtable">
+<li>We now can turn on red or blue LED depend on lighting condition (try blocking the photoresister), <b>lit</b> leaves 1 or 0 on data stack, <b>?z</b> takes the value and turns on the red or blue LED. <blockquote class="doxtable">
 <p><b>lit</b> <b>?z</b> ⏎ </p>
 </blockquote>
 </li>
-<li>define a word <b>xyz</b> to keep checking photoresister, turn the blue or red LED on depending on the photoresister value read until button hooked at pin 7 is pushed <blockquote class="doxtable">
+<li>Define a word <b>xyz</b> to keep checking photoresister, turn the blue or red LED on depending on the photoresister value read until button hooked at pin 7 is pushed. <blockquote class="doxtable">
 <p>: <b>xyz</b> BGN <b>lit</b> <b>?z</b> 7 IN UTL ; ⏎<br  />
  <b>xyz</b> ⏎ </p><blockquote class="doxtable">
 <p>&gt; Try blocking the photoresister to see the LED toggles.<br  />
@@ -228,7 +228,7 @@ $(document).ready(function(){initNavTree('page1.html',''); initResizable(); });
 </blockquote>
 </blockquote>
 </li>
-<li>show all nanoFORTH words available, including <b>xyz</b>, <b>?z</b>, <b>xy</b>, <b>lit</b>, <b>blu</b>, <b>red</b> that we've just created <blockquote class="doxtable">
+<li>Let's list all nanoFORTH words available in its dictionary. <blockquote class="doxtable">
 <p>WRD ⏎ </p><table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft"></th></tr>
@@ -239,13 +239,16 @@ $(document).ready(function(){initNavTree('page1.html',''); initResizable(); });
  </td></tr>
 </table>
 <blockquote class="doxtable">
-<p>&gt; Behold! This is nanoFORTH in its entirety. It's a short list of 'words' which should be rather easy to master. </p>
+<p>&gt; See the latest, they include <b>xyz</b>, <b>?z</b>, <b>xy</b>, <b>lit</b>, <b>blu</b>, <b>red</b> that we've just created. </p>
 </blockquote>
 </blockquote>
-<br  />
 </li>
 </ul>
-<p>OK, if that have captured the imaginations, we might have an idea of what nanoFORTH is trying to do. Remember that we do these without any compilation, instead, "talk" directly with Arduino once nanoFORTH uploaded via the USB cable. The interactive nature changes the way we are very used to on this platform. Imagine, what if we can do it via WiFi or BLE using our Nano? Look Mom! I can talk to the mailbox. No cable!</p>
+<p>Behold! This is nanoFORTH in its entirety. It's a short list of 'words' which should be rather easy to master. Note that the steps illustrated above has been the way Forth programmers building their applications. One small word at a time. Debug each well interactively then combine them into a "bigger" word. If a bug found, FGT the word, redefine it. Next word!</p>
+<p><br  />
+</p>
+<p>OK! If the process shown above has captured the essense, we should have an idea of what nanoFORTH is trying to do. Let's just stop and contemplate for a while. We did all of the above without any recompilation. Instead, we "talked" directly with the nanoFORTH uploaded only once via the USB cable. Should you code these in C, how do you go about doing it?</p>
+<p>The interactive nature is different from the way we are so used to on Arduino platform. Just consider how many times you have to compile your C code to go through the functions shown above. So, move forward, let's envision how we can control robots or what we can do using Bluetooth with our Nano...</p>
 <p><br  />
  <a href="page2.html">2. How - Ready to get nanoFORTH for a trial?</a><br  />
  <a href="page3.html">3. What - References and all the details...</a> </p>

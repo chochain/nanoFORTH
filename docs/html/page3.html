@@ -94,34 +94,34 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <blockquote class="doxtable">
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadRight">address </th><th class="markdownTableHeadCenter">object </th><th class="markdownTableHeadCenter">growth </th><th class="markdownTableHeadCenter">forth  </th></tr>
+<th class="markdownTableHeadRight">address </th><th class="markdownTableHeadCenter">object </th><th class="markdownTableHeadCenter">growth </th><th class="markdownTableHeadCenter">Forth </th><th class="markdownTableHeadCenter">EEPROM  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight">0x900 </td><td class="markdownTableBodyCenter">Arduino RAM max </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">.  </td></tr>
+<td class="markdownTableBodyRight">0x900 </td><td class="markdownTableBodyCenter">Arduino RAM max </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">. </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyRight">0x8f6 </td><td class="markdownTableBodyCenter">global/static variables </td><td class="markdownTableBodyCenter">⇩ </td><td class="markdownTableBodyCenter">.  </td></tr>
+<td class="markdownTableBodyRight">0x8f6 </td><td class="markdownTableBodyCenter">global/static variables/Arduino heap </td><td class="markdownTableBodyCenter">⇩ </td><td class="markdownTableBodyCenter">. </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">Arduino heap </td><td class="markdownTableBodyCenter">⇩ </td><td class="markdownTableBodyCenter">.  </td></tr>
+<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">... </td><td class="markdownTableBodyCenter">... </td><td class="markdownTableBodyCenter">. </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">Forth input buffer </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X  </td></tr>
+<td class="markdownTableBodyRight">0x618 </td><td class="markdownTableBodyCenter">Forth input buffer </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight">0x618 </td><td class="markdownTableBodyCenter"><b>return stack</b> </td><td class="markdownTableBodyCenter">⇩ </td><td class="markdownTableBodyCenter">X  </td></tr>
+<td class="markdownTableBodyRight">0x617 </td><td class="markdownTableBodyCenter"><b>return stack</b> </td><td class="markdownTableBodyCenter">⇩ </td><td class="markdownTableBodyCenter">X </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">0x100 shared space </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">X  </td></tr>
+<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">0x100 shared space </td><td class="markdownTableBodyCenter">... </td><td class="markdownTableBodyCenter">X </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight">0x518 </td><td class="markdownTableBodyCenter"><b>data stack</b> </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X  </td></tr>
+<td class="markdownTableBodyRight">0x518 </td><td class="markdownTableBodyCenter"><b>data stack</b> </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">user defined words </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X  </td></tr>
+<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">user defined words </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X </td><td class="markdownTableBodyCenter">X  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight">0x1e8 </td><td class="markdownTableBodyCenter"><b>user dictionary</b> starts </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X  </td></tr>
+<td class="markdownTableBodyRight">0x1e8 </td><td class="markdownTableBodyCenter"><b>user dictionary</b> starts </td><td class="markdownTableBodyCenter">⇧ </td><td class="markdownTableBodyCenter">X </td><td class="markdownTableBodyCenter">X  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">Arduino libraries </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">.  </td></tr>
+<td class="markdownTableBodyRight">... </td><td class="markdownTableBodyCenter">Arduino libraries </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">. </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyRight">0x100 </td><td class="markdownTableBodyCenter">Arduino RAM starts </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">.  </td></tr>
+<td class="markdownTableBodyRight">0x100 </td><td class="markdownTableBodyCenter">Arduino RAM starts </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">. </td><td class="markdownTableBodyCenter">.  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyRight">0x000 </td><td class="markdownTableBodyCenter">Arduino registers </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">.  </td></tr>
+<td class="markdownTableBodyRight">0x000 </td><td class="markdownTableBodyCenter">Arduino registers </td><td class="markdownTableBodyCenter">_ </td><td class="markdownTableBodyCenter">. </td><td class="markdownTableBodyCenter">.  </td></tr>
 </table>
 </blockquote>
-<p>Of course, we still have the 1K Flash Memory sitting on the side which can save and reload the user dictionary when instructed.</p>
+<p>Note, we have the 1K EEPROM sitting on the side which can save and restore the user dictionary when instructed.</p>
 <h2>Number Representation</h2>
 <p>nanoFORTH handles only integer numbers.</p><ul>
 <li>16-bit integer range -32727 to 32726</li>
@@ -395,10 +395,10 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">IN </td><td class="markdownTableBodyLeft"><code>( p -- w )</code> </td><td class="markdownTableBodyLeft">digitalRead(p)  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">OUT </td><td class="markdownTableBodyLeft"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft">digitalWrite(p, w),<br  />
-when p=0x1xx, xx masks PORTD (pin 0~7),<br  />
-when p=0x2xx, xx masks PORTB (pin 8~13)<br  />
-when p=$3xx, xx masks PORTC (analog A0~A6)  </td></tr>
+<td class="markdownTableBodyLeft">OUT </td><td class="markdownTableBodyLeft"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft">if p=0x0xx, digitalWrite(xx, w),<br  />
+if p=0x1xx, xx masks PORTD (pin 0~7) i.e. multi-port write,<br  />
+if p=0x2xx, xx masks PORTB (pin 8~13)<br  />
+if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">AIN </td><td class="markdownTableBodyLeft"><code>( p -- w )</code> </td><td class="markdownTableBodyLeft">analogRead(p)  </td></tr>
 <tr class="markdownTableRowOdd">
@@ -425,7 +425,7 @@ when p=$3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">TMR </td><td class="markdownTableBodyLeft"><code>( n i -- )</code> </td><td class="markdownTableBodyLeft">set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds  </td></tr>
+<td class="markdownTableBodyLeft">TMI </td><td class="markdownTableBodyLeft"><code>( n i -- )</code> </td><td class="markdownTableBodyLeft">set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">PCI </td><td class="markdownTableBodyLeft"><code>( p -- )</code> </td><td class="markdownTableBodyLeft">capture pin #p change (either HIGH to LOW or LOW to HIGH)  </td></tr>
 <tr class="markdownTableRowOdd">
@@ -433,13 +433,14 @@ when p=$3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">PCE </td><td class="markdownTableBodyLeft"><code>( f -- )</code> </td><td class="markdownTableBodyLeft">enable/disable pin change interrupt, 0:disable, 1:enable  </td></tr>
 </table>
-<p>Note: nanoForth utilizes timer2 for timer interrupt. It might conflict with libraries which also uses timer2 such as Tone().</p>
+<blockquote class="doxtable">
+<p>Note: nanoForth utilizes timer2 for timer interrupt. It might conflict with libraries which also uses timer2 such as Tone(). </p>
+</blockquote>
 <p><b>Examples</b></p>
 <p>: aa 65 emt ; ➤ <em>ok</em> (define a word <b>aa</b> which emit 'A' on console)<br  />
  : bb 66 emt ; ➤ <em>ok</em> (define a word <b>bb</b> which emit 'B' on console)<br  />
-</p>
-<p>1000 0 TMR <b>aa</b> ➤ <em>ok</em> (run <b>aa</b> every 10 seconds)<br  />
- 2500 0 TMR <b>bb</b> ➤ <em>ok</em> (run <b>bb</b> every 25 seconds)<br  />
+ 1000 0 TMI <b>aa</b> ➤ <em>ok</em> (run <b>aa</b> every 10 seconds)<br  />
+ 2500 0 TMI <b>bb</b> ➤ <em>ok</em> (run <b>bb</b> every 25 seconds)<br  />
  1 TME ➤ <em>ok</em> (enable timer interrupt)<br  />
  AABAAABAABAA (interrupt routines been called)<br  />
  0 TME ➤ <em>ok</em> (disable timer interrupt)<br  />
