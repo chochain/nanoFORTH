@@ -166,7 +166,6 @@ nanoFORTH handles only integer numbers.
 ### Reset, Debug, and Tracing
 > |opcode|stack|description|
 > |:--|:--|:--|
-> |RST|`( -- )`|reset nanoFORTH for debugging on PC|
 > |BYE|`( -- )`|reset nanoFORTH on Arduino, exit to OS on other platform|
 > |DMP|`( a w -- )`|dump nanoFORTH user dictionary from address 'a' for w bytes|
 > |TRC|`( t -- )`|enable/disable execution tracing|
