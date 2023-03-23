@@ -16,7 +16,7 @@
 
 void setup() {
     Serial.begin(115200);          ///< init Serial stream
-    n4_setup("");                  ///< intialize nanoFORTH
+    n4_setup();                    ///< intialize nanoFORTH
 }
 
 void loop() {
