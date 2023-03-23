@@ -281,19 +281,18 @@ void outer()
         case 7: N4Asm::forget();        break;   /// * FGT, rollback word created
         case 8: _dump(POP(), POP());    break;   /// * DMP, memory dump
         ///> system
-        case 9: _init();                break;   /// * RST, restart the virtual machine (for debugging)
 #if ARDUINO
-        case 10: _init();               break;   /// * BYE, restart
+        case 9: _init();                break;   /// * BYE, restart
 #else
-        case 10: exit(0);               break;   /// * BYE, bail to OS
+        case 9: exit(0);                break;   /// * BYE, bail to OS
 #endif // ARDUINO
 #if N4_META
         ///> meta programming (for advance users)
-        case 11: N4Asm::create();       break;   /// * CRE, create a word (header only)
-        case 12: N4Asm::comma(POP());   break;   /// * ,    add a 16-bit value onto dictionary
-        case 13: N4Asm::ccomma(POP());  break;   /// * C,   add a 8-bit value onto dictionary
-        case 14: PUSH(N4Asm::query());  break;   /// * '    get parameter field of a word
-        case 15: _nest(POP());          break;   /// * EXE  execute a given parameter field
+        case 10: N4Asm::create();       break;   /// * CRE, create a word (header only)
+        case 11: N4Asm::comma(POP());   break;   /// * ,    add a 16-bit value onto dictionary
+        case 12: N4Asm::ccomma(POP());  break;   /// * C,   add a 8-bit value onto dictionary
+        case 13: PUSH(N4Asm::query());  break;   /// * '    get parameter field of a word
+        case 14: _nest(POP());          break;   /// * EXE  execute a given parameter field
 #endif // N4_META
         }                               break;
     case TKN_WRD: _nest(tmp + 2 + 3);   break;   ///>> execute colon word (user defined)

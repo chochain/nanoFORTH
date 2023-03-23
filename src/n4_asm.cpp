@@ -34,13 +34,12 @@ using namespace N4Core;                       /// * make utilities available
 ///
 ///@{
 #if N4_META
-PROGMEM const char IMM[] = "\x10" \
-    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "RST" \
-	"BYE" "CRE" ",  " "C, " "'  " "EXE";
+PROGMEM const char IMM[] = "\xf" \
+    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "BYE" \
+	"CRE" ",  " "C, " "'  " "EXE";
 #else
 PROGMEM const char IMM[] = "\xa" \
-    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "RST" \
-	"BYE";
+    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "BYE";
 #endif // N4_META
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \

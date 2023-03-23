@@ -19,7 +19,7 @@
  *   + in your terminal app, try type WRD and hit <return>
  */
 #include <AltSoftSerial.h>
-#include <nanoforth.h>
+#include <nanoFORTH.h>
 
 AltSoftSerial bt;                   ///< default: RX on pin 8, TX on pin 9
 
@@ -30,7 +30,7 @@ void setup() {
     bt.begin(9600);                 ///< setup Bluetooth serial device at 9600 baud
     delay(1000);                    ///< wait for a while, for it to stable
 
-    n4_setup("", 1, bt);            ///< add the blink task to NanoForth task manager
+    n4_setup(0, bt);                ///< add the blink task to NanoForth task manager
 }
 
 void loop() {

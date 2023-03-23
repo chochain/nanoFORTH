@@ -17,14 +17,15 @@
  *  Once compiled/uploaded, you should see
  *  + some nanoFORTH init system info and the ok prompt
  *  + note that the built-in LED is blinking at 1Hz
- *  + in Serial Monitor input, type WRD and hit. nanoFORTH is taking input now<return>
+ *  + in Serial Monitor input, type WRD and hit <return>.
+ *  + nanoFORTH is multi-tasking now<return>
  */
 #include <nanoFORTH.h>
 
 const char code[] PROGMEM =        ///< define preload Forth code here
-": xx 13 in 1 xor 13 out ;\n"      // * define word xx to toggle built-in LED (pin 13)
-"50 tmi xx\n"                      // * tick xx every 50x10ms=500ms
-"1 tme\n";                         // * turn on timer interrupt
+": xx 13 IN 1 XOR 13 OUT ;\n"      // * define word xx to toggle built-in LED (pin 13)
+"500 0 TMI xx\n"                   // * attach xx as timer ISR in slot 0, tick every 500ms
+"1 TME\n";                         // * turn on timer interrupt
 
 void setup() {
     Serial.begin(115200);          ///< init Serial stream

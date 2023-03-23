@@ -62,8 +62,8 @@ int  n4_pop()       { return N4VM::pop(); }
 #if ARDUINO
 NanoForth _n4;                   ///< singleton instance
 
+void n4_setup(const char *code, Stream &io, int ucase)  { _n4.setup(code); }
 void n4_api(int i, void (*fp)()) { _n4.add_api(i, fp); }
-void n4_setup(const char *code)  { _n4.setup(code);    }
 void n4_run()                    { _n4.exec();         }
 #else // !ARDUINO
 #include <stdio.h>

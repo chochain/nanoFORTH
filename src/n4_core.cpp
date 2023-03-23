@@ -175,7 +175,7 @@ void clear_tib() {
 char vkey() {
 	static char *p = _pre;                   /// capture preload Forth code
 #if ARDUINO
-    char c = pgm_read_byte(p);
+    char c = p ? pgm_read_byte(p) : 0;
 #else
     char c = *p;
 #endif // ARDUINO
