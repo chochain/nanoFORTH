@@ -36,6 +36,41 @@ using namespace N4Core;                             /// * VM built with core uni
 ///@}
 namespace N4VM {
 ///
+///> reset virtual machine
+///
+void _nest(U16 xt);                      /// * forward declaration
+void _init() {
+    show(APP_NAME); show(APP_VERSION);   /// * show init prompt
+
+    rp = (U16*)(dic + N4_DIC_SZ);        /// * reset return stack pointer
+    sp = SP0;                            /// * reset data stack pointer
+    N4Intr::reset();                     /// * init interrupt handler
+
+    U16 xt = N4Asm::reset();             /// * reload EEPROM and reset assembler
+    if (xt != LFA_X) {                   /// * check autorun addr has been setup? (see SEX)
+        show("reset\n");
+        _nest(xt + 2 + 3);               /// * execute last saved colon word in EEPROM
+    }
+}
+///
+///> show a section of memory in Forth dump format
+///
+#define DUMP_PER_LINE 0x10
+void _dump(U16 p0, U16 sz0)
+{
+    U8  *p = PTR((p0&0xffe0));
+    U16 sz = (sz0+0x1f)&0xffe0;
+    for (U16 i=0; i<sz; i+=DUMP_PER_LINE) {
+        d_chr('\n');
+        d_mem(dic, p, DUMP_PER_LINE, ' ');
+        d_chr(' ');
+        for (U8 j=0; j<DUMP_PER_LINE; j++, p++) {         // print and advance to next byte
+            char c = *p & 0x7f;
+            d_chr((c==0x7f||c<0x20) ? '_' : c);
+        }
+    }
+}
+///
 ///> invoke a built-in opcode
 ///
 void _invoke(U8 op)
@@ -85,49 +120,54 @@ void _invoke(U8 op)
     case 29: /* handled one level up */   break; // ."
     case 30: RPUSH(POP());                break; // >R
     case 31: PUSH(RPOP());                break; // R>
-    case 32: N4Asm::words();              break; // WRD
-    case 33: PUSH(IDX(N4Asm::here));      break; // HRE
-    case 34: PUSH(random(POP()));         break; // RND
-    case 35: N4Asm::here += POP();        break; // ALO
-    case 36: N4Asm::save();               break; // SAV
-    case 37: N4Asm::load();               break; // LD
-    case 38: N4Asm::save(true);           break; // SEX - save/execute (autorun)
-    case 39: trc = POP();                 break; // TRC
-    case 40: {                                   // CLK
+    case 32: PUSH(IDX(N4Asm::here));      break; // HRE
+    case 33: PUSH(random(POP()));         break; // RND
+    case 34: N4Asm::here += POP();        break; // ALO
+    case 35: trc = POP();                 break; // TRC
+    case 36: {                                   // CLK
         U32 u = millis();       // millisecond (32-bit value)
         PUSH(LO16(u));
         PUSH(HI16(u));
     }                                     break;
-    case 41: {                                   // D+
+    case 37: {                                   // D+
         S32 v = TO32(SS(2), SS(3)) + TO32(TOS, SS(1));
         POP(); POP();
         SS(1) = (S16)LO16(v);
         TOS   = (S16)HI16(v);
     }                                     break;
-    case 42: {                                   // D-
+    case 38: {                                   // D-
         S32 v = TO32(SS(2), SS(3)) - TO32(TOS, SS(1));
         POP(); POP();
         SS(1) = (S16)LO16(v);
         TOS   = (S16)HI16(v);
     }                                     break;
-    case 43: {                                   // DNG
+    case 39: {                                   // DNG
         S32 v = -TO32(TOS, SS(1));
         SS(1) = (S16)LO16(v);
         TOS   = (S16)HI16(v);
     }                                     break;
-    case 44: TOS = abs(TOS);                          break; // ABS
-    case 45: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
-    case 46: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
-    case 47: NanoForth::wait((U32)POP());             break; // DLY
-    case 48: PUSH(digitalRead(POP()));                break; // IN
-    case 49: PUSH(analogRead(POP()));                 break; // AIN
-    case 50: { U16 p=POP(); d_out(p, POP()); }        break; // OUT
-    case 51: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
-    case 52: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
-    case 53: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
-    case 54: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
-    case 55: NanoForth::call_api(POP());              break; // API
-    /* case 56~59 available */
+    case 40: TOS = abs(TOS);                          break; // ABS
+    case 41: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
+    case 42: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
+    case 43: NanoForth::wait((U32)POP());             break; // DLY
+    case 44: PUSH(digitalRead(POP()));                break; // IN
+    case 45: PUSH(analogRead(POP()));                 break; // AIN
+    case 46: { U16 p=POP(); d_out(p, POP()); }        break; // OUT
+    case 47: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
+    case 48: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
+    case 49: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
+    case 50: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
+    case 51: NanoForth::call_api(POP());              break; // API
+#if N4_META
+    ///> meta programming (for advance users)
+    case 52: N4Asm::create();                         break; // CRE, create a word (header only)
+    case 53: N4Asm::comma(POP());                     break; // ,    comma, add a 16-bit value onto dictionary
+    case 54: N4Asm::ccomma(POP());                    break; // C,   C-comma, add a 8-bit value onto dictionary
+    case 55: PUSH(N4Asm::query());                    break; // '    tick, get parameter field of a word
+    case 56: /* TODO */                               break; // DO>  execution time code
+    case 57: _nest(POP());                            break; // EXE  execute a given parameter field
+#endif // N4_META
+    /* case 58, 59 available */
     case I_I:   PUSH(*(rp-1));                        break; // I
     case I_FOR: RPUSH(POP());                         break; // FOR
     case I_NXT: /* handled at upper level */          break; // NXT
@@ -188,40 +228,6 @@ void _nest(U16 xt)
     }
 }
 ///
-///> reset virtual machine
-///
-void _init() {
-    show(APP_NAME); show(APP_VERSION);   /// * show init prompt
-
-    rp = (U16*)(dic + N4_DIC_SZ);        /// * reset return stack pointer
-    sp = SP0;                            /// * reset data stack pointer
-    N4Intr::reset();                     /// * init interrupt handler
-
-    U16 xt = N4Asm::reset();             /// * reload EEPROM and reset assembler
-    if (xt != LFA_X) {                   /// * check autorun addr has been setup? (see SEX)
-        show("reset\n");
-        _nest(xt + 2 + 3);               /// * execute last saved colon word in EEPROM
-    }
-}
-///
-///> show a section of memory in Forth dump format
-///
-#define DUMP_PER_LINE 0x10
-void _dump(U16 p0, U16 sz0)
-{
-    U8  *p = PTR((p0&0xffe0));
-    U16 sz = (sz0+0x1f)&0xffe0;
-    for (U16 i=0; i<sz; i+=DUMP_PER_LINE) {
-        d_chr('\n');
-        d_mem(dic, p, DUMP_PER_LINE, ' ');
-        d_chr(' ');
-        for (U8 j=0; j<DUMP_PER_LINE; j++, p++) {         // print and advance to next byte
-            char c = *p & 0x7f;
-            d_chr((c==0x7f||c<0x20) ? '_' : c);
-        }
-    }
-}
-///
 ///> constructor and initializer
 ///
 void setup(const char *code, Stream &io, U8 ucase)
@@ -269,31 +275,29 @@ void outer()
         ///> interrupt handlers
         case 3: N4Intr::add_pcisr(               /// * PCI, create a pin change interrupt handler
                 POP(), N4Asm::query()); break;
-        case 4:                                  /// * TMR, create a timer interrupt handler
+        case 4:                                  /// * TMI, create a timer interrupt handler
             tmp = POP();                         ///< tmp = ISR slot#
             N4Intr::add_tmisr(
                 tmp, POP(),
                 N4Asm::query());        break;   /// * period in multiply of 10ms
-        ///> numeric radix 
+        ///> numeric radix
         case 5: set_hex(1);             break;   /// * HEX
         case 6: set_hex(0);             break;   /// * DEC
         ///> dicionary debugging
         case 7: N4Asm::forget();        break;   /// * FGT, rollback word created
-        case 8: _dump(POP(), POP());    break;   /// * DMP, memory dump
+        case 8: N4Asm::words();         break;   /// * WRD
+        case 9:                                  /// * DMP, memory dump
+            tmp = POP();
+            _dump(POP(), tmp);          break;
         ///> system
+        case 10: N4Asm::save();         break;   /// * SAV
+        case 11: N4Asm::load();         break;   /// * LD
+        case 12: N4Asm::save(true);     break;   /// * SEX - save/execute (autorun)
 #if ARDUINO
-        case 9: _init();                break;   /// * BYE, restart
+        case 13: _init();               break;   /// * BYE, restart
 #else
-        case 9: exit(0);                break;   /// * BYE, bail to OS
+        case 13: exit(0);               break;   /// * BYE, bail to OS
 #endif // ARDUINO
-#if N4_META
-        ///> meta programming (for advance users)
-        case 10: N4Asm::create();       break;   /// * CRE, create a word (header only)
-        case 11: N4Asm::comma(POP());   break;   /// * ,    add a 16-bit value onto dictionary
-        case 12: N4Asm::ccomma(POP());  break;   /// * C,   add a 8-bit value onto dictionary
-        case 13: PUSH(N4Asm::query());  break;   /// * '    get parameter field of a word
-        case 14: _nest(POP());          break;   /// * EXE  execute a given parameter field
-#endif // N4_META
         }                               break;
     case TKN_WRD: _nest(tmp + 2 + 3);   break;   ///>> execute colon word (user defined)
     case TKN_PRM: _invoke((U8)tmp);     break;   ///>> execute primitive built-in word,
