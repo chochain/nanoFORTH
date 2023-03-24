@@ -33,25 +33,28 @@ using namespace N4Core;                       /// * make utilities available
 /// @brief loop control opcodes
 ///
 ///@{
-#if N4_META
-PROGMEM const char IMM[] = "\xf" \
-    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "BYE" \
-	"CRE" ",  " "C, " "'  " "EXE";
-#else
-PROGMEM const char IMM[] = "\xa" \
-    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "DMP" "BYE";
-#endif // N4_META
+PROGMEM const char IMM[] = "\xe"                                \
+    ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "WRD" "DMP" \
+    "SAV" "LD " "SEX" "BYE";
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
     "NXT";
-PROGMEM const char PRM[] = "\x38" \
+
+#define N4_WORDS \
     "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
     "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " ">  " \
     "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
-    ">R " "R> " "WRD" "HRE" "RND" "ALO" "SAV" "LD " "SEX" "TRC" \
-    "CLK" "D+ " "D- " "DNG" "ABS" "MAX" "MIN" "DLY" "IN " "AIN" \
-    "OUT" "PWM" "PIN" "TME" "PCE" "API";
+    ">R " "R> " "HRE" "RND" "ALO" "TRC" "CLK" "D+ " "D- " "DNG" \
+    "ABS" "MAX" "MIN" "DLY" "IN " "AIN" "OUT" "PWM" "PIN" "TME" \
+    "PCE" "API"
+
+PROGMEM const char PRM[] =
+#if N4_META
+    "\x3a" N4_WORDS "CRE" ",  " "C, " "DO>" "'  " "EXE";
+#else
+    "\x34" N4_WORDS;
+#endif // N4_META
 
 PROGMEM const char PMX[] = "\x3" \
     "I  " "FOR" "NXT";
