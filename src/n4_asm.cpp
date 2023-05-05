@@ -103,7 +103,7 @@ U8  tab = 0;                        ///< tracing indentation counter
 ///
 U8 _find(U8 *tkn, U16 *adr)
 {
-    for (U8 *p=last, *ex=PTR(LFA_X); p!=ex; p=PTR(GET16(p))) {
+    for (U8 *p=last, *ex=PTR(LFA_END); p!=ex; p=PTR(GET16(p))) {
         if (uc(p[2])==uc(tkn[0]) &&
             uc(p[3])==uc(tkn[1]) &&
             (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
@@ -243,8 +243,8 @@ void save(bool autorun)
 ///
 ///> restore dictionary from EEPROM into RAM
 /// @return
-///    lnk:   autorun address (of last word from EEPROM)
-///    LFA_X: no autorun or EEPROM not been setup yet
+///    lnk:     autorun address (of last word from EEPROM)
+///    LFA_END: no autorun or EEPROM not been setup yet
 ///
 U16 load(bool autorun)
 {
@@ -254,9 +254,9 @@ U16 load(bool autorun)
     ///
     U16 n4 = ((U16)EEPROM.read(0)<<8) + EEPROM.read(1);
     if (autorun) {
-        if (n4 != N4_AUTO) return LFA_X;          // EEPROM is not set to autorun
+        if (n4 != N4_AUTO) return LFA_END;          // EEPROM is not set to autorun
     }
-    else if (n4 != N4_SIG) return LFA_X;          // EEPROM has no saved words
+    else if (n4 != N4_SIG) return LFA_END;          // EEPROM has no saved words
     ///
     /// retrieve metadata (sizes) of user dictionary
     ///
@@ -290,7 +290,7 @@ U16 load(bool autorun)
 U16 reset()
 {
     here    = dic;                       // rewind to dictionary base
-    last    = PTR(LFA_X);                // root of linked field
+    last    = PTR(LFA_END);              // root of linked field
     tab     = 0;
     
 #if ARDUINO
@@ -426,14 +426,14 @@ void constant(S16 v)
 ///
 void words()
 {
-    U8  wrp = WORDS_PER_ROW >> (trc ? 1 : 0);                 ///> wraping width
+    U8  wrp = WORDS_PER_ROW >> (trc ? 1 : 0);                    ///> wraping width
     U16 n   = 0;
-    for (U8 *p=last, *ex=PTR(LFA_X); p!=ex; p=PTR(GET16(p))) {/// **from last, loop through dictionary**
+    for (U8 *p=last, *ex=PTR(LFA_END); p!=ex; p=PTR(GET16(p))) { /// **from last, loop through dictionary**
         d_chr(n++%wrp ? ' ' : '\n');
-        if (trc) { d_adr(IDX(p)); d_chr(':'); }               ///>> optionally show address
-        d_chr(p[2]); d_chr(p[3]); d_chr(p[4]);                ///>> 3-char name
+        if (trc) { d_adr(IDX(p)); d_chr(':'); }                  ///>> optionally show address
+        d_chr(p[2]); d_chr(p[3]); d_chr(p[4]);                   ///>> 3-char name
     }
-    _list_voc(trc ? n<<1 : n);                                ///> list built-in vocabularies
+    _list_voc(trc ? n<<1 : n);                                   ///> list built-in vocabularies
     d_chr(' ');
 }
 ///

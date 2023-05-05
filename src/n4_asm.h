@@ -55,7 +55,7 @@ enum N4_EXT_OP {                 ///< extended opcode (used by for...nxt loop)
     I_NXT,                       ///< 62
     I_LIT                        ///< 63 = 0x3f 3-byte literal
 };
-constexpr U16 LFA_X = 0xffff;    ///< end of link field
+constexpr U16 LFA_END = 0xffff;  ///< end of link field
 ///
 /// Assembler class
 ///
