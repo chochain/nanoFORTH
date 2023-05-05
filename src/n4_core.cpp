@@ -217,13 +217,19 @@ U8 ok()
 	if (_empty) {
 		///
 		///> console prompt with stack dump
-		///
-		S16 *s0 = (S16*)_tib;                /// * fetch top of heap
-	    if (sp > s0) {                       /// * check stack overflow
+        /*        
+         *                             SP0 (sp max to protect overwritten of vm object)
+         * mem[...dic_sz...|...stk_sz...|......heap......]max
+         *    |            |            |                |
+         *    dic-->       +-->rp  sp<--+-->tib   auto<--+
+         *                         TOS NOS
+         */
+		S16 *sp0 = (S16*)_tib;               /// * fetch top of heap
+	    if (sp <= (S16*)(rp+1)) {            /// * check stack overflow
 	        show("OVF!\n");
-	        sp = s0;                         // reset to top of stack block
+	        sp = (S16*)(rp+1);               /// * stack max out
 	    }
-	    for (S16 *p=s0-1; p >= sp; p--) {    /// * dump stack content
+	    for (S16 *p=sp0-1; p >= sp; p--) {   /// * dump stack content
 	        d_num(*p); d_chr('_');
 	    }
 	    show("ok");                          /// * user input prompt
