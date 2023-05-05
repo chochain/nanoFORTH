@@ -71,6 +71,44 @@ void _dump(U16 p0, U16 sz0)
     }
 }
 ///
+///> immediate word handler
+///
+void _immediate(U16 op)
+{
+        switch (op) {
+        ///> compiler
+        case 0: N4Asm::compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
+        case 1: N4Asm::variable();      break;   /// * VAR, create new variable
+        case 2: N4Asm::constant(POP()); break;   /// * VAL, create new constant
+        ///> interrupt handlers
+        case 3: N4Intr::add_pcisr(               /// * PCI, create a pin change interrupt handler
+                POP(), N4Asm::query()); break;
+        case 4:                                  /// * TMI, create a timer interrupt handler
+            op = POP();                          ///< tmp = ISR slot#
+            N4Intr::add_tmisr(
+                op, POP(),
+                N4Asm::query());        break;   /// * period in multiply of 10ms
+        ///> numeric radix
+        case 5: set_hex(1);             break;   /// * HEX
+        case 6: set_hex(0);             break;   /// * DEC
+        ///> dicionary debugging
+        case 7: N4Asm::forget();        break;   /// * FGT, rollback word created
+        case 8: N4Asm::words();         break;   /// * WRD
+        case 9:                                  /// * DMP, memory dump
+            op = POP();
+            _dump(POP(), op);           break;
+        ///> system
+        case 10: N4Asm::save();         break;   /// * SAV
+        case 11: N4Asm::load();         break;   /// * LD
+        case 12: N4Asm::save(true);     break;   /// * SEX - save/execute (autorun)
+#if ARDUINO
+        case 13: _init();               break;   /// * BYE, restart
+#else
+        case 13: exit(0);               break;   /// * BYE, bail to OS
+#endif // ARDUINO
+        }
+}
+///
 ///> invoke a built-in opcode
 ///
 void _invoke(U8 op)
@@ -266,39 +304,7 @@ void outer()
     U8  *tkn = get_token();                      ///> get a token from console
     U16 tmp;                                     /// * word address or numeric value
     switch (N4Asm::parse(tkn, &tmp, 1)) {        ///> parse action from token (keep opcode in tmp)
-    case TKN_IMM:                                ///>> immediate words,
-        switch (tmp) {
-        ///> compiler
-        case 0: N4Asm::compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
-        case 1: N4Asm::variable();      break;   /// * VAR, create new variable
-        case 2: N4Asm::constant(POP()); break;   /// * VAL, create new constant
-        ///> interrupt handlers
-        case 3: N4Intr::add_pcisr(               /// * PCI, create a pin change interrupt handler
-                POP(), N4Asm::query()); break;
-        case 4:                                  /// * TMI, create a timer interrupt handler
-            tmp = POP();                         ///< tmp = ISR slot#
-            N4Intr::add_tmisr(
-                tmp, POP(),
-                N4Asm::query());        break;   /// * period in multiply of 10ms
-        ///> numeric radix
-        case 5: set_hex(1);             break;   /// * HEX
-        case 6: set_hex(0);             break;   /// * DEC
-        ///> dicionary debugging
-        case 7: N4Asm::forget();        break;   /// * FGT, rollback word created
-        case 8: N4Asm::words();         break;   /// * WRD
-        case 9:                                  /// * DMP, memory dump
-            tmp = POP();
-            _dump(POP(), tmp);          break;
-        ///> system
-        case 10: N4Asm::save();         break;   /// * SAV
-        case 11: N4Asm::load();         break;   /// * LD
-        case 12: N4Asm::save(true);     break;   /// * SEX - save/execute (autorun)
-#if ARDUINO
-        case 13: _init();               break;   /// * BYE, restart
-#else
-        case 13: exit(0);               break;   /// * BYE, bail to OS
-#endif // ARDUINO
-        }                               break;
+    case TKN_IMM: _immediate(tmp);      break;   ///>> immediate words,
     case TKN_WRD: _nest(tmp + 2 + 3);   break;   ///>> execute colon word (user defined)
     case TKN_PRM: _invoke((U8)tmp);     break;   ///>> execute primitive built-in word,
     case TKN_NUM: PUSH(tmp);            break;   ///>> push a number (literal) to stack top,
