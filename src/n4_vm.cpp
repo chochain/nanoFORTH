@@ -47,7 +47,7 @@ void _init() {
     N4Intr::reset();                     /// * init interrupt handler
 
     U16 xt = N4Asm::reset();             /// * reload EEPROM and reset assembler
-    if (xt != LFA_X) {                   /// * check autorun addr has been setup? (see SEX)
+    if (xt != LFA_END) {                 /// * check autorun addr has been setup? (see SEX)
         show("reset\n");
         _nest(xt + 2 + 3);               /// * execute last saved colon word in EEPROM
     }
@@ -179,8 +179,8 @@ void _invoke(U8 op)
 ///
 void _nest(U16 xt)
 {
-    RPUSH(LFA_X);                                         // enter function call
-    for (U8 *pc=PTR(xt), *ex=PTR(LFA_X); pc!=ex; ) {      ///> walk through instruction sequences
+    RPUSH(LFA_END);                                       // enter function call
+    for (U8 *pc=PTR(xt), *ex=PTR(LFA_END); pc!=ex; ) {    ///> walk through instruction sequences
         U16 a  = IDX(pc);                                 // current program counter
         U8  ir = *pc++;                                   // fetch instruction
 
