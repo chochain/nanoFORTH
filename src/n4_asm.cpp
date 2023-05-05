@@ -63,14 +63,14 @@ constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
 ///
 ///@name Branching
 ///@{
-#define JMP000(p,j)     SET16(p, (j)<<8)
+#define JMP000(p,j)     ENC16(p, (j)<<8)
 #define JMPSET(idx, p1) do {               \
     U8  *p = PTR(idx);                     \
     U8  f8 = *(p);                         \
     U16 a  = IDX(p1);                      \
-    SET16(p, (a | (U16)f8<<8));            \
+    ENC16(p, (a | (U16)f8<<8));            \
     } while(0)
-#define JMPBCK(idx, f) SET16(here, (idx) | ((f)<<8))
+#define JMPBCK(idx, f) ENC16(here, (idx) | ((f)<<8))
 ///@}
 ///
 ///@name Stack Ops (note: return stack grows downward)
@@ -122,10 +122,10 @@ void _add_word()
     U16 tmp  = IDX(last);           // link to previous word
 
     last = here;                    ///#### create 3-byte name field
-    SET16(here, tmp);               // lfa: pointer to previous word
-    SET8(here, tkn[0]);             // nfa: store token into 3-byte name field
-    SET8(here, tkn[1]);
-    SET8(here, tkn[1]!=' ' ? tkn[2] : ' ');
+    ENC16(here, tmp);               // lfa: pointer to previous word
+    ENC8(here, tkn[0]);             // nfa: store token into 3-byte name field
+    ENC8(here, tkn[1]);
+    ENC8(here, tkn[1]!=' ' ? tkn[2] : ' ');
 }
 ///
 ///> create branching for instructions
@@ -163,14 +163,14 @@ void _add_branch(U8 op)
         JMPBCK(RPOP(), OP_UDJ);         // unconditional jump back to A1
         break;
     case 8: /* I */
-        SET8(here, PRM_OPS | I_I);      // fetch loop counter
+        ENC8(here, PRM_OPS | I_I);      // fetch loop counter
         break;
     case 9: /* FOR */
         RPUSH(IDX(here+1));             // save current addr A1
-        SET8(here, PRM_OPS | I_FOR);    // encode FOR opcode
+        ENC8(here, PRM_OPS | I_FOR);    // encode FOR opcode
         break;
     case 10: /* NXT */
-        SET8(here, PRM_OPS | I_NXT);    // encode NXT opcode
+        ENC8(here, PRM_OPS | I_NXT);    // encode NXT opcode
         JMPBCK(RPOP(), OP_UDJ);         // unconditionally jump back to A1
         break;
     }
@@ -183,8 +183,8 @@ void _add_str()
     U8 *p0 = get_token();               // get string from input buffer
     U8 sz  = 0;
     for (U8 *p=p0; *p!='"'; p++, sz++);
-    SET8(here, sz);
-    for (int i=0; i<sz; i++) SET8(here, *p0++);
+    ENC8(here, sz);
+    for (int i=0; i<sz; i++) ENC8(here, *p0++);
 }
 ///
 ///> list words in built-in vocabularies
@@ -343,7 +343,7 @@ void compile(U16 *rp0)
         switch(parse(tkn, &tmp, 0)) {       ///>> **determine type of operation, and keep opcode in tmp**
         case TKN_IMM:                       ///>> an immediate command?
             if (tmp==OP_EXIT) {             /// * handle return i.e. ; (semi-colon)
-                SET8(here, OP_RET);         //  terminate COLON definitions, or
+                ENC8(here, OP_RET);         //  terminate COLON definitions, or
                 tkn = NULL;                 //  clear token to exit compile mode
             }
             else _add_branch(tmp);          /// * add branching opcode
@@ -352,16 +352,16 @@ void compile(U16 *rp0)
             JMPBCK(tmp+2+3, OP_CALL);       /// * call subroutine
             break;
         case TKN_PRM:                       ///>> a built-in primitives?
-            SET8(here, PRM_OPS | (U8)tmp);  /// * add found primitive opcode
+            ENC8(here, PRM_OPS | (U8)tmp);  /// * add found primitive opcode
             if (tmp==I_DQ) _add_str();      /// * do extra, if it's a ." (dot_string) command
             break;
         case TKN_NUM:                       ///>> a literal (number)?
             if (tmp < 128) {
-                SET8(here, (U8)tmp);        /// * 1-byte literal, or
+                ENC8(here, (U8)tmp);        /// * 1-byte literal, or
             }
             else {
-                SET8(here, PRM_OPS | I_LIT);/// * 3-byte literal
-                SET16(here, tmp);
+                ENC8(here, PRM_OPS | I_LIT);/// * 3-byte literal
+                ENC16(here, tmp);
             }
             break;
         case TKN_EXT:                       ///>> extended words, not implemented yet
@@ -384,17 +384,17 @@ void create() {                             ///> create a word header (link + na
 
     U8 tmp = IDX(here+2);                   // address to variable storage
     if (tmp < 128) {                        ///> handle 1-byte address + RET(1)
-        SET8(here, (U8)tmp);
+        ENC8(here, (U8)tmp);
     }
     else {
         tmp += 2;                           ///> or, extra bytes for 16-bit address
-        SET8(here, PRM_OPS | I_LIT);
-        SET16(here, tmp);
+        ENC8(here, PRM_OPS | I_LIT);
+        ENC16(here, tmp);
     }
-    SET8(here, OP_RET);
+    ENC8(here, OP_RET);
 }
-void comma(S16 v)  { SET16(here, v); }      ///> compile a 16-bit value onto dictionary
-void ccomma(S16 v) { SET8(here, v);  }      ///> compile a 16-bit value onto dictionary
+void comma(S16 v)  { ENC16(here, v); }      ///> compile a 16-bit value onto dictionary
+void ccomma(S16 v) { ENC8(here, v);  }      ///> compile a 16-bit value onto dictionary
 ///
 ///> create a variable on dictionary
 /// * note: 8 or 10-byte per variable
@@ -402,7 +402,7 @@ void ccomma(S16 v) { SET8(here, v);  }      ///> compile a 16-bit value onto dic
 void variable()
 {
     create();
-    SET16(here, 0);                         /// add actual literal storage area
+    ENC16(here, 0);                         /// add actual literal storage area
 }
 ///
 ///> create a constant on dictionary
@@ -413,13 +413,13 @@ void constant(S16 v)
     _add_word();                            /// **fetch token, create name field linked to previous word**
 
     if (v < 128) {                          ///> handle 1-byte constant
-        SET8(here, (U8)v);
+        ENC8(here, (U8)v);
     }
     else {
-        SET8(here, PRM_OPS | I_LIT);        ///> or, constant stored as 3-byte literal 
-        SET16(here, v);
+        ENC8(here, PRM_OPS | I_LIT);        ///> or, constant stored as 3-byte literal 
+        ENC16(here, v);
     }
-    SET8(here, OP_RET);
+    ENC8(here, OP_RET);
 }
 ///
 ///> display words in dictionary

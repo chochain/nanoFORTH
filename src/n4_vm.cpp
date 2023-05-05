@@ -9,7 +9,7 @@
  *        mem[...dic_sz...|...stk_sz...|......heap......]max
  *           |            |            |                |
  *           dic-->       +-->rp  sp<--+-->tib   auto<--+
- *                                TOS TOS1 (top of stack)
+ *                                TOS NOS
  * @endcode
  */
 #include "n4_core.h"
@@ -110,7 +110,7 @@ void _invoke(U8 op)
     case 19: TOS = POP()< TOS;            break; // >
     case 20: TOS = POP()!=TOS;            break; // <>
     case 21: { U8 *p = PTR(POP()); PUSH(GET16(p));  } break; // @
-    case 22: { U8 *p = PTR(POP()); SET16(p, POP()); } break; // !
+    case 22: { U8 *p = PTR(POP()); ENC16(p, POP()); } break; // !
     case 23: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
     case 24: { U8 *p = PTR(POP()); *p = (U8)POP();  } break; // C!
     case 25: PUSH((U16)key());            break; // KEY

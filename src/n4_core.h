@@ -21,15 +21,15 @@ constexpr U16 N4_TIB_SZ = 0x80;   /**< terminal input buffer size          */
 ///
 ///@name Memory Access Ops
 ///
-/// @def SET8
+/// @def ENC8
 /// @brief 1-byte write
-/// @def SET16
+/// @def ENC16
 /// @brief 2-byte write, prevent alignment issue (on 32-bit CPU) and preserve Big-Endian encoding
 /// @def GET16
 /// @brief 2-byte read, prevent alignment issue (on 32-bit CPU) and preserve Big-Endian encoding
 ///@{
-#define SET8(p, c)     (*(U8*)(p)++=(U8)(c))
-#define SET16(p, n)    do { U16 x=(U16)(n); SET8(p,(x)>>8); SET8(p,(x)&0xff); } while(0)
+#define ENC8(p, c)     (*(U8*)(p)++=(U8)(c))
+#define ENC16(p, n)    { U16 x=(U16)(n); ENC8(p,(x)>>8); ENC8(p,(x)&0xff); }
 #define GET16(p)       (((U16)(*(U8*)(p))<<8) + *((U8*)(p)+1))
 ///@}
 ///
