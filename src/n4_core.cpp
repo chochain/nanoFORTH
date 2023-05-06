@@ -122,7 +122,7 @@ void d_mem(U8* base, U8 *p0, U16 sz, U8 delim)
         if (delim && (n&0x3)==0) d_chr(delim);
         d_u8(*p0++);
     }
-    d_chr(delim);
+    if (delim) d_chr(delim);
 }
 ///
 ///> display the opcode name
