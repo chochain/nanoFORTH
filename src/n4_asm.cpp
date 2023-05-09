@@ -51,7 +51,7 @@ PROGMEM const char JMP[] = "\x0b" \
 
 PROGMEM const char PRM[] =
 #if N4_META
-    "\x3a" N4_WORDS "CRE" ",  " "C, " "DO>" "'  " "EXE";
+    "\x3a" N4_WORDS "CRE" ",  " "C, " "'  " "EXE" "DO>";
 #else
     "\x34" N4_WORDS;
 #endif // N4_META
@@ -65,7 +65,7 @@ constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
 ///@{
 #define JMP000(p,j)     ENC16(p, (j)<<8)
 #define JMPSET(idx, p1) do {               \
-    U8  *p = PTR(idx);                     \
+    U8  *p = DIC(idx);                     \
     U8  f8 = *(p);                         \
     U16 a  = IDX(p1);                      \
     ENC16(p, (a | (U16)f8<<8));            \
@@ -81,7 +81,7 @@ constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
 ///
 ///@name Dictionary Index <=> Pointer Converter
 ///@{
-#define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
+#define DIC(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
 #define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
 ///@}
 constexpr U16 N4_SIG  = (((U16)'N'<<8)+(U16)'4');  ///< EEPROM signature
@@ -103,7 +103,7 @@ U8  tab = 0;                        ///< tracing indentation counter
 ///
 U8 _find(U8 *tkn, U16 *adr)
 {
-    for (U8 *p=last, *ex=PTR(LFA_END); p!=ex; p=PTR(GET16(p))) {
+    for (U8 *p=last, *ex=DIC(LFA_END); p!=ex; p=DIC(GET16(p))) {
         if (uc(p[2])==uc(tkn[0]) &&
             uc(p[3])==uc(tkn[1]) &&
             (p[3]==' ' || uc(p[4])==uc(tkn[2]))) {
@@ -272,8 +272,8 @@ U16 load(bool autorun)
     ///
     /// adjust user dictionary pointers
     ///
-    last = PTR(last_i);
-    here = PTR(here_i);
+    last = DIC(last_i);
+    here = DIC(here_i);
 
     if (trc && !autorun) {
         d_num(here_i);
@@ -290,7 +290,7 @@ U16 load(bool autorun)
 U16 reset()
 {
     here    = dic;                       // rewind to dictionary base
-    last    = PTR(LFA_END);              // root of linked field
+    last    = DIC(LFA_END);              // root of linked field
     tab     = 0;
     
 #if ARDUINO
@@ -428,7 +428,7 @@ void words()
 {
     U8  wrp = WORDS_PER_ROW >> (trc ? 1 : 0);                    ///> wraping width
     U16 n   = 0;
-    for (U8 *p=last, *ex=PTR(LFA_END); p!=ex; p=PTR(GET16(p))) { /// **from last, loop through dictionary**
+    for (U8 *p=last, *ex=DIC(LFA_END); p!=ex; p=DIC(GET16(p))) { /// **from last, loop through dictionary**
         d_chr(n++%wrp ? ' ' : '\n');
         if (trc) { d_adr(IDX(p)); d_chr(':'); }                  ///>> optionally show address
         d_chr(p[2]); d_chr(p[3]); d_chr(p[4]);                   ///>> 3-char name
@@ -446,8 +446,8 @@ void forget()
     ///
     /// word found, rollback here
     ///
-    U8 *lfa = PTR(xt - 2 - 3);         ///< pointer to word's link
-    last    = PTR(GET16(lfa));         /// * reset last word address
+    U8 *lfa = DIC(xt - 2 - 3);         ///< pointer to word's link
+    last    = DIC(GET16(lfa));         /// * reset last word address
     here    = lfa;                     /// * reset current pointer
 }
 ///
@@ -459,11 +459,11 @@ void trace(U16 a, U8 ir)
 
     U8 *p, op = ir & CTL_BITS;
     if (op==JMP_OPS) {                                ///> is a jump instruction?
-        a = GET16(PTR(a)) & ADR_MASK;                 // target address
+        a = GET16(DIC(a)) & ADR_MASK;                 // target address
         switch (ir & JMP_MASK) {                      // get branching opcode
         case OP_CALL:                                 // 0xc0 CALL word call
             d_chr(':');
-            p = PTR(a)-3;                             // backtrack 3-byte (name field)
+            p = DIC(a)-3;                             // backtrack 3-byte (name field)
             d_chr(*p++); d_chr(*p++); d_chr(*p);
             show("\n....");
             for (int i=0, n=++tab; i<n; i++) {        // indentation per call-depth
@@ -483,13 +483,13 @@ void trace(U16 a, U8 ir)
         switch (op) {
         case I_LIT:                                   // 3-byte literal (i.e. 16-bit signed integer)
             d_chr('#');
-            p = PTR(a)+1;                             // address to the 16-bit number
+            p = DIC(a)+1;                             // address to the 16-bit number
             a = GET16(p);                             // fetch the number (reuse a, bad, but to save)
             d_u8(a>>8); d_u8(a&0xff);
             break;
         case I_DQ:                                    // print string
             d_chr('"');
-            p = PTR(a)+1;                             // address to string header
+            p = DIC(a)+1;                             // address to string header
             d_str(p);                                 // print the string to console
             break;
         default:                                      // other opcodes
