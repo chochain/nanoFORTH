@@ -50,6 +50,7 @@ constexpr U8  OP_RET   = 0xf0;   ///< 1111 0000
 ///
 enum N4_EXT_OP {                 ///< extended opcode (used by for...nxt loop)
     I_DQ   = 29,                 ///< ." handler (adjust, if field name list changed)
+    I_DO   = 57,                 ///< DO>
     I_I    = 60,                 ///< 60 loop counter
     I_FOR,                       ///< 61
     I_NXT,                       ///< 62
