@@ -117,99 +117,99 @@ void _invoke(U8 op)
 #define LO16(u)    ((U16)((u)&0xffff))
 #define TO32(u, v) (((S32)(u)<<16) | LO16(v))
     switch (op) {
-    case 0:  POP();                       break; // DRP
-    case 1:  PUSH(TOS);                   break; // DUP
-    case 2:  {                                   // SWP
+    case 0: /* handled at upper level */  break; // NOP
+    case 1:  POP();                       break; // DRP
+    case 2:  PUSH(TOS);                   break; // DUP
+    case 3:  {                                   // SWP
         U16 x = SS(1);
         SS(1) = TOS;
         TOS   = x;
     } break;
-    case 3:  PUSH(SS(1));                 break; // OVR
-    case 4:  {                                   // ROT
+    case 4:  PUSH(SS(1));                 break; // OVR
+    case 5:  {                                   // ROT
         U16 x = SS(2);
         SS(2) = SS(1);
         SS(1) = TOS;
         TOS   = x;
     } break;
-    case 5:  TOS += POP();                break; // +
-    case 6:  TOS -= POP();                break; // -
-    case 7:  TOS *= POP();                break; // *
-    case 8:  TOS /= POP();                break; // /
-    case 9:  TOS %= POP();                break; // MOD
-    case 10: TOS = -TOS;                  break; // NEG
-    case 11: TOS &= POP();                break; // AND
-    case 12: TOS |= POP();                break; // OR
-    case 13: TOS ^= POP();                break; // XOR
-    case 14: TOS ^= -1;                   break; // NOT
-    case 15: TOS <<= POP();               break; // LSH
-    case 16: TOS >>= POP();               break; // RSH
-    case 17: TOS = POP()==TOS;            break; // =
-    case 18: TOS = POP()> TOS;            break; // <
-    case 19: TOS = POP()< TOS;            break; // >
-    case 20: TOS = POP()!=TOS;            break; // <>
-    case 21: { U8 *p = DIC(POP()); PUSH(GET16(p));  } break; // @
-    case 22: { U8 *p = DIC(POP()); ENC16(p, POP()); } break; // !
-    case 23: { U8 *p = DIC(POP()); PUSH((U16)*p);   } break; // C@
-    case 24: { U8 *p = DIC(POP()); *p = (U8)POP();  } break; // C!
-    case 25: PUSH((U16)key());            break; // KEY
-    case 26: d_chr((U8)POP());            break; // EMT
-    case 27: d_chr('\n');                 break; // CR
-    case 28: d_num(POP()); d_chr(' ');    break; // .
-    case 29: /* handled one level up */   break; // ."
-    case 30: RPUSH(POP());                break; // >R
-    case 31: PUSH(RPOP());                break; // R>
-    case 32: PUSH(IDX(N4Asm::here));      break; // HRE
-    case 33: PUSH(random(POP()));         break; // RND
-    case 34: N4Asm::here += POP();        break; // ALO
-    case 35: trc = POP();                 break; // TRC
-    case 36: {                                   // CLK
+    case 6:  TOS += POP();                break; // +
+    case 7:  TOS -= POP();                break; // -
+    case 8:  TOS *= POP();                break; // *
+    case 9:  TOS /= POP();                break; // /
+    case 10: TOS %= POP();                break; // MOD
+    case 11: TOS = -TOS;                  break; // NEG
+    case 12: TOS &= POP();                break; // AND
+    case 13: TOS |= POP();                break; // OR
+    case 14: TOS ^= POP();                break; // XOR
+    case 15: TOS ^= -1;                   break; // NOT
+    case 16: TOS <<= POP();               break; // LSH
+    case 17: TOS >>= POP();               break; // RSH
+    case 18: TOS = POP()==TOS;            break; // =
+    case 19: TOS = POP()> TOS;            break; // <
+    case 20: TOS = POP()< TOS;            break; // >
+    case 21: TOS = POP()!=TOS;            break; // <>
+    case 22: { U8 *p = DIC(POP()); PUSH(GET16(p));  } break; // @
+    case 23: { U8 *p = DIC(POP()); ENC16(p, POP()); } break; // !
+    case 24: { U8 *p = DIC(POP()); PUSH((U16)*p);   } break; // C@
+    case 25: { U8 *p = DIC(POP()); *p = (U8)POP();  } break; // C!
+    case 26: PUSH((U16)key());            break; // KEY
+    case 27: d_chr((U8)POP());            break; // EMT
+    case 28: d_chr('\n');                 break; // CR
+    case 29: d_num(POP()); d_chr(' ');    break; // .
+    case 30: /* handled one level up */   break; // ."
+    case 31: RPUSH(POP());                break; // >R
+    case 32: PUSH(RPOP());                break; // R>
+    case 33: PUSH(IDX(N4Asm::here));      break; // HRE
+    case 34: PUSH(random(POP()));         break; // RND
+    case 35: N4Asm::here += POP();        break; // ALO
+    case 36: trc = POP();                 break; // TRC
+    case 37: {                                   // CLK
         U32 u = millis();       // millisecond (32-bit value)
         PUSH(LO16(u));
         PUSH(HI16(u));
     }                                     break;
-    case 37: {                                   // D+
+    case 38: {                                   // D+
         S32 v = TO32(SS(2), SS(3)) + TO32(TOS, SS(1));
         POP(); POP();
         SS(1) = (S16)LO16(v);
         TOS   = (S16)HI16(v);
     }                                     break;
-    case 38: {                                   // D-
+    case 39: {                                   // D-
         S32 v = TO32(SS(2), SS(3)) - TO32(TOS, SS(1));
         POP(); POP();
         SS(1) = (S16)LO16(v);
         TOS   = (S16)HI16(v);
     }                                     break;
-    case 39: {                                   // DNG
+    case 40: {                                   // DNG
         S32 v = -TO32(TOS, SS(1));
         SS(1) = (S16)LO16(v);
         TOS   = (S16)HI16(v);
     }                                     break;
-    case 40: TOS = abs(TOS);                          break; // ABS
-    case 41: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
-    case 42: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
-    case 43: NanoForth::wait((U32)POP());             break; // DLY
-    case 44: PUSH(digitalRead(POP()));                break; // IN
-    case 45: PUSH(analogRead(POP()));                 break; // AIN
-    case 46: { U16 p=POP(); d_out(p, POP()); }        break; // OUT
-    case 47: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
-    case 48: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
-    case 49: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
-    case 50: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
-    case 51: NanoForth::call_api(POP());              break; // API
+    case 41: TOS = abs(TOS);                          break; // ABS
+    case 42: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
+    case 43: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
+    case 44: NanoForth::wait((U32)POP());             break; // DLY
+    case 45: PUSH(digitalRead(POP()));                break; // IN
+    case 46: PUSH(analogRead(POP()));                 break; // AIN
+    case 47: { U16 p=POP(); d_out(p, POP()); }        break; // OUT
+    case 48: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
+    case 49: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
+    case 50: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
+    case 51: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
+    case 52: NanoForth::call_api(POP());              break; // API
 #if N4_META
     ///> meta programming (for advance users)
-    case 52: N4Asm::create();                         break; // CRE, create a word (header only)
-    case 53: N4Asm::comma(POP());                     break; // ,    comma, add a 16-bit value onto dictionary
-    case 54: N4Asm::ccomma(POP());                    break; // C,   C-comma, add a 8-bit value onto dictionary
-    case 55: PUSH(N4Asm::query());                    break; // '    tick, get parameter field of a word
-    case 56: _nest(POP());                            break; // EXE  execute a given parameter field
-    case 57: /* TODO */                               break; // DO>  execution time code
+    case 53: N4Asm::create();                         break; // CRE, create a word (header only)
+    case 54: N4Asm::comma(POP());                     break; // ,    comma, add a 16-bit value onto dictionary
+    case 55: N4Asm::ccomma(POP());                    break; // C,   C-comma, add a 8-bit value onto dictionary
+    case 56: PUSH(N4Asm::query());                    break; // '    tick, get parameter field of a word
+    case 57: _nest(POP());                            break; // EXE  execute a given parameter field
+    case 58: /* TODO */                               break; // DO>  execution time code
 #endif // N4_META
-    /* case 58, 59 available */
-    case I_I:   PUSH(*(rp-1));                        break; // I
-    case I_FOR: RPUSH(POP());                         break; // FOR
-    case I_NXT: /* handled at upper level */          break; // NXT
-    case I_LIT: /* handled at upper level */          break; // LIT
+    /* case 59, 60 available */
+    case I_I:   PUSH(*(rp-1));                        break; // 61, I
+    case I_FOR: RPUSH(POP());                         break; // 62, FOR
+    case I_LIT: /* handled at upper level */          break; // 63, LIT
     }
 }
 ///
@@ -236,20 +236,21 @@ void _nest(U16 xt)
                 break;
             case OP_CDJ: xt = POP() ? xt+2 : w; break;    // 0xd0 conditional jump
             case OP_UDJ: xt = w;                break;    // 0xe0 unconditional jump
-            case OP_RET: xt = RPOP();           break;    // 0xf0 return from subroutine
+            case OP_NXT:                                  // 0xf0 FOR...NXT
+                if (!--(*(rp-1))) {                       // decrement counter *(rp-1)
+                	xt += 2;                              // break loop
+                    RPOP();                               // pop off loop index
+                }
+                else xt = w;                              // loop back
+                serv_isr();                               ///> give user task some cycles (800us)
+                break;
             }
         } break;
         case PRM_OPS: {                                   ///> handle primitive word
             xt++;                                         // advance 1 (primitive token)
         	op &= PRM_MASK;                               // capture opcode
             switch(op) {
-            case I_NXT:
-                if (!--(*(rp-1))) {                       // decrement counter *(rp-1)
-                    xt += 2;                              // if (i==0) break loop
-                    RPOP();                               // pop off index
-                }
-                serv_isr();                               ///> give user task some cycles (800us)
-                break;
+            case I_RET:	xt = RPOP(); break;               // POP return address
             case I_LIT: {                                 // 3-byte literal
             	U16 w = GET16(DIC(xt));
                 PUSH(w);
