@@ -31,7 +31,7 @@ using namespace N4Core;                             /// * VM built with core uni
 ///@}
 ///@name Dictionary Index <=> Pointer Converters
 ///@{
-#define PTR(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
+#define DIC(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
 #define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
 ///@}
 namespace N4VM {
@@ -42,7 +42,7 @@ void _nest(U16 xt);                      /// * forward declaration
 void _init() {
     show(APP_NAME); show(APP_VERSION);   /// * show init prompt
 
-    rp = (U16*)(dic + N4_DIC_SZ);        /// * reset return stack pointer
+    rp = (U16*)DIC(N4_DIC_SZ);           /// * reset return stack pointer
     sp = SP0;                            /// * reset data stack pointer
     N4Intr::reset();                     /// * init interrupt handler
 
@@ -58,7 +58,7 @@ void _init() {
 #define DUMP_PER_LINE 0x10
 void _dump(U16 p0, U16 sz0)
 {
-    U8  *p = PTR((p0&0xffe0));
+    U8  *p = DIC((p0&0xffe0));
     U16 sz = (sz0+0x1f)&0xffe0;
     for (U16 i=0; i<sz; i+=DUMP_PER_LINE) {
         d_chr('\n');
@@ -147,10 +147,10 @@ void _invoke(U8 op)
     case 18: TOS = POP()> TOS;            break; // <
     case 19: TOS = POP()< TOS;            break; // >
     case 20: TOS = POP()!=TOS;            break; // <>
-    case 21: { U8 *p = PTR(POP()); PUSH(GET16(p));  } break; // @
-    case 22: { U8 *p = PTR(POP()); ENC16(p, POP()); } break; // !
-    case 23: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
-    case 24: { U8 *p = PTR(POP()); *p = (U8)POP();  } break; // C!
+    case 21: { U8 *p = DIC(POP()); PUSH(GET16(p));  } break; // @
+    case 22: { U8 *p = DIC(POP()); ENC16(p, POP()); } break; // !
+    case 23: { U8 *p = DIC(POP()); PUSH((U16)*p);   } break; // C@
+    case 24: { U8 *p = DIC(POP()); *p = (U8)POP();  } break; // C!
     case 25: PUSH((U16)key());            break; // KEY
     case 26: d_chr((U8)POP());            break; // EMT
     case 27: d_chr('\n');                 break; // CR
@@ -202,8 +202,8 @@ void _invoke(U8 op)
     case 53: N4Asm::comma(POP());                     break; // ,    comma, add a 16-bit value onto dictionary
     case 54: N4Asm::ccomma(POP());                    break; // C,   C-comma, add a 8-bit value onto dictionary
     case 55: PUSH(N4Asm::query());                    break; // '    tick, get parameter field of a word
-    case 56: /* TODO */                               break; // DO>  execution time code
-    case 57: _nest(POP());                            break; // EXE  execute a given parameter field
+    case 56: _nest(POP());                            break; // EXE  execute a given parameter field
+    case 57: /* TODO */                               break; // DO>  execution time code
 #endif // N4_META
     /* case 58, 59 available */
     case I_I:   PUSH(*(rp-1));                        break; // I
@@ -218,51 +218,54 @@ void _invoke(U8 op)
 void _nest(U16 xt)
 {
     RPUSH(LFA_END);                                       // enter function call
-    for (U8 *pc=PTR(xt), *ex=PTR(LFA_END); pc!=ex; ) {    ///> walk through instruction sequences
-        U16 a  = IDX(pc);                                 // current program counter
-        U8  ir = *pc++;                                   // fetch instruction
-
+    while (xt != LFA_END) {                               ///> walk through instruction sequences
+        U8 op = *DIC(xt);                                 // fetch instruction
+        
 #if    TRC_LEVEL > 0
-        if (trc) N4Asm::trace(a, ir);                     // execution tracing when enabled
+        if (trc) N4Asm::trace(xt, op);                    // execution tracing when enabled
 #endif // TRC_LEVEL
-
-        U8  op = ir & CTL_BITS;                           ///> determine control bits
-        if (op==JMP_OPS) {                                ///> handle branching instruction
-            a = GET16(pc-1) & ADR_MASK;                   // target address
-            switch (ir & JMP_MASK) {                      // get branch opcode
+        
+        switch (op & CTL_BITS) {                          ///> determine control bits
+        case JMP_OPS: {                                   ///> handle branching instruction
+            U16 w = GET16(DIC(xt)) & ADR_MASK;            // target address
+            switch (op & JMP_MASK) {                      // get branch opcode
             case OP_CALL:                                 // 0xc0 subroutine call
                 serv_isr();                               ///> give user task some cycles (800us)
-                RPUSH(IDX(pc+1));                         // keep next instruction on return stack
-                pc = PTR(a);                              // jump to subroutine till I_RET
+                RPUSH(xt+2);                              // keep next instruction on return stack
+                xt = w;                                   // jump to subroutine till I_RET
                 break;
-            case OP_CDJ:                                  // 0xd0 conditional jump
-                pc = POP() ? pc+1 : PTR(a);               // next or target
-                break;
-            case OP_UDJ:                                  // 0xe0 unconditional jump
-                pc = PTR(a);                              // set jump target
-                break;
-            case OP_RET:                                  // 0xf0 return from subroutine
-                a  = RPOP();                              // pop return address
-                pc = PTR(a);                              // caller's next instruction (or break loop if 0xffff)
-                break;
+            case OP_CDJ: xt = POP() ? xt+2 : w; break;    // 0xd0 conditional jump
+            case OP_UDJ: xt = w;                break;    // 0xe0 unconditional jump
+            case OP_RET: xt = RPOP();           break;    // 0xf0 return from subroutine
             }
-        }
-        else if (op==PRM_OPS) {                           ///> handle primitive word
-            op = ir & PRM_MASK;                           // capture opcode
+        } break;
+        case PRM_OPS: {                                   ///> handle primitive word
+            xt++;                                         // advance 1 (primitive token)
+        	op &= PRM_MASK;                               // capture opcode
             switch(op) {
             case I_NXT:
                 if (!--(*(rp-1))) {                       // decrement counter *(rp-1)
-                    pc+=2;                                // if (i==0) break loop
+                    xt += 2;                              // if (i==0) break loop
                     RPOP();                               // pop off index
                 }
                 serv_isr();                               ///> give user task some cycles (800us)
                 break;
-            case I_LIT: PUSH(GET16(pc)); pc+=2; break;    // 3-byte literal
-            case I_DQ:  d_str(pc); pc+=*pc+1;   break;    // handle ." (len,byte,byte,...)
-            default:    _invoke(op);                      // handle other opcodes
+            case I_LIT: {                                 // 3-byte literal
+            	U16 w = GET16(DIC(xt));
+                PUSH(w);
+                xt += 2;
+            } break;
+            case I_DQ:                                    // handle ." (len,byte,byte,...)
+                d_str(DIC(xt));
+                xt += *DIC(xt) + 1;
+                break;                                    
+            default: _invoke(op);                         // handle other opcodes
             }
+        } break;
+        default:                                          ///> handle number (1-byte literal)
+        	xt++;
+        	PUSH(op);
         }
-        else PUSH(ir);                                    ///> handle number (1-byte literal)
     }
 }
 ///
