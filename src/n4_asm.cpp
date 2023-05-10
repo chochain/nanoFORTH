@@ -42,23 +42,21 @@ PROGMEM const char JMP[] = "\x0b" \
     "NXT";
 
 #define N4_WORDS \
-    "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " "MOD" \
-    "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " ">  " \
-    "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " ".\" "\
-    ">R " "R> " "HRE" "RND" "ALO" "TRC" "CLK" "D+ " "D- " "DNG" \
-    "ABS" "MAX" "MIN" "DLY" "IN " "AIN" "OUT" "PWM" "PIN" "TME" \
-    "PCE" "API"
+    "NOP" "DRP" "DUP" "SWP" "OVR" "ROT" "+  " "-  " "*  " "/  " \
+    "MOD" "NEG" "AND" "OR " "XOR" "NOT" "LSH" "RSH" "=  " "<  " \
+    ">  " "<> " "@  " "!  " "C@ " "C! " "KEY" "EMT" "CR " ".  " \
+    ".\" "">R " "R> " "HRE" "RND" "ALO" "TRC" "CLK" "D+ " "D- " \
+    "DNG" "ABS" "MAX" "MIN" "DLY" "IN " "AIN" "OUT" "PWM" "PIN" \
+    "TME" "PCE" "API"
 
 PROGMEM const char PRM[] =
 #if N4_META
-    "\x3a" N4_WORDS "CRE" ",  " "C, " "'  " "EXE" "DO>";
+    "\x3b" N4_WORDS "CRE" ",  " "C, " "'  " "EXE" "DO>";
 #else
-    "\x34" N4_WORDS;
+    "\x35" N4_WORDS;
 #endif // N4_META
 
-PROGMEM const char PMX[] = "\x3" \
-    "I  " "FOR" "NXT";
-constexpr U16 OP_EXIT = 0;      ///< semi-colon, end of function definition
+PROGMEM const char PMX[] = "\x2" "I  " "FOR";
 ///@}
 ///
 ///@name Branching
@@ -136,6 +134,9 @@ void _add_word()
 void _add_branch(U8 op)
 {
     switch (op) {
+    case 0: /* ; */
+        ENC8(here, PRM_OPS | I_RET);    // semi colon, mark end of a colon word
+        break;
     case 1: /* IF */
         RPUSH(IDX(here));               // save current here A1
         JMP000(here, OP_CDJ);           // alloc addr with jmp_flag
@@ -170,8 +171,7 @@ void _add_branch(U8 op)
         ENC8(here, PRM_OPS | I_FOR);    // encode FOR opcode
         break;
     case 10: /* NXT */
-        ENC8(here, PRM_OPS | I_NXT);    // encode NXT opcode
-        JMPBCK(RPOP(), OP_UDJ);         // unconditionally jump back to A1
+        JMPBCK(RPOP(), OP_NXT);         // loop back to A1
         break;
     }
 }
@@ -342,11 +342,11 @@ void compile(U16 *rp0)
         p0  = here;                         // keep current top of dictionary (for memdump)
         switch(parse(tkn, &tmp, 0)) {       ///>> **determine type of operation, and keep opcode in tmp**
         case TKN_IMM:                       ///>> an immediate command?
-            if (tmp==OP_EXIT) {             /// * handle return i.e. ; (semi-colon)
-                ENC8(here, OP_RET);         //  terminate COLON definitions, or
-                tkn = NULL;                 //  clear token to exit compile mode
+            _add_branch(tmp);               /// * add branching opcode
+            if (tmp==I_RET) {
+                tkn = NULL;                 /// * clear token to exit compile mode
+                if (trc) d_mem(dic, last, (U16)(here-last), ' ');  ///> debug memory dump, if enabled
             }
-            else _add_branch(tmp);          /// * add branching opcode
             break;
         case TKN_WRD:                       ///>> a colon word? [addr + lnk(2) + name(3)]
             JMPBCK(tmp+2+3, OP_CALL);       /// * call subroutine
@@ -373,8 +373,6 @@ void compile(U16 *rp0)
             tkn  = NULL;                    /// * bail, terminate loop!
         }
     }
-    ///> debug memory dump
-    if (trc && last>l0) d_mem(dic, last, (U16)(here-last), ' ');
 }
 ///
 ///> meta compiler
@@ -391,7 +389,7 @@ void create() {                             ///> create a word header (link + na
         ENC8(here, PRM_OPS | I_LIT);
         ENC16(here, tmp);
     }
-    ENC8(here, OP_RET);
+    ENC8(here, I_RET);
 }
 void comma(S16 v)  { ENC16(here, v); }      ///> compile a 16-bit value onto dictionary
 void ccomma(S16 v) { ENC8(here, v);  }      ///> compile a 16-bit value onto dictionary
@@ -419,7 +417,7 @@ void constant(S16 v)
         ENC8(here, PRM_OPS | I_LIT);        ///> or, constant stored as 3-byte literal 
         ENC16(here, v);
     }
-    ENC8(here, OP_RET);
+    ENC8(here, I_RET);
 }
 ///
 ///> display words in dictionary
@@ -457,8 +455,9 @@ void trace(U16 a, U8 ir)
 {
     d_adr(a);                                         // opcode address
 
-    U8 *p, op = ir & CTL_BITS;
-    if (op==JMP_OPS) {                                ///> is a jump instruction?
+    U8 *p;
+    switch (ir & CTL_BITS) {
+    case JMP_OPS: {                                   ///> is a jump instruction?
         a = GET16(DIC(a)) & ADR_MASK;                 // target address
         switch (ir & JMP_MASK) {                      // get branching opcode
         case OP_CALL:                                 // 0xc0 CALL word call
@@ -472,15 +471,16 @@ void trace(U16 a, U8 ir)
             break;
         case OP_CDJ: d_chr('?'); d_adr(a); break;     // 0xd0 CDJ  conditional jump
         case OP_UDJ: d_chr('j'); d_adr(a); break;     // 0xe0 UDJ  unconditional jump
-        case OP_RET:                                  // 0xf0 RET return
+        case OP_NXT: d_chr('r'); d_adr(a); break;     // 0xf0 NXT
+        }
+    } break;
+    case PRM_OPS: {                                   ///> is a primitive?
+    	ir &= PRM_MASK;                               // capture primitive opcode
+        switch (ir) {
+        case I_RET:
             d_chr(';');
             tab -= tab ? 1 : 0;
             break;
-        }
-    }
-    else if (op==PRM_OPS) {                           ///> is a primitive?
-        op = ir & PRM_MASK;                           // capture primitive opcode
-        switch (op) {
         case I_LIT:                                   // 3-byte literal (i.e. 16-bit signed integer)
             d_chr('#');
             p = DIC(a)+1;                             // address to the 16-bit number
@@ -494,12 +494,11 @@ void trace(U16 a, U8 ir)
             break;
         default:                                      // other opcodes
             d_chr('_');
-            U8 ci = op >= I_I;                        // loop controller flag
-            d_name(ci ? op-I_I : op, ci ? PMX : PRM, 0);
+            U8 ci = ir >= I_I;                        // loop controller flag
+            d_name(ci ? ir-I_I : ir, ci ? PMX : PRM, 0);
         }
-    }
-    else {                                            ///> and a number (i.e. 1-byte literal)
-        d_chr('#'); d_u8(ir);
+    } break;
+    default: d_chr('#'); d_u8(ir);                    ///> and a number (i.e. 1-byte literal)
     }
     d_chr(' ');
 }
