@@ -33,8 +33,8 @@ enum N4OP {
 ///@{
 constexpr U8  CTL_BITS = 0xc0;   ///< 1100 0000, JMP - 11nn xxxx, PRM - 10nn nnnn, NUM - 0nnn nnnn
 constexpr U8  JMP_OPS  = 0xc0;   ///< 1100 0000
-constexpr U8  JMP_MASK = 0xf0;   ///< 11nn xxxx, nn - CALL 00, CDJ 01, UDJ 10, RET 11
 constexpr U8  PRM_OPS  = 0x80;   ///< 1000 0000
+constexpr U8  JMP_MASK = 0xf0;   ///< 11nn xxxx, nn - CALL 00, CDJ 01, UDJ 10, NXT 11
 constexpr U8  PRM_MASK = 0x3f;   ///< 00nn nnnn, 6-bit primitive opcodes
 constexpr U16 ADR_MASK = 0x0fff; ///< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions
 ///@}
@@ -43,17 +43,17 @@ constexpr U16 ADR_MASK = 0x0fff; ///< 0000 aaaa aaaa aaaa 12-bit address in 16-b
 constexpr U8  OP_CALL  = 0xc0;   ///< 1100 0000
 constexpr U8  OP_CDJ   = 0xd0;   ///< 1101 0000
 constexpr U8  OP_UDJ   = 0xe0;   ///< 1110 0000
-constexpr U8  OP_RET   = 0xf0;   ///< 1111 0000
+constexpr U8  OP_NXT   = 0xf0;   ///< 1111 0000
 ///@}
 ///
 /// opcodes for loop control (in compiler mode)
 ///
 enum N4_EXT_OP {                 ///< extended opcode (used by for...nxt loop)
-    I_DQ   = 29,                 ///< ." handler (adjust, if field name list changed)
-    I_DO   = 57,                 ///< DO>
-    I_I    = 60,                 ///< 60 loop counter
-    I_FOR,                       ///< 61
-    I_NXT,                       ///< 62
+    I_RET  = 0,                  ///< hidden opcode
+    I_DQ   = 30,                 ///< ." handler (adjust, if field name list changed)
+    I_DO   = 58,                 ///< DO>
+    I_I    = 61,                 ///< loop counter
+    I_FOR,                       ///< 62
     I_LIT                        ///< 63 = 0x3f 3-byte literal
 };
 constexpr U16 LFA_END = 0xffff;  ///< end of link field
