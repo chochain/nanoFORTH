@@ -91,11 +91,13 @@ namespace N4Asm                     // (10-byte header)
     U16  query();                   ///< get xt of next input token, 0 if not found
     void words();                   ///< display words in dictionary
     void forget();                  ///< forgets word in the dictionary
+    void see();                     ///< decode colon word
 
     /// print execution tracing info
-    void trace(
-        U16 adr,                    ///< address to word to be executed
-        U8  ir                      ///< instruction register value
+    U16 trace(
+        U16  adr,                   ///< address to word to be executed
+        U8   ir,                    ///< instruction register value
+        char delim=0                ///< token delimiter
         );
 };  // namespace N4Asm
 #endif //__SRC_N4_ASM_H
