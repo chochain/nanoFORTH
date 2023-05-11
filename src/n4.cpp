@@ -32,7 +32,7 @@ void NanoForth::exec()
 
 void NanoForth::call_api(U16 id)
 {
-	if (id < N4_API_SZ) fp[id]();
+	if (id < N4_API_SZ && fp[id]) fp[id]();
 }
 ///
 ///> n4 yield, execute one round of user hardware tasks
@@ -92,6 +92,13 @@ int main(int argc, char **argv)
 /*
  * Revision History
  * -----------------
+ *> 2023-05-05: chochain@yahoo.com - v2.1
+ *    [14286,197] inner loop with address
+ *
+ *> 2023-03-23: chochain@yahoo.com - v2.0
+ *  * [14140,216] replace protothread with Timer2 interrupt, ticks at 1ms
+ *                embedded Forth and C API added
+ *
  *> 2023-01-06: chochain@yahoo.com - v1.6
  *  * [14830,303] make namespace N4VM, N4Asm, N4Core (singletons)
  *                yield handles isr (2x slower, tuning)
