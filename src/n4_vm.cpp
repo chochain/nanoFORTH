@@ -213,7 +213,7 @@ void _invoke(U8 op)
     case 55: N4Asm::ccomma(POP());                    break; // C,   C-comma, add a 8-bit value onto dictionary
     case 56: PUSH(N4Asm::query());                    break; // '    tick, get parameter field of a word
     case 57: _nest(POP());                            break; // EXE  execute a given parameter field
-    case 58: /* TODO */                               break; // DO>  execution time code
+    case 58: /* TODO */                               break; // DO>
 #endif // N4_META
     /* case 59, 60 available */
     case I_I:   PUSH(*(rp-1));                        break; // 61, I
@@ -226,16 +226,16 @@ void _invoke(U8 op)
 ///
 void _nest(U16 xt)
 {
-	static U8 isr_cnt = 0;                                // interrupt service counter
+    static U8 isr_cnt = 0;                                // interrupt service counter
     RPUSH(LFA_END);                                       // enter function call
     while (xt != LFA_END) {                               ///> walk through instruction sequences
         U8 op = *DIC(xt);                                 // fetch instruction
         if (isr_cnt++) serv_isr();                        // loop-around every 256 ops
-        
+
 #if    TRC_LEVEL > 0
         if (trc) N4Asm::trace(xt, op);                    // execution tracing when enabled
 #endif // TRC_LEVEL
-        
+
         switch (op & CTL_BITS) {                          ///> determine control bits
         case JMP_OPS: {                                   ///> handle branching instruction
             U16 w = GET16(DIC(xt)) & ADR_MASK;            // target address
@@ -248,7 +248,7 @@ void _nest(U16 xt)
             case OP_UDJ: xt = w;                break;    // 0xe0 unconditional jump
             case OP_NXT:                                  // 0xf0 FOR...NXT
                 if (!--(*(rp-1))) {                       // decrement counter *(rp-1)
-                	xt += 2;                              // break loop
+                    xt += 2;                              // break loop
                     RPOP();                               // pop off loop index
                 }
                 else xt = w;                              // loop back
@@ -257,24 +257,23 @@ void _nest(U16 xt)
         } break;
         case PRM_OPS: {                                   ///> handle primitive word
             xt++;                                         // advance 1 (primitive token)
-        	op &= PRM_MASK;                               // capture opcode
+            op &= PRM_MASK;                               // capture opcode
             switch(op) {
-            case I_RET:	xt = RPOP(); break;               // POP return address
+            case I_RET:	xt = RPOP();     break;           // POP return address
             case I_LIT: {                                 // 3-byte literal
-            	U16 w = GET16(DIC(xt));
+                U16 w = GET16(DIC(xt));
                 PUSH(w);
                 xt += 2;
-            } break;
+            }                            break;
             case I_DQ:                                    // handle ." (len,byte,byte,...)
                 d_str(DIC(xt));
-                xt += *DIC(xt) + 1;
-                break;                                    
+                xt += *DIC(xt) + 1;      break;
             default: _invoke(op);                         // handle other opcodes
             }
         } break;
         default:                                          ///> handle number (1-byte literal)
-        	xt++;
-        	PUSH(op);
+            xt++;
+            PUSH(op);
         }
     }
 }
