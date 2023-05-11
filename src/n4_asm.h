@@ -87,6 +87,7 @@ namespace N4Asm                     // (10-byte header)
     void create();                  ///< create a word name field
     void comma(S16 v);              ///< compile a 16-bit value onto dictionary
     void ccomma(S16 v);             ///< compile a 8-it value onto dictionary
+    void does(U16 xt);              ///< metaprogrammer (jump to definding word DO> section)
     // dictionary, string list scanners
     U16  query();                   ///< get xt of next input token, 0 if not found
     void words();                   ///< display words in dictionary
