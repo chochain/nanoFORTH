@@ -41,11 +41,6 @@
 #define millis()          10000
 #define random(v)         (rand()%v)
 #define pgm_read_byte(p)  (*(p))
-#define pinMode(p,v)
-#define digitalWrite(p,v)
-#define digitalRead(p)    (1)
-#define analogWrite(p,v)
-#define analogRead(p)     (1)
 #define log(msg)          ::printf("%s", msg)
 #define logx(v)           ::printf("%x", (U16)v)
 #define Stream            int
