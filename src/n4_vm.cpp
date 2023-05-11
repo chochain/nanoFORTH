@@ -109,13 +109,39 @@ void _immediate(U16 op)
         }
 }
 ///
+///> 32-bit operators
+/// @brief: stand-alone functions to reduce register allocation in _invoke
+///
+#define HI16(u)    ((U16)((u)>>16))
+#define LO16(u)    ((U16)((u)&0xffff))
+#define TO32(u, v) (((S32)(u)<<16) | LO16(v))
+void _clock() {
+    U32 u = millis();       // millisecond (32-bit value)
+    PUSH(LO16(u));
+    PUSH(HI16(u));
+}
+void _dplus() {
+    S32 v = TO32(SS(2), SS(3)) + TO32(TOS, SS(1));
+    POP(); POP();
+    SS(1) = (S16)LO16(v);
+    TOS   = (S16)HI16(v);
+}
+void _dminus() {
+    S32 v = TO32(SS(2), SS(3)) - TO32(TOS, SS(1));
+    POP(); POP();
+    SS(1) = (S16)LO16(v);
+    TOS   = (S16)HI16(v);
+}
+void _dneg() {
+    S32 v = -TO32(TOS, SS(1));
+    SS(1) = (S16)LO16(v);
+    TOS   = (S16)HI16(v);
+}
+///
 ///> invoke a built-in opcode
 ///
 void _invoke(U8 op)
 {
-#define HI16(u)    ((U16)((u)>>16))
-#define LO16(u)    ((U16)((u)&0xffff))
-#define TO32(u, v) (((S32)(u)<<16) | LO16(v))
     switch (op) {
     case 0: /* handled at upper level */  break; // NOP
     case 1:  POP();                       break; // DRP
@@ -163,37 +189,19 @@ void _invoke(U8 op)
     case 34: PUSH(random(POP()));         break; // RND
     case 35: N4Asm::here += POP();        break; // ALO
     case 36: trc = POP();                 break; // TRC
-    case 37: {                                   // CLK
-        U32 u = millis();       // millisecond (32-bit value)
-        PUSH(LO16(u));
-        PUSH(HI16(u));
-    }                                     break;
-    case 38: {                                   // D+
-        S32 v = TO32(SS(2), SS(3)) + TO32(TOS, SS(1));
-        POP(); POP();
-        SS(1) = (S16)LO16(v);
-        TOS   = (S16)HI16(v);
-    }                                     break;
-    case 39: {                                   // D-
-        S32 v = TO32(SS(2), SS(3)) - TO32(TOS, SS(1));
-        POP(); POP();
-        SS(1) = (S16)LO16(v);
-        TOS   = (S16)HI16(v);
-    }                                     break;
-    case 40: {                                   // DNG
-        S32 v = -TO32(TOS, SS(1));
-        SS(1) = (S16)LO16(v);
-        TOS   = (S16)HI16(v);
-    }                                     break;
+    case 37: _clock();                    break; // CLK
+    case 38: _dplus();                    break; // D+
+    case 39: _dminus();                   break; // D-
+    case 40: _dneg();                     break; // DNG
     case 41: TOS = abs(TOS);                          break; // ABS
     case 42: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
     case 43: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
     case 44: NanoForth::wait((U32)POP());             break; // DLY
-    case 45: PUSH(digitalRead(POP()));                break; // IN
-    case 46: PUSH(analogRead(POP()));                 break; // AIN
+    case 45: PUSH(d_in(POP()));                       break; // IN
+    case 46: PUSH(a_in(POP()));                       break; // AIN
     case 47: { U16 p=POP(); d_out(p, POP()); }        break; // OUT
-    case 48: { U16 p=POP(); analogWrite(p, POP());  } break; // PWM
-    case 49: { U16 p=POP(); pinMode(p, POP());      } break; // PIN
+    case 48: { U16 p=POP(); a_out(p, POP()); }        break; // PWM
+    case 49: { U16 p=POP(); d_pin(p, POP()); }        break; // PIN
     case 50: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
     case 51: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
     case 52: NanoForth::call_api(POP());              break; // API
@@ -217,9 +225,11 @@ void _invoke(U8 op)
 ///
 void _nest(U16 xt)
 {
+	static U8 isr_cnt = 0;                                // interrupt service counter
     RPUSH(LFA_END);                                       // enter function call
     while (xt != LFA_END) {                               ///> walk through instruction sequences
         U8 op = *DIC(xt);                                 // fetch instruction
+        if (isr_cnt++) serv_isr();                        // loop-around every 256 ops
         
 #if    TRC_LEVEL > 0
         if (trc) N4Asm::trace(xt, op);                    // execution tracing when enabled
@@ -230,7 +240,6 @@ void _nest(U16 xt)
             U16 w = GET16(DIC(xt)) & ADR_MASK;            // target address
             switch (op & JMP_MASK) {                      // get branch opcode
             case OP_CALL:                                 // 0xc0 subroutine call
-                serv_isr();                               ///> give user task some cycles (800us)
                 RPUSH(xt+2);                              // keep next instruction on return stack
                 xt = w;                                   // jump to subroutine till I_RET
                 break;
@@ -242,7 +251,6 @@ void _nest(U16 xt)
                     RPOP();                               // pop off loop index
                 }
                 else xt = w;                              // loop back
-                serv_isr();                               ///> give user task some cycles (800us)
                 break;
             }
         } break;
@@ -306,7 +314,7 @@ void outer()
 {
     ok();                                        ///> console ok prompt if tib is empty
     U8  *tkn = get_token();                      ///> get a token from console
-    U16 tmp;                                     /// * word address or numeric value
+    U16 tmp;
     switch (N4Asm::parse(tkn, &tmp, 1)) {        ///> parse action from token (keep opcode in tmp)
     case TKN_IMM: _immediate(tmp);      break;   ///>> immediate words,
     case TKN_WRD: _nest(tmp + 2 + 3);   break;   ///>> execute colon word (user defined)
