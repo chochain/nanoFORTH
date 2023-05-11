@@ -62,6 +62,8 @@ namespace N4Core
     void d_nib(U8 n);               ///< print a nibble
     void d_u8(U8 c);                ///< print a 8-bit hex number
     void d_num(S16 n);              ///< sent a number literal to console
+    void d_pin(U16 p, U16 v);       ///< set pin a given pinMode (INPUT, OUTPUT)
+    U16  d_in(U16 p);               ///< fetch from GPIO port
     void d_out(U16 p, U16 v);       ///< send output to GPIO ports
     void d_mem(                     ///< display memory block
         U8 *base,                   ///< reference memory pointer (start of dictionary)<br/>
@@ -74,6 +76,8 @@ namespace N4Core
         const char *lst,            ///< nanoForth string formatted list
         U8 space                    ///< delimiter to append at the end
         );
+    U16  a_in(U16 p);               ///< fetch from analog port
+    void a_out(U16 p, U16 v);       ///< send output to GPIO ports
     ///@}
     ///
     ///@name Input buffer Functions

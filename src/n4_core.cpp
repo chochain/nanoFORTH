@@ -80,9 +80,11 @@ void d_chr(char c)     {
         NanoForth::yield();
     }
 }
-void d_adr(U16 a)      { d_nib(a>>8); d_nib((a>>4)&0xf); d_nib(a&0xf); }
-void d_ptr(U8 *p)      { U16 a=(U16)p; d_chr('p'); d_adr(a); }
-void d_num(S16 n)      { _hex ? io->print(n&0xffff,HEX) : io->print(n); }
+void d_adr(U16 a)        { d_nib(a>>8); d_nib((a>>4)&0xf); d_nib(a&0xf); }
+void d_ptr(U8 *p)        { U16 a=(U16)p; d_chr('p'); d_adr(a); }
+void d_num(S16 n)        { _hex ? io->print(n&0xffff,HEX) : io->print(n); }
+void d_pin(U16 p, U16 v) { pinMode(p, v); }
+U16  d_in(U16 p)         { return digitalRead(p); }
 void d_out(U16 p, U16 v) {
     switch (p & 0x300) {
     case 0x100:            // PORTD (0~7)
@@ -100,17 +102,23 @@ void d_out(U16 p, U16 v) {
     default: digitalWrite(p, v);
     }
 }
+U16  a_in(U16 p)         { return analogRead(p); }
+void a_out(U16 p, U16 v) { analogWrite(p, v); }
 #else
-char key()             { return getchar();  }
-void d_chr(char c)     { printf("%c", c);   }
-void d_adr(U16 a)      { printf("%03x", a); }
-void d_ptr(U8 *p)      { printf("%p", p);   }
-void d_num(S16 n)      { printf(_hex ? "%x" : "%d", n); }
+char key()               { return getchar();  }
+void d_chr(char c)       { printf("%c", c);   }
+void d_adr(U16 a)        { printf("%03x", a); }
+void d_ptr(U8 *p)        { printf("%p", p);   }
+void d_num(S16 n)        { printf(_hex ? "%x" : "%d", n); }
+void d_pin(U16 p, U16 v) { /* do nothing */ }
+U16  d_in(U16 p)         { return 0; }
 void d_out(U16 p, U16 v) { /* do nothing */ }
+U16  a_in(U16 p)         { return 0; }
+void a_out(U16 p, U16 v) { /* do nothing */ }
 #endif //ARDUINO
-void d_str(U8 *p)      { for (U8 i=0, sz=*p++; i<sz; i++) d_chr(*p++); }
-void d_nib(U8 n)       { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
-void d_u8(U8 c)        { d_nib(c>>4); d_nib(c&0xf); }
+void d_str(U8 *p)        { for (U8 i=0, sz=*p++; i<sz; i++) d_chr(*p++); }
+void d_nib(U8 n)         { d_chr((n) + ((n)>9 ? 'a'-10 : '0')); }
+void d_u8(U8 c)          { d_nib(c>>4); d_nib(c&0xf); }
 ///@}
 ///
 ///> dump byte-stream between pointers with delimiter option
