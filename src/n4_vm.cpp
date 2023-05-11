@@ -97,14 +97,15 @@ void _immediate(U16 op)
         case 9:                                  /// * DMP, memory dump
             op = POP();
             _dump(POP(), op);           break;
+        case 10: N4Asm::see();          break;   /// * SEE
         ///> system
-        case 10: N4Asm::save();         break;   /// * SAV
-        case 11: N4Asm::load();         break;   /// * LD
-        case 12: N4Asm::save(true);     break;   /// * SEX - save/execute (autorun)
+        case 11: N4Asm::save();         break;   /// * SAV
+        case 12: N4Asm::load();         break;   /// * LD
+        case 13: N4Asm::save(true);     break;   /// * SEX - save/execute (autorun)
 #if ARDUINO
-        case 13: _init();               break;   /// * BYE, restart
+        case 14: _init();               break;   /// * BYE, restart
 #else
-        case 13: exit(0);               break;   /// * BYE, bail to OS
+        case 14: exit(0);               break;   /// * BYE, bail to OS
 #endif // ARDUINO
         }
 }
