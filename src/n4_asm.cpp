@@ -61,14 +61,14 @@ PROGMEM const char PMX[] = "\x2" "I  " "FOR";
 ///
 ///@name Branching
 ///@{
-#define JMP000(p,j)     ENC16(p, (j)<<8)
+#define JMP00(j)      ENC16(here, (j)<<8)
+#define JMPTO(idx, f) ENC16(here, (idx) | ((f)<<8))
 #define JMPSET(idx, p1) do {               \
     U8  *p = DIC(idx);                     \
     U8  f8 = *(p);                         \
     U16 a  = IDX(p1);                      \
     ENC16(p, (a | (U16)f8<<8));            \
     } while(0)
-#define JMPBCK(idx, f) ENC16(here, (idx) | ((f)<<8))
 ///@}
 ///
 ///@name Stack Ops (note: return stack grows downward)
@@ -139,12 +139,12 @@ void _add_branch(U8 op)
         break;
     case 1: /* IF */
         RPUSH(IDX(here));               // save current here A1
-        JMP000(here, OP_CDJ);           // alloc addr with jmp_flag
+        JMP00(OP_CDJ);                  // alloc addr with jmp_flag
         break;
     case 2: /* ELS */
         JMPSET(RPOP(), here+2);         // update A1 with next addr
         RPUSH(IDX(here));               // save current here A2
-        JMP000(here, OP_UDJ);           // alloc space with jmp_flag
+        JMP00(OP_UDJ);                  // alloc space with jmp_flag
         break;
     case 3: /* THN */
         JMPSET(RPOP(), here);           // update A2 with current addr
@@ -153,15 +153,15 @@ void _add_branch(U8 op)
         RPUSH(IDX(here));               // save current here A1
         break;
     case 5: /* UTL */
-        JMPBCK(RPOP(), OP_CDJ);         // conditional jump back to A1
+        JMPTO(RPOP(), OP_CDJ);          // conditional jump back to A1
         break;
     case 6: /* WHL */
         RPUSH(IDX(here));               // save WHILE addr A2
-        JMP000(here, OP_CDJ);           // allocate branch addr A2 with jmp flag
+        JMP00(OP_CDJ);                  // allocate branch addr A2 with jmp flag
         break;
     case 7: /* RPT */
         JMPSET(RPOP(), here+2);         // update A2 with next addr
-        JMPBCK(RPOP(), OP_UDJ);         // unconditional jump back to A1
+        JMPTO(RPOP(), OP_UDJ);          // unconditional jump back to A1
         break;
     case 8: /* I */
         ENC8(here, PRM_OPS | I_I);      // fetch loop counter
@@ -171,7 +171,7 @@ void _add_branch(U8 op)
         ENC8(here, PRM_OPS | I_FOR);    // encode FOR opcode
         break;
     case 10: /* NXT */
-        JMPBCK(RPOP(), OP_NXT);         // loop back to A1
+        JMPTO(RPOP(), OP_NXT);          // loop back to A1
         break;
     }
 }
@@ -349,7 +349,7 @@ void compile(U16 *rp0)
             }
             break;
         case TKN_WRD:                       ///>> a colon word? [addr + lnk(2) + name(3)]
-            JMPBCK(tmp+2+3, OP_CALL);       /// * call subroutine
+            JMPTO(tmp+2+3, OP_CALL);        /// * call subroutine
             break;
         case TKN_PRM:                       ///>> a built-in primitives?
             ENC8(here, PRM_OPS | (U8)tmp);  /// * add found primitive opcode
@@ -389,7 +389,7 @@ void create() {                             ///> create a word header (link + na
         ENC8(here, PRM_OPS | I_LIT);
         ENC16(here, tmp);
     }
-    ENC8(here, I_RET);
+    ENC8(here, PRM_OPS | I_RET);
 }
 void comma(S16 v)  { ENC16(here, v); }      ///> compile a 16-bit value onto dictionary
 void ccomma(S16 v) { ENC8(here, v);  }      ///> compile a 16-bit value onto dictionary
@@ -417,7 +417,7 @@ void constant(S16 v)
         ENC8(here, PRM_OPS | I_LIT);        ///> or, constant stored as 3-byte literal 
         ENC16(here, v);
     }
-    ENC8(here, I_RET);
+    ENC8(here, PRM_OPS | I_RET);
 }
 ///
 ///> display words in dictionary
@@ -459,7 +459,7 @@ void see()
     /// word found, walk parameter field
     ///
     d_chr('\n');
-    for (U8 ir = *DIC(xt); ir != I_RET; ir = *DIC(xt)) {
+    for (U8 ir = *DIC(xt); ir != (PRM_OPS|I_RET); ir = *DIC(xt)) {
         xt = trace(xt, ir, '\n');
     }
 }
