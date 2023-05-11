@@ -33,9 +33,9 @@ using namespace N4Core;                       /// * make utilities available
 /// @brief loop control opcodes
 ///
 ///@{
-PROGMEM const char IMM[] = "\xe"                                \
+PROGMEM const char IMM[] = "\xf"                                \
     ":  " "VAR" "VAL" "PCI" "TMI" "HEX" "DEC" "FGT" "WRD" "DMP" \
-    "SAV" "LD " "SEX" "BYE";
+    "SEE" "SAV" "LD " "SEX" "BYE";
     // TODO: "s\" "
 PROGMEM const char JMP[] = "\x0b" \
     ";  " "IF " "ELS" "THN" "BGN" "UTL" "WHL" "RPT" "I  " "FOR" \
@@ -439,7 +439,7 @@ void words()
 ///
 void forget()
 {
-    U16 xt = query();                  ///< lfa of word
+    U16 xt = query();                  ///< cfa of word
     if (!xt) return;                   /// * bail if word not found
     ///
     /// word found, rollback here
@@ -449,58 +449,84 @@ void forget()
     here    = lfa;                     /// * reset current pointer
 }
 ///
+///> decode colon word
+///
+void see()
+{
+    U16 xt = query();                  ///< cfa of word
+    if (!xt) return;                   /// * bail if word not found
+    ///
+    /// word found, walk parameter field
+    ///
+    d_chr('\n');
+    for (U8 ir = *DIC(xt); ir != I_RET; ir = *DIC(xt)) {
+        xt = trace(xt, ir, '\n');
+    }
+}
+///
 ///> execution tracer (debugger, can be modified into single-stepper)
 ///
-void trace(U16 a, U8 ir)
+U16 trace(U16 a, U8 ir, char delim)
 {
     d_adr(a);                                         // opcode address
 
-    U8 *p;
     switch (ir & CTL_BITS) {
     case JMP_OPS: {                                   ///> is a jump instruction?
-        a = GET16(DIC(a)) & ADR_MASK;                 // target address
+        U16 w = GET16(DIC(a)) & ADR_MASK;             // target address
         switch (ir & JMP_MASK) {                      // get branching opcode
-        case OP_CALL:                                 // 0xc0 CALL word call
+        case OP_CALL: {                               // 0xc0 CALL word call
+            U8 *p = DIC(w)-3;                         // backtrack 3-byte (name field)
             d_chr(':');
-            p = DIC(a)-3;                             // backtrack 3-byte (name field)
             d_chr(*p++); d_chr(*p++); d_chr(*p);
-            show("\n....");
-            for (int i=0, n=++tab; i<n; i++) {        // indentation per call-depth
-                show("  ");
+            if (!delim) {
+	            show("\n....");
+    	        for (int i=0, n=++tab; i<n; i++) {    // indentation per call-depth
+        	        show("  ");
+	            }
             }
+        } break;
+        case OP_CDJ: d_chr('?'); d_adr(w); break;     // 0xd0 CDJ  conditional jump
+        case OP_UDJ: d_chr('j'); d_adr(w); break;     // 0xe0 UDJ  unconditional jump
+        case OP_NXT:                                  // 0xf0 NXT
+            if (!delim) { d_chr('r'); d_adr(w); }
+            else show("_NXT");
             break;
-        case OP_CDJ: d_chr('?'); d_adr(a); break;     // 0xd0 CDJ  conditional jump
-        case OP_UDJ: d_chr('j'); d_adr(a); break;     // 0xe0 UDJ  unconditional jump
-        case OP_NXT: d_chr('r'); d_adr(a); break;     // 0xf0 NXT
         }
+        a+=2;                                         // skip over address
     } break;
     case PRM_OPS: {                                   ///> is a primitive?
     	ir &= PRM_MASK;                               // capture primitive opcode
         switch (ir) {
         case I_RET:
-            d_chr(';');
+        	d_chr('_'); d_chr(';');
             tab -= tab ? 1 : 0;
             break;
-        case I_LIT:                                   // 3-byte literal (i.e. 16-bit signed integer)
+        case I_LIT: {                                 // 3-byte literal (i.e. 16-bit signed integer)
+            U8 *p = DIC(a)+1;                         // address to the 16-bit number
+            S16 w = GET16(p);                         // fetch the number
             d_chr('#');
-            p = DIC(a)+1;                             // address to the 16-bit number
-            a = GET16(p);                             // fetch the number (reuse a, bad, but to save)
-            d_u8(a>>8); d_u8(a&0xff);
-            break;
-        case I_DQ:                                    // print string
+            d_num(w);
+            a += 2;                                   // skip literal
+        } break;
+        case I_DQ: {                                  // print string
+            U8 *p = DIC(a)+1;                         // address to string header
             d_chr('"');
-            p = DIC(a)+1;                             // address to string header
             d_str(p);                                 // print the string to console
-            break;
+            a += *p;
+        } break;
         default:                                      // other opcodes
             d_chr('_');
             U8 ci = ir >= I_I;                        // loop controller flag
             d_name(ci ? ir-I_I : ir, ci ? PMX : PRM, 0);
         }
+        a++;
     } break;
-    default: d_chr('#'); d_u8(ir);                    ///> and a number (i.e. 1-byte literal)
+    default:                                          ///> and a number (i.e. 1-byte literal)
+        d_chr('#'); d_num((S16)ir);
+        a++;           
     }
-    d_chr(' ');
+    d_chr(delim ? delim : ' ');
+    return a;
 }
 
 }  // namespace N4Asm
