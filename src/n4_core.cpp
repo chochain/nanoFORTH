@@ -13,18 +13,16 @@ namespace N4Core {
 ///
 ///@name MMU controls
 ///@{
-U8     *dic    { NULL };                       ///< base of dictionary
-U16    *rp     { NULL };                       ///< base of return stack
-S16    *sp     { NULL };                       ///< top of data stack
+U8      *dic   { NULL };                       ///< base of dictionary
+N4Task  vm;                                    ///< VM states
 ///@}
 ///@name IO controls
 ///@{
 Stream  *io    { &Serial };                    ///< default to Arduino Serial Monitor
-U8      trc    { 0 };                          ///< tracing flag
 char    *_pre  { NULL };                       ///< preload Forth code
 U8      *_tib  { NULL };                       ///< base of terminal input buffer
-U8      _hex   { 0 };                          ///< numeric radix for display
 U8      _empty { 1 };                          ///< empty flag for terminal input buffer
+U8      _hex   { 0 };                          ///< numeric radix for display
 U8      _ucase { 0 };                          ///< empty flag for terminal input buffer
 ///@}
 ///
@@ -233,11 +231,12 @@ U8 ok()
          *                         TOS NOS
          */
 		S16 *sp0 = (S16*)_tib;               /// * fetch top of heap
-	    if (sp <= (S16*)(rp+1)) {            /// * check stack overflow
+		S16 *rp1 = (S16*)(vm.rp+1);
+	    if (vm.sp <= rp1) {            /// * check stack overflow
 	        show("OVF!\n");
-	        sp = (S16*)(rp+1);               /// * stack max out
+	        vm.sp = rp1;               /// * stack max out
 	    }
-	    for (S16 *p=sp0-1; p >= sp; p--) {   /// * dump stack content
+	    for (S16 *p=sp0-1; p >= vm.sp; p--) {   /// * dump stack content
 	        d_num(*p); d_chr('_');
 	    }
 	    show("ok");                          /// * user input prompt
@@ -267,7 +266,7 @@ U8 *get_token(bool rst)
     U8 cx = dq ? '"' : ' ';                  /// * set delimiter
     U8 sz = 0;
     while (*tp && *tp!='(' && *tp++!=cx) sz++;/// * count token length
-    if (trc) {                               /// * optionally print token for debugging
+    if (vm.trc) {                               /// * optionally print token for debugging
         d_chr('\n');
         for (int i=0; i<5; i++) {
             d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');
