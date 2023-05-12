@@ -19,6 +19,7 @@ N4Task  vm;                                    ///< VM states
 ///@name IO controls
 ///@{
 Stream  *io    { &Serial };                    ///< default to Arduino Serial Monitor
+U8      trc    { 0 };                          ///< tracing control flag
 char    *_pre  { NULL };                       ///< preload Forth code
 U8      *_tib  { NULL };                       ///< base of terminal input buffer
 U8      _empty { 1 };                          ///< empty flag for terminal input buffer
@@ -266,7 +267,7 @@ U8 *get_token(bool rst)
     U8 cx = dq ? '"' : ' ';                  /// * set delimiter
     U8 sz = 0;
     while (*tp && *tp!='(' && *tp++!=cx) sz++;/// * count token length
-    if (vm.trc) {                               /// * optionally print token for debugging
+    if (trc) {                               /// * optionally print token for debugging
         d_chr('\n');
         for (int i=0; i<5; i++) {
             d_chr(i<sz ? (*(p+i)<0x20 ? '_' : *(p+i)) : ' ');

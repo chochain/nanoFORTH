@@ -207,7 +207,7 @@ void _list_voc(U16 n)
 ///
 ///> persist dictionary from RAM into EEPROM
 ///
-void save(bool trc, bool autorun)
+void save(bool autorun)
 {
     U16 here_i = IDX(here);
 
@@ -246,7 +246,7 @@ void save(bool trc, bool autorun)
 ///    lnk:     autorun address (of last word from EEPROM)
 ///    LFA_END: no autorun or EEPROM not been setup yet
 ///
-U16 load(bool trc, bool autorun)
+U16 load(bool autorun)
 {
     if (trc && !autorun) show("dic<<ROM ");
     ///
@@ -294,9 +294,9 @@ U16 reset()
     tab     = 0;
     
 #if ARDUINO
-    vm.trc = 0;
+    trc = 0;
 #else
-    vm.trc = 1;                             // tracing on PC
+    trc = 1;                             // tracing on PC
 #endif // ARDUINO
 
     return load(true);
@@ -336,7 +336,7 @@ void compile(U16 *rp0)
 
     for (U8 *tkn=p0; tkn;) {        ///> loop til exhaust all tokens (tkn==NULL)
         U16 tmp;
-        if (vm.trc) d_mem(dic, p0, (U16)(here-p0), 0);  ///>> trace assembler progress if enabled
+        if (trc) d_mem(dic, p0, (U16)(here-p0), 0);  ///>> trace assembler progress if enabled
 
         tkn = get_token();
         p0  = here;                         // keep current top of dictionary (for memdump)
@@ -345,7 +345,7 @@ void compile(U16 *rp0)
             _add_branch(tmp);               /// * add branching opcode
             if (tmp==I_RET) {
                 tkn = NULL;                 /// * clear token to exit compile mode
-                if (vm.trc) d_mem(dic, last, (U16)(here-last), ' ');  ///> debug memory dump, if enabled
+                if (trc) d_mem(dic, last, (U16)(here-last), ' ');  ///> debug memory dump, if enabled
             }
             break;
         case TKN_WRD:                       ///>> a colon word? [addr + lnk(2) + name(3)]
@@ -432,7 +432,7 @@ void constant(S16 v)
 ///
 ///> display words in dictionary
 ///
-void words(bool trc)
+void words()
 {
     U8  wrp = WORDS_PER_ROW >> (trc ? 1 : 0);                    ///> wraping width
     U16 n   = 0;

@@ -93,15 +93,15 @@ void _immediate(U16 op)
         case 6: set_hex(0);             break;   /// * DEC
         ///> dicionary debugging
         case 7: N4Asm::forget();        break;   /// * FGT, rollback word created
-        case 8: N4Asm::words(vm.trc);   break;   /// * WRD
+        case 8: N4Asm::words();         break;   /// * WRD
         case 9:                                  /// * DMP, memory dump
             op = POP();
             _dump(POP(), op);           break;
         case 10: N4Asm::see();          break;   /// * SEE
         ///> system
-        case 11: N4Asm::save(vm.trc);   break;   /// * SAV
-        case 12: N4Asm::load(vm.trc);   break;   /// * LD
-        case 13: N4Asm::save(vm.trc, true); break; /// * SEX - save/execute (autorun)
+        case 11: N4Asm::save();         break;   /// * SAV
+        case 12: N4Asm::load();         break;   /// * LD
+        case 13: N4Asm::save(true);     break;   /// * SEX - save/execute (autorun)
 #if ARDUINO
         case 14: _init();               break;   /// * BYE, restart
 #else
@@ -189,7 +189,7 @@ void _invoke(U8 op)
     case 33: PUSH(IDX(N4Asm::here));      break; // HRE
     case 34: PUSH(random(POP()));         break; // RND
     case 35: N4Asm::here += POP();        break; // ALO
-    case 36: vm.trc = POP();              break; // TRC
+    case 36: trc = POP();              break; // TRC
     case 37: _clock();                    break; // CLK
     case 38: _dplus();                    break; // D+
     case 39: _dminus();                   break; // D-

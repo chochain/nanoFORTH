@@ -66,8 +66,8 @@ namespace N4Asm                     // (10-byte header)
     extern U8  *here;               ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
 
     // EEPROM persistence I/O
-    void save(bool trc, bool autorun=false);  ///< persist user dictionary to EEPROM
-    U16  load(bool trc, bool autorun=false);  ///< restore user dictionary from EEPROM
+    void save(bool autorun=false);  ///< persist user dictionary to EEPROM
+    U16  load(bool autorun=false);  ///< restore user dictionary from EEPROM
 
     U16 reset();                    ///< reset internal pointers (for BYE)
 
@@ -90,7 +90,7 @@ namespace N4Asm                     // (10-byte header)
     void does(U16 xt);              ///< metaprogrammer (jump to definding word DO> section)
     // dictionary, string list scanners
     U16  query();                   ///< get xt of next input token, 0 if not found
-    void words(bool trc);           ///< display words in dictionary
+    void words();                   ///< display words in dictionary
     void forget();                  ///< forgets word in the dictionary
     void see();                     ///< decode colon word
 
