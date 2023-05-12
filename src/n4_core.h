@@ -35,13 +35,17 @@ constexpr U16 N4_TIB_SZ = 0x80;   /**< terminal input buffer size          */
 ///
 /// nanoForth memory and IO helper functions
 ///
+typedef struct {
+    U16    *rp     { 0 };           ///< base of return stack
+    S16    *sp     { 0 };           ///< top of data stack
+    U8      trc    { 0 };           ///< tracing flag
+} N4Task;
+
 namespace N4Core
 {
-    extern Stream *io;              ///< default to Arduino Serial Monitor
+    extern N4Task vm;               ///< VM state
     extern U8     *dic;             ///< base of dictionary
-    extern U16    *rp;				///< base of return stack
-    extern S16    *sp;              ///< top of data stack
-    extern U8     trc;              ///< tracing flag
+    extern Stream *io;              ///< default to Arduino Serial Monitor
 
     void init_mem();                ///< initialize MMU
     void memstat();                 ///< display MMU statistics
