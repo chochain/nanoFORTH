@@ -93,7 +93,7 @@ int main(int argc, char **argv)
  * Revision History
  * -----------------
  *> 2023-05-05: chochain@yahoo.com - v2.1
- *    [14286,197] inner loop with address
+ *    [13986,153] inner loop with address
  *
  *> 2023-03-23: chochain@yahoo.com - v2.0
  *  * [14140,216] replace protothread with Timer2 interrupt, ticks at 1ms
