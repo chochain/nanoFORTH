@@ -73,14 +73,14 @@ PROGMEM const char PMX[] = "\x2" "I  " "FOR";
 ///
 ///@name Stack Ops (note: return stack grows downward)
 ///@{
-#define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack */
-#define RPOP()         (*(--rp))                    /**< pop address from return stack  */
+#define RPUSH(a)       (*(vm.rp++)=(U16)(a))       /**< push address onto return stack */
+#define RPOP()         (*(--vm.rp))                /**< pop address from return stack  */
 ///@}
 ///
 ///@name Dictionary Index <=> Pointer Converter
 ///@{
-#define DIC(n)         ((U8*)dic + (n))             /**< convert dictionary index to a memory pointer */
-#define IDX(p)         ((U16)((U8*)(p) - dic))      /**< convert memory pointer to a dictionary index */
+#define DIC(n)         ((U8*)dic + (n))            /**< convert dictionary index to a memory pointer */
+#define IDX(p)         ((U16)((U8*)(p) - dic))     /**< convert memory pointer to a dictionary index */
 ///@}
 constexpr U16 N4_SIG  = (((U16)'N'<<8)+(U16)'4');  ///< EEPROM signature
 constexpr U16 N4_AUTO = N4_SIG | 0x8080;           ///< EEPROM auto-run signature
@@ -207,7 +207,7 @@ void _list_voc(U16 n)
 ///
 ///> persist dictionary from RAM into EEPROM
 ///
-void save(bool autorun)
+void save(bool trc, bool autorun)
 {
     U16 here_i = IDX(here);
 
@@ -246,7 +246,7 @@ void save(bool autorun)
 ///    lnk:     autorun address (of last word from EEPROM)
 ///    LFA_END: no autorun or EEPROM not been setup yet
 ///
-U16 load(bool autorun)
+U16 load(bool trc, bool autorun)
 {
     if (trc && !autorun) show("dic<<ROM ");
     ///
@@ -294,9 +294,9 @@ U16 reset()
     tab     = 0;
     
 #if ARDUINO
-    trc = 0;
+    vm.trc = 0;
 #else
-    trc = 1;                             // tracing on PC
+    vm.trc = 1;                             // tracing on PC
 #endif // ARDUINO
 
     return load(true);
@@ -328,7 +328,7 @@ N4OP parse(U8 *tkn, U16 *rst, U8 run)
 ///
 void compile(U16 *rp0)
 {
-    rp = rp0;                       // set return stack pointer
+    vm.rp = rp0;                       // set return stack pointer
     U8 *l0 = last, *h0 = here;
     U8 *p0 = here;
 
@@ -336,7 +336,7 @@ void compile(U16 *rp0)
 
     for (U8 *tkn=p0; tkn;) {        ///> loop til exhaust all tokens (tkn==NULL)
         U16 tmp;
-        if (trc) d_mem(dic, p0, (U16)(here-p0), 0);  ///>> trace assembler progress if enabled
+        if (vm.trc) d_mem(dic, p0, (U16)(here-p0), 0);  ///>> trace assembler progress if enabled
 
         tkn = get_token();
         p0  = here;                         // keep current top of dictionary (for memdump)
@@ -345,7 +345,7 @@ void compile(U16 *rp0)
             _add_branch(tmp);               /// * add branching opcode
             if (tmp==I_RET) {
                 tkn = NULL;                 /// * clear token to exit compile mode
-                if (trc) d_mem(dic, last, (U16)(here-last), ' ');  ///> debug memory dump, if enabled
+                if (vm.trc) d_mem(dic, last, (U16)(here-last), ' ');  ///> debug memory dump, if enabled
             }
             break;
         case TKN_WRD:                       ///>> a colon word? [addr + lnk(2) + name(3)]
@@ -432,7 +432,7 @@ void constant(S16 v)
 ///
 ///> display words in dictionary
 ///
-void words()
+void words(bool trc)
 {
     U8  wrp = WORDS_PER_ROW >> (trc ? 1 : 0);                    ///> wraping width
     U16 n   = 0;
@@ -472,6 +472,7 @@ void see()
     for (U8 ir = *DIC(xt); ir != (PRM_OPS|I_RET); ir = *DIC(xt)) {
         xt = trace(xt, ir, '\n');
     }
+    d_adr(xt); show("_; ");
 }
 ///
 ///> execution tracer (debugger, can be modified into single-stepper)
