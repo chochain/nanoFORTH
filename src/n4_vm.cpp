@@ -213,7 +213,7 @@ void _invoke(U8 op)
     case 55: N4Asm::ccomma(POP());                    break; // C,   C-comma, add a 8-bit value onto dictionary
     case 56: PUSH(N4Asm::query());                    break; // '    tick, get parameter field of a word
     case 57: _nest(POP());                            break; // EXE  execute a given parameter field
-    case 58: /* TODO */                               break; // DO>
+    case 58: /* handled at upper level */             break; // DO>
 #endif // N4_META
     /* case 59, 60 available */
     case I_I:   PUSH(*(rp-1));                        break; // 61, I
@@ -268,6 +268,9 @@ void _nest(U16 xt)
             case I_DQ:                                    // handle ." (len,byte,byte,...)
                 d_str(DIC(xt));
                 xt += *DIC(xt) + 1;      break;
+            case I_DO:                                    // metaprogrammer
+                N4Asm::does(xt);                          // jump to definding word DO> section
+                xt = LFA_END;            break;
             default: _invoke(op);                         // handle other opcodes
             }
         } break;
