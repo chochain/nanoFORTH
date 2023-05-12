@@ -44,7 +44,7 @@ char uc(char c)      {                         ///< upper case for case-insensit
 ///
 void memstat()
 {
-#if ARDUINO && TRC_LEVEL > 0
+#if ARDUINO
     S16 bsz = (S16)((U8*)&bsz - _tib);                        // free for TIB in bytes
     show("mem=");    d_ptr(dic);
     show("[dic=$");  d_adr(N4_DIC_SZ);
