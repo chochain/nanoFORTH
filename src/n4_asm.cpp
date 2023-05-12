@@ -28,7 +28,7 @@ using namespace N4Core;                       /// * make utilities available
 /// @var JMP (note: ; is hard-coded at position 0, do not change it)
 /// @brief words for branching ops in compile mode.
 /// @var PRM
-/// @brief primitive words (51 allocated, 64 max).
+/// @brief primitive words (53 of 61 allocated, 3 pre-allocated).
 /// @var PMX
 /// @brief loop control opcodes
 ///
@@ -393,6 +393,14 @@ void create() {                             ///> create a word header (link + na
 }
 void comma(S16 v)  { ENC16(here, v); }      ///> compile a 16-bit value onto dictionary
 void ccomma(S16 v) { ENC8(here, v);  }      ///> compile a 16-bit value onto dictionary
+void does(U16 xt)  {
+	U8 *p = here - 1;                               /// start walking back
+    for (; *p!=(PRM_OPS|I_RET); p--) *(p+2) = *p;   /// shift down parameters by 2 bytes
+    *(p-1) += 2;                                    /// adjust the PFA
+    ENC16(p, xt | (OP_UDJ << 8));                   /// replace RET with a JMP,
+	ENC8(p, PRM_OPS|I_RET);                         /// and a RET, (not necessary but nice to SEE)
+	here += 2;                                      /// extra 2 bytes due to shift
+}
 ///
 ///> create a variable on dictionary
 /// * note: 8 or 10-byte per variable
