@@ -226,11 +226,9 @@ void _invoke(U8 op)
 ///
 void _nest(U16 xt)
 {
-    static U8 isr_cnt = 0;                                // interrupt service counter
     RPUSH(LFA_END);                                       // enter function call
     while (xt != LFA_END) {                               ///> walk through instruction sequences
         U8 op = *DIC(xt);                                 // fetch instruction
-        if (isr_cnt++) serv_isr();                        // loop-around every 256 ops
 
 #if    TRC_LEVEL > 0
         if (trc) N4Asm::trace(xt, op);                    // execution tracing when enabled
@@ -241,6 +239,7 @@ void _nest(U16 xt)
             U16 w = GET16(DIC(xt)) & ADR_MASK;            // target address
             switch (op & JMP_MASK) {                      // get branch opcode
             case OP_CALL:                                 // 0xc0 subroutine call
+                serv_isr();                               // loop-around every 256 ops
                 RPUSH(xt+2);                              // keep next instruction on return stack
                 xt = w;                                   // jump to subroutine till I_RET
                 break;
@@ -252,6 +251,7 @@ void _nest(U16 xt)
                     RPOP();                               // pop off loop index
                 }
                 else xt = w;                              // loop back
+                serv_isr();                               // loop-around every 256 ops
                 break;
             }
         } break;
