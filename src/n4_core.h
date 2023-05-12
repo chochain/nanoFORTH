@@ -22,7 +22,7 @@ constexpr U16 N4_TIB_SZ = 0x80;   /**< terminal input buffer size          */
 ///@name Memory Access Ops
 ///
 /// @def ENC8
-/// @brief 1-byte write
+/// @brief 1-byte write (Note: increment calling pointer by 1)
 /// @def ENC16
 /// @brief 2-byte write, prevent alignment issue (on 32-bit CPU) and preserve Big-Endian encoding
 /// @def GET16
