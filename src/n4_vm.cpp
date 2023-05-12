@@ -22,12 +22,12 @@ using namespace N4Core;                             /// * VM built with core uni
 ///@name Data Stack and Return Stack Ops
 ///@{
 #define SP0            ((S16*)&dic[N4_DIC_SZ + N4_STK_SZ])
-#define TOS            (*sp)                        /**< pointer to top of current stack     */
-#define SS(i)          (*(sp+(i)))                  /**< pointer to the nth on stack         */
-#define PUSH(v)        (*(--sp)=(S16)(v))           /**< push v onto parameter stack         */
-#define POP()          (*sp++)                      /**< pop value off parameter stack       */
-#define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack      */
-#define RPOP()         (*(--rp))                    /**< pop address from return stack       */
+#define TOS            (*vm.sp)                     /**< pointer to top of current stack     */
+#define SS(i)          (*(vm.sp+(i)))               /**< pointer to the nth on stack         */
+#define PUSH(v)        (*(--vm.sp)=(S16)(v))        /**< push v onto parameter stack         */
+#define POP()          (*vm.sp++)                   /**< pop value off parameter stack       */
+#define RPUSH(a)       (*(vm.rp++)=(U16)(a))        /**< push address onto return stack      */
+#define RPOP()         (*(--vm.rp))                 /**< pop address from return stack       */
 ///@}
 ///@name Dictionary Index <=> Pointer Converters
 ///@{
@@ -42,8 +42,8 @@ void _nest(U16 xt);                      /// * forward declaration
 void _init() {
     show(APP_NAME); show(APP_VERSION);   /// * show init prompt
 
-    rp = (U16*)DIC(N4_DIC_SZ);           /// * reset return stack pointer
-    sp = SP0;                            /// * reset data stack pointer
+    vm.rp = (U16*)DIC(N4_DIC_SZ);        /// * reset return stack pointer
+    vm.sp = SP0;                         /// * reset data stack pointer
     N4Intr::reset();                     /// * init interrupt handler
 
     U16 xt = N4Asm::reset();             /// * reload EEPROM and reset assembler
@@ -58,8 +58,8 @@ void _init() {
 #define DUMP_PER_LINE 0x10
 void _dump(U16 p0, U16 sz0)
 {
-    U8  *p = DIC((p0&0xffe0));
-    U16 sz = (sz0+0x1f)&0xffe0;
+    U8  *p = DIC(p0 & 0xffe0);
+    U16 sz = (sz0 + 0x1f) & 0xffe0;
     for (U16 i=0; i<sz; i+=DUMP_PER_LINE) {
         d_chr('\n');
         d_mem(dic, p, DUMP_PER_LINE, ' ');
@@ -77,7 +77,7 @@ void _immediate(U16 op)
 {
         switch (op) {
         ///> compiler
-        case 0: N4Asm::compile(rp);     break;   /// * : (COLON), switch into compile mode (for new word)
+        case 0: N4Asm::compile(vm.rp);  break;   /// * : (COLON), switch into compile mode (for new word)
         case 1: N4Asm::variable();      break;   /// * VAR, create new variable
         case 2: N4Asm::constant(POP()); break;   /// * VAL, create new constant
         ///> interrupt handlers
@@ -93,15 +93,15 @@ void _immediate(U16 op)
         case 6: set_hex(0);             break;   /// * DEC
         ///> dicionary debugging
         case 7: N4Asm::forget();        break;   /// * FGT, rollback word created
-        case 8: N4Asm::words();         break;   /// * WRD
+        case 8: N4Asm::words(vm.trc);   break;   /// * WRD
         case 9:                                  /// * DMP, memory dump
             op = POP();
             _dump(POP(), op);           break;
         case 10: N4Asm::see();          break;   /// * SEE
         ///> system
-        case 11: N4Asm::save();         break;   /// * SAV
-        case 12: N4Asm::load();         break;   /// * LD
-        case 13: N4Asm::save(true);     break;   /// * SEX - save/execute (autorun)
+        case 11: N4Asm::save(vm.trc);   break;   /// * SAV
+        case 12: N4Asm::load(vm.trc);   break;   /// * LD
+        case 13: N4Asm::save(vm.trc, true); break; /// * SEX - save/execute (autorun)
 #if ARDUINO
         case 14: _init();               break;   /// * BYE, restart
 #else
@@ -189,7 +189,7 @@ void _invoke(U8 op)
     case 33: PUSH(IDX(N4Asm::here));      break; // HRE
     case 34: PUSH(random(POP()));         break; // RND
     case 35: N4Asm::here += POP();        break; // ALO
-    case 36: trc = POP();                 break; // TRC
+    case 36: vm.trc = POP();              break; // TRC
     case 37: _clock();                    break; // CLK
     case 38: _dplus();                    break; // D+
     case 39: _dminus();                   break; // D-
@@ -216,7 +216,7 @@ void _invoke(U8 op)
     case 58: /* handled at upper level */             break; // DO>
 #endif // N4_META
     /* case 59, 60 available */
-    case I_I:   PUSH(*(rp-1));                        break; // 61, I
+    case I_I:   PUSH(*(vm.rp-1));                     break; // 61, I
     case I_FOR: RPUSH(POP());                         break; // 62, FOR
     case I_LIT: /* handled at upper level */          break; // 63, LIT
     }
@@ -236,7 +236,7 @@ void _nest(U16 xt)
 
         switch (op & CTL_BITS) {                          ///> determine control bits
         case JMP_OPS: {                                   ///> handle branching instruction
-            U16 w = GET16(DIC(xt)) & ADR_MASK;            // target address
+            U16 w = (((U16)op<<8) | *DIC(xt+1)) & ADR_MASK;  // target address
             switch (op & JMP_MASK) {                      // get branch opcode
             case OP_CALL:                                 // 0xc0 subroutine call
                 serv_isr();                               // loop-around every 256 ops
@@ -246,7 +246,7 @@ void _nest(U16 xt)
             case OP_CDJ: xt = POP() ? xt+2 : w; break;    // 0xd0 conditional jump
             case OP_UDJ: xt = w;                break;    // 0xe0 unconditional jump
             case OP_NXT:                                  // 0xf0 FOR...NXT
-                if (!--(*(rp-1))) {                       // decrement counter *(rp-1)
+                if (!--(*(vm.rp-1))) {                    // decrement counter *(rp-1)
                     xt += 2;                              // break loop
                     RPOP();                               // pop off loop index
                 }
@@ -261,13 +261,13 @@ void _nest(U16 xt)
             switch(op) {
             case I_RET:	xt = RPOP();     break;           // POP return address
             case I_LIT: {                                 // 3-byte literal
-                U16 w = GET16(DIC(xt));
-                PUSH(w);
-                xt += 2;
+                U16 w = GET16(DIC(xt));                   // fetch the 16-bit literal
+                PUSH(w);                                  // put the value on TOS
+                xt += 2;                                  // skip over the 16-bit literal
             }                            break;
             case I_DQ:                                    // handle ." (len,byte,byte,...)
-                d_str(DIC(xt));
-                xt += *DIC(xt) + 1;      break;
+                d_str(DIC(xt));                           // display the string
+                xt += *DIC(xt) + 1;      break;           // skip over the string
             case I_DO:                                    // metaprogrammer
                 N4Asm::does(xt);                          // jump to definding word DO> section
                 xt = LFA_END;            break;
@@ -276,7 +276,7 @@ void _nest(U16 xt)
         } break;
         default:                                          ///> handle number (1-byte literal)
             xt++;
-            PUSH(op);
+            PUSH(op);                                     // put the 7-bit literal on TOS
         }
     }
 }
