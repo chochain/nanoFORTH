@@ -393,13 +393,15 @@ void create() {                             ///> create a word header (link + na
 }
 void comma(S16 v)  { ENC16(here, v); }      ///> compile a 16-bit value onto dictionary
 void ccomma(S16 v) { ENC8(here, v);  }      ///> compile a 16-bit value onto dictionary
-void does(U16 xt)  {
+void does(U16 xt)  {                        ///> metaprogrammer (jump to definding word DO> section)
+#if N4_META
 	U8 *p = here - 1;                               /// start walking back
     for (; *p!=(PRM_OPS|I_RET); p--) *(p+2) = *p;   /// shift down parameters by 2 bytes
     *(p-1) += 2;                                    /// adjust the PFA
     ENC16(p, xt | (OP_UDJ << 8));                   /// replace RET with a JMP,
 	ENC8(p, PRM_OPS|I_RET);                         /// and a RET, (not necessary but nice to SEE)
 	here += 2;                                      /// extra 2 bytes due to shift
+#endif // N4_META
 }
 ///
 ///> create a variable on dictionary
