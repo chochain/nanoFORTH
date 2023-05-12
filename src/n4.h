@@ -23,7 +23,7 @@
 
 #define APP_NAME          "nanoForth "
 #define APP_VERSION       "2.0 "
-#define TRC_LEVEL         1       /**< tracing verbosity level      */
+#define TRC_LEVEL         0       /**< tracing verbosity level      */
 #define N4_API_SZ         8       /**< C API function pointer slots */
 
 ///@name Arduino Console Output Support
