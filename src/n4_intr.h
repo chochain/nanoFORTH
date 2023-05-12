@@ -19,10 +19,6 @@
 #endif // ARDUINO
 
 namespace N4Intr {
-    extern U8   t_idx;             ///< max slot# of timer interrupt
-    extern U16  p_xt[3];           ///< pin change ISR
-    extern U16  t_xt[8];           ///< timer ISR
-
     void reset();                  ///< reset interrupts
     U16  isr();                    ///< fetch interrupt service routines
 
