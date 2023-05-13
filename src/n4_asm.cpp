@@ -50,11 +50,11 @@ PROGMEM const char JMP[] = "\x0b" \
     "TME" "PCE" "API"
 
 PROGMEM const char PRM[] =
-#if N4_META
+#if N4_DOES_META
     "\x3b" N4_WORDS "CRE" ",  " "C, " "'  " "EXE" "DO>";
 #else
     "\x35" N4_WORDS;
-#endif // N4_META
+#endif // N4_DOES_META
 
 PROGMEM const char PMX[] = "\x2" "I  " "FOR";
 ///@}
@@ -394,14 +394,14 @@ void create() {                             ///> create a word header (link + na
 void comma(S16 v)  { ENC16(here, v); }      ///> compile a 16-bit value onto dictionary
 void ccomma(S16 v) { ENC8(here, v);  }      ///> compile a 16-bit value onto dictionary
 void does(U16 xt)  {                        ///> metaprogrammer (jump to definding word DO> section)
-#if N4_META
+#if N4_DOES_META
 	U8 *p = here - 1;                               /// start walking back
     for (; *p!=(PRM_OPS|I_RET); p--) *(p+2) = *p;   /// shift down parameters by 2 bytes
     *(p-1) += 2;                                    /// adjust the PFA
     ENC16(p, xt | (OP_UDJ << 8));                   /// replace RET with a JMP,
 	ENC8(p, PRM_OPS|I_RET);                         /// and a RET, (not necessary but nice to SEE)
 	here += 2;                                      /// extra 2 bytes due to shift
-#endif // N4_META
+#endif // N4_DOES_META
 }
 ///
 ///> create a variable on dictionary
