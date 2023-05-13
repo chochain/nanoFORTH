@@ -93,7 +93,8 @@ int main(int argc, char **argv)
  * Revision History
  * -----------------
  *> 2023-05-05: chochain@yahoo.com - v2.1
- *    [13992,143] tune inner loop; add computed goto 
+ *    [13986,139] tune inner loop, isr - (30% faster)
+ *                add computed goto 
  *
  *> 2023-03-23: chochain@yahoo.com - v2.0
  *  * [14140,216] replace protothread with Timer2 interrupt, ticks at 1ms
