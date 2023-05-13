@@ -21,10 +21,10 @@
 #ifndef __SRC_N4_H
 #define __SRC_N4_H
 
-#define APP_NAME          "nanoForth "
+#define APP_NAME          "\nnanoForth "
 #define APP_VERSION       "2.0 "
-#define TRC_LEVEL         0       /**< tracing verbosity level      */
 #define N4_API_SZ         8       /**< C API function pointer slots */
+#define TRC_LEVEL         0       /**< tracing verbosity level      */
 
 ///@name Arduino Console Output Support
 ///@{
