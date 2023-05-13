@@ -67,8 +67,8 @@ namespace N4Asm                     // (10-byte header)
     extern U8  *here;               ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
 
     // EEPROM persistence I/O
-    void save(bool autorun=false);  ///< persist user dictionary to EEPROM
-    U16  load(bool autorun=false);  ///< restore user dictionary from EEPROM
+    void save(U8 autorun=0);        ///< persist user dictionary to EEPROM
+    U16  load(U8 autorun=0);        ///< restore user dictionary from EEPROM
 
     U16 reset();                    ///< reset internal pointers (for BYE)
 

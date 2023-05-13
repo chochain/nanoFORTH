@@ -207,7 +207,7 @@ void _list_voc(U16 n)
 ///
 ///> persist dictionary from RAM into EEPROM
 ///
-void save(bool autorun)
+void save(U8 autorun)
 {
     U16 here_i = IDX(here);
 
@@ -246,7 +246,7 @@ void save(bool autorun)
 ///    lnk:     autorun address (of last word from EEPROM)
 ///    LFA_END: no autorun or EEPROM not been setup yet
 ///
-U16 load(bool autorun)
+U16 load(U8 autorun)
 {
     if (trc && !autorun) show("dic<<ROM ");
     ///
@@ -299,7 +299,7 @@ U16 reset()
     trc = 1;                             // tracing on PC
 #endif // ARDUINO
 
-    return load(true);
+    return load(1);                      // 1=autorun
 }
 ///
 ///> get address of next input token
