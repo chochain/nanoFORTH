@@ -147,11 +147,11 @@ void _invoke(U8 op)
 #if N4_USE_GOTO
     #define DISPATCH(op) goto *vt[op];
     #define _X(i,g)      L_##i: { g; } return
-    #define _L(i)        &&L_##i
     #define LL(i) \
-        _L(i##0),_L(i##1),_L(i##2),_L(i##3),_L(i##4),_L(i##5),_L(i##6),_L(i##7),_L(i##8),_L(i##9)
+        &&L_##i##0,&&L_##i##1,&&L_##i##2,&&L_##i##3,&&L_##i##4, \
+        &&L_##i##5,&&L_##i##6,&&L_##i##7,&&L_##i##8,&&L_##i##9
     static void *vt[] = {           // computed goto branching table
-        LL(), LL(1), LL(2), LL(3), LL(4), LL(5), _L(60), _L(61), _L(62), _L(63)
+        LL(),LL(1),LL(2),LL(3),LL(4),LL(5),&&L_60,&&L_61,&&L_62,&&L_63
     };
 #else  // !N4_USE_GOTO
     #define DISPATCH(op) switch(op)
