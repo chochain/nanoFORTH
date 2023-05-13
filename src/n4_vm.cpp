@@ -140,85 +140,99 @@ void _dneg() {
 }
 ///
 ///> invoke a built-in opcode
+///> Note: computed goto takes extra 128-bytes for ~60ms/100K faster
 ///
 void _invoke(U8 op)
 {
-    switch (op) {
-    case 0: /* handled at upper level */  break; // NOP
-    case 1:  POP();                       break; // DRP
-    case 2:  PUSH(TOS);                   break; // DUP
-    case 3:  {                                   // SWP
+#if N4_USE_GOTO
+    #define DISPATCH(op) goto *vt[op];
+    #define _X(i,g)      L_##i: { g; } return
+    #define _L(i)        &&L_##i
+    #define LL(i) \
+        _L(i##0),_L(i##1),_L(i##2),_L(i##3),_L(i##4),_L(i##5),_L(i##6),_L(i##7),_L(i##8),_L(i##9)
+    static void *vt[] = {           // computed goto branching table
+        LL(), LL(1), LL(2), LL(3), LL(4), LL(5), _L(60), _L(61), _L(62), _L(63)
+    };
+#else  // !N4_USE_GOTO
+    #define DISPATCH(op) switch(op)
+    #define _X(i,g)      case i: { g; } break
+#endif // N4_USE_GOTO
+
+    DISPATCH(op) {                  // switch(op) or goto *vt[op]
+    _X(0,  {});                     // NOP, handled at upper level
+    _X(1,  POP());                  // DRP
+    _X(2,  PUSH(TOS));              // DUP
+    _X(3,                           // SWP
         U16 x = SS(1);
         SS(1) = TOS;
-        TOS   = x;
-    } break;
-    case 4:  PUSH(SS(1));                 break; // OVR
-    case 5:  {                                   // ROT
+        TOS   = x);
+    _X(4,  PUSH(SS(1)));            // OVR
+    _X(5,                           // ROT
         U16 x = SS(2);
         SS(2) = SS(1);
         SS(1) = TOS;
-        TOS   = x;
-    } break;
-    case 6:  TOS += POP();                break; // +
-    case 7:  TOS -= POP();                break; // -
-    case 8:  TOS *= POP();                break; // *
-    case 9:  TOS /= POP();                break; // /
-    case 10: TOS %= POP();                break; // MOD
-    case 11: TOS = -TOS;                  break; // NEG
-    case 12: TOS &= POP();                break; // AND
-    case 13: TOS |= POP();                break; // OR
-    case 14: TOS ^= POP();                break; // XOR
-    case 15: TOS ^= -1;                   break; // NOT
-    case 16: TOS <<= POP();               break; // LSH
-    case 17: TOS >>= POP();               break; // RSH
-    case 18: TOS = POP()==TOS;            break; // =
-    case 19: TOS = POP()> TOS;            break; // <
-    case 20: TOS = POP()< TOS;            break; // >
-    case 21: TOS = POP()!=TOS;            break; // <>
-    case 22: { U8 *p = DIC(POP()); PUSH(GET16(p));  } break; // @
-    case 23: { U8 *p = DIC(POP()); ENC16(p, POP()); } break; // !
-    case 24: { U8 *p = DIC(POP()); PUSH((U16)*p);   } break; // C@
-    case 25: { U8 *p = DIC(POP()); *p = (U8)POP();  } break; // C!
-    case 26: PUSH((U16)key());            break; // KEY
-    case 27: d_chr((U8)POP());            break; // EMT
-    case 28: d_chr('\n');                 break; // CR
-    case 29: d_num(POP()); d_chr(' ');    break; // .
-    case 30: /* handled one level up */   break; // ."
-    case 31: RPUSH(POP());                break; // >R
-    case 32: PUSH(RPOP());                break; // R>
-    case 33: PUSH(IDX(N4Asm::here));      break; // HRE
-    case 34: PUSH(random(POP()));         break; // RND
-    case 35: N4Asm::here += POP();        break; // ALO
-    case 36: trc = POP();              break; // TRC
-    case 37: _clock();                    break; // CLK
-    case 38: _dplus();                    break; // D+
-    case 39: _dminus();                   break; // D-
-    case 40: _dneg();                     break; // DNG
-    case 41: TOS = abs(TOS);                          break; // ABS
-    case 42: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
-    case 43: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
-    case 44: NanoForth::wait((U32)POP());             break; // DLY
-    case 45: PUSH(d_in(POP()));                       break; // IN
-    case 46: PUSH(a_in(POP()));                       break; // AIN
-    case 47: { U16 p=POP(); d_out(p, POP()); }        break; // OUT
-    case 48: { U16 p=POP(); a_out(p, POP()); }        break; // PWM
-    case 49: { U16 p=POP(); d_pin(p, POP()); }        break; // PIN
-    case 50: N4Intr::enable_timer(POP());             break; // TME - enable/disable timer2 interrupt
-    case 51: N4Intr::enable_pci(POP());               break; // PCE - enable/disable pin change interrupts
-    case 52: NanoForth::call_api(POP());              break; // API
-#if N4_META
+        TOS   = x);
+    _X(6,  TOS += POP());           // +
+    _X(7,  TOS -= POP());           // -
+    _X(8,  TOS *= POP());           // *
+    _X(9,  TOS /= POP());           // /
+    _X(10, TOS %= POP());           // MOD
+    _X(11, TOS = -TOS);             // NEG
+    _X(12, TOS &= POP());           // AND
+    _X(13, TOS |= POP());           // OR
+    _X(14, TOS ^= POP());           // XOR
+    _X(15, TOS ^= -1);              // NOT
+    _X(16, TOS <<= POP());          // LSH
+    _X(17, TOS >>= POP());          // RSH
+    _X(18, TOS = POP()==TOS);       // =
+    _X(19, TOS = POP()> TOS);       // <
+    _X(20, TOS = POP()< TOS);       // >
+    _X(21, TOS = POP()!=TOS);       // <>
+    _X(22, U8 *p = DIC(POP()); PUSH(GET16(p)) ); // @
+    _X(23, U8 *p = DIC(POP()); ENC16(p, POP())); // !
+    _X(24, U8 *p = DIC(POP()); PUSH((U16)*p)  ); // C@
+    _X(25, U8 *p = DIC(POP()); *p = (U8)POP() ); // C!
+    _X(26, PUSH((U16)key()));       // KEY
+    _X(27, d_chr((U8)POP()));       // EMT
+    _X(28, d_chr('\n'));            // CR
+    _X(29, d_num(POP()); d_chr(' ')); // .
+    _X(30, {});                     // ."  handled one level up
+    _X(31, RPUSH(POP()));           // >R
+    _X(32, PUSH(RPOP()));           // R>
+    _X(33, PUSH(IDX(N4Asm::here))); // HRE
+    _X(34, PUSH(random(POP())));    // RND
+    _X(35, N4Asm::here += POP());   // ALO
+    _X(36, trc = POP());            // TRC
+    _X(37, _clock());               // CLK
+    _X(38, _dplus());               // D+
+    _X(39, _dminus());              // D-
+    _X(40, _dneg());                // DNG
+    _X(41, TOS = abs(TOS));         // ABS
+    _X(42, S16 n = POP(); TOS = n>TOS ? n : TOS); // MAX
+    _X(43, S16 n = POP(); TOS = n<TOS ? n : TOS); // MIN
+    _X(44, NanoForth::wait((U32)POP()));          // DLY
+    _X(45, PUSH(d_in(POP())));                    // IN
+    _X(46, PUSH(a_in(POP())));                    // AIN
+    _X(47, U16 p = POP(); d_out(p, POP()));       // OUT
+    _X(48, U16 p = POP(); a_out(p, POP()));       // PWM
+    _X(49, U16 p = POP(); d_pin(p, POP()));       // PIN
+    _X(50, N4Intr::enable_timer(POP()));          // TME - enable/disable timer2 interrupt
+    _X(51, N4Intr::enable_pci(POP()));            // PCE - enable/disable pin change interrupts
+    _X(52, NanoForth::call_api(POP()));           // API
+#if N4_DOES_META
     ///> meta programming (for advance users)
-    case 53: N4Asm::create();                         break; // CRE, create a word (header only)
-    case 54: N4Asm::comma(POP());                     break; // ,    comma, add a 16-bit value onto dictionary
-    case 55: N4Asm::ccomma(POP());                    break; // C,   C-comma, add a 8-bit value onto dictionary
-    case 56: PUSH(N4Asm::query());                    break; // '    tick, get parameter field of a word
-    case 57: _nest(POP());                            break; // EXE  execute a given parameter field
-    case 58: /* handled at upper level */             break; // DO>
-#endif // N4_META
-    /* case 59, 60 available */
-    case I_I:   PUSH(*(vm.rp-1));                     break; // 61, I
-    case I_FOR: RPUSH(POP());                         break; // 62, FOR
-    case I_LIT: /* handled at upper level */          break; // 63, LIT
+    _X(53, N4Asm::create());        // CRE, create a word (header only)
+    _X(54, N4Asm::comma(POP()));    // ,    comma, add a 16-bit value onto dictionary
+    _X(55, N4Asm::ccomma(POP()));   // C,   C-comma, add a 8-bit value onto dictionary
+    _X(56, PUSH(N4Asm::query()));   // '    tick, get parameter field of a word
+    _X(57, _nest(POP()));           // EXE  execute a given parameter field
+    _X(58, {});                     // DO> handled at upper level
+#endif // N4_DOES_META
+    _X(59, {});                     // available
+    _X(60, {});                     // available
+    _X(61, PUSH(*(vm.rp - 1)));     // 61, I
+    _X(62, RPUSH(POP()));           // 62, FOR
+    _X(63, {});                     // 63, LIT handled at upper level
     }
 }
 ///
@@ -234,8 +248,7 @@ void _nest(U16 xt)
         if (trc) N4Asm::trace(xt, op);                    // execution tracing when enabled
 #endif // TRC_LEVEL
 
-        switch (op & CTL_BITS) {                          ///> determine control bits
-        case JMP_OPS: {                                   ///> handle branching instruction
+        if ((op & CTL_BITS)==JMP_OPS) {                   ///> determine control bits
             U16 w = (((U16)op<<8) | *DIC(xt+1)) & ADR_MASK;  // target address
             switch (op & JMP_MASK) {                      // get branch opcode
             case OP_CALL:                                 // 0xc0 subroutine call
@@ -254,12 +267,12 @@ void _nest(U16 xt)
                 serv_isr();                               // loop-around every 256 ops
                 break;
             }
-        } break;
-        case PRM_OPS: {                                   ///> handle primitive word
+        }
+        else if ((op & CTL_BITS)==PRM_OPS) {              ///> handle primitive word
             xt++;                                         // advance 1 (primitive token)
             op &= PRM_MASK;                               // capture opcode
             switch(op) {
-            case I_RET:	xt = RPOP();     break;           // POP return address
+            case I_RET:    xt = RPOP();  break;           // POP return address
             case I_LIT: {                                 // 3-byte literal
                 U16 w = GET16(DIC(xt));                   // fetch the 16-bit literal
                 PUSH(w);                                  // put the value on TOS
@@ -273,8 +286,8 @@ void _nest(U16 xt)
                 xt = LFA_END;            break;
             default: _invoke(op);                         // handle other opcodes
             }
-        } break;
-        default:                                          ///> handle number (1-byte literal)
+        }
+        else {                                            ///> handle number (1-byte literal)
             xt++;
             PUSH(op);                                     // put the 7-bit literal on TOS
         }
@@ -293,7 +306,7 @@ void setup(const char *code, Stream &io, U8 ucase)
     set_ucase(ucase);        /// * set case sensitiveness
     set_hex(0);              /// * set radix = 10
 
-    _init();                   /// * init VM
+    _init();                 /// * init VM
 }
 ///
 ///> VM proxy functions
