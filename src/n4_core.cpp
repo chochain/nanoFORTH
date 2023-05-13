@@ -44,20 +44,14 @@ char uc(char c)      {                         ///< upper case for case-insensit
 ///
 void memstat()
 {
-#if ARDUINO
-    S16 bsz = (S16)((U8*)&bsz - _tib);                        // free for TIB in bytes
-    show("mem=");    d_ptr(dic);
-    show("[dic=$");  d_adr(N4_DIC_SZ);
-    show("|stk=$");  d_adr(N4_STK_SZ);
-    show("|tib=$");  d_adr(N4_TIB_SZ);
-    show("] auto="); d_num((U16)((U8*)&bsz - &_tib[N4_TIB_SZ]));
-#else
     log("MEM=$");    logx(N4_DIC_SZ + N4_STK_SZ + N4_TIB_SZ); // forth memory block
     log("[DIC=$");   logx(N4_DIC_SZ);                         // dictionary size
     log("|STK=$");   logx(N4_STK_SZ);                         // stack size
     log("|TIB=$");   logx(N4_TIB_SZ);
+#if ARDUINO
+    S16 bsz = (S16)((U8*)&bsz - _tib);                        // free for TIB in bytes
+    show("] auto="); d_num((U16)((U8*)&bsz - &_tib[N4_TIB_SZ]));
 #endif // ARDUINO
-    show("]\n");
 }
 ///@}
 ///@name Console IO Functions with Cooperative Threading support
