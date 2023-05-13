@@ -168,7 +168,7 @@ U8 number(U8 *str, S16 *num)
 ///> clear terminal input buffer
 ///
 void clear_tib() {
-    get_token(true);                         ///> empty the static tib inside #get_token
+    get_token(1);                            ///> empty the static tib inside #get_token
 }
 ///
 ///> fill input buffer from console char-by-char til CR or LF hit
@@ -241,7 +241,7 @@ U8 ok()
 ///
 ///> capture a token from console input buffer
 ///
-U8 *get_token(bool rst)
+U8 *get_token(U8 rst)
 {
     static U8 *tp = _tib;                    ///> token pointer to input buffer
     static U8 dq  = 0;                       ///> dot_string flag

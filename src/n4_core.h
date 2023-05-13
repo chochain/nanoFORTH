@@ -88,7 +88,7 @@ namespace N4Core
     ///@{
     void clear_tib();               ///< reset input buffer
     U8   ok();                      ///< check whether input buffer is empty
-    U8   *get_token(bool rst=false);///< get a token from console input
+    U8   *get_token(U8 rst=0);      ///< get a token from console input
     U8   number(                    ///< process a literal from string given
         U8 *tkn,                    ///< token string of a number
         S16 *num                    ///< number pointer for return value
