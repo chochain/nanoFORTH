@@ -101,7 +101,7 @@ void _immediate(U16 op)
         ///> system
         case 11: N4Asm::save();         break;   /// * SAV
         case 12: N4Asm::load();         break;   /// * LD
-        case 13: N4Asm::save(true);     break;   /// * SEX - save/execute (autorun)
+        case 13: N4Asm::save(1);        break;   /// * SEX - save/execute (autorun)
 #if ARDUINO
         case 14: _init();               break;   /// * BYE, restart
 #else
@@ -270,9 +270,9 @@ void _nest(U16 xt)
         }
         else if ((op & CTL_BITS)==PRM_OPS) {              ///> handle primitive word
             xt++;                                         // advance 1 (primitive token)
-            op &= PRM_MASK;                               // capture opcode
+            op &= PRM_MASK;                               // get primitive opcode
             switch(op) {
-            case I_RET:    xt = RPOP();  break;           // POP return address
+            case I_RET: xt = RPOP();     break;           // POP return address
             case I_LIT: {                                 // 3-byte literal
                 U16 w = GET16(DIC(xt));                   // fetch the 16-bit literal
                 PUSH(w);                                  // put the value on TOS
