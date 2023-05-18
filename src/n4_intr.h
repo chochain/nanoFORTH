@@ -6,8 +6,6 @@
 #define __SRC_N4_INTR_H
 #include "n4_core.h"
 
-#define ISR_PERIOD 100             /* tick divider, higher => longer */
-
 #if ARDUINO
 #define CLI()   cli()
 #define SEI()   sei()

@@ -29,26 +29,28 @@ void reset() {
 #define _fake_intr()
 #else // !ARDUINO
 U8  tmr_on = 0;               ///< fake timer enabler
-void _fake_intr()
+void _fake_intr(U16 hx)
 {
-    static U8 n = 0;          // fake interrupt
-    if (tmr_on && ++n >= 2) {
-        n=0; ir.t_hit = 1;
+    static U8 n = 0;               // fake interrupt
+    if (tmr_on && !hx && ++n >= 50) {
+        n=0; ir.t_hit = 3;
     }
 }
 #endif // ARDUINO
 ///
 ///> fetch interrupt service routine if any
 ///
+#define ISR_THROTTLE 100           /** interrupt throttle count */
 U16 isr() {
-    static U8 n = 0;               ///> interrupt trigger wait counter (256 max)
     volatile static U8  hit = 0;   ///> 8-bit flag makes checking faster
     volatile static U16 hx  = 0;   ///> cached interrupt flags
+    static U8 cnt = 0;             ///> interrupt throttle counter (256 max)
 
-    _fake_intr();
+    _fake_intr(hx);
 
-    if (!hit && ++n < ISR_PERIOD) return 0;
-    n = 0;
+    if (!hit && ++cnt < ISR_THROTTLE) return 0;
+    cnt = 0;
+
     CLI();
     if (!hit) {                    // collect interrupts if no existing one to serve
         hit = (hx = ((U16)ir.p_hit << 8) | ir.t_hit) != 0;
@@ -68,7 +70,7 @@ void add_tmisr(U16 i, U16 n, U16 xt) {
 
     CLI();
     ir.xt[i]    = xt;                      // ISR xt
-    ir.t_cnt[i] = (U16)micros() % n;       // init counter (randomize, spread time slice)
+    ir.t_cnt[i] = (U16)millis() % n;       // init counter (randomize, spread time slice)
     ir.t_max[i] = n;                       // period (in 1ms)
     if (i >= ir.t_idx) ir.t_idx = i + 1;   // cache max index
     SEI();
