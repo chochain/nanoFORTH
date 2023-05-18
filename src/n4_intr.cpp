@@ -26,7 +26,7 @@ void reset() {
     SEI();
 }
 #if ARDUINO
-#define _fake_intr()
+#define _fake_intr(hx)
 #else // !ARDUINO
 U8  tmr_on = 0;               ///< fake timer enabler
 void _fake_intr(U16 hx)
