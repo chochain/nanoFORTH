@@ -9,9 +9,9 @@
 ///
 typedef struct {
     U8  t_idx { 0 };           ///< max timer interrupt slot index
-    U16 t_cnt[8];              ///< timer CTC counters
     U16 t_max[8];              ///< timer CTC top value
     U16 xt[11];                ///< vectors 0-7: timer, 8-10 pin change
+    volatile U16 t_cnt[8];     ///< timer CTC counters
     volatile U8  t_hit { 0 };  ///< 8-bit for 8 timer ISR,
     volatile U8  p_hit { 0 };  ///< 3-bit for pin change ISR
 } IsrRec;                      ///< Interrupt Record Keeper
@@ -67,9 +67,9 @@ void add_tmisr(U16 i, U16 n, U16 xt) {
     if (xt==0 || i > 7) return;    // range check
 
     CLI();
-    ir.xt[i]    = xt;              // ISR xt
-    ir.t_cnt[i] = 0;               // init counter
-    ir.t_max[i] = n;               // period (in 1ms)
+    ir.xt[i]    = xt;                      // ISR xt
+    ir.t_cnt[i] = (U16)micros() % n;       // init counter (randomize, spread time slice)
+    ir.t_max[i] = n;                       // period (in 1ms)
     if (i >= ir.t_idx) ir.t_idx = i + 1;   // cache max index
     SEI();
 }
