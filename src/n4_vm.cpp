@@ -28,6 +28,7 @@ using namespace N4Core;                             /// * VM built with core uni
 #define POP()          (*sp++)                      /**< pop value off parameter stack       */
 #define RPUSH(a)       (*(rp++)=(U16)(a))           /**< push address onto return stack      */
 #define RPOP()         (*(--rp))                    /**< pop address from return stack       */
+#define BOOL(f)        ((f)?-1:0)                   /**< TRUE=-1 per common Forth idiom      */
 ///@}
 ///@name Dictionary Index <=> Pointer Converters
 ///@{
@@ -69,11 +70,11 @@ void _invoke(U8 op)
     case 13: TOS ^= POP();                break; // XOR
     case 14: TOS ^= -1;                   break; // NOT
     case 15: TOS <<= POP();               break; // LSH
-    case 16: TOS >>= POP();               break; // RSH
-    case 17: TOS = POP()==TOS;            break; // =
-    case 18: TOS = POP()> TOS;            break; // <
-    case 19: TOS = POP()< TOS;            break; // >
-    case 20: TOS = POP()!=TOS;            break; // <>
+    case 16: { U16 n = POP(); TOS = (U16)TOS >> n; }  break; // RSH
+    case 17: TOS = BOOL(POP()==TOS);      break; // =
+    case 18: TOS = BOOL(POP()> TOS);      break; // <
+    case 19: TOS = BOOL(POP()< TOS);      break; // >
+    case 20: TOS = BOOL(POP()!=TOS);      break; // <>
     case 21: { U8 *p = PTR(POP()); PUSH(GET16(p));  } break; // @
     case 22: { U8 *p = PTR(POP()); SET16(p, POP()); } break; // !
     case 23: { U8 *p = PTR(POP()); PUSH((U16)*p);   } break; // C@
@@ -115,7 +116,7 @@ void _invoke(U8 op)
         SS(1) = (S16)LO16(v);
         TOS   = (S16)HI16(v);
     }                                     break;
-    case 44: TOS = abs(TOS);                          break; // ABS
+    case 44: TOS = TOS>0 ? TOS : -TOS;                break; // ABS
     case 45: { S16 n=POP(); TOS = n>TOS ? n : TOS; }  break; // MAX
     case 46: { S16 n=POP(); TOS = n<TOS ? n : TOS; }  break; // MIN
     case 47: NanoForth::wait((U32)POP());             break; // DLY
