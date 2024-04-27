@@ -9,7 +9,7 @@ If your programming language exposure has been with C, Java, or even Python so f
 
 You can skip to next section and start getting your hands dirty right away. However, if you prefer gathering all the sticks before starting a fire or enjoy immersing yourself in the philosophical wonderland of FORTH, excellent online e-books are here free for you.
 * Timeless classic for the history, paths, and thoughts behind FORTH language.
-> <a href="http://home.iae.nl/users/mhx/sf.html" target="_blank">Starting Forth by Leo Brodie</a><br/>
+> <a href="https://www.forth.com/starting-forth" target="_blank">Starting Forth by Leo Brodie</a><br/>
 > <a href="http://thinking-forth.sourceforge.net" target="_blank">Thinking Forth by Leo Brodie</a>
 
 ### Install nanoFORTH - to be simple and useful

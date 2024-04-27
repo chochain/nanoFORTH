@@ -8,5 +8,5 @@
 <area shape="rect" id="node6" href="$n4__asm_8cpp.html" title="nanoForth Assmebler implementation" alt="" coords="219,155,341,181"/>
 <area shape="rect" id="node8" href="$n4__core_8cpp.html" title="nanoForth Core Utilities" alt="" coords="416,155,539,181"/>
 <area shape="rect" id="node9" href="$n4__intr_8h.html" title="nanoForth interrupt handler class" alt="" coords="563,155,664,181"/>
-<area shape="rect" id="node10" href="$n4__intr_8cpp.html" title="nanoForth Interrupt handlers implementation" alt="" coords="555,229,671,256"/>
+<area shape="rect" id="node10" href="$n4__intr_8cpp.html" title="nanoForth Interrupt handlers implementation Note: with volatile struct reduce 100 cycles from 14ms to..." alt="" coords="555,229,671,256"/>
 </map>

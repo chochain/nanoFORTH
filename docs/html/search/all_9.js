@@ -1,9 +1,27 @@
 var searchData=
 [
-  ['jmp_69',['JMP',['../n4__asm_8cpp.html#a9a42bfe95413e9933bed0e815b6dfec4',1,'n4_asm.cpp']]],
-  ['jmp000_70',['JMP000',['../n4__asm_8cpp.html#a6890bb77e82b3706ffb77c8f2f2d81ff',1,'n4_asm.cpp']]],
-  ['jmp_5fmask_71',['JMP_MASK',['../n4__asm_8h.html#a9783e35109050005b254d0d7aa1dfa40',1,'n4_asm.h']]],
-  ['jmp_5fops_72',['JMP_OPS',['../n4__asm_8h.html#ac7585da0b4ae076b0800d6dca55746d8',1,'n4_asm.h']]],
-  ['jmpbck_73',['JMPBCK',['../n4__asm_8cpp.html#a92cc7957e8d8f21d50b2abb068cf7ee8',1,'n4_asm.cpp']]],
-  ['jmpset_74',['JMPSET',['../n4__asm_8cpp.html#a2167c97965233bc0198413dddbf0dd28',1,'n4_asm.cpp']]]
+  ['i_5fdo_88',['I_DO',['../n4__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032aacc286ec0133ed5b6de7d382b4533643',1,'n4_asm.h']]],
+  ['i_5fdq_89',['I_DQ',['../n4__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a8cd3b63201f2d98323d8cb584171d373',1,'n4_asm.h']]],
+  ['i_5ffor_90',['I_FOR',['../n4__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a8dffc118526dc2de6ec198adf32339c4',1,'n4_asm.h']]],
+  ['i_5fi_91',['I_I',['../tforth_8c.html#a7c9ed869ad6628c5a9e2d792aa55ffcb',1,'I_I():&#160;tforth.c'],['../n4__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a85c55d94aeacac3ccd0094b4f4dc733c',1,'I_I():&#160;n4_asm.h']]],
+  ['i_5flit_92',['I_LIT',['../tforth_8c.html#a6d299e638ea28041b8fb02caa3f57c1a',1,'I_LIT():&#160;tforth.c'],['../n4__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032af9db9448bc03b218c32b4ff370dab892',1,'I_LIT():&#160;n4_asm.h']]],
+  ['i_5floop_93',['I_LOOP',['../tforth_8c.html#a3aeb90361cc6cac8395255f675a6e9c3',1,'tforth.c']]],
+  ['i_5fnop_94',['I_NOP',['../n4__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a48d556dfe4702978d69e4a80e52c3378',1,'n4_asm.h']]],
+  ['i_5fp2r2_95',['I_P2R2',['../tforth_8c.html#a7e29096b872847a6994d33b162537b99',1,'tforth.c']]],
+  ['i_5frdrop2_96',['I_RDROP2',['../tforth_8c.html#a16dea72b18dde49e38bfdacba39b381d',1,'tforth.c']]],
+  ['i_5fret_97',['I_RET',['../tforth_8c.html#aa9c3f2bfc1405cda06c432d42c4b5ed1',1,'tforth.c']]],
+  ['i_5fsem_98',['I_SEM',['../n4__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a6d14ec8eae22294bfd62ead71c159e87',1,'n4_asm.h']]],
+  ['i_5fsq_99',['I_SQ',['../n4__asm_8h.html#ab277eef7cdcc7632f73c9b95eeb8a032a2b75a4f25b9fbd076f151cbbb2673d3b',1,'n4_asm.h']]],
+  ['idx_100',['IDX',['../n4__asm_8cpp.html#a5736213940db38c8e215a3bb8688522c',1,'IDX():&#160;n4_asm.cpp'],['../n4__vm_8cpp.html#a5736213940db38c8e215a3bb8688522c',1,'IDX():&#160;n4_vm.cpp']]],
+  ['imm_101',['IMM',['../n4__asm_8cpp.html#a146695a92c378403b44dea7967e7f2ce',1,'n4_asm.cpp']]],
+  ['init_102',['init',['../conio_8c.html#a795ea50921b36311ffd5e7baa2ef1f7e',1,'conio.c']]],
+  ['init_5fmem_103',['init_mem',['../namespaceN4Core.html#a845d552476fac4f136b90d6a90c41c6c',1,'N4Core']]],
+  ['initl_104',['initl',['../h8_2system_8c.html#a094bf7cddd970ca61a88721b0b6ae475',1,'initl(void):&#160;system.c'],['../h8_2system_8h.html#a094bf7cddd970ca61a88721b0b6ae475',1,'initl(void):&#160;system.c'],['../mingw_2system_8c.html#a094bf7cddd970ca61a88721b0b6ae475',1,'initl(void):&#160;system.c'],['../mingw_2system_8h.html#a094bf7cddd970ca61a88721b0b6ae475',1,'initl(void):&#160;system.c'],['../unix_2system_8c.html#a094bf7cddd970ca61a88721b0b6ae475',1,'initl(void):&#160;system.c'],['../unix_2system_8h.html#a094bf7cddd970ca61a88721b0b6ae475',1,'initl(void):&#160;system.c']]],
+  ['inline_105',['INLINE',['../n4_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116',1,'n4.h']]],
+  ['io_106',['io',['../namespaceN4Core.html#a86633f8fd989f4914e0f225ae75f7f70',1,'N4Core']]],
+  ['ir_107',['ir',['../namespaceN4Intr.html#ad24fedf1a6cd981b028b8b84a59631c3',1,'N4Intr']]],
+  ['isr_108',['isr',['../namespaceN4Intr.html#a088d5fc8975b4d2c0447625c3fb474b5',1,'N4Intr::isr()'],['../n4__intr_8cpp.html#a5686c229bdef50123688ab6cb1404230',1,'ISR(TIMER2_COMPA_vect):&#160;n4_intr.cpp'],['../n4__intr_8cpp.html#aa64c6dce15e9de9105b4ae9533c9a267',1,'ISR(PCINT0_vect):&#160;n4_intr.cpp'],['../n4__intr_8cpp.html#afe6035149a64d5f448fbda08e9d1b67f',1,'ISR(PCINT1_vect):&#160;n4_intr.cpp'],['../n4__intr_8cpp.html#a9c4665742c6b6eb1f0bb9dde41f7cba3',1,'ISR(PCINT2_vect):&#160;n4_intr.cpp']]],
+  ['isr_5fthrottle_109',['ISR_THROTTLE',['../n4__intr_8cpp.html#ad810a8f10558e7412c88ae5188bfb1ec',1,'n4_intr.cpp']]],
+  ['isrrec_110',['IsrRec',['../structIsrRec.html',1,'']]],
+  ['iu_111',['IU',['../n4_8h.html#a5fd90490ca5b2ceb72bf8b2c89a9634b',1,'n4.h']]]
 ];

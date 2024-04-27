@@ -12,9 +12,9 @@ static U8 _eeprom[EEPROM_SZ];          ///< mock EEPROM storage
 class MockRom                          ///< mock EEPROM access class
 {
 public:
-    U16  length() { return EEPROM_SZ; }
-    U8   read(U16 idx) { return _eeprom[idx]; }
-    void update(U16 idx, U8 v) { _eeprom[idx] = v; }
+    IU   length() { return EEPROM_SZ; }
+    U8   read(IU idx) { return _eeprom[idx]; }
+    void update(IU idx, U8 v) { _eeprom[idx] = v; }
 };
 
 MockRom EEPROM;                        ///< mock EEPROM access object instance

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['sp_314',['sp',['../namespaceN4Core.html#aa9e558f030395d3ab72a3e137875d493',1,'N4Core']]]
+  ['sp_435',['sp',['../structN4Task.html#a8b6a1c22a6f0fedcab58b6cae3711792',1,'N4Task']]],
+  ['stack_436',['stack',['../tforth_8c.html#aff74dd3da188562f082f201252791400',1,'tforth.c']]]
 ];

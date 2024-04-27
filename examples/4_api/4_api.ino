@@ -9,8 +9,9 @@
  *  + baud rate set to 115200
  *  + line ending set to Both NL & CR (if using emulator, set Add CR on, ECHO on)
  *  + type> WRD                   \ note that there is no new word created in dictionary
+ *  + type> : m+ 0 API ;          \ define a word m+ to bind my_add to API[0]
+ *  + type> : m- 1 API ;          \ define a word m- to bind my_sub to API[1]
  *  + type> 123 456 m+            \ calls my_add(123, 456) and put 579 on top of stack
- *  + type> : m- 1 API ;          \ define a word to wrap the API if you want to
  *  + type> 123 m-                \ calls my_sub(579, 123) and return 456 on stack
  */
 #include <nanoFORTH.h>

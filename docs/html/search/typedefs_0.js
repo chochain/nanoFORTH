@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['fptr_323',['FPTR',['../n4_8h.html#ad49a4a3795be934579ff11f1296c1050',1,'n4.h']]]
+  ['du_447',['DU',['../n4_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a',1,'n4.h']]],
+  ['du2_448',['DU2',['../n4_8h.html#aa7a3686579f085a12b3c66bac1e352a3',1,'n4.h']]]
 ];

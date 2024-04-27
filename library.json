@@ -1,7 +1,7 @@
 {
   "name": "nanoFORTH",
   "keywords": "Forth, Nano, UNO, multi-task",
-  "description": "A tiny Forth in .ino that can be loaded into Nano/UNO. You can interact with it via Serial Monitor or Bluetooth to control pins. Your 'app' can be saved into EEROM for autorun on reboot. Multi-tasking is also supported.",
+  "description": "Interactive via Serial Monitor or Bluetooth. Multi-tasking. Can save 'app' to EEPROM, autorun on reboot.",
   "authors":
   [
     {
@@ -15,7 +15,7 @@
     "type": "git",
     "url": "https://github.com/chochain/nanoforth.git"
   },
-  "version": "2.0.0",
+  "version": "2.2.0",
   "license": "MIT",
   "frameworks": "arduino",
   "platforms": "atmelmegaavr"

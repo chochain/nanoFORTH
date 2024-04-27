@@ -15,8 +15,18 @@
 #ifndef __SRC_N4_ASM_H
 #define __SRC_N4_ASM_H
 #include "n4.h"
-
-#define N4_META      0 /**< enable meta programming */
+///
+/// @Note 1:
+///   N4_DOES_META flag enable meta-programming,
+///   it takes 6 opcodes slots i.e. 55~60
+///   can be disabled if other opcodes need the slots
+/// @Note 2:
+///   N4_USE_GOTO flag use computed goto for primitive word invocation,
+///   speeds up 5%, but takes extra 128 bytes of RAM,
+///   can be disabled if some library needs extra memory 
+///
+#define N4_DOES_META  1 /**< enable meta programming */
+#define N4_USE_GOTO   1 /**< use computed goto       */
 ///
 /// parser actions enum used by execution and assembler units
 ///
@@ -33,29 +43,40 @@ enum N4OP {
 ///@{
 constexpr U8  CTL_BITS = 0xc0;   ///< 1100 0000, JMP - 11nn xxxx, PRM - 10nn nnnn, NUM - 0nnn nnnn
 constexpr U8  JMP_OPS  = 0xc0;   ///< 1100 0000
-constexpr U8  JMP_MASK = 0xf0;   ///< 11nn xxxx, nn - CALL 00, CDJ 01, UDJ 10, RET 11
 constexpr U8  PRM_OPS  = 0x80;   ///< 1000 0000
+constexpr U8  JMP_MASK = 0xf0;   ///< 11nn xxxx, nn - CALL 00, CDJ 01, UDJ 10, NXT 11
 constexpr U8  PRM_MASK = 0x3f;   ///< 00nn nnnn, 6-bit primitive opcodes
-constexpr U16 ADR_MASK = 0x0fff; ///< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions
+constexpr IU  ADR_MASK = 0x0fff; ///< 0000 aaaa aaaa aaaa 12-bit address in 16-bit branching instructions
 ///@}
 ///@name Opcode Prefixes
 ///@{
 constexpr U8  OP_CALL  = 0xc0;   ///< 1100 0000
 constexpr U8  OP_CDJ   = 0xd0;   ///< 1101 0000
 constexpr U8  OP_UDJ   = 0xe0;   ///< 1110 0000
-constexpr U8  OP_RET   = 0xf0;   ///< 1111 0000
+constexpr U8  OP_NXT   = 0xf0;   ///< 1111 0000
 ///@}
 ///
 /// opcodes for loop control (in compiler mode)
+/// Note: sequence in-sync with N4Asm::N4_WORDS, and N4VM::_invoke
 ///
 enum N4_EXT_OP {                 ///< extended opcode (used by for...nxt loop)
-    I_DQ   = 29,                 ///< ." handler (adjust, if field name list changed)
-    I_I    = 60,                 ///< 60 loop counter
-    I_FOR,                       ///< 61
-    I_NXT,                       ///< 62
-    I_LIT                        ///< 63 = 0x3f 3-byte literal
+    I_NOP  = 0,                  ///< NOP means EXIT
+    I_SEM  = 10,                 ///< ; semi-colon
+    I_DQ   = 31,                 ///< ." dot_string
+    I_SQ   = 32,                 ///< S" do_string
+    I_DO   = 55,                 ///< DO>
+    I_I    = 61,                 ///< 61, loop counter
+    I_FOR  = 62,                 ///< 62
+    I_LIT  = 63                  ///< 63 = 0x3f 3-byte literal
 };
-constexpr U16 LFA_X = 0xffff;    ///< end of link field
+constexpr IU LFA_END = 0xffff;   ///< end of link field
+#define XT(a)  ((a) + sizeof(IU) + 3) /** adr + lnk[2] + name[3] */
+/// LFA     NFA     XT=PFA
+/// +-------+-------+--------------------+
+/// |  lnk  | name  | parameters...I_RET |
+/// +-------+-------+--------------------+
+///  \\      \\      \\
+///   16-bits 3-bytes variable length parameters
 ///
 /// Assembler class
 ///
@@ -65,36 +86,41 @@ namespace N4Asm                     // (10-byte header)
     extern U8  *here;               ///< top of dictionary (exposed to _vm for HRE, ALO opcodes)
 
     // EEPROM persistence I/O
-    void save(bool autorun=false);  ///< persist user dictionary to EEPROM
-    U16  load(bool autorun=false);  ///< restore user dictionary from EEPROM
+    void save(U8 autorun=0);        ///< persist user dictionary to EEPROM
+    IU   load(U8 autorun=0);        ///< restore user dictionary from EEPROM
 
-    U16 reset();                    ///< reset internal pointers (for BYE)
+    IU   reset();                   ///< reset internal pointers (for BYE)
 
     /// Instruction decoder
     N4OP parse(
         U8  *tkn,                   ///< token to be parsed
-        U16 *rst,                   ///< parsed result
+        IU  *rst,                   ///< parsed result
         U8  run                     ///< run mode flag (1: run mode, 0: compile mode)
         );
     /// Forth compiler
     void compile(
-        U16 *rp0                    ///< memory address to be used as assembler return stack
+        IU *rp0                     ///< memory address to be used as assembler return stack
         );
     void variable();                ///< create a variable on dictionary
-    void constant(S16 v);           ///< create a constant on dictionary
+    void constant(DU v);            ///< create a constant on dictionary
     /// meta compiler
     void create();                  ///< create a word name field
-    void comma(S16 v);              ///< compile a 16-bit value onto dictionary
-    void ccomma(S16 v);             ///< compile a 8-it value onto dictionary
-    // dictionary, string list scanners
-    U16  query();                   ///< get xt of next input token, 0 if not found
+    void comma(DU v);               ///< compile a 16-bit value onto dictionary
+    void ccomma(DU v);              ///< compile a 8-it value onto dictionary
+    void does(IU xt);               ///< metaprogrammer (jump to definding word DO> section)
+    void dot_str();
+    /// dictionary, string list scanners
+    IU  query();                    ///< get xt of next input token, 0 if not found
     void words();                   ///< display words in dictionary
     void forget();                  ///< forgets word in the dictionary
+    void see();                     ///< decode colon word
 
     /// print execution tracing info
-    void trace(
-        U16 adr,                    ///< address to word to be executed
-        U8  ir                      ///< instruction register value
+    U16 trace(
+        IU   adr,                   ///< address to word to be executed
+        U8   ir,                    ///< instruction register value
+        char delim=0                ///< token delimiter
         );
 };  // namespace N4Asm
+
 #endif //__SRC_N4_ASM_H

@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['forget_242',['forget',['../namespaceN4Asm.html#abcb801624632a840580a79196f744762',1,'N4Asm']]]
+  ['find_343',['find',['../tforth_8c.html#ad8a4a410a2935caf415edb3bab7ea31f',1,'tforth.c']]],
+  ['forget_344',['forget',['../tforth_8c.html#a38489a90f5e255e79d561099325b58a2',1,'forget():&#160;tforth.c'],['../namespaceN4Asm.html#abcb801624632a840580a79196f744762',1,'N4Asm::forget()']]]
 ];

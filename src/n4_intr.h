@@ -6,8 +6,6 @@
 #define __SRC_N4_INTR_H
 #include "n4_core.h"
 
-#define ISR_PERIOD 100             /* tick divider, higher => longer */
-
 #if ARDUINO
 #define CLI()   cli()
 #define SEI()   sei()
@@ -19,20 +17,16 @@
 #endif // ARDUINO
 
 namespace N4Intr {
-    extern U8   t_idx;             ///< max slot# of timer interrupt
-    extern U16  p_xt[3];           ///< pin change ISR
-    extern U16  t_xt[8];           ///< timer ISR
-
     void reset();                  ///< reset interrupts
-    U16  isr();                    ///< fetch interrupt service routines
+    IU   isr();                    ///< fetch interrupt service routines
 
     void add_tmisr(
             U16 i,                 ///< interrupt handler slot#
             U16 n,                 ///< interrupt period (n x 10ms = period)
-            U16 xt);               ///< handler's xt
+            IU xt);                ///< handler's xt
     void add_pcisr(
             U16 pin,               ///< pin change to capture
-            U16 xt);               ///< handler's xt
+            IU xt);                ///< handler's xt
 
     void enable_timer(U16 f);      ///< ENABLE=1, DISABLE=0
     void enable_pci(U16 f);

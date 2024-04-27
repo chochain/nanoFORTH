@@ -1,20 +1,11 @@
 var searchData=
 [
-  ['s16_143',['S16',['../n4_8h.html#a6d241ad21a823c90d4835380787db5d4',1,'n4.h']]],
-  ['s32_144',['S32',['../n4_8h.html#a39c786017723555afb9e8b85accec0de',1,'n4.h']]],
-  ['save_145',['save',['../namespaceN4Asm.html#afcb99e6d1f5944d1a329a905b5c8f04c',1,'N4Asm']]],
-  ['scan_146',['scan',['../namespaceN4Core.html#aa7ee2231a6702a3c7829a2c4f111ae2c',1,'N4Core']]],
-  ['sei_147',['SEI',['../n4__intr_8h.html#a52e81e3198871fa5ae5c84580a12c032',1,'n4_intr.h']]],
-  ['serv_5fisr_148',['serv_isr',['../namespaceN4VM.html#a2a4b54c8ccb6a3677681158335f4663b',1,'N4VM']]],
-  ['set16_149',['SET16',['../n4__core_8h.html#a7e7ed6ececb483febb8dbc47a9ca26e2',1,'n4_core.h']]],
-  ['set8_150',['SET8',['../n4__core_8h.html#a5fbe8c099d455dc8049978119712ed97',1,'n4_core.h']]],
-  ['set_5fhex_151',['set_hex',['../namespaceN4Core.html#a9093443521bb5aa5f7984d39926916d6',1,'N4Core']]],
-  ['set_5fio_152',['set_io',['../namespaceN4Core.html#af3f2a7a80bc031dbc26d29cc0c029f15',1,'N4Core']]],
-  ['set_5fpre_153',['set_pre',['../namespaceN4Core.html#a2a38d3076bf721f94dcbd41c2353579a',1,'N4Core']]],
-  ['set_5fucase_154',['set_ucase',['../namespaceN4Core.html#a370606874b2b14eca3ef32481c0fe16e',1,'N4Core']]],
-  ['setup_155',['setup',['../classNanoForth.html#a4f1f79c48afd3622ef05ec471e6b5018',1,'NanoForth::setup()'],['../namespaceN4VM.html#ab88fb5c76add0b62c41d4212c1bae6ae',1,'N4VM::setup()']]],
-  ['show_156',['show',['../n4__core_8h.html#a1b6f4e8567ad08a015fca3e83b3dc584',1,'n4_core.h']]],
-  ['sp_157',['sp',['../namespaceN4Core.html#aa9e558f030395d3ab72a3e137875d493',1,'N4Core']]],
-  ['sp0_158',['SP0',['../n4__vm_8cpp.html#a5588ae260e9757e8666dfbcdc83cd175',1,'n4_vm.cpp']]],
-  ['ss_159',['SS',['../n4__vm_8cpp.html#a226f93ec68411372ccd30902117406f3',1,'n4_vm.cpp']]]
+  ['r2v_203',['R2V',['../h8_2system_8h.html#a2ae130f3a4b0e6f9693c24a6231c5cc4',1,'R2V():&#160;system.h'],['../mingw_2system_8h.html#a2ae130f3a4b0e6f9693c24a6231c5cc4',1,'R2V():&#160;system.h'],['../unix_2system_8h.html#a2ae130f3a4b0e6f9693c24a6231c5cc4',1,'R2V():&#160;system.h']]],
+  ['readme_2emd_204',['README.md',['../docs_2README_8md.html',1,'(Global Namespace)'],['../orig_2README_8md.html',1,'(Global Namespace)'],['../README_8md.html',1,'(Global Namespace)']]],
+  ['reset_205',['reset',['../namespaceN4Asm.html#aac053931cb4683b52951d551f16ff2ee',1,'N4Asm::reset()'],['../namespaceN4Intr.html#a8a52e26e10bce795f4bb11dd62d2578e',1,'N4Intr::reset()']]],
+  ['retstk_206',['retstk',['../tforth_8c.html#a03dcea2070ca7c5c872b03089ecc125c',1,'tforth.c']]],
+  ['rom_5fhdr_207',['ROM_HDR',['../n4__asm_8cpp.html#a84d15522174a05d17c37fac69a28c6d6',1,'n4_asm.cpp']]],
+  ['rp_208',['rp',['../structN4Task.html#a47907f1cfb6b15285d31368e55228725',1,'N4Task']]],
+  ['rpop_209',['RPOP',['../n4__asm_8cpp.html#a55b5173e6face979deb7372dcbb643df',1,'RPOP():&#160;n4_asm.cpp'],['../n4__vm_8cpp.html#a55b5173e6face979deb7372dcbb643df',1,'RPOP():&#160;n4_vm.cpp']]],
+  ['rpush_210',['RPUSH',['../n4__asm_8cpp.html#a82363ba7a7cd1a9826fa73d03805e641',1,'RPUSH():&#160;n4_asm.cpp'],['../n4__vm_8cpp.html#a82363ba7a7cd1a9826fa73d03805e641',1,'RPUSH():&#160;n4_vm.cpp']]]
 ];

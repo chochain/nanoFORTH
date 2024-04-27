@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">nanoFORTH
-   &#160;<span id="projectnumber">v2.0</span>
+   &#160;<span id="projectnumber">v2.2</span>
    </div>
   </td>
  </tr>
@@ -336,13 +336,23 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <td class="markdownTableBodyLeft">. </td><td class="markdownTableBodyLeft"><code>( w -- )</code> </td><td class="markdownTableBodyLeft">print the value on data stack to output console  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">." </td><td class="markdownTableBodyLeft">`( -- )` </td><td class="markdownTableBodyLeft">send the following string (terminated with a ") to output console  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">S" </td><td class="markdownTableBodyLeft">`( -- a n )` </td><td class="markdownTableBodyLeft">put string (terminated with a ") address and length on TOS  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">TYP </td><td class="markdownTableBodyLeft"><code>( a n -- )</code> </td><td class="markdownTableBodyLeft">type the string at address with length n  </td></tr>
 </table>
 <p><b>Examples</b></p>
 <p>: <b>hi</b> FOR ." hello!" 33 EMT CR NXT ; ⏎ ➤ <em>ok</em> (<b>hi</b> is now defined in user dictionary)<br  />
  3 <b>hi</b> ⏎<br  />
  ➤ <em>hello!</em><br  />
  ➤ <em>hello!</em><br  />
- ➤ <em>hello!ok</em> </p>
+ ➤ <em>hello!ok</em> : <b>s1</b> S" one!" ; : <b>s0</b> S" zero!" ;⏎ ➤ <em>ok</em> (<b>s1</b> <b>s0</b> are defined in user dictionary)<br  />
+ : <b>chk</b> IF s1 ELS s0 THN TYP ;⏎ ➤ <em>ok</em><br  />
+ 1 **chk**⏎<br  />
+ ➤ <em>one!</em><br  />
+ 0 **chk**⏎<br  />
+ ➤ <em>zero!</em><br  />
+ </p>
 </blockquote>
 <h3>Reset, Debug, and Tracing</h3>
 <blockquote class="doxtable">

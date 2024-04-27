@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['dump_5fper_5fline_346',['DUMP_PER_LINE',['../n4__vm_8cpp.html#af76800feb65a72436c3dd83a82dc8c2d',1,'n4_vm.cpp']]]
+  ['cli_476',['CLI',['../n4__intr_8h.html#a60bc02dc3bbd02fe2c8f7472d473a659',1,'n4_intr.h']]],
+  ['code_477',['CODE',['../n4__vm_8cpp.html#a096be77600c0dcb0d72f97c45a3be66e',1,'n4_vm.cpp']]]
 ];

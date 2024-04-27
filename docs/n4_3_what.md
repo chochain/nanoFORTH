@@ -154,6 +154,8 @@ nanoFORTH handles only integer numbers.
 > |CR  |`( -- )` |send a \<return\> to console|
 > |.   |`( w -- )`|print the value on data stack to output console|
 > |.\" |`( -- )`|send the following string (terminated with a \") to output console|
+> |S\" |`( -- a n )`|put string (terminated with a \") address and length on TOS|
+> |TYP |`( a n -- )`|type the string at address with length n|
 >
 > **Examples**
 >
@@ -162,6 +164,12 @@ nanoFORTH handles only integer numbers.
 > ➤ *hello!*<br/>
 > ➤ *hello!*<br/>
 > ➤ *hello!ok*
+> : **s1** S" one!" ; : **s0** S" zero!" ;⏎ ➤ *ok* (**s1** **s0** are defined in user dictionary)<br/>
+> : **chk** IF s1 ELS s0 THN TYP ;⏎ ➤ *ok*<br/>
+> 1 **chk**⏎<br/>
+> ➤ *one!*<br/>
+> 0 **chk**⏎<br/>
+> ➤ *zero!*<br/>
 
 ### Reset, Debug, and Tracing
 > |opcode|stack|description|

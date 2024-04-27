@@ -1,7 +1,28 @@
 var searchData=
 [
-  ['eeprom_5fsz_46',['EEPROM_SZ',['../mockrom_8h.html#ada5d615b300522bbc9e1ad325d9c5e9b',1,'mockrom.h']]],
-  ['enable_5fpci_47',['enable_pci',['../namespaceN4Intr.html#a65119dda7aff2180c03e7a2ac546f624',1,'N4Intr']]],
-  ['enable_5ftimer_48',['enable_timer',['../namespaceN4Intr.html#a512ae8d3a56cc651c1036e2499b20dda',1,'N4Intr']]],
-  ['exec_49',['exec',['../classNanoForth.html#a0403210f2caa59cf6ebb2f44eab79425',1,'NanoForth']]]
+  ['d_5fadr_45',['d_adr',['../namespaceN4Core.html#a9dda01fccf86a179e62d205450a9e351',1,'N4Core']]],
+  ['d_5fchr_46',['d_chr',['../namespaceN4Core.html#a3a3e4ae4954551e76c19625c18e72182',1,'N4Core']]],
+  ['d_5fhi_47',['D_HI',['../n4__vm_8cpp.html#a5b8e1fafd666a8bf21861f6cb5204902',1,'n4_vm.cpp']]],
+  ['d_5fin_48',['d_in',['../namespaceN4Core.html#ad57f3e5d4a84b2a402c9aedf7d707d63',1,'N4Core']]],
+  ['d_5flo_49',['D_LO',['../n4__vm_8cpp.html#aed4923695ab6b11f5b10cd5b88312a0f',1,'n4_vm.cpp']]],
+  ['d_5fmem_50',['d_mem',['../namespaceN4Core.html#af49924f055ed2947cc8d5e88dc07453f',1,'N4Core']]],
+  ['d_5fname_51',['d_name',['../namespaceN4Core.html#a35758b42f0b64c3ca01c6dbdee696a30',1,'N4Core::d_name(U8 *p)'],['../namespaceN4Core.html#a286ee4feeeb87bfd3a44d3d353b2713c',1,'N4Core::d_name(U8 op, const char *lst, U8 space)']]],
+  ['d_5fnib_52',['d_nib',['../namespaceN4Core.html#a00f8c798ee3ddd89c038999180347d17',1,'N4Core']]],
+  ['d_5fnum_53',['d_num',['../namespaceN4Core.html#a623a587ca0f8929f0dbc72e7d58e5c94',1,'N4Core']]],
+  ['d_5fout_54',['d_out',['../namespaceN4Core.html#a1f89113ebe2ce1d68c23d4cff96d1ee0',1,'N4Core']]],
+  ['d_5fpin_55',['d_pin',['../namespaceN4Core.html#a37592d2d6ec0adcd3b52c4b31528dcbb',1,'N4Core']]],
+  ['d_5fptr_56',['d_ptr',['../namespaceN4Core.html#aae3a814b552f13eb6f533f04e59793e6',1,'N4Core']]],
+  ['d_5fstr_57',['d_str',['../namespaceN4Core.html#a8ebd0caea89dd845a216290731901fa9',1,'N4Core']]],
+  ['d_5fu8_58',['d_u8',['../namespaceN4Core.html#a76fd10331f7f55db3f1a924fcdf7e1d5',1,'N4Core']]],
+  ['dic_59',['DIC',['../n4__asm_8cpp.html#ad505278488475406e6307410678b4dd3',1,'DIC():&#160;n4_asm.cpp'],['../n4__vm_8cpp.html#ad505278488475406e6307410678b4dd3',1,'DIC():&#160;n4_vm.cpp'],['../tforth_8c.html#abb62f6a5e04673f3e990ac3e88271668',1,'dic():&#160;tforth.c'],['../namespaceN4Core.html#ab11fdda5dd4a2660128e64087a7d507b',1,'N4Core::dic()']]],
+  ['dic_5fsize_60',['DIC_SIZE',['../h8_2system_8h.html#a0d6ff96bc09be9a735314cf03cee2fd6',1,'DIC_SIZE():&#160;system.h'],['../mingw_2system_8h.html#a0d6ff96bc09be9a735314cf03cee2fd6',1,'DIC_SIZE():&#160;system.h'],['../unix_2system_8h.html#a0d6ff96bc09be9a735314cf03cee2fd6',1,'DIC_SIZE():&#160;system.h']]],
+  ['dicent_61',['dicent',['../tforth_8c.html#a523f7f1ebaa0475719c06a2cc63185fc',1,'tforth.c']]],
+  ['dicptr_62',['dicptr',['../tforth_8c.html#ab6a1c26ff255f170c413bf9fd6cb92dc',1,'tforth.c']]],
+  ['dispatch_63',['DISPATCH',['../n4__vm_8cpp.html#a99cca8c766bbb673859637a1cf1f1150',1,'n4_vm.cpp']]],
+  ['does_64',['does',['../namespaceN4Asm.html#a26d72376ee9af845d95b2cf96ce3dfde',1,'N4Asm']]],
+  ['dot_5fstr_65',['dot_str',['../namespaceN4Asm.html#a3ea0860fce9f01b4f8508eaabcd1b3c1',1,'N4Asm']]],
+  ['du_66',['DU',['../n4_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a',1,'n4.h']]],
+  ['du2_67',['DU2',['../n4_8h.html#aa7a3686579f085a12b3c66bac1e352a3',1,'n4.h']]],
+  ['dump_5fper_5fline_68',['DUMP_PER_LINE',['../n4__vm_8cpp.html#af76800feb65a72436c3dd83a82dc8c2d',1,'n4_vm.cpp']]],
+  ['documentation_20pages_69',['Documentation Pages',['../index.html',1,'']]]
 ];

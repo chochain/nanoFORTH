@@ -1,101 +1,101 @@
 /**
  * @file
  * @brief nanoForth Interrupt handlers implementation
+ *    Note: with volatile struct reduce 100 cycles from 14ms to 11ms
  */
 #include "n4_intr.h"
 ///
 /// nanoForth Interrupt handler -  static variables
 ///
-namespace N4Intr {
+typedef struct {
+    U8  t_idx { 0 };           ///< max timer interrupt slot index
+    U16 t_max[8];              ///< timer CTC top value
+    IU  xt[11];                ///< vectors 0-7: timer, 8-10 pin change
+    volatile U16 t_cnt[8];     ///< timer CTC counters
+    volatile U8  t_hit { 0 };  ///< 8-bit for 8 timer ISR,
+    volatile U8  p_hit { 0 };  ///< 3-bit for pin change ISR
+} IsrRec;                      ///< Interrupt Record Keeper
 
-U8  t_idx   = { 0 };       ///< max timer interrupt slot index
-U16 p_xt[3] = { 0, 0, 0 }; ///< pin change interrupt vectors
-U16 t_xt[8];               ///< timer interrupt vectors
-U16 t_max[8];              ///< timer CTC top value
-    
-volatile U8  _hits { 0 };  ///< interrupt flags
-volatile U8  p_hit { 0 };  ///< pin change interrupt (PORT-B,C,D)
-volatile U8  t_hit { 0 };  ///< 8-bit for 8 timer ISR
-volatile U16 t_cnt[8];     ///< timer CTC counters
+namespace N4Intr {
+IsrRec ir;                     ///< real-time interrupt record
 
 void reset() {
     CLI();
-    t_idx = t_hit = p_hit = 0;
-    for (int i=0; i < 8; i++) t_xt[i] = 0;
-    for (int i=0; i < 3; i++) p_xt[i] = 0;
+    ir.t_idx = ir.t_hit = ir.p_hit = 0;
+    for (int i=0; i < 11; i++) ir.xt[i] = 0;
     SEI();
 }
 #if ARDUINO
-#define _fake_intr()
+#define _fake_intr(hx)
 #else // !ARDUINO
-U8  tmr_on = 0;                   ///< fake timer enabler
-void _fake_intr()
+U8  tmr_on = 0;               ///< fake timer enabler
+void _fake_intr(U16 hx)
 {
-    static int n = 0;                              // fake interrupt
-    if (tmr_on && !_hits && ++n >= 2) {
-        n=0; t_hit = 1;
+    static U8 n = 0;               // fake interrupt
+    if (tmr_on && !hx && ++n >= 50) {
+        n=0; ir.t_hit = 3;
     }
 }
 #endif // ARDUINO
 ///
 ///> fetch interrupt service routine if any
 ///
-U16 isr() {
-    static U16 n = 0;
+#define ISR_THROTTLE 100           /** interrupt throttle count */
+IU isr() {
+    volatile static U8  hit = 0;   ///> 8-bit flag makes checking faster
+    volatile static U16 hx  = 0;   ///> cached interrupt flags
+    static U8 cnt = 0;             ///> interrupt throttle counter (256 max)
 
-    _fake_intr();
-    
-    if (!_hits && ++n < ISR_PERIOD) return 0;
-    n = 0;
+    _fake_intr(hx);
+
+    if (!hit && ++cnt < ISR_THROTTLE) return 0;
+    cnt = 0;
+
     CLI();
-    if (!_hits) {
-        _hits = (p_hit << 8) | t_hit; // capture interrupt flags
-        t_hit = p_hit = 0;            // clear flags, ready for next round
+    if (!hit) {                    // collect interrupts if no existing one to serve
+        hit = (hx = ((U16)ir.p_hit << 8) | ir.t_hit) != 0;
+        ir.p_hit = ir.t_hit = 0;
     }
     SEI();
-    if (_hits) {
-        U8 hx = _hits & 0xff;
-        for (int i=0, t=1; hx && i < t_idx; i++, t<<=1, hx>>=1) {
-            if (_hits & t) { _hits &= ~t; return t_xt[i]; }
-        }
-        hx = _hits >> 8;
-        for (int i=0, t=0x100; hx && i < 3; i++, t<<=1, hx>>=1) {
-            if (_hits & t) { _hits &= ~t; return p_xt[i]; }
+    for (int i=0; hx; i++, hx>>=1) {// serve interrupts (hopefully fairly)
+        if (hx & 1) {              // check interrupt flag
+            hx >>= 1;              // clear flag
+            return ir.xt[i];       // return ISR to Forth VM
         }
     }
-    return 0;
+    return hit = 0;
 }
-void add_tmisr(U16 i, U16 n, U16 xt) {
-    if (xt==0 || i > 7) return;      // range check
+void add_tmisr(U16 i, U16 n, IU xt) {
+    if (xt==0 || i > 7) return;    // range check
 
     CLI();
-    t_xt[i]  = xt;                   // ISR xt
-    t_cnt[i] = 0;                    // init counter
-    t_max[i] = n;                    // period (in 1ms)
-    if (i >= t_idx) t_idx = i + 1;   // cache max index
+    ir.xt[i]    = xt;                      // ISR xt
+    ir.t_cnt[i] = (U16)millis() % n;       // init counter (randomize, spread time slice)
+    ir.t_max[i] = n;                       // period (in 1ms)
+    if (i >= ir.t_idx) ir.t_idx = i + 1;   // cache max index
     SEI();
 }
 #if !ARDUINO
-void add_pcisr(U16 p, U16 xt) {}     // mocked functions for x86
+void add_pcisr(U16 p, IU xt)  {}   // mocked functions for x86
 void enable_pci(U16 f)        {}
 void enable_timer(U16 f)      { tmr_on = f; }
 #else  // ARDUINO
 ///
 ///@name N4Intr static variables
 ///@{
-void add_pcisr(U16 p, U16 xt) {
+void add_pcisr(U16 p, IU xt) {
     if (xt==0) return;               // range check
     CLI();
     if (p < 8)       {
-        p_xt[2] = xt;
+        ir.xt[10] = xt;
         PCMSK2 |= 1 << p;
     }
     else if (p < 13) {
-        p_xt[0] = xt;
+        ir.xt[8] = xt;
         PCMSK0 |= 1 << (p - 8);
     }
     else {
-        p_xt[1] = xt;
+        ir.xt[9] = xt;
         PCMSK1 |= 1 << (p - 14);
     }
     SEI();
@@ -103,9 +103,9 @@ void add_pcisr(U16 p, U16 xt) {
 void enable_pci(U16 f) {
     CLI();
     if (f) {
-        if (p_xt[0]) PCICR |= _BV(PCIE0);  // enable PORTB
-        if (p_xt[1]) PCICR |= _BV(PCIE1);  // enable PORTC
-        if (p_xt[2]) PCICR |= _BV(PCIE2);  // enable PORTD
+        if (ir.xt[8])  PCICR |= _BV(PCIE0);     // enable PORTB
+        if (ir.xt[9])  PCICR |= _BV(PCIE1);     // enable PORTC
+        if (ir.xt[10]) PCICR |= _BV(PCIE2);     // enable PORTD
     }
     else PCICR = 0;
     SEI();
@@ -132,14 +132,14 @@ void enable_timer(U16 f) {
 ///
 #if ARDUINO
 ISR(TIMER2_COMPA_vect) {
-    for (U8 i=0, b=1; i < N4Intr::t_idx; i++, b<<=1) {
-        if (!N4Intr::t_xt[i] ||
-            (++N4Intr::t_cnt[i] < N4Intr::t_max[i])) continue;
-        N4Intr::t_hit    |= b;
-        N4Intr::t_cnt[i]  = 0;
+    for (int i=0, b=1; i < N4Intr::ir.t_idx; i++, b<<=1) {
+        if (!N4Intr::ir.xt[i] ||               // check against stop counters
+            (++N4Intr::ir.t_cnt[i] < N4Intr::ir.t_max[i])) continue;
+        N4Intr::ir.t_hit    |= b;              // mark hit bit
+        N4Intr::ir.t_cnt[i]  = 0;              // reset counter
     }
 }
-ISR(PCINT0_vect) { N4Intr::p_hit |= 1; }
-ISR(PCINT1_vect) { N4Intr::p_hit |= 2; }
-ISR(PCINT2_vect) { N4Intr::p_hit |= 4; }
+ISR(PCINT0_vect) { N4Intr::ir.p_hit |= 1; }    // mark hit bit
+ISR(PCINT1_vect) { N4Intr::ir.p_hit |= 2; }
+ISR(PCINT2_vect) { N4Intr::ir.p_hit |= 4; }
 #endif // ARDUINO

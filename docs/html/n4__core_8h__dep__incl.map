@@ -4,5 +4,5 @@
 <area shape="rect" id="node3" href="$n4__core_8cpp.html" title="nanoForth Core Utilities" alt="" coords="152,80,275,107"/>
 <area shape="rect" id="node4" href="$n4__intr_8h.html" title="nanoForth interrupt handler class" alt="" coords="299,80,400,107"/>
 <area shape="rect" id="node6" href="$n4__vm_8cpp.html" title="nanoForth Virtual Machine class implementation" alt="" coords="379,155,495,181"/>
-<area shape="rect" id="node5" href="$n4__intr_8cpp.html" title="nanoForth Interrupt handlers implementation" alt="" coords="239,155,355,181"/>
+<area shape="rect" id="node5" href="$n4__intr_8cpp.html" title="nanoForth Interrupt handlers implementation Note: with volatile struct reduce 100 cycles from 14ms to..." alt="" coords="239,155,355,181"/>
 </map>

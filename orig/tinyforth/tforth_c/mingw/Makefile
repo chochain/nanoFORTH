@@ -1,0 +1,19 @@
+CC=gcc
+CFLAGS=-Wall -Os
+
+all : tforth.exe
+
+tforth.exe : tforth.o system.o
+	$(CC) $(CFLAGS) -o $@ $+
+
+tforth.o : tforth.c system.h
+	$(CC) $(CFLAGS) -c $<
+
+tforth.c : ../tforth.c
+	cp $< $@
+
+system.o : system.c system.h
+	$(CC) $(CFLAGS) -c $<
+
+clean : 
+	rm -f tforth.exe tforth.o tforth.c system.o

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['n4_5fapi_5fsz_359',['N4_API_SZ',['../n4_8h.html#aa07c729a4e40cfa880ac9374eb03e29c',1,'n4.h']]],
-  ['n4_5fmeta_360',['N4_META',['../n4__asm_8h.html#a37ca24dd144eff164cbb87573e5f2507',1,'n4_asm.h']]]
+  ['key_5fcompilemode_501',['KEY_COMPILEMODE',['../tforth_8c.html#a8d4845bc1998aedcab816cb7b99c5d19',1,'tforth.c']]],
+  ['key_5fprimitive_502',['KEY_PRIMITIVE',['../tforth_8c.html#a943f923c8f0a6dea9835f343a7a0cdb4',1,'tforth.c']]],
+  ['key_5frunmode_503',['KEY_RUNMODE',['../tforth_8c.html#a643fa25587ef277f57414b4b56e39daa',1,'tforth.c']]]
 ];
