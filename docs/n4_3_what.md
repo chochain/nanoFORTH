@@ -223,17 +223,17 @@ nanoFORTH handles only integer numbers.
 >
 > **Examples**
 >
-> : aa 65 emt ; ➤ *ok* (define a word **aa** which emit 'A' on console)<br/>
-> : bb 66 emt ; ➤ *ok* (define a word **bb** which emit 'B' on console)<br/>
-> 10000 0 TMI **aa** ➤ *ok* (set **aa** in handler slot #0, tigger every 10 seconds)<br/>
-> 25000 1 TMI **bb** ➤ *ok* (set **bb** in handler slot #1, tigger every 25 seconds)<br/>
+> : say_a 65 emt ; ➤ *ok* (define a word **say_a** which emit 'A' on console)<br/>
+> : say_b 66 emt ; ➤ *ok* (define a word **say_b** which emit 'B' on console)<br/>
+> 10000 0 TMI **say_a** ➤ *ok* (set **say_a** in handler slot #0, tigger every 10 seconds)<br/>
+> 25000 1 TMI **say_b** ➤ *ok* (set **sayb** in handler slot #1, tigger every 25 seconds)<br/>
 > 1 TME ➤ *ok* (enable timer interrupt)<br/>
 > AABAAABAABAA (interrupt routines been called)<br/>
 > 0 TME ➤ *ok* (disable timer interrupt)<br/>
 >
-> 8 PCI **aa** ➤ *ok* (run **aa** when pic 8 changed)<br/>
-> 1 PCI ➤ *ok* (enable pin change interrupt)<br/>
-> AA (assuming you have a push button hooked up at pin 8)<br/>
+> 8 PCI **say_a** ➤ *ok* (run **say_a** when pin 8 changed)<br/>
+> 1 PCE ➤ *ok* (enable pin change interrupt)<br/>
+> AAA (assuming you have a push button hooked up at pin 8)<br/>
 >
 
 ### Double precision (i.e. 32-bit) Arithmatic (for Arduino Clock mostly)
