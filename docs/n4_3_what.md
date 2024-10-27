@@ -38,13 +38,13 @@ nanoFORTH handles only integer numbers.
 
 ## Built-in Words
 ### Stack Ops
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |DRP|`( w -- )`|drop|
-> |DUP|`( w -- w w )`|duplicate|
-> |SWP|`( a b -- b a )`|swap|
-> |OVR|`( a b -- a b a )`|over|
-> |ROT|`( a b c -- b c a )`|rotate|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |DRP|`( w -- )`||drop|
+> |DUP|`( w -- w w )`||duplicate|
+> |SWP|`( a b -- b a )`||swap|
+> |OVR|`( a b -- a b a )`||over|
+> |ROT|`( a b c -- b c a )`||rotate|
 >
 > **Examples**
 >
@@ -56,17 +56,17 @@ nanoFORTH handles only integer numbers.
 > ROT ⏎ ➤ *20_20_10_ok*<br/>
 
 ### Arithmatics Ops
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |+  |`( a b -- a+b )`|add|
-> |-  |`( a b -- a-b )`|subtract|
-> |*  |`( a b -- a*b )`|multiply|
-> |/  |`( a b -- a/b )`|divide|
-> |MOD|`( a b -- a%%b` )|modulo|
-> |NEG|`( a   -- -a )`|negate|
-> |ABS|`( a   -- abs(a) )`|absolute value of a|
-> |MIN|`( a b -- min(a, b) )`|minimum value between a and b|
-> |MAX|`( a b -- max(a, b) )`|maximum value between a and b|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |+  |`( a b -- a+b )`||add|
+> |-  |`( a b -- a-b )`||subtract|
+> |*  |`( a b -- a*b )`||multiply|
+> |/  |`( a b -- a/b )`||divide|
+> |MOD|`( a b -- a%%b` )||modulo|
+> |NEG|`( a   -- -a )`||negate|
+> |ABS|`( a   -- abs(a) )`||absolute value of a|
+> |MIN|`( a b -- min(a, b) )`||minimum value between a and b|
+> |MAX|`( a b -- max(a, b) )`||maximum value between a and b|
 >
 > **Examples**
 >
@@ -75,63 +75,63 @@ nanoFORTH handles only integer numbers.
 > 10 3 / ⏎ ➤ *3_ok*<br/>
 
 ### Binary and Logical Ops
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |AND|`( a b -- a&b )`|binary and|
-> |OR |`( a b -- a\|b )`|binary or|
-> |XOR|`( a b \- \- a^b )`|binary xor|
-> |NOT|`( a -- ^a )`|binary not|
-> |LSH|`( n i -- n<<=i )`|left shift|
-> |RSH|`( n i -- n>>=i )`|right shift|
-> |= |`( a b -- a==b )`|equal|
-> |< |`( a b -- a<b )`|less than|
-> |> |`( a b -- a>b )`|greater than|
-> |<>|`( a b -- a!=b )`|not equal|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |AND|`( a b -- a&b )`||binary and|
+> |OR |`( a b -- a\|b )`||binary or|
+> |XOR|`( a b \- \- a^b )`||binary xor|
+> |NOT|`( a -- ^a )`||binary not|
+> |LSH|`( n i -- n<<=i )`||left shift|
+> |RSH|`( n i -- n>>=i )`||right shift|
+> |= |`( a b -- a==b )`||equal|
+> |< |`( a b -- a<b )`||less than|
+> |> |`( a b -- a>b )`||greater than|
+> |<>|`( a b -- a!=b )`||not equal|
 
 ### Word Definition and Dictionary Ops (in Interactive mode only)
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |:  |`( -- )`|start defining a new word|
-> |;  |`( -- )`|end of word definition|
-> |WRD|`( -- )`|list all words defined in nanoFORTH dictionaries|
-> |HRE|`( -- w )`|get current user dictionary pointer|
-> |FGT|`( -- )`|forget/remove functions|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |:  |`( -- )`|yes|start defining a new word|
+> |;  |`( -- )`|yes|end of word definition|
+> |WRD|`( -- )`|yes|list all words defined in nanoFORTH dictionaries|
+> |HRE|`( -- w )`||get current user dictionary pointer|
+> |FGT|`( -- )`|yes|forget/remove functions|
 
 ### Flow Control (in Compiler mode only)
-> |branching ops|description|
-> |:--|:--|
-> |f IF xxx THN|conditional branch|
-> |f IF xxx ELS yyy THN|@image html images/forth_if_els_thn.gif width=300px|
-> |BGN xxx f UTL|@image html images/forth_bgn_utl.gif width=300px|
-> |BGN xxx f WHL yyy RPT|@image html images/forth_bgn_whl_rpt.gif width=300px|
-> |n FOR xxx NXT|for loop, index value I count down from n to 1|
+> |branching ops|immediate|description|
+> |:--|:--|:--|
+> |f IF xxx THN||conditional branch|
+> |f IF xxx ELS yyy THN||@image html images/forth_if_els_thn.gif width=300px|
+> |BGN xxx f UTL||@image html images/forth_bgn_utl.gif width=300px|
+> |BGN xxx f WHL yyy RPT||@image html images/forth_bgn_whl_rpt.gif width=300px|
+> |n FOR xxx NXT||for loop, index value I count down from n to 1|
 
 ### Return Stack Ops
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |I |`( -- w )`|fetch word from top of return stack, aka R@ in other FORTHs|
-> |>R|`( w -- )`|push word on top of data stack onto return stack|
-> |R>|`( -- w )`| pop top of return stack value and push it onto data stack|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |I |`( -- w )`||fetch word from top of return stack, aka R@ in other FORTHs|
+> |>R|`( w -- )`||push word on top of data stack onto return stack|
+> |R>|`( -- w )`|| pop top of return stack value and push it onto data stack|
 > * note: FORTH programmers often use return stack as temp storage. However do use >R and R> carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter.
 
 ### Memory Access Ops
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |\@ |`( a -- w )`|fetch a 16-bit value from memory address 'a'|
-> |!  |`( a w -- )`|store a 16-bit value to memory address 'a'|
-> |C\@|`( a -- w )`|fetch a single byte from memory address 'a'|
-> |C! |`( a w -- )`|store a byte (or lower byte of the word) to memory address 'a'|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |\@ |`( a -- w )`||fetch a 16-bit value from memory address 'a'|
+> |!  |`( a w -- )`||store a 16-bit value to memory address 'a'|
+> |C\@|`( a -- w )`||fetch a single byte from memory address 'a'|
+> |C! |`( a w -- )`||store a byte (or lower byte of the word) to memory address 'a'|
 > * note: the above opcodes read/write nanoFORTH memory space directly. It provides the power to peek and poke random memory but also to shoot yourself on the foot. Use with caution.
 >
 > **Examples**
 > see next section
 
 ### Variable, Constant, and Array Ops
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |VAR|`( -- )`|define a 16-bit variable|
-> |VAL|`( w -- )`|define a 16-bit value (i.e. constant)|
-> |ALO|`( w -- )`|allocate extra w bytes on user dictionary (for array allocation)|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |VAR|`( -- )`|yes|define a 16-bit variable|
+> |VAL|`( w -- )`|yes|define a 16-bit value (i.e. constant)|
+> |ALO|`( w -- )`||allocate extra w bytes on user dictionary (for array allocation)|
 >
 > **Examples**
 >
@@ -147,15 +147,17 @@ nanoFORTH handles only integer numbers.
 > **z** 4 + @ ⏎ ➤ *5_ok* (retrieve **z**[2] onto data stack)<br/>
 
 ### Console I/O
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |KEY |`( -- c )`|get a byte from input console|
-> |EMT |`( c -- )`|write a byte to output console|
-> |CR  |`( -- )` |send a \<return\> to console|
-> |.   |`( w -- )`|print the value on data stack to output console|
-> |.\" |`( -- )`|send the following string (terminated with a \") to output console|
-> |S\" |`( -- a n )`|put string (terminated with a \") address and length on TOS|
-> |TYP |`( a n -- )`|type the string at address with length n|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |KEY |`( -- c )`||get a byte from input console|
+> |EMT |`( c -- )`||write a byte to output console|
+> |CR  |`( -- )` ||send a \<return\> to console|
+> |.   |`( w -- )`||print the value on data stack to output console|
+> |.\" |`( -- )`||send the following string (terminated with a \") to output console|
+> |S\" |`( -- a n )`||put string (terminated with a \") address and length on TOS|
+> |TYP |`( a n -- )`||type the string at address with length n|
+> |HEX |`( -- )`|yes|change input/output to hexadecimal i.e. base 16|
+> |DEC |`( -- )`|yes|change input/output to decimal i.e. base 10|
 >
 > **Examples**
 >
@@ -166,17 +168,17 @@ nanoFORTH handles only integer numbers.
 > ➤ *hello!ok*
 > : **s1** S" one!" ; : **s0** S" zero!" ;⏎ ➤ *ok* (**s1** **s0** are defined in user dictionary)<br/>
 > : **chk** IF s1 ELS s0 THN TYP ;⏎ ➤ *ok*<br/>
-> 1 **chk**⏎<br/>
-> ➤ *one!*<br/>
-> 0 **chk**⏎<br/>
-> ➤ *zero!*<br/>
+> 1 **chk** ⏎<br/>
+> ➤ *one!* <br/>
+> 0 **chk** ⏎<br/>
+> ➤ *zero!* <br/>
 
 ### Reset, Debug, and Tracing
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |BYE|`( -- )`|reset nanoFORTH on Arduino, exit to OS on other platform|
-> |DMP|`( a w -- )`|dump nanoFORTH user dictionary from address 'a' for w bytes|
-> |TRC|`( t -- )`|enable/disable execution tracing|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |BYE|`( -- )`|yes|reset nanoFORTH on Arduino, exit to OS on other platform|
+> |DMP|`( a w -- )`|yes|dump nanoFORTH user dictionary from address 'a' for w bytes|
+> |TRC|`( t -- )`||enable/disable execution tracing|
 >
 > **Examples**
 > ||
@@ -184,22 +186,22 @@ nanoFORTH handles only integer numbers.
 > |@image html images/nanoforth_bye_trc_dmp.png width=800px|
 
 ### EEPROM Access
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |SAV|`( -- )`|save user dictionary into Arduino Flash Memory|
-> |LD |`( -- )`|restore user dictionary from Arduino Flash Memory|
-> |SEX|`( -- )`|SAV with autorun flag set in EEPROM for reboot/execution|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |SAV|`( -- )`|yes|save user dictionary into Arduino Flash Memory|
+> |LD |`( -- )`|yes|restore user dictionary from Arduino Flash Memory|
+> |SEX|`( -- )`|yes|SAV with autorun flag set in EEPROM for reboot/execution|
 
 ### Arduino Specific Ops
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |CLK|`( -- d )`|fetch Arduino millis() value onto data stack as a double number|
-> |DLY|`( w -- )`|wait milliseconds (yield to hardware tasks)|
-> |PIN|`( w p -- )`|pinMode(p, w)|
-> |IN |`( p -- w )`|digitalRead(p)|
-> |OUT|`( w p -- )`|if p=0x0xx, digitalWrite(xx, w),<br/>if p=0x1xx, xx masks PORTD (pin 0~7) i.e. multi-port write,<br/>if p=0x2xx, xx masks PORTB (pin 8~13)<br/>if p=0x3xx, xx masks PORTC (analog A0~A6)|
-> |AIN|`( p -- w )`|analogRead(p)|
-> |PWM|`( w p -- )`|analogWrite(p, w)|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |CLK|`( -- d )`||fetch Arduino millis() value onto data stack as a double number|
+> |DLY|`( w -- )`||wait milliseconds (yield to hardware tasks)|
+> |PIN|`( w p -- )`||pinMode(p, w)|
+> |IN |`( p -- w )`||digitalRead(p)|
+> |OUT|`( w p -- )`||if p=0x0xx, digitalWrite(xx, w),<br/>if p=0x1xx, xx masks PORTD (pin 0~7) i.e. multi-port write,<br/>if p=0x2xx, xx masks PORTB (pin 8~13)<br/>if p=0x3xx, xx masks PORTC (analog A0~A6)|
+> |AIN|`( p -- w )`||analogRead(p)|
+> |PWM|`( w p -- )`||analogWrite(p, w)|
 > 
 > **Examples**
 >
@@ -208,17 +210,17 @@ nanoFORTH handles only integer numbers.
 <br/>
 
 ### C API function call
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |API|`( n -- )`|call API by number registered via ef_api(n, func) in Arduino sketch|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |API|`( n -- )`||call API by number registered via ef_api(n, func) in Arduino sketch|
 
 ### Interrupt ops
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |TMI|`( n i -- )`|set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds|
-> |PCI|`( p -- )`|capture pin #p change (either HIGH to LOW or LOW to HIGH)|
-> |TME|`( f -- )`|enable/disable timer interrupt, 0:disable, 1:enable|
-> |PCE|`( f -- )`|enable/disable pin change interrupt, 0:disable, 1:enable|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |TMI|`( n i -- )`|yes|set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds|
+> |PCI|`( p -- )`|yes|capture pin #p change (either HIGH to LOW or LOW to HIGH)|
+> |TME|`( f -- )`||enable/disable timer interrupt, 0:disable, 1:enable|
+> |PCE|`( f -- )`||enable/disable pin change interrupt, 0:disable, 1:enable|
 >> Note: nanoForth utilizes timer2 for timer interrupt. It might conflict with libraries which also uses timer2 such as Tone().
 >
 > **Examples**
@@ -237,24 +239,24 @@ nanoFORTH handles only integer numbers.
 >
 
 ### Double precision (i.e. 32-bit) Arithmatic (for Arduino Clock mostly)
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |D+ |`( d1 d0 -- d1+d0 )`|add two doubles|
-> |D- |`( d1 d0 -- d1-d0 )`|subtract two doubles|
-> |DNG|`( d0 -- -d0 )`|negate a double number|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |D+ |`( d1 d0 -- d1+d0 )`||add two doubles|
+> |D- |`( d1 d0 -- d1-d0 )`||subtract two doubles|
+> |DNG|`( d0 -- -d0 )`||negate a double number|
 >
 > **Examples**
 >
 > CLK 1000 DLY CLK D- DNG ⏎ ➤ *1000_0_ok*
 
 ### Meta Programming (available only via source recompilation with N4_META set to 1)
-> |opcode|stack|description|
-> |:--|:--|:--|
-> |CRE|`( -- )`|create a word with link and name field|
-> |,  |`( n -- )`|comma, add a 16-bit value onto dictionary|
-> |C, |`( n -- )`|byte comma, add a 8-bit value onto dictionary|
-> |'  |`( -- xt )`|tick, fetch xt (parameter field address) of a word|
-> |EXE|`( xt -- )`|execute an xt address|
+> |opcode|stack|immediate|description|
+> |:--|:--|:--|:--|
+> |CRE|`( -- )`||create a word with link and name field|
+> |,  |`( n -- )`||comma, add a 16-bit value onto dictionary|
+> |C, |`( n -- )`||byte comma, add a 8-bit value onto dictionary|
+> |'  |`( -- xt )`||tick, fetch xt (parameter field address) of a word|
+> |EXE|`( xt -- )`||execute an xt address|
 >
 > **Examples**
 >
