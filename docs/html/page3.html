@@ -446,17 +446,17 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <p>Note: nanoForth utilizes timer2 for timer interrupt. It might conflict with libraries which also uses timer2 such as Tone(). </p>
 </blockquote>
 <p><b>Examples</b></p>
-<p>: say_a 65 emt ; ➤ <em>ok</em> (define a word <b>say_a</b> which emit 'A' on console)<br  />
- : say_b 66 emt ; ➤ <em>ok</em> (define a word <b>say_b</b> which emit 'B' on console)<br  />
- 10000 0 TMI <b>say_a</b> ➤ <em>ok</em> (set <b>say_a</b> in handler slot #0, tigger every 10 seconds)<br  />
- 25000 1 TMI <b>say_b</b> ➤ <em>ok</em> (set <b>sayb</b> in handler slot #1, tigger every 25 seconds)<br  />
+<p>: s_a 65 emt ; ➤ <em>ok</em> (define a word <b>s_a</b> which emit 'A' on console)<br  />
+ : s_b 66 emt ; ➤ <em>ok</em> (define a word <b>s_b</b> which emit 'B' on console)<br  />
+ 10000 0 TMI <b>s_a</b> ➤ <em>ok</em> (set <b>s_a</b> in handler slot #0, tigger every 10 seconds)<br  />
+ 25000 1 TMI <b>s_b</b> ➤ <em>ok</em> (set <b>s_b</b> in handler slot #1, tigger every 25 seconds)<br  />
  1 TME ➤ <em>ok</em> (enable timer interrupt)<br  />
  AABAAABAABAA (interrupt routines been called)<br  />
  0 TME ➤ <em>ok</em> (disable timer interrupt)<br  />
 </p>
-<p>8 PCI <b>say_a</b> ➤ <em>ok</em> (run <b>say_a</b> when pin 8 changed)<br  />
+<p>8 PCI <b>s_a</b> ➤ <em>ok</em> (run <b>s_a</b> when pin 8 changed)<br  />
  1 PCE ➤ <em>ok</em> (enable pin change interrupt)<br  />
- AAA (assuming you have a push button hooked up at pin 8)<br  />
+ AA (assuming you have a push button hooked up at pin 8)<br  />
 </p>
 <p></p>
 </blockquote>
