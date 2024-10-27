@@ -142,15 +142,15 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">DRP </td><td class="markdownTableBodyLeft" colspan="2"><code>( w -- )</code> </td><td class="markdownTableBodyLeft">drop  </td></tr>
+<td class="markdownTableBodyLeft">DRP </td><td class="markdownTableBodyLeft"><code>( w -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">drop  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">DUP </td><td class="markdownTableBodyLeft" colspan="2"><code>( w -- w w )</code> </td><td class="markdownTableBodyLeft">duplicate  </td></tr>
+<td class="markdownTableBodyLeft">DUP </td><td class="markdownTableBodyLeft"><code>( w -- w w )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">duplicate  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">SWP </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- b a )</code> </td><td class="markdownTableBodyLeft">swap  </td></tr>
+<td class="markdownTableBodyLeft">SWP </td><td class="markdownTableBodyLeft"><code>( a b -- b a )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">swap  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">OVR </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a b a )</code> </td><td class="markdownTableBodyLeft">over  </td></tr>
+<td class="markdownTableBodyLeft">OVR </td><td class="markdownTableBodyLeft"><code>( a b -- a b a )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">over  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">ROT </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b c -- b c a )</code> </td><td class="markdownTableBodyLeft">rotate  </td></tr>
+<td class="markdownTableBodyLeft">ROT </td><td class="markdownTableBodyLeft"><code>( a b c -- b c a )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">rotate  </td></tr>
 </table>
 <p><b>Examples</b></p>
 <p>20 10 ⏎ ➤ <em>20_10_ok</em><br  />
@@ -167,23 +167,23 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">+ </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a+b )</code> </td><td class="markdownTableBodyLeft">add  </td></tr>
+<td class="markdownTableBodyLeft">+ </td><td class="markdownTableBodyLeft"><code>( a b -- a+b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">add  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">- </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a-b )</code> </td><td class="markdownTableBodyLeft">subtract  </td></tr>
+<td class="markdownTableBodyLeft">- </td><td class="markdownTableBodyLeft"><code>( a b -- a-b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">subtract  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">* </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a*b )</code> </td><td class="markdownTableBodyLeft">multiply  </td></tr>
+<td class="markdownTableBodyLeft">* </td><td class="markdownTableBodyLeft"><code>( a b -- a*b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">multiply  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">/ </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a/b )</code> </td><td class="markdownTableBodyLeft">divide  </td></tr>
+<td class="markdownTableBodyLeft">/ </td><td class="markdownTableBodyLeft"><code>( a b -- a/b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">divide  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">MOD </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a%b</code> ) </td><td class="markdownTableBodyLeft">modulo  </td></tr>
+<td class="markdownTableBodyLeft">MOD </td><td class="markdownTableBodyLeft"><code>( a b -- a%b</code> ) </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">modulo  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">NEG </td><td class="markdownTableBodyLeft" colspan="2"><code>( a -- -a )</code> </td><td class="markdownTableBodyLeft">negate  </td></tr>
+<td class="markdownTableBodyLeft">NEG </td><td class="markdownTableBodyLeft"><code>( a -- -a )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">negate  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">ABS </td><td class="markdownTableBodyLeft" colspan="2"><code>( a -- abs(a) )</code> </td><td class="markdownTableBodyLeft">absolute value of a  </td></tr>
+<td class="markdownTableBodyLeft">ABS </td><td class="markdownTableBodyLeft"><code>( a -- abs(a) )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">absolute value of a  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">MIN </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- min(a, b) )</code> </td><td class="markdownTableBodyLeft">minimum value between a and b  </td></tr>
+<td class="markdownTableBodyLeft">MIN </td><td class="markdownTableBodyLeft"><code>( a b -- min(a, b) )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">minimum value between a and b  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">MAX </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- max(a, b) )</code> </td><td class="markdownTableBodyLeft">maximum value between a and b  </td></tr>
+<td class="markdownTableBodyLeft">MAX </td><td class="markdownTableBodyLeft"><code>( a b -- max(a, b) )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">maximum value between a and b  </td></tr>
 </table>
 <p><b>Examples</b></p>
 <p>17 5 + ⏎ ➤ <em>22_ok</em><br  />
@@ -197,25 +197,25 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">AND </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a&amp;b )</code> </td><td class="markdownTableBodyLeft">binary and  </td></tr>
+<td class="markdownTableBodyLeft">AND </td><td class="markdownTableBodyLeft"><code>( a b -- a&amp;b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">binary and  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">OR </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a\|b )</code> </td><td class="markdownTableBodyLeft">binary or  </td></tr>
+<td class="markdownTableBodyLeft">OR </td><td class="markdownTableBodyLeft"><code>( a b -- a\|b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">binary or  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">XOR </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b \- \- a^b )</code> </td><td class="markdownTableBodyLeft">binary xor  </td></tr>
+<td class="markdownTableBodyLeft">XOR </td><td class="markdownTableBodyLeft"><code>( a b \- \- a^b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">binary xor  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">NOT </td><td class="markdownTableBodyLeft" colspan="2"><code>( a -- ^a )</code> </td><td class="markdownTableBodyLeft">binary not  </td></tr>
+<td class="markdownTableBodyLeft">NOT </td><td class="markdownTableBodyLeft"><code>( a -- ^a )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">binary not  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">LSH </td><td class="markdownTableBodyLeft" colspan="2"><code>( n i -- n&lt;&lt;=i )</code> </td><td class="markdownTableBodyLeft">left shift  </td></tr>
+<td class="markdownTableBodyLeft">LSH </td><td class="markdownTableBodyLeft"><code>( n i -- n&lt;&lt;=i )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">left shift  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">RSH </td><td class="markdownTableBodyLeft" colspan="2"><code>( n i -- n&gt;&gt;=i )</code> </td><td class="markdownTableBodyLeft">right shift  </td></tr>
+<td class="markdownTableBodyLeft">RSH </td><td class="markdownTableBodyLeft"><code>( n i -- n&gt;&gt;=i )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">right shift  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">= </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a==b )</code> </td><td class="markdownTableBodyLeft">equal  </td></tr>
+<td class="markdownTableBodyLeft">= </td><td class="markdownTableBodyLeft"><code>( a b -- a==b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">equal  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">&lt; </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a&lt;b )</code> </td><td class="markdownTableBodyLeft">less than  </td></tr>
+<td class="markdownTableBodyLeft">&lt; </td><td class="markdownTableBodyLeft"><code>( a b -- a&lt;b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">less than  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">&gt; </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a&gt;b )</code> </td><td class="markdownTableBodyLeft">greater than  </td></tr>
+<td class="markdownTableBodyLeft">&gt; </td><td class="markdownTableBodyLeft"><code>( a b -- a&gt;b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">greater than  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">&lt;&gt; </td><td class="markdownTableBodyLeft" colspan="2"><code>( a b -- a!=b )</code> </td><td class="markdownTableBodyLeft">not equal  </td></tr>
+<td class="markdownTableBodyLeft">&lt;&gt; </td><td class="markdownTableBodyLeft"><code>( a b -- a!=b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">not equal  </td></tr>
 </table>
 </blockquote>
 <h3>Word Definition and Dictionary Ops (in Interactive mode only)</h3>
@@ -230,7 +230,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">WRD </td><td class="markdownTableBodyLeft"><code>( -- )</code> </td><td class="markdownTableBodyLeft">yes </td><td class="markdownTableBodyLeft">list all words defined in nanoFORTH dictionaries  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">HRE </td><td class="markdownTableBodyLeft" colspan="2"><code>( -- w )</code> </td><td class="markdownTableBodyLeft">get current user dictionary pointer  </td></tr>
+<td class="markdownTableBodyLeft">HRE </td><td class="markdownTableBodyLeft"><code>( -- w )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">get current user dictionary pointer  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">FGT </td><td class="markdownTableBodyLeft"><code>( -- )</code> </td><td class="markdownTableBodyLeft">yes </td><td class="markdownTableBodyLeft">forget/remove functions  </td></tr>
 </table>
@@ -239,26 +239,26 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <blockquote class="doxtable">
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadLeft">branching ops </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
+<th class="markdownTableHeadLeft">branching ops </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft" colspan="2">f IF xxx THN </td><td class="markdownTableBodyLeft">conditional branch  </td></tr>
+<td class="markdownTableBodyLeft">f IF xxx THN </td><td class="markdownTableBodyLeft">conditional branch  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft" colspan="2">f IF xxx ELS yyy THN </td><td class="markdownTableBodyLeft"><div class="image">
+<td class="markdownTableBodyLeft">f IF xxx ELS yyy THN </td><td class="markdownTableBodyLeft"><div class="image">
 <img src="forth_if_els_thn.gif" alt="" width="300px</td>"/>
 </div>
  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft" colspan="2">BGN xxx f UTL </td><td class="markdownTableBodyLeft"><div class="image">
+<td class="markdownTableBodyLeft">BGN xxx f UTL </td><td class="markdownTableBodyLeft"><div class="image">
 <img src="forth_bgn_utl.gif" alt="" width="300px</td>"/>
 </div>
  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft" colspan="2">BGN xxx f WHL yyy RPT </td><td class="markdownTableBodyLeft"><div class="image">
+<td class="markdownTableBodyLeft">BGN xxx f WHL yyy RPT </td><td class="markdownTableBodyLeft"><div class="image">
 <img src="forth_bgn_whl_rpt.gif" alt="" width="300px</td>"/>
 </div>
  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft" colspan="2">n FOR xxx NXT </td><td class="markdownTableBodyLeft">for loop, index value I count down from n to 1  </td></tr>
+<td class="markdownTableBodyLeft">n FOR xxx NXT </td><td class="markdownTableBodyLeft">for loop, index value I count down from n to 1  </td></tr>
 </table>
 </blockquote>
 <h3>Return Stack Ops</h3>
@@ -267,11 +267,11 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">I </td><td class="markdownTableBodyLeft" colspan="2"><code>( -- w )</code> </td><td class="markdownTableBodyLeft">fetch word from top of return stack, aka R@ in other FORTHs  </td></tr>
+<td class="markdownTableBodyLeft">I </td><td class="markdownTableBodyLeft"><code>( -- w )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">fetch word from top of return stack, aka R@ in other FORTHs  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">&gt;R </td><td class="markdownTableBodyLeft" colspan="2"><code>( w -- )</code> </td><td class="markdownTableBodyLeft">push word on top of data stack onto return stack  </td></tr>
+<td class="markdownTableBodyLeft">&gt;R </td><td class="markdownTableBodyLeft"><code>( w -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">push word on top of data stack onto return stack  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">R&gt; </td><td class="markdownTableBodyLeft" colspan="2"><code>( -- w )</code> </td><td class="markdownTableBodyLeft">pop top of return stack value and push it onto data stack  </td></tr>
+<td class="markdownTableBodyLeft">R&gt; </td><td class="markdownTableBodyLeft"><code>( -- w )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">pop top of return stack value and push it onto data stack  </td></tr>
 </table>
 <ul>
 <li>note: FORTH programmers often use return stack as temp storage. However do use &gt;R and R&gt; carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter. </li>
@@ -283,13 +283,13 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">@ </td><td class="markdownTableBodyLeft" colspan="2"><code>( a -- w )</code> </td><td class="markdownTableBodyLeft">fetch a 16-bit value from memory address 'a'  </td></tr>
+<td class="markdownTableBodyLeft">@ </td><td class="markdownTableBodyLeft"><code>( a -- w )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">fetch a 16-bit value from memory address 'a'  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">! </td><td class="markdownTableBodyLeft" colspan="2"><code>( a w -- )</code> </td><td class="markdownTableBodyLeft">store a 16-bit value to memory address 'a'  </td></tr>
+<td class="markdownTableBodyLeft">! </td><td class="markdownTableBodyLeft"><code>( a w -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">store a 16-bit value to memory address 'a'  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">C@ </td><td class="markdownTableBodyLeft" colspan="2"><code>( a -- w )</code> </td><td class="markdownTableBodyLeft">fetch a single byte from memory address 'a'  </td></tr>
+<td class="markdownTableBodyLeft">C@ </td><td class="markdownTableBodyLeft"><code>( a -- w )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">fetch a single byte from memory address 'a'  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">C! </td><td class="markdownTableBodyLeft" colspan="2"><code>( a w -- )</code> </td><td class="markdownTableBodyLeft">store a byte (or lower byte of the word) to memory address 'a'  </td></tr>
+<td class="markdownTableBodyLeft">C! </td><td class="markdownTableBodyLeft"><code>( a w -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">store a byte (or lower byte of the word) to memory address 'a'  </td></tr>
 </table>
 <ul>
 <li>note: the above opcodes read/write nanoFORTH memory space directly. It provides the power to peek and poke random memory but also to shoot yourself on the foot. Use with caution.</li>
@@ -306,7 +306,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">VAL </td><td class="markdownTableBodyLeft"><code>( w -- )</code> </td><td class="markdownTableBodyLeft">yes </td><td class="markdownTableBodyLeft">define a 16-bit value (i.e. constant)  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">ALO </td><td class="markdownTableBodyLeft" colspan="2"><code>( w -- )</code> </td><td class="markdownTableBodyLeft">allocate extra w bytes on user dictionary (for array allocation)  </td></tr>
+<td class="markdownTableBodyLeft">ALO </td><td class="markdownTableBodyLeft"><code>( w -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">allocate extra w bytes on user dictionary (for array allocation)  </td></tr>
 </table>
 <p><b>Examples</b></p>
 <p>VAR <b>x</b> ➤ <em>ok</em> (a variable <b>x</b> is created on user dictionary)<br  />
@@ -327,19 +327,19 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">KEY </td><td class="markdownTableBodyLeft" colspan="2"><code>( -- c )</code> </td><td class="markdownTableBodyLeft">get a byte from input console  </td></tr>
+<td class="markdownTableBodyLeft">KEY </td><td class="markdownTableBodyLeft"><code>( -- c )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">get a byte from input console  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">EMT </td><td class="markdownTableBodyLeft" colspan="2"><code>( c -- )</code> </td><td class="markdownTableBodyLeft">write a byte to output console  </td></tr>
+<td class="markdownTableBodyLeft">EMT </td><td class="markdownTableBodyLeft"><code>( c -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">write a byte to output console  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">CR </td><td class="markdownTableBodyLeft" colspan="2"><code>( -- )</code> </td><td class="markdownTableBodyLeft">send a &lt;return&gt; to console  </td></tr>
+<td class="markdownTableBodyLeft">CR </td><td class="markdownTableBodyLeft"><code>( -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">send a &lt;return&gt; to console  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">. </td><td class="markdownTableBodyLeft" colspan="2"><code>( w -- )</code> </td><td class="markdownTableBodyLeft">print the value on data stack to output console  </td></tr>
+<td class="markdownTableBodyLeft">. </td><td class="markdownTableBodyLeft"><code>( w -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">print the value on data stack to output console  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">." </td><td class="markdownTableBodyLeft" colspan="2">`( -- )` </td><td class="markdownTableBodyLeft">send the following string (terminated with a ") to output console  </td></tr>
+<td class="markdownTableBodyLeft">." </td><td class="markdownTableBodyLeft">`( -- )` </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">send the following string (terminated with a ") to output console  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">S" </td><td class="markdownTableBodyLeft" colspan="2">`( -- a n )` </td><td class="markdownTableBodyLeft">put string (terminated with a ") address and length on TOS  </td></tr>
+<td class="markdownTableBodyLeft">S" </td><td class="markdownTableBodyLeft">`( -- a n )` </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">put string (terminated with a ") address and length on TOS  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">TYP </td><td class="markdownTableBodyLeft" colspan="2"><code>( a n -- )</code> </td><td class="markdownTableBodyLeft">type the string at address with length n  </td></tr>
+<td class="markdownTableBodyLeft">TYP </td><td class="markdownTableBodyLeft"><code>( a n -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">type the string at address with length n  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">HEX </td><td class="markdownTableBodyLeft"><code>( -- )</code> </td><td class="markdownTableBodyLeft">yes </td><td class="markdownTableBodyLeft">change input/output to hexadecimal i.e. base 16  </td></tr>
 <tr class="markdownTableRowOdd">
@@ -368,7 +368,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">DMP </td><td class="markdownTableBodyLeft"><code>( a w -- )</code> </td><td class="markdownTableBodyLeft">yes </td><td class="markdownTableBodyLeft">dump nanoFORTH user dictionary from address 'a' for w bytes  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">TRC </td><td class="markdownTableBodyLeft" colspan="2"><code>( t -- )</code> </td><td class="markdownTableBodyLeft">enable/disable execution tracing  </td></tr>
+<td class="markdownTableBodyLeft">TRC </td><td class="markdownTableBodyLeft"><code>( t -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">enable/disable execution tracing  </td></tr>
 </table>
 <p><b>Examples</b> </p><table class="markdownTable">
 <tr class="markdownTableHead">
@@ -399,22 +399,22 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">CLK </td><td class="markdownTableBodyLeft" colspan="2"><code>( -- d )</code> </td><td class="markdownTableBodyLeft">fetch Arduino millis() value onto data stack as a double number  </td></tr>
+<td class="markdownTableBodyLeft">CLK </td><td class="markdownTableBodyLeft"><code>( -- d )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">fetch Arduino millis() value onto data stack as a double number  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">DLY </td><td class="markdownTableBodyLeft" colspan="2"><code>( w -- )</code> </td><td class="markdownTableBodyLeft">wait milliseconds (yield to hardware tasks)  </td></tr>
+<td class="markdownTableBodyLeft">DLY </td><td class="markdownTableBodyLeft"><code>( w -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">wait milliseconds (yield to hardware tasks)  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">PIN </td><td class="markdownTableBodyLeft" colspan="2"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft">pinMode(p, w)  </td></tr>
+<td class="markdownTableBodyLeft">PIN </td><td class="markdownTableBodyLeft"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">pinMode(p, w)  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">IN </td><td class="markdownTableBodyLeft" colspan="2"><code>( p -- w )</code> </td><td class="markdownTableBodyLeft">digitalRead(p)  </td></tr>
+<td class="markdownTableBodyLeft">IN </td><td class="markdownTableBodyLeft"><code>( p -- w )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">digitalRead(p)  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">OUT </td><td class="markdownTableBodyLeft" colspan="2"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft">if p=0x0xx, digitalWrite(xx, w),<br  />
+<td class="markdownTableBodyLeft">OUT </td><td class="markdownTableBodyLeft"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">if p=0x0xx, digitalWrite(xx, w),<br  />
 if p=0x1xx, xx masks PORTD (pin 0~7) i.e. multi-port write,<br  />
 if p=0x2xx, xx masks PORTB (pin 8~13)<br  />
 if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">AIN </td><td class="markdownTableBodyLeft" colspan="2"><code>( p -- w )</code> </td><td class="markdownTableBodyLeft">analogRead(p)  </td></tr>
+<td class="markdownTableBodyLeft">AIN </td><td class="markdownTableBodyLeft"><code>( p -- w )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">analogRead(p)  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">PWM </td><td class="markdownTableBodyLeft" colspan="2"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft">analogWrite(p, w)  </td></tr>
+<td class="markdownTableBodyLeft">PWM </td><td class="markdownTableBodyLeft"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">analogWrite(p, w)  </td></tr>
 </table>
 <p><b>Examples</b></p>
 <p>1 13 OUT ⏎ ➤ <em>ok</em> (built-in LED is turn on, i.e. digitalWrite(13, 1) called)<br  />
@@ -429,7 +429,7 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">API </td><td class="markdownTableBodyLeft" colspan="2"><code>( n -- )</code> </td><td class="markdownTableBodyLeft">call API by number registered via ef_api(n, func) in Arduino sketch  </td></tr>
+<td class="markdownTableBodyLeft">API </td><td class="markdownTableBodyLeft"><code>( n -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">call API by number registered via ef_api(n, func) in Arduino sketch  </td></tr>
 </table>
 </blockquote>
 <h3>Interrupt ops</h3>
@@ -442,9 +442,9 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyLeft">PCI </td><td class="markdownTableBodyLeft"><code>( p -- )</code> </td><td class="markdownTableBodyLeft">yes </td><td class="markdownTableBodyLeft">capture pin #p change (either HIGH to LOW or LOW to HIGH)  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">TME </td><td class="markdownTableBodyLeft" colspan="2"><code>( f -- )</code> </td><td class="markdownTableBodyLeft">enable/disable timer interrupt, 0:disable, 1:enable  </td></tr>
+<td class="markdownTableBodyLeft">TME </td><td class="markdownTableBodyLeft"><code>( f -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">enable/disable timer interrupt, 0:disable, 1:enable  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">PCE </td><td class="markdownTableBodyLeft" colspan="2"><code>( f -- )</code> </td><td class="markdownTableBodyLeft">enable/disable pin change interrupt, 0:disable, 1:enable  </td></tr>
+<td class="markdownTableBodyLeft">PCE </td><td class="markdownTableBodyLeft"><code>( f -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">enable/disable pin change interrupt, 0:disable, 1:enable  </td></tr>
 </table>
 <blockquote class="doxtable">
 <p>Note: nanoForth utilizes timer2 for timer interrupt. It might conflict with libraries which also uses timer2 such as Tone(). </p>
@@ -470,11 +470,11 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">D+ </td><td class="markdownTableBodyLeft" colspan="2"><code>( d1 d0 -- d1+d0 )</code> </td><td class="markdownTableBodyLeft">add two doubles  </td></tr>
+<td class="markdownTableBodyLeft">D+ </td><td class="markdownTableBodyLeft"><code>( d1 d0 -- d1+d0 )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">add two doubles  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">D- </td><td class="markdownTableBodyLeft" colspan="2"><code>( d1 d0 -- d1-d0 )</code> </td><td class="markdownTableBodyLeft">subtract two doubles  </td></tr>
+<td class="markdownTableBodyLeft">D- </td><td class="markdownTableBodyLeft"><code>( d1 d0 -- d1-d0 )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">subtract two doubles  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">DNG </td><td class="markdownTableBodyLeft" colspan="2"><code>( d0 -- -d0 )</code> </td><td class="markdownTableBodyLeft">negate a double number  </td></tr>
+<td class="markdownTableBodyLeft">DNG </td><td class="markdownTableBodyLeft"><code>( d0 -- -d0 )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">negate a double number  </td></tr>
 </table>
 <p><b>Examples</b></p>
 <p>CLK 1000 DLY CLK D- DNG ⏎ ➤ <em>1000_0_ok</em> </p>
@@ -485,15 +485,15 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">CRE </td><td class="markdownTableBodyLeft" colspan="2"><code>( -- )</code> </td><td class="markdownTableBodyLeft">create a word with link and name field  </td></tr>
+<td class="markdownTableBodyLeft">CRE </td><td class="markdownTableBodyLeft"><code>( -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">create a word with link and name field  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">, </td><td class="markdownTableBodyLeft" colspan="2"><code>( n -- )</code> </td><td class="markdownTableBodyLeft">comma, add a 16-bit value onto dictionary  </td></tr>
+<td class="markdownTableBodyLeft">, </td><td class="markdownTableBodyLeft"><code>( n -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">comma, add a 16-bit value onto dictionary  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">C, </td><td class="markdownTableBodyLeft" colspan="2"><code>( n -- )</code> </td><td class="markdownTableBodyLeft">byte comma, add a 8-bit value onto dictionary  </td></tr>
+<td class="markdownTableBodyLeft">C, </td><td class="markdownTableBodyLeft"><code>( n -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">byte comma, add a 8-bit value onto dictionary  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">' </td><td class="markdownTableBodyLeft" colspan="2"><code>( -- xt )</code> </td><td class="markdownTableBodyLeft">tick, fetch xt (parameter field address) of a word  </td></tr>
+<td class="markdownTableBodyLeft">' </td><td class="markdownTableBodyLeft"><code>( -- xt )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">tick, fetch xt (parameter field address) of a word  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">EXE </td><td class="markdownTableBodyLeft" colspan="2"><code>( xt -- )</code> </td><td class="markdownTableBodyLeft">execute an xt address  </td></tr>
+<td class="markdownTableBodyLeft">EXE </td><td class="markdownTableBodyLeft"><code>( xt -- )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">execute an xt address  </td></tr>
 </table>
 <p><b>Examples</b></p>
 <p>: aa 123 ; ⏎ ➤ <em>ok</em> (create a word) CRE bb ⏎ ➤ <em>ok</em> (create a empty word bb with it link and name field only) ' aa ⏎ ➤ <em>5_ok</em> (aa's xt address is put on top of stack) $C0 OR , ⏎ ➤ <em>ok</em> (combile the address and call flag onto dictionary) $F0 , ⏎ ➤ <em>ok</em> (compile RET opcode onto dictionary) bb ⏎ ➤ <em>123_ok</em> (bb calls aa, so returns 123 on stack) ' bb ⏎ ➤ <em>123_11_ok</em> (get bb's xt address) EXE ➤ <em>123_123_ok</em> (execute bb's xt directly) </p>
