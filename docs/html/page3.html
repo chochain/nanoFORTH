@@ -198,27 +198,10 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">immediate </th><th class="markdownTableHeadLeft">description  </th></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">AND </td><td class="markdownTableBodyLeft"><code>( a b -- a&amp;b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">binary and  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">OR </td><td class="markdownTableBodyLeft"><code>( a b -- a\|b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">binary or  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">XOR </td><td class="markdownTableBodyLeft"><code>( a b \- \- a^b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">binary xor  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">NOT </td><td class="markdownTableBodyLeft"><code>( a -- ^a )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">binary not  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">LSH </td><td class="markdownTableBodyLeft"><code>( n i -- n&lt;&lt;=i )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">left shift  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">RSH </td><td class="markdownTableBodyLeft"><code>( n i -- n&gt;&gt;=i )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">right shift  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">= </td><td class="markdownTableBodyLeft"><code>( a b -- a==b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">equal  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">&lt; </td><td class="markdownTableBodyLeft"><code>( a b -- a&lt;b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">less than  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft">&gt; </td><td class="markdownTableBodyLeft"><code>( a b -- a&gt;b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">greater than  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">&lt;&gt; </td><td class="markdownTableBodyLeft"><code>( a b -- a!=b )</code> </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">not equal  </td></tr>
 </table>
+<p>|OR |<code>( a b -- a|b )</code>| |binary or| |XOR|<code>( a b -- a^b )</code>| |binary xor| |NOT|<code>( a -- ^a )</code>| |binary not| |LSH|<code>( n i -- n&lt;&lt;=i )</code>| |left shift| |RSH|<code>( n i -- n&gt;&gt;=i )</code>| |right shift| |= |<code>( a b -- a==b )</code>| |equal| |&lt; |<code>( a b -- a&lt;b )</code>| |less than| |&gt; |<code>( a b -- a&gt;b )</code>| |greater than| |&lt;&gt;|<code>( a b -- a!=b )</code>| |not equal| </p>
 </blockquote>
-<h3>Word Definition and Dictionary Ops (in Interactive mode only)</h3>
+<h3>Word Definition and Dictionary Ops</h3>
 <blockquote class="doxtable">
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -261,7 +244,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <td class="markdownTableBodyLeft">n FOR xxx NXT </td><td class="markdownTableBodyLeft">for loop, index value I count down from n to 1  </td></tr>
 </table>
 </blockquote>
-<h3>Return Stack Ops</h3>
+<h3>Return Stack Ops (in Compiler mode only)</h3>
 <blockquote class="doxtable">
 <table class="markdownTable">
 <tr class="markdownTableHead">

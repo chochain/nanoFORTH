@@ -78,8 +78,8 @@ nanoFORTH handles only integer numbers.
 > |opcode|stack|immediate|description|
 > |:--|:--|:--|:--|
 > |AND|`( a b -- a&b )`| |binary and|
-> |OR |`( a b -- a\|b )`| |binary or|
-> |XOR|`( a b \- \- a^b )`| |binary xor|
+> |OR |`( a b -- a|b )`| |binary or|
+> |XOR|`( a b -- a^b )`| |binary xor|
 > |NOT|`( a -- ^a )`| |binary not|
 > |LSH|`( n i -- n<<=i )`| |left shift|
 > |RSH|`( n i -- n>>=i )`| |right shift|
@@ -88,7 +88,7 @@ nanoFORTH handles only integer numbers.
 > |> |`( a b -- a>b )`| |greater than|
 > |<>|`( a b -- a!=b )`| |not equal|
 
-### Word Definition and Dictionary Ops (in Interactive mode only)
+### Word Definition and Dictionary Ops
 > |opcode|stack|immediate|description|
 > |:--|:--|:--|:--|
 > |:  |`( -- )`|yes|start defining a new word|
@@ -106,7 +106,7 @@ nanoFORTH handles only integer numbers.
 > |BGN xxx f WHL yyy RPT|@image html images/forth_bgn_whl_rpt.gif width=300px|
 > |n FOR xxx NXT|for loop, index value I count down from n to 1|
 
-### Return Stack Ops
+### Return Stack Ops (in Compiler mode only)
 > |opcode|stack|immediate|description|
 > |:--|:--|:--|:--|
 > |I |`( -- w )`| |fetch word from top of return stack, aka R@ in other FORTHs|
