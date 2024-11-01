@@ -193,7 +193,7 @@ nanoFORTH handles only integer numbers.
 > |SEX|`( -- )`|yes|SAV with autorun flag set in EEPROM for reboot/execution|
 
 ### Arduino Specific Ops
-> |opcode|stack|immediate|description|
+> |opcode|stack|description|
 > |:--|:--|:--|
 > |CLK|`( -- d )`|fetch Arduino millis() value onto data stack as a double number|
 > |DLY|`( w -- )`|wait milliseconds (yield to hardware tasks)|
@@ -211,8 +211,10 @@ nanoFORTH handles only integer numbers.
 
 ### C API function call
 > |opcode|stack|description|
-> |:--|:--|:--|:--|
+> |:--|:--|:--|
 > |API|`( n -- )`|call API by number registered via ef_api(n, func) in Arduino sketch|
+
+> **Examples (see ~/examples/4_api/4_api.ino for details) **
 
 ### Interrupt ops
 > |opcode|stack|immediate|description|
