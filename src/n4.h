@@ -77,7 +77,7 @@ typedef S16          DU;          ///< 16-bit data unit (CELL)
 typedef S32          DU2;
 class NanoForth
 {
-	static FPTR fp[N4_API_SZ];    ///< C API function pointer slots
+	static FPTR api[N4_API_SZ];   ///< C API function pointer slots
 
 public:
     void setup(

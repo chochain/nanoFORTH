@@ -6,13 +6,13 @@
  */
 #include "n4_vm.h"
 
-FPTR NanoForth::fp[] = { NULL };
+FPTR NanoForth::api[] = { NULL };
 ///
 ///> add new (user defined) hardware task to linked-list
 ///
 void NanoForth::add_api(U16 i, FPTR ufunc)
 {
-	if (i <= N4_API_SZ) fp[i] = ufunc;
+	if (i <= N4_API_SZ) api[i] = ufunc;
 }
 ///
 ///> n4 VM init proxy
@@ -32,7 +32,7 @@ void NanoForth::exec()
 
 void NanoForth::call_api(U16 id)
 {
-	if (id < N4_API_SZ && fp[id]) fp[id]();
+	if (id < N4_API_SZ && api[id]) api[id]();
 }
 ///
 ///> n4 yield, execute one round of user hardware tasks

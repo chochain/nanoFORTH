@@ -12,6 +12,7 @@
 constexpr U16 N4_DIC_SZ = 0x400;  /**< default dictionary size             */
 constexpr U16 N4_STK_SZ = 0x80;   /**< default parameter/return stack size */
 constexpr U16 N4_TIB_SZ = 0x80;   /**< terminal input buffer size          */
+constexpr U16 N4_RAM_SZ = N4_DIC_SZ + N4_STK_SZ + N4_TIB_SZ;
 ///@}
 #if ARDUINO
 #define show(s)      { io->print(F(s)); io->flush(); }
@@ -49,11 +50,10 @@ typedef struct {
 namespace N4Core
 {
     extern N4Task vm;               ///< VM state
-    extern U8     *dic;             ///< base of dictionary
-    extern U8      trc;             ///< tracing flag
+    extern U8     dic[];            ///< base of dictionary
+    extern U8     trc;              ///< tracing flag
     extern Stream *io;              ///< default to Arduino Serial Monitor
 
-    void init_mem();                ///< initialize MMU
     void mstat();                   ///< display MMU statistics
 
     void set_pre(const char *code); ///< set embedded Forth code

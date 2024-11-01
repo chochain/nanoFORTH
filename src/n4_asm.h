@@ -26,7 +26,7 @@
 ///   can be disabled if some library needs extra memory 
 ///
 #define N4_DOES_META  1 /**< enable meta programming */
-#define N4_USE_GOTO   1 /**< use computed goto       */
+#define N4_USE_GOTO   0 /**< use computed goto       */
 ///
 /// parser actions enum used by execution and assembler units
 ///
@@ -75,8 +75,9 @@ constexpr IU LFA_END = 0xffff;   ///< end of link field
 /// +-------+-------+--------------------+
 /// |  lnk  | name  | parameters...I_RET |
 /// +-------+-------+--------------------+
-///  \\      \\      \\
-///   16-bits 3-bytes variable length parameters
+/// |       |       |
+/// v       v       v
+/// 16-bits 3-bytes variable length parameters
 ///
 /// Assembler class
 ///

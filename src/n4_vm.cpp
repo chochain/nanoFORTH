@@ -299,8 +299,6 @@ void _nest(IU xt)
 ///
 void setup(const char *code, Stream &io, U8 ucase)
 {
-    init_mem();
-
     set_pre(code);           /// * install embedded Forth code
     set_io(&io);             /// * set IO stream pointer (static member, shared with N4ASM)
     set_ucase(ucase);        /// * set case sensitiveness

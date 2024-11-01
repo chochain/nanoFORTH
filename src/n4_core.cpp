@@ -5,7 +5,13 @@
  */
 #include "n4_core.h"
 
-#if !ARDUINO
+#if ARDUINO
+DU freemem() {
+    extern U8 *__flp;
+    DU bsz = (DU)((uintptr_t)&bsz - (uintptr_t)&__flp);
+    return bsz;
+}
+#else
 int  Serial;           				     ///< fake serial interface
 #endif // !ARDUINO
 
@@ -13,7 +19,7 @@ namespace N4Core {
 ///
 ///@name MMU controls
 ///@{
-U8      *dic   { NULL };                       ///< base of dictionary
+U8      dic[N4_RAM_SZ];                        ///< base of dictionary
 N4Task  vm     { NULL, NULL };                 ///< VM context
 ///@}
 ///@name IO controls
@@ -21,17 +27,12 @@ N4Task  vm     { NULL, NULL };                 ///< VM context
 Stream  *io    { &Serial };                    ///< default to Arduino Serial Monitor
 U8      trc    { 0 };                          ///< tracing control flag
 char    *_pre  { NULL };                       ///< preload Forth code
-U8      *_tib  { NULL };                       ///< base of terminal input buffer
+U8      *_tib  { &dic[N4_DIC_SZ+N4_STK_SZ] };  ///< base of terminal input buffer
 U8      _empty { 1 };                          ///< empty flag for terminal input buffer
 U8      _hex   { 0 };                          ///< numeric radix for display
 U8      _ucase { 0 };                          ///< empty flag for terminal input buffer
 ///@}
 ///
-void init_mem() {
-    IU sz = N4_DIC_SZ + N4_STK_SZ + N4_TIB_SZ; ///< core memory block
-    dic  = (U8*)malloc(sz);                    /// * allocate Forth memory block
-    _tib = dic + N4_DIC_SZ + N4_STK_SZ;        /// * grows N4_TIB_SZ
-}
 void set_pre(const char *code) { _pre = (char*)code; }
 void set_io(Stream *s)  { io   = s; }          ///< initialize or redirect IO stream
 void set_hex(U8 f)      { _hex = f; }          ///< enable/disable hex numeric radix
@@ -44,15 +45,13 @@ char uc(char c)      {                         ///< upper case for case-insensit
 ///
 void mstat()
 {
-    int tot = N4_DIC_SZ + N4_STK_SZ + N4_TIB_SZ;
-    show(APP_NAME);                      /// * show init prompt
-    log("[DIC=$");    logx(N4_DIC_SZ);                         // dictionary size
-    log("|SS,RS=$");  logx(N4_STK_SZ);                         // stack size
-    log("|TIB=$");    logx(N4_TIB_SZ);
-    log("] total=$"); logx(tot);                              // total forth memory block
+    show(APP_NAME);
+    log("[DIC=$");    logx(N4_DIC_SZ);         ///> dictionary size
+    log("|SS,RS=$");  logx(N4_STK_SZ);         ///> stack size
+    log("|TIB=$");    logx(N4_TIB_SZ);         ///> terminal input buf
+    log("] total=$"); logx(N4_RAM_SZ);         /// * total forth memory block
 #if ARDUINO
-    DU bsz = (DU)((U8*)&bsz - &_tib[N4_TIB_SZ]);              // free for auto variables
-    log(", auto=$");   logx(bsz);  log("\n");
+    log(", auto=$");   logx(freemem());  log("\n");
 #endif // ARDUINO
 }
 ///@}
