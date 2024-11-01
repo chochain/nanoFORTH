@@ -199,7 +199,7 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">AND </td><td class="markdownTableBodyLeft"><code>( a b -- a&amp;b )</code> </td><td class="markdownTableBodyLeft">binary and  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyLeft">OR </td><td class="markdownTableBodyLeft"><code>( a b -- a&amp;#124;b )</code> </td><td class="markdownTableBodyLeft">binary or  </td></tr>
+<td class="markdownTableBodyLeft">OR </td><td class="markdownTableBodyLeft"><code>( a b -- aIb )</code> </td><td class="markdownTableBodyLeft">binary or  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyLeft">XOR </td><td class="markdownTableBodyLeft"><code>( a b -- a^b )</code> </td><td class="markdownTableBodyLeft">binary xor  </td></tr>
 <tr class="markdownTableRowEven">
@@ -457,7 +457,7 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)| |AIN|<code>( p -- w )</code>|analogRe
 <p><b>Examples</b></p>
 <p>CLK 1000 DLY CLK D- DNG ⏎ ➤ <em>1000_0_ok</em> </p>
 </blockquote>
-<h3>Meta Programming (available only via source recompilation with N4_META set to 1)</h3>
+<h3>Meta Programming (available only via source recompilation with N4_DOES_META set to 1 in <a class="el" href="n4__asm_8h.html" title="nanoForth Assembler class">n4_asm.h</a>)</h3>
 <blockquote class="doxtable">
 <table class="markdownTable">
 <tr class="markdownTableHead">

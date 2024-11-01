@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['get_5ftoken_82',['get_token',['../namespaceN4Core.html#a90f53bfd8e38b52b2071f69b9b13e323',1,'N4Core']]],
-  ['geta_83',['GETA',['../n4__core_8h.html#a18c52ea4a5c5acf027e5628e8571a74a',1,'n4_core.h']]],
-  ['getch_84',['getch',['../conio_8c.html#af5978fab9fa6dd4ced1c3a8ab1251f7b',1,'getch(void):&#160;conio.c'],['../conio_8h.html#af5978fab9fa6dd4ced1c3a8ab1251f7b',1,'getch(void):&#160;conio.c']]],
-  ['getchr_85',['getchr',['../h8_2system_8c.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../h8_2system_8h.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../mingw_2system_8c.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../mingw_2system_8h.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../unix_2system_8c.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../unix_2system_8h.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c']]],
-  ['gettkn_86',['gettkn',['../tforth_8c.html#a18a42a99841a699ad56e7c8774e2c963',1,'tforth.c']]]
+  ['get_5ftoken_83',['get_token',['../namespaceN4Core.html#a90f53bfd8e38b52b2071f69b9b13e323',1,'N4Core']]],
+  ['geta_84',['GETA',['../n4__core_8h.html#a18c52ea4a5c5acf027e5628e8571a74a',1,'n4_core.h']]],
+  ['getch_85',['getch',['../conio_8c.html#af5978fab9fa6dd4ced1c3a8ab1251f7b',1,'getch(void):&#160;conio.c'],['../conio_8h.html#af5978fab9fa6dd4ced1c3a8ab1251f7b',1,'getch(void):&#160;conio.c']]],
+  ['getchr_86',['getchr',['../h8_2system_8c.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../h8_2system_8h.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../mingw_2system_8c.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../mingw_2system_8h.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../unix_2system_8c.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../unix_2system_8h.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c']]],
+  ['gettkn_87',['gettkn',['../tforth_8c.html#a18a42a99841a699ad56e7c8774e2c963',1,'tforth.c']]]
 ];

@@ -104,7 +104,7 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ac6389d153fb47f0555a13bf208fa32f3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNanoForth.html#ac6389d153fb47f0555a13bf208fa32f3">add_api</a> (<a class="el" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> i, void(*<a class="el" href="classNanoForth.html#a41e8a7b3563d137637860509a9f0180c">fp</a>)())</td></tr>
+<tr class="memitem:ac6389d153fb47f0555a13bf208fa32f3"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNanoForth.html#ac6389d153fb47f0555a13bf208fa32f3">add_api</a> (<a class="el" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a> i, void(*fp)())</td></tr>
 <tr class="separator:ac6389d153fb47f0555a13bf208fa32f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66d62586da66074a2b3c08fe0ae36082"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNanoForth.html#a66d62586da66074a2b3c08fe0ae36082">yield</a> ()</td></tr>
 <tr class="memdesc:a66d62586da66074a2b3c08fe0ae36082"><td class="mdescLeft">&#160;</td><td class="mdescRight">nanoForth yield to user tasks  <a href="classNanoForth.html#a66d62586da66074a2b3c08fe0ae36082">More...</a><br /></td></tr>
@@ -118,9 +118,9 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
-<tr class="memitem:a41e8a7b3563d137637860509a9f0180c"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="n4_8h.html#ad49a4a3795be934579ff11f1296c1050">FPTR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNanoForth.html#a41e8a7b3563d137637860509a9f0180c">fp</a> [<a class="el" href="n4_8h.html#aa07c729a4e40cfa880ac9374eb03e29c">N4_API_SZ</a>] = { NULL }</td></tr>
-<tr class="memdesc:a41e8a7b3563d137637860509a9f0180c"><td class="mdescLeft">&#160;</td><td class="mdescRight">C API function pointer slots.  <a href="classNanoForth.html#a41e8a7b3563d137637860509a9f0180c">More...</a><br /></td></tr>
-<tr class="separator:a41e8a7b3563d137637860509a9f0180c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe3f604f80000b7baf5f8ae9d3398085"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="n4_8h.html#ad49a4a3795be934579ff11f1296c1050">FPTR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classNanoForth.html#abe3f604f80000b7baf5f8ae9d3398085">api</a> [<a class="el" href="n4_8h.html#aa07c729a4e40cfa880ac9374eb03e29c">N4_API_SZ</a>] = { NULL }</td></tr>
+<tr class="memdesc:abe3f604f80000b7baf5f8ae9d3398085"><td class="mdescLeft">&#160;</td><td class="mdescRight">C API function pointer slots.  <a href="classNanoForth.html#abe3f604f80000b7baf5f8ae9d3398085">More...</a><br /></td></tr>
+<tr class="separator:abe3f604f80000b7baf5f8ae9d3398085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a4f1f79c48afd3622ef05ec471e6b5018"></a>
@@ -341,8 +341,8 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Field Documentation</h2>
-<a id="a41e8a7b3563d137637860509a9f0180c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41e8a7b3563d137637860509a9f0180c">&#9670;&nbsp;</a></span>fp</h2>
+<a id="abe3f604f80000b7baf5f8ae9d3398085"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe3f604f80000b7baf5f8ae9d3398085">&#9670;&nbsp;</a></span>api</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -351,7 +351,7 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="n4_8h.html#ad49a4a3795be934579ff11f1296c1050">FPTR</a> NanoForth::fp = { NULL }</td>
+          <td class="memname"><a class="el" href="n4_8h.html#ad49a4a3795be934579ff11f1296c1050">FPTR</a> NanoForth::api = { NULL }</td>
         </tr>
       </table>
   </td>

@@ -1,6 +1,6 @@
 var n4__core_8cpp =
 [
-    [ "init_mem", "n4__core_8cpp.html#a845d552476fac4f136b90d6a90c41c6c", null ],
+    [ "freemem", "n4__core_8cpp.html#a74e88136999d57ef9c47127ce0871ed9", null ],
     [ "set_pre", "n4__core_8cpp.html#a2a38d3076bf721f94dcbd41c2353579a", null ],
     [ "uc", "n4__core_8cpp.html#a0d5cc20491c3146786349fde57c13f5b", null ],
     [ "mstat", "n4__core_8cpp.html#ac7bf53dece89911eb1a9d60ecbbd1a02", null ],
@@ -27,7 +27,7 @@ var n4__core_8cpp =
     [ "ok", "n4__core_8cpp.html#a5d15840dcc371f24919df0796a184046", null ],
     [ "get_token", "n4__core_8cpp.html#a90f53bfd8e38b52b2071f69b9b13e323", null ],
     [ "scan", "n4__core_8cpp.html#ae33c34b2bf7f6068686f894229268116", null ],
-    [ "dic", "n4__core_8cpp.html#ab11fdda5dd4a2660128e64087a7d507b", null ],
+    [ "dic", "n4__core_8cpp.html#af7e5579faf8ff0fd7596fcb6b83f9293", null ],
     [ "vm", "n4__core_8cpp.html#a48eb272938651ae7ffdae1305657539f", null ],
     [ "io", "n4__core_8cpp.html#a86633f8fd989f4914e0f225ae75f7f70", null ],
     [ "trc", "n4__core_8cpp.html#a081af5090a01cf873522af7fb88915bd", null ],

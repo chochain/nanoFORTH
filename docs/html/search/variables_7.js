@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['jmp_411',['JMP',['../n4__asm_8cpp.html#a9a42bfe95413e9933bed0e815b6dfec4',1,'n4_asm.cpp']]],
-  ['jmp_5fmask_412',['JMP_MASK',['../n4__asm_8h.html#a9783e35109050005b254d0d7aa1dfa40',1,'n4_asm.h']]],
-  ['jmp_5fops_413',['JMP_OPS',['../n4__asm_8h.html#ac7585da0b4ae076b0800d6dca55746d8',1,'n4_asm.h']]]
+  ['last_414',['last',['../namespaceN4Asm.html#ae4353366a967b2304a4feef9e024c90c',1,'N4Asm']]],
+  ['lfa_5fend_415',['LFA_END',['../n4__asm_8h.html#a26bfb292f253949ffd6e478ab0f8e0d0',1,'n4_asm.h']]]
 ];

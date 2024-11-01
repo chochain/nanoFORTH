@@ -128,12 +128,10 @@ Macros</h2></td></tr>
 <tr class="separator:a5b8e1fafd666a8bf21861f6cb5204902"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aed4923695ab6b11f5b10cd5b88312a0f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#aed4923695ab6b11f5b10cd5b88312a0f">D_LO</a>(u)&#160;&#160;&#160;((<a class="el" href="n4_8h.html#a0a0a322d5fa4a546d293a77ba8b4a71f">U16</a>)((u)&amp;0xffff))</td></tr>
 <tr class="separator:aed4923695ab6b11f5b10cd5b88312a0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99cca8c766bbb673859637a1cf1f1150"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a99cca8c766bbb673859637a1cf1f1150">DISPATCH</a>(op)&#160;&#160;&#160;goto *vt[op];</td></tr>
+<tr class="memitem:a99cca8c766bbb673859637a1cf1f1150"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a99cca8c766bbb673859637a1cf1f1150">DISPATCH</a>(op)&#160;&#160;&#160;switch(op)</td></tr>
 <tr class="separator:a99cca8c766bbb673859637a1cf1f1150"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a096be77600c0dcb0d72f97c45a3be66e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a096be77600c0dcb0d72f97c45a3be66e">CODE</a>(i,  g)&#160;&#160;&#160;L_##i: { g; } return xt</td></tr>
+<tr class="memitem:a096be77600c0dcb0d72f97c45a3be66e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a096be77600c0dcb0d72f97c45a3be66e">CODE</a>(i,  g)&#160;&#160;&#160;case i: { g; } break</td></tr>
 <tr class="separator:a096be77600c0dcb0d72f97c45a3be66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a489c396eaf96efc00c8dc86bee113411"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="n4__vm_8cpp.html#a489c396eaf96efc00c8dc86bee113411">LL</a>(i)</td></tr>
-<tr class="separator:a489c396eaf96efc00c8dc86bee113411"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Data Stack and Return Stack Ops</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><ul>
 <li>VM built with core units </li>
@@ -487,7 +485,7 @@ Functions</h2></td></tr>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">op</td><td>)</td>
-          <td>&#160;&#160;&#160;goto *vt[op];</td>
+          <td>&#160;&#160;&#160;switch(op)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -515,36 +513,16 @@ Functions</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;L_##i: { g; } return xt</td>
+          <td></td><td>&#160;&#160;&#160;case i: { g; } break</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="a489c396eaf96efc00c8dc86bee113411"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a489c396eaf96efc00c8dc86bee113411">&#9670;&nbsp;</a></span>LL</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define LL</td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname">i</td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line">        &amp;&amp;L_##i##0,&amp;&amp;L_##i##1,&amp;&amp;L_##i##2,&amp;&amp;L_##i##3,&amp;&amp;L_##i##4, \</div>
-<div class="line">        &amp;&amp;L_##i##5,&amp;&amp;L_##i##6,&amp;&amp;L_##i##7,&amp;&amp;L_##i##8,&amp;&amp;L_##i##9</div>
-</div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespaceN4Core_html_a48eb272938651ae7ffdae1305657539f"><div class="ttname"><a href="namespaceN4Core.html#a48eb272938651ae7ffdae1305657539f">N4Core::vm</a></div><div class="ttdeci">N4Task vm</div><div class="ttdoc">VM context.</div><div class="ttdef"><b>Definition:</b> n4_core.cpp:17</div></div>
+<div class="ttc" id="anamespaceN4Core_html_a48eb272938651ae7ffdae1305657539f"><div class="ttname"><a href="namespaceN4Core.html#a48eb272938651ae7ffdae1305657539f">N4Core::vm</a></div><div class="ttdeci">N4Task vm</div><div class="ttdoc">VM context.</div><div class="ttdef"><b>Definition:</b> n4_core.cpp:23</div></div>
 <div class="ttc" id="atforth_8c_html_abb62f6a5e04673f3e990ac3e88271668"><div class="ttname"><a href="tforth_8c.html#abb62f6a5e04673f3e990ac3e88271668">dic</a></div><div class="ttdeci">static unsigned char dic[DIC_SIZE]</div><div class="ttdef"><b>Definition:</b> tforth.c:31</div></div>
 <div class="ttc" id="an4__vm_8cpp_html_a5588ae260e9757e8666dfbcdc83cd175"><div class="ttname"><a href="n4__vm_8cpp.html#a5588ae260e9757e8666dfbcdc83cd175">SP0</a></div><div class="ttdeci">#define SP0</div><div class="ttdef"><b>Definition:</b> n4_vm.cpp:24</div></div>
 <div class="ttc" id="an4__vm_8cpp_html_a7ee1e26ca2891997f2b51dacefa3f475"><div class="ttname"><a href="n4__vm_8cpp.html#a7ee1e26ca2891997f2b51dacefa3f475">TOS</a></div><div class="ttdeci">#define TOS</div><div class="ttdef"><b>Definition:</b> n4_vm.cpp:25</div></div>

@@ -16,7 +16,6 @@ var n4__vm_8cpp =
     [ "D_LO", "n4__vm_8cpp.html#aed4923695ab6b11f5b10cd5b88312a0f", null ],
     [ "DISPATCH", "n4__vm_8cpp.html#a99cca8c766bbb673859637a1cf1f1150", null ],
     [ "CODE", "n4__vm_8cpp.html#a096be77600c0dcb0d72f97c45a3be66e", null ],
-    [ "LL", "n4__vm_8cpp.html#a489c396eaf96efc00c8dc86bee113411", null ],
     [ "_nest", "n4__vm_8cpp.html#a1cd4befa0ac0e9dca68db4d79bb87877", null ],
     [ "_init", "n4__vm_8cpp.html#a71ce1c2bbebb2db9931a9a40cf6acb04", null ],
     [ "_dump", "n4__vm_8cpp.html#a9c6ec2e8084aff19e198d91287cdfeed", null ],

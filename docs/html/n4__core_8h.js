@@ -7,7 +7,6 @@ var n4__core_8h =
     [ "GETA", "n4__core_8h.html#a18c52ea4a5c5acf027e5628e8571a74a", null ],
     [ "STORE", "n4__core_8h.html#a035d44b345c313db64ca4a929a81d3b5", null ],
     [ "FETCH", "n4__core_8h.html#adfaa630c05b7ff690a4489a4583fe13f", null ],
-    [ "init_mem", "n4__core_8h.html#a845d552476fac4f136b90d6a90c41c6c", null ],
     [ "mstat", "n4__core_8h.html#ac7bf53dece89911eb1a9d60ecbbd1a02", null ],
     [ "set_pre", "n4__core_8h.html#a2a38d3076bf721f94dcbd41c2353579a", null ],
     [ "set_io", "n4__core_8h.html#af3f2a7a80bc031dbc26d29cc0c029f15", null ],
@@ -37,5 +36,6 @@ var n4__core_8h =
     [ "scan", "n4__core_8h.html#ae33c34b2bf7f6068686f894229268116", null ],
     [ "N4_DIC_SZ", "n4__core_8h.html#a0fbd46bf8acfaff6cb92691910ff3ad4", null ],
     [ "N4_STK_SZ", "n4__core_8h.html#a6b47c655a4d981330600913136da8a62", null ],
-    [ "N4_TIB_SZ", "n4__core_8h.html#aeb245820b2fa4873404a042d8ee0f6b5", null ]
+    [ "N4_TIB_SZ", "n4__core_8h.html#aeb245820b2fa4873404a042d8ee0f6b5", null ],
+    [ "N4_RAM_SZ", "n4__core_8h.html#a12ae9712ee5fb49710627ff78aae7223", null ]
 ];
