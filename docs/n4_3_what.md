@@ -78,7 +78,7 @@ nanoFORTH handles only integer numbers.
 > |opcode|stack|description|
 > |:--|:--|:--|
 > |AND|`( a b -- a&b )`|binary and|
-> |OR |`( a b -- a&#124;b )`|binary or|
+> |OR |`( a b -- aIb )`|binary or|
 > |XOR|`( a b -- a^b )`|binary xor|
 > |NOT|`( a -- ^a )`|binary not|
 > |LSH|`( n i -- n<<=i )`|left shift|
@@ -249,7 +249,7 @@ nanoFORTH handles only integer numbers.
 >
 > CLK 1000 DLY CLK D- DNG ⏎ ➤ *1000_0_ok*
 
-### Meta Programming (available only via source recompilation with N4_META set to 1)
+### Meta Programming (available only via source recompilation with N4_DOES_META set to 1 in n4_asm.h)
 > |opcode|stack|description|
 > |:--|:--|:--|
 > |CRE|`( -- )`|create a word with link and name field|
