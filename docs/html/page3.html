@@ -395,10 +395,27 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 </blockquote>
 <h3>Arduino Specific Ops</h3>
 <blockquote class="doxtable">
-<p>|opcode|stack|immediate|description| |:&ndash;|:&ndash;|:&ndash;| |CLK|<code>( -- d )</code>|fetch Arduino millis() value onto data stack as a double number| |DLY|<code>( w -- )</code>|wait milliseconds (yield to hardware tasks)| |PIN|<code>( w p -- )</code>|pinMode(p, w)| |IN |<code>( p -- w )</code>|digitalRead(p)| |OUT|<code>( w p -- )</code>|if p=0x0xx, digitalWrite(xx, w),<br  />
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">description  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">CLK </td><td class="markdownTableBodyLeft"><code>( -- d )</code> </td><td class="markdownTableBodyLeft">fetch Arduino millis() value onto data stack as a double number  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">DLY </td><td class="markdownTableBodyLeft"><code>( w -- )</code> </td><td class="markdownTableBodyLeft">wait milliseconds (yield to hardware tasks)  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">PIN </td><td class="markdownTableBodyLeft"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft">pinMode(p, w)  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">IN </td><td class="markdownTableBodyLeft"><code>( p -- w )</code> </td><td class="markdownTableBodyLeft">digitalRead(p)  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">OUT </td><td class="markdownTableBodyLeft"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft">if p=0x0xx, digitalWrite(xx, w),<br  />
 if p=0x1xx, xx masks PORTD (pin 0~7) i.e. multi-port write,<br  />
 if p=0x2xx, xx masks PORTB (pin 8~13)<br  />
-if p=0x3xx, xx masks PORTC (analog A0~A6)| |AIN|<code>( p -- w )</code>|analogRead(p)| |PWM|<code>( w p -- )</code>|analogWrite(p, w)|</p>
+if p=0x3xx, xx masks PORTC (analog A0~A6)  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">AIN </td><td class="markdownTableBodyLeft"><code>( p -- w )</code> </td><td class="markdownTableBodyLeft">analogRead(p)  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">PWM </td><td class="markdownTableBodyLeft"><code>( w p -- )</code> </td><td class="markdownTableBodyLeft">analogWrite(p, w)  </td></tr>
+</table>
 <p><b>Examples</b></p>
 <p>1 13 OUT ⏎ ➤ <em>ok</em> (built-in LED is turn on, i.e. digitalWrite(13, 1) called)<br  />
  $F0 $1F0 OUT ⏎ ➤ <em>ok</em> (turn on pin 4,5,6,7 at once)<br  />
@@ -408,7 +425,15 @@ if p=0x3xx, xx masks PORTC (analog A0~A6)| |AIN|<code>( p -- w )</code>|analogRe
 </p>
 <h3>C API function call</h3>
 <blockquote class="doxtable">
-<p>|opcode|stack|description| |:&ndash;|:&ndash;|:&ndash;|:&ndash;| |API|<code>( n -- )</code>|call API by number registered via ef_api(n, func) in Arduino sketch| </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft">opcode </th><th class="markdownTableHeadLeft">stack </th><th class="markdownTableHeadLeft">description  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">API </td><td class="markdownTableBodyLeft"><code>( n -- )</code> </td><td class="markdownTableBodyLeft">call API by number registered via ef_api(n, func) in Arduino sketch  </td></tr>
+</table>
+</blockquote>
+<blockquote class="doxtable">
+<p>**Examples (see ~/examples/4_api/4_api.ino for details) ** </p>
 </blockquote>
 <h3>Interrupt ops</h3>
 <blockquote class="doxtable">
