@@ -71,7 +71,7 @@ I touched FORTH briefly years ago back in school days. After seeing <a href="htt
 > ⇨ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ok
 >> \> so, you've probably noticed that **I** is the loop counter and . (dot) prints it<br/>
 
-* Let's try analog, say read a value from analog pin 1, assuming you have one installed, or [try this Wokwi project](https://wokwi.com/projects/359920992049600513) again
+* Let's try analog, say read a value from analog pin 1, assuming you have one installed, or [try this Wokwi project](https://wokwi.com/projects/396070731189646337)
 > 1 AIN ⏎<br>
 > ⇨ 258_ok
 >> \> 258 is the value nanoFORTH read from photo-resister, then place it on top of data stack
