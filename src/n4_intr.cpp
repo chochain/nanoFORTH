@@ -69,7 +69,7 @@ void add_tmisr(U16 i, U16 n, IU xt) {
     if (xt==0 || i > 7) return;    // range check
 
     CLI();
-    ir.xt[i]    = xt;                      // ISR xt
+    ir.xt[i]    = n ? xt : 0;              // ISR xt or disable it
     ir.t_cnt[i] = (U16)millis() % n;       // init counter (randomize, spread time slice)
     ir.t_max[i] = n;                       // period (in 1ms)
     if (i >= ir.t_idx) ir.t_idx = i + 1;   // cache max index
