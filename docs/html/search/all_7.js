@@ -1,8 +1,28 @@
 var searchData=
 [
-  ['get_5ftoken_83',['get_token',['../namespaceN4Core.html#a90f53bfd8e38b52b2071f69b9b13e323',1,'N4Core']]],
-  ['geta_84',['GETA',['../n4__core_8h.html#a18c52ea4a5c5acf027e5628e8571a74a',1,'n4_core.h']]],
-  ['getch_85',['getch',['../conio_8c.html#af5978fab9fa6dd4ced1c3a8ab1251f7b',1,'getch(void):&#160;conio.c'],['../conio_8h.html#af5978fab9fa6dd4ced1c3a8ab1251f7b',1,'getch(void):&#160;conio.c']]],
-  ['getchr_86',['getchr',['../h8_2system_8c.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../h8_2system_8h.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../mingw_2system_8c.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../mingw_2system_8h.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../unix_2system_8c.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c'],['../unix_2system_8h.html#aacc534bac8570897b5c88abbd7340527',1,'getchr(void):&#160;system.c']]],
-  ['gettkn_87',['gettkn',['../tforth_8c.html#a18a42a99841a699ad56e7c8774e2c963',1,'tforth.c']]]
+  ['d_5fadr_0',['d_adr',['../namespaceN4Core.html#a9dda01fccf86a179e62d205450a9e351',1,'N4Core']]],
+  ['d_5fchr_1',['d_chr',['../namespaceN4Core.html#a3a3e4ae4954551e76c19625c18e72182',1,'N4Core']]],
+  ['d_5fhi_2',['D_HI',['../n4__vm_8cpp.html#a5b8e1fafd666a8bf21861f6cb5204902',1,'n4_vm.cpp']]],
+  ['d_5fin_3',['d_in',['../namespaceN4Core.html#ad57f3e5d4a84b2a402c9aedf7d707d63',1,'N4Core']]],
+  ['d_5flo_4',['D_LO',['../n4__vm_8cpp.html#aed4923695ab6b11f5b10cd5b88312a0f',1,'n4_vm.cpp']]],
+  ['d_5fmem_5',['d_mem',['../namespaceN4Core.html#af49924f055ed2947cc8d5e88dc07453f',1,'N4Core']]],
+  ['d_5fname_6',['d_name',['../namespaceN4Core.html#a35758b42f0b64c3ca01c6dbdee696a30',1,'N4Core::d_name(U8 *p)'],['../namespaceN4Core.html#a286ee4feeeb87bfd3a44d3d353b2713c',1,'N4Core::d_name(U8 op, const char *lst, U8 space)']]],
+  ['d_5fnib_7',['d_nib',['../namespaceN4Core.html#a00f8c798ee3ddd89c038999180347d17',1,'N4Core']]],
+  ['d_5fnum_8',['d_num',['../namespaceN4Core.html#a623a587ca0f8929f0dbc72e7d58e5c94',1,'N4Core']]],
+  ['d_5fout_9',['d_out',['../namespaceN4Core.html#a1f89113ebe2ce1d68c23d4cff96d1ee0',1,'N4Core']]],
+  ['d_5fpin_10',['d_pin',['../namespaceN4Core.html#a37592d2d6ec0adcd3b52c4b31528dcbb',1,'N4Core']]],
+  ['d_5fptr_11',['d_ptr',['../namespaceN4Core.html#aae3a814b552f13eb6f533f04e59793e6',1,'N4Core']]],
+  ['d_5fstr_12',['d_str',['../namespaceN4Core.html#a8ebd0caea89dd845a216290731901fa9',1,'N4Core']]],
+  ['d_5fu8_13',['d_u8',['../namespaceN4Core.html#a76fd10331f7f55db3f1a924fcdf7e1d5',1,'N4Core']]],
+  ['dic_14',['dic',['../tforth_8c.html#abb62f6a5e04673f3e990ac3e88271668',1,'dic:&#160;tforth.c'],['../n4__vm_8cpp.html#ad505278488475406e6307410678b4dd3',1,'DIC:&#160;n4_vm.cpp'],['../n4__asm_8cpp.html#ad505278488475406e6307410678b4dd3',1,'DIC:&#160;n4_asm.cpp'],['../namespaceN4Core.html#af7e5579faf8ff0fd7596fcb6b83f9293',1,'N4Core::dic']]],
+  ['dic_5fsize_15',['dic_size',['../h8_2system_8h.html#a0d6ff96bc09be9a735314cf03cee2fd6',1,'DIC_SIZE:&#160;system.h'],['../mingw_2system_8h.html#a0d6ff96bc09be9a735314cf03cee2fd6',1,'DIC_SIZE:&#160;system.h'],['../unix_2system_8h.html#a0d6ff96bc09be9a735314cf03cee2fd6',1,'DIC_SIZE:&#160;system.h']]],
+  ['dicent_16',['dicent',['../tforth_8c.html#a523f7f1ebaa0475719c06a2cc63185fc',1,'tforth.c']]],
+  ['dicptr_17',['dicptr',['../tforth_8c.html#ab6a1c26ff255f170c413bf9fd6cb92dc',1,'tforth.c']]],
+  ['dispatch_18',['DISPATCH',['../n4__vm_8cpp.html#a99cca8c766bbb673859637a1cf1f1150',1,'n4_vm.cpp']]],
+  ['documentation_20pages_19',['Documentation Pages',['../index.html',1,'']]],
+  ['does_20',['does',['../namespaceN4Asm.html#a26d72376ee9af845d95b2cf96ce3dfde',1,'N4Asm']]],
+  ['dot_5fstr_21',['dot_str',['../namespaceN4Asm.html#a3ea0860fce9f01b4f8508eaabcd1b3c1',1,'N4Asm']]],
+  ['du_22',['DU',['../n4_8h.html#a149fe3b107a553d7f4a2fcf3adc02b6a',1,'n4.h']]],
+  ['du2_23',['DU2',['../n4_8h.html#aa7a3686579f085a12b3c66bac1e352a3',1,'n4.h']]],
+  ['dump_5fper_5fline_24',['DUMP_PER_LINE',['../n4__vm_8cpp.html#af76800feb65a72436c3dd83a82dc8c2d',1,'n4_vm.cpp']]]
 ];

@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['ok_177',['ok',['../namespaceN4Core.html#a5d15840dcc371f24919df0796a184046',1,'N4Core']]],
-  ['op_5fcall_178',['OP_CALL',['../n4__asm_8h.html#a224ce243e33ebbf1dda8050c0b416c50',1,'n4_asm.h']]],
-  ['op_5fcdj_179',['OP_CDJ',['../n4__asm_8h.html#a006dd0582e2403710175a993bf6ee3c1',1,'n4_asm.h']]],
-  ['op_5fnxt_180',['OP_NXT',['../n4__asm_8h.html#a319125a570968821f3e7f484ffc695f0',1,'n4_asm.h']]],
-  ['op_5fudj_181',['OP_UDJ',['../n4__asm_8h.html#a06b727c2ba8690ccbfe6bf593c3b632c',1,'n4_asm.h']]],
-  ['outer_182',['outer',['../namespaceN4VM.html#a943be53277c6329fdcad7f4118f07c24',1,'N4VM']]]
+  ['last_0',['last',['../namespaceN4Asm.html#ae4353366a967b2304a4feef9e024c90c',1,'N4Asm']]],
+  ['lfa_5fend_1',['LFA_END',['../n4__asm_8h.html#a26bfb292f253949ffd6e478ab0f8e0d0',1,'n4_asm.h']]],
+  ['literal_2',['literal',['../tforth_8c.html#a03241cf06e4ab2242507180caafddfd4',1,'tforth.c']]],
+  ['load_3',['load',['../namespaceN4Asm.html#a9950068a950a3d14975ede50ffd6da1e',1,'N4Asm']]],
+  ['log_4',['log',['../n4_8h.html#a642fd9241bc9e4219ea15503ca87fefb',1,'n4.h']]],
+  ['logx_5',['logx',['../n4_8h.html#a0c6ed456da2d729add89153d74894f35',1,'n4.h']]],
+  ['lookup_6',['lookup',['../tforth_8c.html#ae9b12da6067d93d1a559a955ddfe69db',1,'tforth.c']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['documentation_20pages_531',['Documentation Pages',['../index.html',1,'']]]
+  ['1_20why_0',['.1 Why',['../page1.html',1,'']]]
 ];

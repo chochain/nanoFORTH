@@ -30,7 +30,7 @@ var n4__asm_8cpp =
     [ "forget", "n4__asm_8cpp.html#abcb801624632a840580a79196f744762", null ],
     [ "see", "n4__asm_8cpp.html#a79c17f7017a486a212d67dde5ae2ff5f", null ],
     [ "trace", "n4__asm_8cpp.html#ae25e54d11acc80bf4627d28f3980b578", null ],
-    [ "IMM", "n4__asm_8cpp.html#a146695a92c378403b44dea7967e7f2ce", null ],
+    [ "IMM", "n4__asm_8cpp.html#a68c991ccedd527f475badac381a5078e", null ],
     [ "JMP", "n4__asm_8cpp.html#a9a42bfe95413e9933bed0e815b6dfec4", null ],
     [ "PRM", "n4__asm_8cpp.html#a45e9d53ec6444e11dde94863dbcad68e", null ],
     [ "PMX", "n4__asm_8cpp.html#a1b304aa3f1d9625342f28364803c681e", null ],

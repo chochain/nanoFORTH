@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['main_131',['main',['../tforth_8c.html#a840291bc02cba5474a4cb46a9b9566fe',1,'tforth.c']]],
-  ['mockrom_2eh_132',['mockrom.h',['../mockrom_8h.html',1,'']]],
-  ['mstat_133',['mstat',['../namespaceN4Core.html#ac7bf53dece89911eb1a9d60ecbbd1a02',1,'N4Core']]]
+  ['jmp_0',['JMP',['../n4__asm_8cpp.html#a9a42bfe95413e9933bed0e815b6dfec4',1,'n4_asm.cpp']]],
+  ['jmp00_1',['JMP00',['../n4__asm_8cpp.html#aa804b75b7ecea3b5d13f82736f953767',1,'n4_asm.cpp']]],
+  ['jmp_5fmask_2',['JMP_MASK',['../n4__asm_8h.html#a9783e35109050005b254d0d7aa1dfa40',1,'n4_asm.h']]],
+  ['jmp_5fops_3',['JMP_OPS',['../n4__asm_8h.html#ac7585da0b4ae076b0800d6dca55746d8',1,'n4_asm.h']]],
+  ['jmpset_4',['JMPSET',['../n4__asm_8cpp.html#a2167c97965233bc0198413dddbf0dd28',1,'n4_asm.cpp']]],
+  ['jmpto_5',['JMPTO',['../n4__asm_8cpp.html#a20c0a5d456f1180cadae73e69be4d920',1,'n4_asm.cpp']]]
 ];

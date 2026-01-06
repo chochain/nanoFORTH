@@ -1,7 +1,25 @@
 var searchData=
 [
-  ['v2r_254',['V2R',['../h8_2system_8h.html#af119bdbd7220cead1beca1eb073e87d4',1,'V2R():&#160;system.h'],['../mingw_2system_8h.html#af119bdbd7220cead1beca1eb073e87d4',1,'V2R():&#160;system.h'],['../unix_2system_8h.html#af119bdbd7220cead1beca1eb073e87d4',1,'V2R():&#160;system.h']]],
-  ['variable_255',['variable',['../tforth_8c.html#a7cc511c0a674b324b9d1e3341ec439ef',1,'variable():&#160;tforth.c'],['../namespaceN4Asm.html#a3f87b8f17e103c19afc2544bbb42a146',1,'N4Asm::variable()']]],
-  ['vkey_256',['vkey',['../namespaceN4Core.html#a7fdcd56f30ef39f37f8c0963eccdddc4',1,'N4Core']]],
-  ['vm_257',['vm',['../namespaceN4Core.html#a48eb272938651ae7ffdae1305657539f',1,'N4Core']]]
+  ['s16_0',['S16',['../n4_8h.html#a6d241ad21a823c90d4835380787db5d4',1,'n4.h']]],
+  ['s2d_1',['S2D',['../n4__vm_8cpp.html#a94e7afb5049a6a1c056c590d7d050dde',1,'n4_vm.cpp']]],
+  ['s32_2',['S32',['../n4_8h.html#a39c786017723555afb9e8b85accec0de',1,'n4.h']]],
+  ['save_3',['save',['../namespaceN4Asm.html#a39ae45422cafad5a76266ca783111e8c',1,'N4Asm']]],
+  ['scan_4',['scan',['../namespaceN4Core.html#ae33c34b2bf7f6068686f894229268116',1,'N4Core']]],
+  ['see_5',['see',['../namespaceN4Asm.html#a79c17f7017a486a212d67dde5ae2ff5f',1,'N4Asm']]],
+  ['sei_6',['SEI',['../n4__intr_8h.html#a52e81e3198871fa5ae5c84580a12c032',1,'n4_intr.h']]],
+  ['serv_5fisr_7',['serv_isr',['../namespaceN4VM.html#a2a4b54c8ccb6a3677681158335f4663b',1,'N4VM']]],
+  ['set_5fhex_8',['set_hex',['../namespaceN4Core.html#a9093443521bb5aa5f7984d39926916d6',1,'N4Core']]],
+  ['set_5fio_9',['set_io',['../namespaceN4Core.html#af3f2a7a80bc031dbc26d29cc0c029f15',1,'N4Core']]],
+  ['set_5fpre_10',['set_pre',['../namespaceN4Core.html#a2a38d3076bf721f94dcbd41c2353579a',1,'N4Core']]],
+  ['set_5fucase_11',['set_ucase',['../namespaceN4Core.html#a370606874b2b14eca3ef32481c0fe16e',1,'N4Core']]],
+  ['setup_12',['setup',['../classNanoForth.html#a4f1f79c48afd3622ef05ec471e6b5018',1,'NanoForth::setup()'],['../namespaceN4VM.html#ab88fb5c76add0b62c41d4212c1bae6ae',1,'N4VM::setup()']]],
+  ['show_13',['show',['../n4__core_8h.html#a1b6f4e8567ad08a015fca3e83b3dc584',1,'n4_core.h']]],
+  ['sp_14',['sp',['../structN4Task.html#a8b6a1c22a6f0fedcab58b6cae3711792',1,'N4Task']]],
+  ['sp0_15',['SP0',['../n4__vm_8cpp.html#a5588ae260e9757e8666dfbcdc83cd175',1,'n4_vm.cpp']]],
+  ['ss_16',['SS',['../n4__vm_8cpp.html#a226f93ec68411372ccd30902117406f3',1,'n4_vm.cpp']]],
+  ['stack_17',['stack',['../tforth_8c.html#aff74dd3da188562f082f201252791400',1,'tforth.c']]],
+  ['stack_5fsize_18',['stack_size',['../h8_2system_8h.html#a6423a880df59733d2d9b509c7718d3a9',1,'STACK_SIZE:&#160;system.h'],['../mingw_2system_8h.html#a6423a880df59733d2d9b509c7718d3a9',1,'STACK_SIZE:&#160;system.h'],['../unix_2system_8h.html#a6423a880df59733d2d9b509c7718d3a9',1,'STACK_SIZE:&#160;system.h']]],
+  ['store_19',['STORE',['../n4__core_8h.html#a035d44b345c313db64ca4a929a81d3b5',1,'n4_core.h']]],
+  ['system_2ec_20',['system.c',['../unix_2system_8c.html',1,'(Global Namespace)'],['../mingw_2system_8c.html',1,'(Global Namespace)'],['../h8_2system_8c.html',1,'(Global Namespace)']]],
+  ['system_2eh_21',['system.h',['../unix_2system_8h.html',1,'(Global Namespace)'],['../mingw_2system_8h.html',1,'(Global Namespace)'],['../h8_2system_8h.html',1,'(Global Namespace)']]]
 ];

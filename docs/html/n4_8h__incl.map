@@ -1,4 +1,5 @@
 <map id="src/n4.h" name="src/n4.h">
-<area shape="rect" id="node1" title="nanoForth main controller" alt="" coords="11,5,84,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,89,107"/>
+<area shape="rect" id="Node000001" title="nanoForth main controller" alt="" coords="11,5,84,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,89,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="50,31,50,65,45,65,45,31"/>
 </map>

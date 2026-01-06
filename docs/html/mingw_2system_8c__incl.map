@@ -1,7 +1,11 @@
 <map id="orig/tinyforth/tforth_c/mingw/system.c" name="orig/tinyforth/tforth_c/mingw/system.c">
-<area shape="rect" id="node1" title=" " alt="" coords="105,5,252,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,95,72,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="97,95,167,121"/>
-<area shape="rect" id="node4" href="$conio_8h.html" title=" " alt="" coords="192,95,261,121"/>
-<area shape="rect" id="node5" href="$mingw_2system_8h.html" title=" " alt="" coords="285,95,368,121"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="105,5,252,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,72,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="146,48,73,89,70,84,144,43"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="97,93,167,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,47,148,83,144,80,165,44"/>
+<area shape="rect" id="Node000004" href="$conio_8h.html" title=" " alt="" coords="192,93,261,119"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="193,44,215,80,210,83,188,47"/>
+<area shape="rect" id="Node000005" href="$mingw_2system_8h.html" title=" " alt="" coords="285,93,368,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="215,43,294,84,291,89,213,48"/>
 </map>

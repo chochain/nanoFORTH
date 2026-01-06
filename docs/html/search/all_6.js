@@ -1,8 +1,17 @@
 var searchData=
 [
-  ['fetch_78',['FETCH',['../n4__core_8h.html#adfaa630c05b7ff690a4489a4583fe13f',1,'n4_core.h']]],
-  ['find_79',['find',['../tforth_8c.html#ad8a4a410a2935caf415edb3bab7ea31f',1,'tforth.c']]],
-  ['forget_80',['forget',['../tforth_8c.html#a38489a90f5e255e79d561099325b58a2',1,'forget():&#160;tforth.c'],['../namespaceN4Asm.html#abcb801624632a840580a79196f744762',1,'N4Asm::forget()']]],
-  ['fptr_81',['FPTR',['../n4_8h.html#ad49a4a3795be934579ff11f1296c1050',1,'n4.h']]],
-  ['freemem_82',['freemem',['../n4__core_8cpp.html#a74e88136999d57ef9c47127ce0871ed9',1,'n4_core.cpp']]]
+  ['call_5fapi_0',['call_api',['../classNanoForth.html#a7bebbd0a32c92ea15c65add6b5239ac1',1,'NanoForth']]],
+  ['ccomma_1',['ccomma',['../namespaceN4Asm.html#a442aa7fbe312d4aa726c1640a6088702',1,'N4Asm']]],
+  ['clear_5ftib_2',['clear_tib',['../namespaceN4Core.html#a3d456e769c6b769d0ff9a121ef67bbfe',1,'N4Core']]],
+  ['cli_3',['CLI',['../n4__intr_8h.html#a60bc02dc3bbd02fe2c8f7472d473a659',1,'n4_intr.h']]],
+  ['code_4',['CODE',['../n4__vm_8cpp.html#a096be77600c0dcb0d72f97c45a3be66e',1,'n4_vm.cpp']]],
+  ['comma_5',['comma',['../namespaceN4Asm.html#a6a811d5a3618a4a22f49a2ee1eaad7f5',1,'N4Asm']]],
+  ['compile_6',['compile',['../tforth_8c.html#a497e8375841d5a9629aa80ada0092620',1,'compile():&#160;tforth.c'],['../namespaceN4Asm.html#ab09dff0fa8977d4d328f2cdc434ec551',1,'N4Asm::compile()']]],
+  ['conio_2ec_7',['conio.c',['../conio_8c.html',1,'']]],
+  ['conio_2eh_8',['conio.h',['../conio_8h.html',1,'']]],
+  ['conio_5fclose_9',['conio_close',['../conio_8c.html#a0ca1629be5be134785e0cf371b2e9a5f',1,'conio.c']]],
+  ['conio_5fopen_10',['conio_open',['../conio_8c.html#a7dd72fc41be63cb362620f8325906136',1,'conio.c']]],
+  ['constant_11',['constant',['../namespaceN4Asm.html#afa6b79c0ca2a4ea29c075e3aef966f5d',1,'N4Asm']]],
+  ['create_12',['create',['../namespaceN4Asm.html#a3a2adf206b4e816082401a4045271a72',1,'N4Asm']]],
+  ['ctl_5fbits_13',['CTL_BITS',['../n4__asm_8h.html#a0b2400848a0f21e8dcd935a8d3c98933',1,'n4_asm.h']]]
 ];

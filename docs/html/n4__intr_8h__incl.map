@@ -1,6 +1,9 @@
 <map id="src/n4_intr.h" name="src/n4_intr.h">
-<area shape="rect" id="node1" title="nanoForth interrupt handler class" alt="" coords="5,5,107,32"/>
-<area shape="rect" id="node2" href="$n4__core_8h.html" title="nanoForth Core Utilities" alt="" coords="13,80,99,107"/>
-<area shape="rect" id="node3" href="$n4_8h.html" title="nanoForth main controller" alt="" coords="31,155,81,181"/>
-<area shape="rect" id="node4" title=" " alt="" coords="14,229,98,256"/>
+<area shape="rect" id="Node000001" title="nanoForth interrupt handler class" alt="" coords="5,5,107,31"/>
+<area shape="rect" id="Node000002" href="$n4__core_8h.html" title="nanoForth Core Utilities" alt="" coords="13,79,99,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="59,31,59,65,53,65,53,31"/>
+<area shape="rect" id="Node000003" href="$n4_8h.html" title="nanoForth main controller" alt="" coords="31,152,81,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="59,104,59,138,53,138,53,104"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="14,225,98,251"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="59,178,59,212,53,212,53,178"/>
 </map>

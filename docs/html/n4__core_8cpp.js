@@ -2,6 +2,9 @@ var n4__core_8cpp =
 [
     [ "freemem", "n4__core_8cpp.html#a74e88136999d57ef9c47127ce0871ed9", null ],
     [ "set_pre", "n4__core_8cpp.html#a2a38d3076bf721f94dcbd41c2353579a", null ],
+    [ "set_io", "n4__core_8cpp.html#af3f2a7a80bc031dbc26d29cc0c029f15", null ],
+    [ "set_hex", "n4__core_8cpp.html#a9093443521bb5aa5f7984d39926916d6", null ],
+    [ "set_ucase", "n4__core_8cpp.html#a370606874b2b14eca3ef32481c0fe16e", null ],
     [ "uc", "n4__core_8cpp.html#a0d5cc20491c3146786349fde57c13f5b", null ],
     [ "mstat", "n4__core_8cpp.html#ac7bf53dece89911eb1a9d60ecbbd1a02", null ],
     [ "key", "n4__core_8cpp.html#ad93f809a92778f2f4fcdabc9350a3ea8", null ],

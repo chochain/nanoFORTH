@@ -1,5 +1,7 @@
 <map id="orig/tinyforth/tforth_c/h8/system.c" name="orig/tinyforth/tforth_c/h8/system.c">
-<area shape="rect" id="node1" title=" " alt="" coords="25,5,172,47"/>
-<area shape="rect" id="node2" href="$h8_2system_8h.html" title=" " alt="" coords="5,95,88,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="113,95,189,121"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="25,5,172,45"/>
+<area shape="rect" id="Node000002" href="$h8_2system_8h.html" title=" " alt="" coords="5,93,88,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,47,64,83,60,80,84,44"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="113,93,189,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="113,44,138,80,133,83,109,47"/>
 </map>

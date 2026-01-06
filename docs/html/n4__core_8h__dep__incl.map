@@ -1,8 +1,14 @@
 <map id="src/n4_core.h" name="src/n4_core.h">
-<area shape="rect" id="node1" title="nanoForth Core Utilities" alt="" coords="227,5,335,32"/>
-<area shape="rect" id="node2" href="$n4__asm_8cpp.html" title="nanoForth Assmebler implementation" alt="" coords="5,80,128,107"/>
-<area shape="rect" id="node3" href="$n4__core_8cpp.html" title="nanoForth Core Utilities" alt="" coords="152,80,275,107"/>
-<area shape="rect" id="node4" href="$n4__intr_8h.html" title="nanoForth interrupt handler class" alt="" coords="299,80,400,107"/>
-<area shape="rect" id="node6" href="$n4__vm_8cpp.html" title="nanoForth Virtual Machine class implementation" alt="" coords="379,155,495,181"/>
-<area shape="rect" id="node5" href="$n4__intr_8cpp.html" title="nanoForth Interrupt handlers implementation Note: with volatile struct reduce 100 cycles from 14ms to..." alt="" coords="239,155,355,181"/>
+<area shape="rect" id="Node000001" title="nanoForth Core Utilities" alt="" coords="227,5,335,31"/>
+<area shape="rect" id="Node000002" href="$n4__asm_8cpp.html" title="nanoForth Assmebler implementation" alt="" coords="5,79,128,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="235,37,102,81,101,76,233,32"/>
+<area shape="rect" id="Node000003" href="$n4__core_8cpp.html" title="nanoForth Core Utilities" alt="" coords="152,79,275,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="263,42,226,80,222,77,259,39"/>
+<area shape="rect" id="Node000004" href="$n4__intr_8h.html" title="nanoForth interrupt handler class" alt="" coords="299,79,400,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="304,39,340,77,336,80,300,42"/>
+<area shape="rect" id="Node000006" href="$n4__vm_8cpp.html" title="nanoForth Virtual Machine class implementation" alt="" coords="379,152,495,177"/>
+<area shape="poly" id="edge6_Node000001_Node000006" title=" " alt="" coords="344,33,381,50,414,77,426,95,433,116,439,151,434,152,428,117,421,98,410,80,379,55,342,38"/>
+<area shape="rect" id="Node000005" href="$n4__intr_8cpp.html" title="nanoForth Interrupt handlers implementation Note: with volatile struct reduce 100 cycles from 14ms to..." alt="" coords="239,152,355,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="335,117,308,153,304,150,331,114"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="376,110,425,150,421,154,372,115"/>
 </map>
