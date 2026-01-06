@@ -97,9 +97,37 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 <p>At its core, nanoFORTH is a traditional <b>parse-dispatch virtual machine</b> interpreter with twin stacks. Essentially, it is a parser and a big switch loop. Like every other FORTH, it has a dual-personality which toggles between interpreter mode and compiler mode. In interpreter mode, it runs interactively not unlike an old HP hand-held calculator. When in compiler mode, it transcodes user defined functions into <a href="https://www.complang.tuwien.ac.at/forth/threaded-code.html#what" target="_blank">token threaded code</a> which is compact and <b>portable</b>. The latter ability enables future units to exchange not only data packets but also instruction code segments to each other. This can bring a big grin but, of course, we later might need to deal with the red flag raised by security concerning parties.</p>
 <p>Compared to any FORTH language tutorial, you probably will notice that the length of a word of nanoFORTH, unlike most are 31-character, is 3 characters or less. Core vocabulary is a short list which means makers need to define one if a more elaborated function is needed. There is no floating-point or meta-compiler supported. These depart from standard FORTHs and begs the question of whether nanoFORTH is truly a FORTH. Well, our target platform is a very small MCU and our application has probably a dozen of functions. Aside from saving a few bytes, it has the benefit in simplifying internal searching. The theory says that our brain is pretty good at filling the gap. So, hopefully, with a little bit creativity, our code can be clean and still maintainable. To qualify it as a FORTH or not, probably doesn't matter that much so long as it behaves well, runs fast enough, and useful for our needs.</p>
 <h3>Arduino Nano Memory Map</h3>
-<blockquote class="doxtable">
-<p>&zwj;|address|object|growth|Forth|EEPROM| |&ndash;:|:&mdash;:|:&ndash;:|:&ndash;:|:&ndash;:| |0x900|Arduino RAM max|_|.|.| |0x8f6|global/static variables/Arduino heap|⇩|.|.| |...|...|...|.|.| |0x618|Forth input buffer|⇧|X|.| |0x617| <b>return stack</b> |⇩|X|.| |...|0x100 shared space|...|X|.| |0x518| <b>data stack</b> |⇧|X|.| |...|user defined words|⇧|X|X| |0x1e8| <b>user dictionary</b> starts|⇧|X|X| |...|Arduino libraries|_|.|.| |0x100|Arduino RAM starts|_|.|.| |0x000|Arduino registers|_|.|.| </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadRight"><blockquote class="doxtable">
+<p>&zwj;address   </p>
 </blockquote>
+</th><th class="markdownTableHeadCenter">object   </th><th class="markdownTableHeadCenter">growth   </th><th class="markdownTableHeadCenter">Forth   </th><th class="markdownTableHeadCenter">EEPROM    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyRight">0x900   </td><td class="markdownTableBodyCenter">Arduino RAM max   </td><td class="markdownTableBodyCenter">_   </td><td class="markdownTableBodyCenter">.   </td><td class="markdownTableBodyCenter">.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyRight">0x8f6   </td><td class="markdownTableBodyCenter">global/static variables/Arduino heap   </td><td class="markdownTableBodyCenter">⇩   </td><td class="markdownTableBodyCenter">.   </td><td class="markdownTableBodyCenter">.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyRight">...   </td><td class="markdownTableBodyCenter">...   </td><td class="markdownTableBodyCenter">...   </td><td class="markdownTableBodyCenter">.   </td><td class="markdownTableBodyCenter">.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyRight">0x618   </td><td class="markdownTableBodyCenter">Forth input buffer   </td><td class="markdownTableBodyCenter">⇧   </td><td class="markdownTableBodyCenter">X   </td><td class="markdownTableBodyCenter">.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyRight">0x617   </td><td class="markdownTableBodyCenter"><b>return stack</b>   </td><td class="markdownTableBodyCenter">⇩   </td><td class="markdownTableBodyCenter">X   </td><td class="markdownTableBodyCenter">.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyRight">...   </td><td class="markdownTableBodyCenter">0x100 shared space   </td><td class="markdownTableBodyCenter">...   </td><td class="markdownTableBodyCenter">X   </td><td class="markdownTableBodyCenter">.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyRight">0x518   </td><td class="markdownTableBodyCenter"><b>data stack</b>   </td><td class="markdownTableBodyCenter">⇧   </td><td class="markdownTableBodyCenter">X   </td><td class="markdownTableBodyCenter">.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyRight">...   </td><td class="markdownTableBodyCenter">user defined words   </td><td class="markdownTableBodyCenter">⇧   </td><td class="markdownTableBodyCenter">X   </td><td class="markdownTableBodyCenter">X    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyRight">0x1e8   </td><td class="markdownTableBodyCenter"><b>user dictionary</b> starts   </td><td class="markdownTableBodyCenter">⇧   </td><td class="markdownTableBodyCenter">X   </td><td class="markdownTableBodyCenter">X    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyRight">...   </td><td class="markdownTableBodyCenter">Arduino libraries   </td><td class="markdownTableBodyCenter">_   </td><td class="markdownTableBodyCenter">.   </td><td class="markdownTableBodyCenter">.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyRight">0x100   </td><td class="markdownTableBodyCenter">Arduino RAM starts   </td><td class="markdownTableBodyCenter">_   </td><td class="markdownTableBodyCenter">.   </td><td class="markdownTableBodyCenter">.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyRight">0x000   </td><td class="markdownTableBodyCenter">Arduino registers   </td><td class="markdownTableBodyCenter">_   </td><td class="markdownTableBodyCenter">.   </td><td class="markdownTableBodyCenter">.   </td></tr>
+</table>
 <p>Note, we have the 1K EEPROM sitting on the side which can save and restore the user dictionary when instructed.</p>
 <h2>Number Representation</h2>
 <p>nanoFORTH handles only integer numbers.</p><ul>
@@ -115,8 +143,23 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
 </blockquote>
 <h2>Built-in Words</h2>
 <h3>Stack Ops</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|description| |:&ndash;|:&ndash;|:&ndash;| |DRP|<code>( w -- )</code>|drop| |DUP|<code>( w -- w w )</code>|duplicate| |SWP|<code>( a b -- b a )</code>|swap| |OVR|<code>( a b -- a b a )</code>|over| |ROT|<code>( a b c -- b c a )</code>|rotate|</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">DRP   </td><td class="markdownTableBodyLeft"><code>( w -- )</code>   </td><td class="markdownTableBodyLeft">drop    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">DUP   </td><td class="markdownTableBodyLeft"><code>( w -- w w )</code>   </td><td class="markdownTableBodyLeft">duplicate    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">SWP   </td><td class="markdownTableBodyLeft"><code>( a b -- b a )</code>   </td><td class="markdownTableBodyLeft">swap    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">OVR   </td><td class="markdownTableBodyLeft"><code>( a b -- a b a )</code>   </td><td class="markdownTableBodyLeft">over    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">ROT   </td><td class="markdownTableBodyLeft"><code>( a b c -- b c a )</code>   </td><td class="markdownTableBodyLeft">rotate   </td></tr>
+</table>
 <p><b>Examples</b></p>
 <p>20 10 ⏎ ➤ <em>20_10_ok</em><br  />
  OVR ⏎ ➤ <em>20_10_20_ok</em><br  />
@@ -125,53 +168,161 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
  DUP ⏎ ➤ <em>10_20_20_ok</em><br  />
  ROT ⏎ ➤ <em>20_20_10_ok</em><br  />
  </p>
-</blockquote>
 <h3>Arithmatics Ops</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|description| |:&ndash;|:&ndash;|:&ndash;| |+ |<code>( a b -- a+b )</code>|add| |- |<code>( a b -- a-b )</code>|subtract| |* |<code>( a b -- a*b )</code>|multiply| |/ |<code>( a b -- a/b )</code>|divide| |MOD|<code>( a b -- a%b</code> )|modulo| |NEG|<code>( a -- -a )</code>|negate| |ABS|<code>( a -- abs(a) )</code>|absolute value of a| |MIN|<code>( a b -- min(a, b) )</code>|minimum value between a and b| |MAX|<code>( a b -- max(a, b) )</code>|maximum value between a and b|</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">+   </td><td class="markdownTableBodyLeft"><code>( a b -- a+b )</code>   </td><td class="markdownTableBodyLeft">add    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">-   </td><td class="markdownTableBodyLeft"><code>( a b -- a-b )</code>   </td><td class="markdownTableBodyLeft">subtract    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">*   </td><td class="markdownTableBodyLeft"><code>( a b -- a*b )</code>   </td><td class="markdownTableBodyLeft">multiply    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">/   </td><td class="markdownTableBodyLeft"><code>( a b -- a/b )</code>   </td><td class="markdownTableBodyLeft">divide    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">MOD   </td><td class="markdownTableBodyLeft"><code>( a b -- a%b</code> )   </td><td class="markdownTableBodyLeft">modulo    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">NEG   </td><td class="markdownTableBodyLeft"><code>( a -- -a )</code>   </td><td class="markdownTableBodyLeft">negate    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">ABS   </td><td class="markdownTableBodyLeft"><code>( a -- abs(a) )</code>   </td><td class="markdownTableBodyLeft">absolute value of a    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">MIN   </td><td class="markdownTableBodyLeft"><code>( a b -- min(a, b) )</code>   </td><td class="markdownTableBodyLeft">minimum value between a and b    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">MAX   </td><td class="markdownTableBodyLeft"><code>( a b -- max(a, b) )</code>   </td><td class="markdownTableBodyLeft">maximum value between a and b   </td></tr>
+</table>
 <p><b>Examples</b></p>
 <p>17 5 + ⏎ ➤ <em>22_ok</em><br  />
  1 2 3 4 + + + ⏎ ➤ <em>10_ok</em><br  />
  10 3 / ⏎ ➤ <em>3_ok</em><br  />
  </p>
-</blockquote>
 <h3>Binary and Logical Ops</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|description| |:&ndash;|:&ndash;|:&ndash;| |AND|<code>( a b -- a&amp;b )</code>|binary and| |OR |<code>( a b -- aIb )</code>|binary or| |XOR|<code>( a b -- a^b )</code>|binary xor| |NOT|<code>( a -- ^a )</code>|binary not| |LSH|<code>( n i -- n&lt;&lt;=i )</code>|left shift| |RSH|<code>( n i -- n&gt;&gt;=i )</code>|right shift| |= |<code>( a b -- a==b )</code>|equal| |&lt; |<code>( a b -- a&lt;b )</code>|less than| |&gt; |<code>( a b -- a&gt;b )</code>|greater than| |&lt;&gt;|<code>( a b -- a!=b )</code>|not equal| </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
 </blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">AND   </td><td class="markdownTableBodyLeft"><code>( a b -- a&amp;b )</code>   </td><td class="markdownTableBodyLeft">binary and    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">OR   </td><td class="markdownTableBodyLeft"><code>( a b -- aIb )</code>   </td><td class="markdownTableBodyLeft">binary or    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">XOR   </td><td class="markdownTableBodyLeft"><code>( a b -- a^b )</code>   </td><td class="markdownTableBodyLeft">binary xor    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">NOT   </td><td class="markdownTableBodyLeft"><code>( a -- ^a )</code>   </td><td class="markdownTableBodyLeft">binary not    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">LSH   </td><td class="markdownTableBodyLeft"><code>( n i -- n&lt;&lt;=i )</code>   </td><td class="markdownTableBodyLeft">left shift    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">RSH   </td><td class="markdownTableBodyLeft"><code>( n i -- n&gt;&gt;=i )</code>   </td><td class="markdownTableBodyLeft">right shift    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">=   </td><td class="markdownTableBodyLeft"><code>( a b -- a==b )</code>   </td><td class="markdownTableBodyLeft">equal    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">&lt;   </td><td class="markdownTableBodyLeft"><code>( a b -- a&lt;b )</code>   </td><td class="markdownTableBodyLeft">less than    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">&gt;   </td><td class="markdownTableBodyLeft"><code>( a b -- a&gt;b )</code>   </td><td class="markdownTableBodyLeft">greater than    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">&lt;&gt;   </td><td class="markdownTableBodyLeft"><code>( a b -- a!=b )</code>   </td><td class="markdownTableBodyLeft">not equal   </td></tr>
+</table>
 <h3>Word Definition and Dictionary Ops</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|immediate|description| |:&ndash;|:&ndash;|:&ndash;|:&ndash;| |: |<code>( -- )</code>|yes|start defining a new word| |; |<code>( -- )</code>|yes|end of word definition| |WRD|<code>( -- )</code>|yes|list all words defined in nanoFORTH dictionaries| |FGT|<code>( -- )</code>|yes|forget/remove functions| |HRE|<code>( -- w )</code>| |get current user dictionary pointer| </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
 </blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">immediate   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">:   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">start defining a new word    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">;   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">end of word definition    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">WRD   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">list all words defined in nanoFORTH dictionaries    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">FGT   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">forget/remove functions    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">HRE   </td><td class="markdownTableBodyLeft"><code>( -- w )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">get current user dictionary pointer   </td></tr>
+</table>
 <h3>Flow Control (in Compiler mode only)</h3>
-<blockquote class="doxtable">
-<p>&zwj;|branching ops|description| |:&ndash;|:&ndash;| |f IF xxx THN|conditional branch| |f IF xxx ELS yyy THN|</p><div class="image">
-<img src="forth_if_els_thn.gif" alt="" width="300px|"/>
-</div>
-<p> |BGN xxx f UTL|</p><div class="image">
-<img src="forth_bgn_utl.gif" alt="" width="300px|"/>
-</div>
-<p> |BGN xxx f WHL yyy RPT|</p><div class="image">
-<img src="forth_bgn_whl_rpt.gif" alt="" width="300px|"/>
-</div>
-<p> |n FOR xxx NXT|for loop, index value I count down from n to 1| </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;branching ops   </p>
 </blockquote>
+</th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">f IF xxx THN   </td><td class="markdownTableBodyLeft">conditional branch    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">f IF xxx ELS yyy THN   </td><td class="markdownTableBodyLeft"><div class="image">
+<img src="forth_if_els_thn.gif" alt="" width="300px"/>
+</div>
+   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">BGN xxx f UTL   </td><td class="markdownTableBodyLeft"><div class="image">
+<img src="forth_bgn_utl.gif" alt="" width="300px"/>
+</div>
+   </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">BGN xxx f WHL yyy RPT   </td><td class="markdownTableBodyLeft"><div class="image">
+<img src="forth_bgn_whl_rpt.gif" alt="" width="300px"/>
+</div>
+   </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">n FOR xxx NXT   </td><td class="markdownTableBodyLeft">for loop, index value I count down from n to 1   </td></tr>
+</table>
 <h3>Return Stack Ops (in Compiler mode only)</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|immediate|description| |:&ndash;|:&ndash;|:&ndash;|:&ndash;| |I |<code>( -- w )</code>| |fetch word from top of return stack, aka R@ in other FORTHs| |&gt;R|<code>( w -- )</code>| |push word on top of data stack onto return stack| |R&gt;|<code>( -- w )</code>| | pop top of return stack value and push it onto data stack|</p><ul>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">immediate   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">I   </td><td class="markdownTableBodyLeft"><code>( -- w )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">fetch word from top of return stack, aka R@ in other FORTHs    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">&gt;R   </td><td class="markdownTableBodyLeft"><code>( w -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">push word on top of data stack onto return stack    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">R&gt;   </td><td class="markdownTableBodyLeft"><code>( -- w )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">pop top of return stack value and push it onto data stack   </td></tr>
+</table>
+<ul>
 <li>note: FORTH programmers often use return stack as temp storage. However do use &gt;R and R&gt; carefully and in Compile mode only or you risk messing up call depth which can crash FORTH interpreter. </li>
 </ul>
-</blockquote>
 <h3>Memory Access Ops</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|immediate|description| |:&ndash;|:&ndash;|:&ndash;|:&ndash;| |@ |<code>( a -- w )</code>| |fetch a 16-bit value from memory address 'a'| |! |<code>( a w -- )</code>| |store a 16-bit value to memory address 'a'| |C@|<code>( a -- w )</code>| |fetch a single byte from memory address 'a'| |C! |<code>( a w -- )</code>| |store a byte (or lower byte of the word) to memory address 'a'|</p><ul>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">immediate   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">@   </td><td class="markdownTableBodyLeft"><code>( a -- w )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">fetch a 16-bit value from memory address 'a'    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">!   </td><td class="markdownTableBodyLeft"><code>( a w -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">store a 16-bit value to memory address 'a'    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">C@   </td><td class="markdownTableBodyLeft"><code>( a -- w )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">fetch a single byte from memory address 'a'    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">C!   </td><td class="markdownTableBodyLeft"><code>( a w -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">store a byte (or lower byte of the word) to memory address 'a'   </td></tr>
+</table>
+<ul>
 <li>note: the above opcodes read/write nanoFORTH memory space directly. It provides the power to peek and poke random memory but also to shoot yourself on the foot. Use with caution.</li>
 </ul>
 <p><b>Examples</b> see next section </p>
-</blockquote>
 <h3>Variable, Constant, and Array Ops</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|immediate|description| |:&ndash;|:&ndash;|:&ndash;|:&ndash;| |VAR|<code>( -- )</code>|yes|define a 16-bit variable| |VAL|<code>( w -- )</code>|yes|define a 16-bit value (i.e. constant)| |ALO|<code>( w -- )</code>| |allocate extra w bytes on user dictionary (for array allocation)|</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">immediate   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">VAR   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">define a 16-bit variable    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">VAL   </td><td class="markdownTableBodyLeft"><code>( w -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">define a 16-bit value (i.e. constant)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">ALO   </td><td class="markdownTableBodyLeft"><code>( w -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">allocate extra w bytes on user dictionary (for array allocation)   </td></tr>
+</table>
 <p><b>Examples</b></p>
 <p>VAR <b>x</b> ➤ <em>ok</em> (a variable <b>x</b> is created on user dictionary)<br  />
  3 <b>x</b> ! ➤ <em>ok</em> (store 3 into variable <b>x</b>)<br  />
@@ -184,10 +335,32 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
  5 <b>z</b> 4 + ! ⏎ ➤ <em>ok</em> (5 is stored into <b>z</b>[2])<br  />
  <b>z</b> 4 + @ ⏎ ➤ <em>5_ok</em> (retrieve <b>z</b>[2] onto data stack)<br  />
  </p>
-</blockquote>
 <h3>Console I/O</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|immediate|description| |:&ndash;|:&ndash;|:&ndash;|:&ndash;| |KEY |<code>( -- c )</code>| |get a byte from input console| |EMT |<code>( c -- )</code>| |write a byte to output console| |CR |<code>( -- )</code> | |send a &lt;return&gt; to console| |. |<code>( w -- )</code>| |print the value on data stack to output console| |." |`( -- )`| |send the following string (terminated with a ") to output console| |S" |`( -- a n )`| |put string (terminated with a ") address and length on TOS| |TYP |<code>( a n -- )</code>| |type the string at address with length n| |HEX |<code>( -- )</code>|yes|change input/output to hexadecimal i.e. base 16| |DEC |<code>( -- )</code>|yes|change input/output to decimal i.e. base 10|</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">immediate   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">KEY   </td><td class="markdownTableBodyLeft"><code>( -- c )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">get a byte from input console    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">EMT   </td><td class="markdownTableBodyLeft"><code>( c -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">write a byte to output console    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">CR   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">send a &lt;return&gt; to console    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">.   </td><td class="markdownTableBodyLeft"><code>( w -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">print the value on data stack to output console    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">."   </td><td class="markdownTableBodyLeft">` ( -- ) `   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">send the following string (terminated with a ") to output console    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">S"   </td><td class="markdownTableBodyLeft">` ( -- a n ) `   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">put string (terminated with a ") address and length on TOS    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">TYP   </td><td class="markdownTableBodyLeft"><code>( a n -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">type the string at address with length n    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">HEX   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">change input/output to hexadecimal i.e. base 16    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">DEC   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">change input/output to decimal i.e. base 10   </td></tr>
+</table>
 <p><b>Examples</b></p>
 <p>: <b>hi</b> FOR ." hello!" 33 EMT CR NXT ; ⏎ ➤ <em>ok</em> (<b>hi</b> is now defined in user dictionary)<br  />
  3 <b>hi</b> ⏎<br  />
@@ -200,48 +373,102 @@ $(document).ready(function(){initNavTree('page3.html',''); initResizable(); });
  1 <b>chk</b> ⏎ ➤ <em>one! ok</em> <br  />
  0 <b>chk</b> ⏎ ➤ <em>zero! ok</em> <br  />
  </p>
-</blockquote>
 <h3>Reset, Debug, and Tracing</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|immediate|description| |:&ndash;|:&ndash;|:&ndash;|:&ndash;| |BYE|<code>( -- )</code>|yes|reset nanoFORTH on Arduino, exit to OS on other platform| |DMP|<code>( a w -- )</code>|yes|dump nanoFORTH user dictionary from address 'a' for w bytes| |TRC|<code>( t -- )</code>| |enable/disable execution tracing|</p>
-<p><b>Examples</b> </p><table class="markdownTable">
+<table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadLeft"></th></tr>
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">immediate   </th><th class="markdownTableHeadLeft">description    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyLeft"><div class="image">
+<td class="markdownTableBodyLeft">BYE   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">reset nanoFORTH on Arduino, exit to OS on other platform    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">DMP   </td><td class="markdownTableBodyLeft"><code>( a w -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">dump nanoFORTH user dictionary from address 'a' for w bytes    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">TRC   </td><td class="markdownTableBodyLeft"><code>( t -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">enable/disable execution tracing   </td></tr>
+</table>
+<p><b>Examples</b> </p>
+<blockquote class="doxtable">
+<p>&zwj;</p><div class="image">
 <img src="nanoforth_bye_trc_dmp.png" alt="" width="800px"/>
 </div>
-  </td></tr>
-</table>
-</blockquote>
+ </blockquote>
 <h3>EEPROM Access</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|immediate|description| |:&ndash;|:&ndash;|:&ndash;|:&ndash;| |SAV|<code>( -- )</code>|yes|save user dictionary into Arduino Flash Memory| |LD |<code>( -- )</code>|yes|restore user dictionary from Arduino Flash Memory| |SEX|<code>( -- )</code>|yes|SAV with autorun flag set in EEPROM for reboot/execution| </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
 </blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">immediate   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">SAV   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">save user dictionary into Arduino Flash Memory    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">LD   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">restore user dictionary from Arduino Flash Memory    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">SEX   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">SAV with autorun flag set in EEPROM for reboot/execution   </td></tr>
+</table>
 <h3>Arduino Specific Ops</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|description| |:&ndash;|:&ndash;|:&ndash;| |CLK|<code>( -- d )</code>|fetch Arduino millis() value onto data stack as a double number| |DLY|<code>( w -- )</code>|wait milliseconds (yield to hardware tasks)| |PIN|<code>( w p -- )</code>|pinMode(p, w)| |IN |<code>( p -- w )</code>|digitalRead(p)| |OUT|<code>( w p -- )</code>|if p=0x0xx, digitalWrite(xx, w),<br  />
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">CLK   </td><td class="markdownTableBodyLeft"><code>( -- d )</code>   </td><td class="markdownTableBodyLeft">fetch Arduino millis() value onto data stack as a double number    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">DLY   </td><td class="markdownTableBodyLeft"><code>( w -- )</code>   </td><td class="markdownTableBodyLeft">wait milliseconds (yield to hardware tasks)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">PIN   </td><td class="markdownTableBodyLeft"><code>( w p -- )</code>   </td><td class="markdownTableBodyLeft">pinMode(p, w)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">IN   </td><td class="markdownTableBodyLeft"><code>( p -- w )</code>   </td><td class="markdownTableBodyLeft">digitalRead(p)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">OUT   </td><td class="markdownTableBodyLeft"><code>( w p -- )</code>   </td><td class="markdownTableBodyLeft">if p=0x0xx, digitalWrite(xx, w),<br  />
 if p=0x1xx, xx masks PORTD (pin 0~7) i.e. multi-port write,<br  />
 if p=0x2xx, xx masks PORTB (pin 8~13)<br  />
-if p=0x3xx, xx masks PORTC (analog A0~A6)| |AIN|<code>( p -- w )</code>|analogRead(p)| |PWM|<code>( w p -- )</code>|analogWrite(p, w)|</p>
+if p=0x3xx, xx masks PORTC (analog A0~A6)    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">AIN   </td><td class="markdownTableBodyLeft"><code>( p -- w )</code>   </td><td class="markdownTableBodyLeft">analogRead(p)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">PWM   </td><td class="markdownTableBodyLeft"><code>( w p -- )</code>   </td><td class="markdownTableBodyLeft">analogWrite(p, w)   </td></tr>
+</table>
 <p><b>Examples</b></p>
 <p>1 13 OUT ⏎ ➤ <em>ok</em> (built-in LED is turn on, i.e. digitalWrite(13, 1) called)<br  />
  $F0 $1F0 OUT ⏎ ➤ <em>ok</em> (turn on pin 4,5,6,7 at once)<br  />
  </p>
-</blockquote>
 <p><br  />
 </p>
 <h3>C API function call</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|description| |:&ndash;|:&ndash;|:&ndash;| |API|<code>( n -- )</code>|call API by number registered via ef_api(n, func) in Arduino sketch| </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
 </blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">API   </td><td class="markdownTableBodyLeft"><code>( n -- )</code>   </td><td class="markdownTableBodyLeft">call API by number registered via ef_api(n, func) in Arduino sketch   </td></tr>
+</table>
 <blockquote class="doxtable">
 <p>&zwj;**Examples (see ~/examples/4_api/4_api.ino for details) ** </p>
 </blockquote>
 <h3>Interrupt ops</h3>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">immediate   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">TMI   </td><td class="markdownTableBodyLeft"><code>( n i -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds<br  />
+set n to 0 disable this ISR    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">PCI   </td><td class="markdownTableBodyLeft"><code>( p -- )</code>   </td><td class="markdownTableBodyLeft">yes   </td><td class="markdownTableBodyLeft">capture pin #p change (either HIGH to LOW or LOW to HIGH)    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">TME   </td><td class="markdownTableBodyLeft"><code>( f -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">enable/disable timer interrupt, 0:disable, 1:enable    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">PCE   </td><td class="markdownTableBodyLeft"><code>( f -- )</code>   </td><td class="markdownTableBodyLeft"></td><td class="markdownTableBodyLeft">enable/disable pin change interrupt, 0:disable, 1:enable   </td></tr>
+</table>
 <blockquote class="doxtable">
-<p>&zwj;|opcode|stack|immediate|description| |:&ndash;|:&ndash;|:&ndash;|:&ndash;| |TMI|<code>( n i -- )</code>|yes|set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds<br  />
-set n to 0 disable this ISR| |PCI|<code>( p -- )</code>|yes|capture pin #p change (either HIGH to LOW or LOW to HIGH)| |TME|<code>( f -- )</code>| |enable/disable timer interrupt, 0:disable, 1:enable| |PCE|<code>( f -- )</code>| |enable/disable pin change interrupt, 0:disable, 1:enable| </p><blockquote class="doxtable">
 <p>&zwj;Note: nanoForth utilizes timer2 for timer interrupt. It might conflict with libraries which also uses timer2 such as Tone(). </p>
 </blockquote>
 <p><b>Examples</b></p>
@@ -259,17 +486,40 @@ set n to 0 disable this ISR| |PCI|<code>( p -- )</code>|yes|capture pin #p chang
  1 PCE ➤ <em>ok</em> (enable pin change interrupt)<br  />
  AA (assuming you have a push button hooked up at pin 8)<br  />
 </p>
-<p></p>
-</blockquote>
 <h3>Double precision (i.e. 32-bit) Arithmatic (for Arduino Clock mostly)</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|description| |:&ndash;|:&ndash;|:&ndash;| |D+ |<code>( d1 d0 -- d1+d0 )</code>|add two doubles| |D- |<code>( d1 d0 -- d1-d0 )</code>|subtract two doubles| |DNG|<code>( d0 -- -d0 )</code>|negate a double number|</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">D+   </td><td class="markdownTableBodyLeft"><code>( d1 d0 -- d1+d0 )</code>   </td><td class="markdownTableBodyLeft">add two doubles    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">D-   </td><td class="markdownTableBodyLeft"><code>( d1 d0 -- d1-d0 )</code>   </td><td class="markdownTableBodyLeft">subtract two doubles    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">DNG   </td><td class="markdownTableBodyLeft"><code>( d0 -- -d0 )</code>   </td><td class="markdownTableBodyLeft">negate a double number   </td></tr>
+</table>
 <p><b>Examples</b></p>
 <p>CLK 1000 DLY CLK D- DNG ⏎ ➤ <em>1000_0_ok</em> </p>
-</blockquote>
 <h3>Meta Programming (available only via source recompilation with N4_DOES_META set to 1 in <a class="el" href="n4__asm_8h.html" title="nanoForth Assembler class">n4_asm.h</a>)</h3>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|description| |:&ndash;|:&ndash;|:&ndash;| |CRE|<code>( -- )</code>|create a word with link and name field| |, |<code>( n -- )</code>|comma, add a 16-bit value onto dictionary| |C, |<code>( n -- )</code>|byte comma, add a 8-bit value onto dictionary| |' |<code>( -- xt )</code>|tick, fetch xt (parameter field address) of a word| |EXE|<code>( xt -- )</code>|execute an xt address|</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
+</blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">CRE   </td><td class="markdownTableBodyLeft"><code>( -- )</code>   </td><td class="markdownTableBodyLeft">create a word with link and name field    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">,   </td><td class="markdownTableBodyLeft"><code>( n -- )</code>   </td><td class="markdownTableBodyLeft">comma, add a 16-bit value onto dictionary    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">C,   </td><td class="markdownTableBodyLeft"><code>( n -- )</code>   </td><td class="markdownTableBodyLeft">byte comma, add a 8-bit value onto dictionary    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">'   </td><td class="markdownTableBodyLeft"><code>( -- xt )</code>   </td><td class="markdownTableBodyLeft">tick, fetch xt (parameter field address) of a word    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">EXE   </td><td class="markdownTableBodyLeft"><code>( xt -- )</code>   </td><td class="markdownTableBodyLeft">execute an xt address   </td></tr>
+</table>
 <p><b>Examples</b></p>
 <p>: aa 123 ; ⏎ ➤ <em>ok</em> (create a word)<br  />
  CRE bb ⏎ ➤ <em>ok</em> (create a empty word bb with it link and name field only)<br  />
@@ -280,19 +530,40 @@ set n to 0 disable this ISR| |PCI|<code>( p -- )</code>|yes|capture pin #p chang
  ' bb ⏎ ➤ <em>123_11_ok</em> (get bb's xt address)<br  />
  EXE ➤ <em>123_123_ok</em> (execute bb's xt directly)<br  />
  </p>
-</blockquote>
-<p><br  />
-</p>
 <h2>Function/Word Struct</h2>
-<blockquote class="doxtable">
-<p>&zwj;|size|field| |:&ndash;|:&ndash;| |fixed 16-bit|address to previous word, 0xffff is terminator| |fixed 3-byte|function name| |n-byte<br  />
-depends on the length of the function| * compiled opcodes (see next section), or<br  />
-* address of a user defined word| </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;size   </p>
 </blockquote>
+</th><th class="markdownTableHeadLeft">field    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">fixed 16-bit   </td><td class="markdownTableBodyLeft">address to previous word, 0xffff is terminator    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">fixed 3-byte   </td><td class="markdownTableBodyLeft">function name    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">n-byte<br  />
+depends on the length of the function   </td><td class="markdownTableBodyLeft">* compiled opcodes (see next section), or<br  />
+* address of a user defined word   </td></tr>
+</table>
 <h2>Opcode Memory Formats</h2>
-<blockquote class="doxtable">
-<p>&zwj;|opcode|stack|description| |:&ndash;|:&ndash;|:&ndash;| |1-byte literal|<code>0nnn nnnn</code>|0..127, often used, speeds up core| |3-byte literal|<code>1011 1111 snnn nnnn nnnn nnnn</code>|16-bit signed integer| |1-byte primitive|<code>10oo oooo</code>|6-bit opcode i.e. 64 primitives| |branching opcodes|<code>11BB aaaa aaaa aaaa</code>|12-bit address i.e. 4K space| |n-byte string|<code>len, byte, byte, ...</code>|256 bytes max, used in print string| </p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadLeft"><blockquote class="doxtable">
+<p>&zwj;opcode   </p>
 </blockquote>
+</th><th class="markdownTableHeadLeft">stack   </th><th class="markdownTableHeadLeft">description    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">1-byte literal   </td><td class="markdownTableBodyLeft"><code>0nnn nnnn</code>   </td><td class="markdownTableBodyLeft">0..127, often used, speeds up core    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">3-byte literal   </td><td class="markdownTableBodyLeft"><code>1011 1111 snnn nnnn nnnn nnnn</code>   </td><td class="markdownTableBodyLeft">16-bit signed integer    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">1-byte primitive   </td><td class="markdownTableBodyLeft"><code>10oo oooo</code>   </td><td class="markdownTableBodyLeft">6-bit opcode i.e. 64 primitives    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyLeft">branching opcodes   </td><td class="markdownTableBodyLeft"><code>11BB aaaa aaaa aaaa</code>   </td><td class="markdownTableBodyLeft">12-bit address i.e. 4K space    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyLeft">n-byte string   </td><td class="markdownTableBodyLeft"><code>len, byte, byte, ...</code>   </td><td class="markdownTableBodyLeft">256 bytes max, used in print string   </td></tr>
+</table>
 <p><br  />
  <a href="page1.html">1. Why - Review nanoFORTH command examples</a><br  />
  <a href="page2.html">2. How - Intall nanoFORTH</a> </p>
