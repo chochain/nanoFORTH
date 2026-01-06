@@ -69,10 +69,10 @@ Now let's try some fancy stuffs to see what nanoFORTH has to offer.
 
 * To do some logic ops in hex, and back in decimal, we can do this.
 > HEX ⏎<br/>
-> 40 38
+> 40 38 ⏎<br/>
 > ⇨ 40_38_ok
 > OR ⏎<br/>
-> 78_ok
+> ⇨ 78_ok
 > DEC ⏎<br/>
 > ⇨ 120_ok
 
