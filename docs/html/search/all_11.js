@@ -18,7 +18,7 @@ var searchData=
   ['n4_5fintr_2ecpp_15',['n4_intr.cpp',['../n4__intr_8cpp.html',1,'']]],
   ['n4_5fintr_2eh_16',['n4_intr.h',['../n4__intr_8h.html',1,'']]],
   ['n4_5fpop_17',['n4_pop',['../n4_8cpp.html#ae2c2d6cacdd559dfc10e5280284001fb',1,'n4_pop():&#160;n4.cpp'],['../nanoFORTH_8h.html#ae2c2d6cacdd559dfc10e5280284001fb',1,'n4_pop():&#160;n4.cpp']]],
-  ['n4_5fpush_18',['n4_push',['../n4_8cpp.html#aed6916ae35c70dfbf2f712a6ea0d359b',1,'n4_push(int v):&#160;n4.cpp'],['../nanoFORTH_8h.html#aed6916ae35c70dfbf2f712a6ea0d359b',1,'n4_push(int v):&#160;n4.cpp']]],
+  ['n4_5fpush_18',['n4_push',['../nanoFORTH_8h.html#aed6916ae35c70dfbf2f712a6ea0d359b',1,'n4_push(int v):&#160;n4.cpp'],['../n4_8cpp.html#aed6916ae35c70dfbf2f712a6ea0d359b',1,'n4_push(int v):&#160;n4.cpp']]],
   ['n4_5fram_5fsz_19',['N4_RAM_SZ',['../n4__core_8h.html#a12ae9712ee5fb49710627ff78aae7223',1,'n4_core.h']]],
   ['n4_5frun_20',['n4_run',['../n4_8cpp.html#a3042b3d86c75fe3e37ece7afdd496c42',1,'n4_run():&#160;n4.cpp'],['../nanoFORTH_8h.html#a3042b3d86c75fe3e37ece7afdd496c42',1,'n4_run():&#160;n4.cpp']]],
   ['n4_5fsetup_21',['n4_setup',['../n4_8cpp.html#a32751d2b8ad3e7dfd9568390746612ed',1,'n4_setup(const char *code, Stream &amp;io, int ucase):&#160;n4.cpp'],['../nanoFORTH_8h.html#ae66230265262bfcec7e06b026079788b',1,'n4_setup(const char *code=0, Stream &amp;io=Serial, int ucase=0):&#160;n4.cpp']]],
@@ -37,6 +37,5 @@ var searchData=
   ['n4vm_34',['N4VM',['../namespaceN4VM.html',1,'']]],
   ['nanoforth_35',['NanoForth',['../classNanoForth.html',1,'']]],
   ['nanoforth_2eh_36',['nanoFORTH.h',['../nanoFORTH_8h.html',1,'']]],
-  ['nanoforth_2eino_37',['nanoforth.ino',['../nanoforth_8ino.html',1,'']]],
-  ['number_38',['number',['../namespaceN4Core.html#a8db4d047e633c1ca5f91a9947b574da0',1,'N4Core']]]
+  ['number_37',['number',['../namespaceN4Core.html#a8db4d047e633c1ca5f91a9947b574da0',1,'N4Core']]]
 ];

@@ -13,6 +13,5 @@ var searchData=
   ['n4_5fintr_2eh_10',['n4_intr.h',['../n4__intr_8h.html',1,'']]],
   ['n4_5fvm_2ecpp_11',['n4_vm.cpp',['../n4__vm_8cpp.html',1,'']]],
   ['n4_5fvm_2eh_12',['n4_vm.h',['../n4__vm_8h.html',1,'']]],
-  ['nanoforth_2eh_13',['nanoFORTH.h',['../nanoFORTH_8h.html',1,'']]],
-  ['nanoforth_2eino_14',['nanoforth.ino',['../nanoforth_8ino.html',1,'']]]
+  ['nanoforth_2eh_13',['nanoFORTH.h',['../nanoFORTH_8h.html',1,'']]]
 ];

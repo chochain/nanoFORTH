@@ -180,7 +180,6 @@ var NAVTREEINDEX1 =
 "nanoFORTH_8h.html#ae66230265262bfcec7e06b026079788b":[6,0,2,11,0],
 "nanoFORTH_8h.html#aed6916ae35c70dfbf2f712a6ea0d359b":[6,0,2,11,2],
 "nanoFORTH_8h_source.html":[6,0,2,11],
-"nanoforth_8ino.html":[6,0,3],
 "page1.html":[1],
 "page2.html":[2],
 "page3.html":[3],
