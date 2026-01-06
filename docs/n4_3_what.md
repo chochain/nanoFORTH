@@ -165,13 +165,12 @@ nanoFORTH handles only integer numbers.
 > 3 **hi** ⏎<br/>
 > ➤ *hello!*<br/>
 > ➤ *hello!*<br/>
-> ➤ *hello!ok*
-> : **s1** S" one!" ; : **s0** S" zero!" ;⏎ ➤ *ok* (**s1** **s0** are defined in user dictionary)<br/>
+> ➤ *hello!* ok<br/>
+> : **s1** S" one!" ;<br/>
+> : **s0** S" zero!" ;⏎ ➤ *ok* (**s1** **s0** are defined in user dictionary)<br/>
 > : **chk** IF s1 ELS s0 THN TYP ;⏎ ➤ *ok*<br/>
-> 1 **chk** ⏎<br/>
-> ➤ *one! ok* <br/>
-> 0 **chk** ⏎<br/>
-> ➤ *zero! ok* <br/>
+> 1 **chk** ⏎ ➤ *one! ok* <br/>
+> 0 **chk** ⏎ ➤ *zero! ok* <br/>
 
 ### Reset, Debug, and Tracing
 > |opcode|stack|immediate|description|
@@ -219,7 +218,7 @@ nanoFORTH handles only integer numbers.
 ### Interrupt ops
 > |opcode|stack|immediate|description|
 > |:--|:--|:--|:--|
-> |TMI|`( n i -- )`|yes|set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds|
+> |TMI|`( n i -- )`|yes|set timer ISR with period at n microsecond. n is a U16 unsigned number i.e. max ~64 seconds<br/>set n to 0 disable this ISR|
 > |PCI|`( p -- )`|yes|capture pin #p change (either HIGH to LOW or LOW to HIGH)|
 > |TME|`( f -- )`| |enable/disable timer interrupt, 0:disable, 1:enable|
 > |PCE|`( f -- )`| |enable/disable pin change interrupt, 0:disable, 1:enable|
@@ -233,6 +232,8 @@ nanoFORTH handles only integer numbers.
 > 25000 1 TMI **s_b** ➤ *ok* (set **s_b** in handler slot #1, tigger every 25 seconds)<br/>
 > 1 TME ➤ *ok* (enable timer interrupt)<br/>
 > AABAAABAABAA (interrupt routines been called)<br/>
+> 0 1 TMI **s_b** ➤ *ok* (disable **s_b** in handler slot #1)<br/>
+> AAAAAAA<br/>
 > 0 TME ➤ *ok* (disable timer interrupt)<br/>
 >
 > 8 PCI **s_a** ➤ *ok* (run **s_a** when pin 8 changed)<br/>
@@ -262,14 +263,14 @@ nanoFORTH handles only integer numbers.
 >
 > **Examples**
 >
-> : aa 123 ; ⏎ ➤ *ok*  (create a word)
-> CRE bb ⏎ ➤ *ok*      (create a empty word bb with it link and name field only)
-> ' aa ⏎ ➤ *5_ok*      (aa's xt address is put on top of stack)
-> $C0 OR , ⏎ ➤ *ok*    (combile the address and call flag onto dictionary)
-> $F0 , ⏎ ➤ *ok*       (compile RET opcode onto dictionary)
-> bb ⏎ ➤ *123_ok*      (bb calls aa, so returns 123 on stack)
-> ' bb ⏎ ➤ *123_11_ok* (get bb's xt address)
-> EXE ➤ *123_123_ok*   (execute bb's xt directly)
+> : aa 123 ; ⏎ ➤ *ok*  (create a word)<br/>
+> CRE bb ⏎ ➤ *ok*      (create a empty word bb with it link and name field only)<br/>
+> ' aa ⏎ ➤ *5_ok*      (aa's xt address is put on top of stack)<br/>
+> $C0 OR , ⏎ ➤ *ok*    (combile the address and call flag onto dictionary)<br/>
+> $F0 , ⏎ ➤ *ok*       (compile RET opcode onto dictionary)<br/>
+> bb ⏎ ➤ *123_ok*      (bb calls aa, so returns 123 on stack)<br/>
+> ' bb ⏎ ➤ *123_11_ok* (get bb's xt address)<br/>
+> EXE ➤ *123_123_ok*   (execute bb's xt directly)<br/>
 <br/>
 
 ## Function/Word Struct
